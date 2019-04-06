@@ -529,7 +529,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Expression
 
         /// <summary>
-        ///     start vistigin a expression
+        ///     start visiting an expression
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(ExpressionSymbol element) {

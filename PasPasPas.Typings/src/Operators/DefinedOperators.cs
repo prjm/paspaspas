@@ -145,5 +145,15 @@
         /// </summary>
         public const int ConcatArrayOperator = 36;
 
+        /// <summary>
+        ///     checked cast operator
+        /// </summary>
+        public const int AsOperator = 37;
+
+        /// <summary>
+        ///     cast check operator
+        /// </summary>
+        public const int IsOperator = 38;
+
     }
 }

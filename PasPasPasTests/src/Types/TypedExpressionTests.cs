@@ -808,6 +808,10 @@ namespace PasPasPasTests.Types {
             AssertExprValue("a <> b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
         }
 
+        [TestMethod]
+        public void TestClassOperators() {
+            AssertExprType("a is TObject", KnownTypeIds.BooleanType, "var a: TObject;");
+        }
 
     }
 }

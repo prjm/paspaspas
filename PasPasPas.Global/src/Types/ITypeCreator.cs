@@ -28,8 +28,9 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="baseType">base type id</param>
         /// <param name="newType"><c>true</c> if the type should be treated as a new tyüe</param>
+        /// <param name="systemTypeId">predefined type alias</param>
         /// <returns></returns>
-        IAliasedType CreateTypeAlias(int baseType, bool newType);
+        IAliasedType CreateTypeAlias(int baseType, bool newType, int systemTypeId = -1);
 
         /// <summary>
         ///     create a new enumerated type

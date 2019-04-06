@@ -5,7 +5,7 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     constant array
+    ///     constant array value
     /// </summary>
     public class ArrayConstant : ExpressionBase, IExpressionTarget {
 

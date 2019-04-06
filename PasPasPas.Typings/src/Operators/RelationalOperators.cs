@@ -30,7 +30,7 @@ namespace PasPasPas.Typings.Operators {
             Register(registry, DefinedOperators.LessThenOrEqual);
             Register(registry, DefinedOperators.GreaterThenEqual);
         }
-
+        //
         /// <summary>
         ///     create a new relational operator
         /// </summary>

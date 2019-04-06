@@ -741,9 +741,9 @@ namespace PasPasPas.Parsing.Parser {
             var methods = default(RttiControlSpecifier);
             var properties = default(RttiControlSpecifier);
             var fields = default(RttiControlSpecifier);
-            var specifier = default(Terminal);
 
             using (var list = GetList<RttiControlSpecifier>()) {
+                Terminal specifier;
                 do {
                     specifier = ContinueWith(TokenKind.Methods, TokenKind.Properties, TokenKind.Fields);
 
@@ -817,7 +817,6 @@ namespace PasPasPas.Parsing.Parser {
             var symbol = ContinueWithOrMissing(TokenKind.Warn);
             var id = ContinueWith(TokenKind.Identifier);
             var warningType = default(string);
-            var warningMode = default(Terminal);
             var invalid = false;
 
             if (id == default) {
@@ -828,7 +827,7 @@ namespace PasPasPas.Parsing.Parser {
                 warningType = id.Token.Value;
             }
 
-            warningMode = ContinueWith(TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default);
+            var warningMode = ContinueWith(TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default);
 
             if (warningMode == default) {
                 if (!invalid)
@@ -1159,8 +1158,6 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             var size = 0ul;
-            var parsedSize = EnumSize.Undefined;
-
             if (sizeSymbol?.Token.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
                 size = intValue.UnsignedValue;
             }
@@ -1169,6 +1166,7 @@ namespace PasPasPas.Parsing.Parser {
                 hasError = true;
             }
 
+            EnumSize parsedSize;
             switch (size) {
                 case 1:
                     parsedSize = EnumSize.OneByte;
@@ -1993,7 +1991,6 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             var aliasName = ContinueWith(TokenKind.QuotedString);
-            var prefix = string.Empty;
             var parsedAliasName = string.Empty;
 
             if (aliasName != default && aliasName.Token.ParsedValue is IStringValue alias) {
@@ -2004,7 +2001,7 @@ namespace PasPasPas.Parsing.Parser {
                     ErrorLastPart(CompilerDirectiveParserErrors.InvalidObjTypeDirective);
                 }
                 else {
-                    prefix = parsedAliasName.Substring(0, 1);
+                    var prefix = parsedAliasName.Substring(0, 1);
                     if (!string.Equals(prefix, "N", StringComparison.OrdinalIgnoreCase) &&
                         !string.Equals(prefix, "B", StringComparison.OrdinalIgnoreCase)) {
                         parsedAliasName = null;
@@ -2492,10 +2489,9 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
         public AlignSwitch ParseAlignSwitch() {
-            var alignSymbol = default(Terminal);
             var alignSwitch = default(Terminal);
             var alignValue = Alignment.Undefined;
-
+            Terminal alignSymbol;
             if (Match(TokenKind.AlignSwitch1)) {
                 alignSymbol = ContinueWith(TokenKind.AlignSwitch1);
                 alignValue = Alignment.Unaligned;
@@ -2563,7 +2559,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected override bool AllowIdentifier() {
             var token = CurrentToken().Value;
-            return (!string.IsNullOrEmpty(token)) && (Tokenizer.Keywords.ContainsKey(token));
+            return !string.IsNullOrEmpty(token) && Tokenizer.Keywords.ContainsKey(token);
         }
 
     }

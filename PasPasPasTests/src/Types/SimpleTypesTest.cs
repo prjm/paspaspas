@@ -59,6 +59,12 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestArrayTypes2() {
+            AssertDeclType("array [1..4, 1..4] of Integer", typeKind: CommonTypeKind.StaticArrayType);
+            AssertDeclType("array [1..4, 1..4] of Integer", (td) => Assert.AreEqual(CommonTypeKind.StaticArrayType, (td as ArrayType)?.BaseType?.TypeKind));
+        }
+
+        [TestMethod]
         public void TestConstantArrays()
             => AssertExprValue("a", GetArrayValue(RegisteredTypes.SmallestUserTypeId, KnownTypeIds.CardinalType, GetIntegerValue(0x7E3), GetIntegerValue(0x81B), GetIntegerValue(0x819), GetIntegerValue(0x81A)), "const a: array [0..3] of Cardinal = ($000007E3, $0000081B, $00000819, $0000081A);");
 

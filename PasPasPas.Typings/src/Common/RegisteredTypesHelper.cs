@@ -337,6 +337,10 @@ namespace PasPasPas.Typings.Common {
                     return DefinedOperators.UnaryPlus;
                 case ExpressionKind.In:
                     return DefinedOperators.InSetOperator;
+                case ExpressionKind.As:
+                    return DefinedOperators.AsOperator;
+                case ExpressionKind.Is:
+                    return DefinedOperators.IsOperator;
             };
 
             if (kind == ExpressionKind.Plus) {

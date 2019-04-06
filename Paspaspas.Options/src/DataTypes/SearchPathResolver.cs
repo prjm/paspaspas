@@ -12,7 +12,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///  parent option set
         /// </summary>
-        private OptionSet optionSet;
+        private readonly OptionSet optionSet;
 
         /// <summary>
         ///     Create a new search path resolve

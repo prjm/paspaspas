@@ -420,5 +420,10 @@
         /// </summary>
         public const int GenericArrayType = 111;
 
+        /// <summary>
+        ///     class alias
+        /// </summary>
+        public const int TClassAlias = 112;
+
     }
 }

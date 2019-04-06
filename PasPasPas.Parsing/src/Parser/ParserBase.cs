@@ -344,8 +344,8 @@ namespace PasPasPas.Parsing.Parser {
         protected bool Match(int tokenKind1, int tokenKind2) {
             var token = CurrentToken();
             return
-                (token.Kind == tokenKind1) ||
-                (token.Kind == tokenKind2);
+                token.Kind == tokenKind1 ||
+                token.Kind == tokenKind2;
         }
 
         /// <summary>
@@ -358,9 +358,9 @@ namespace PasPasPas.Parsing.Parser {
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3) {
             var token = CurrentToken();
             return
-                (token.Kind == tokenKind1) ||
-                (token.Kind == tokenKind2) ||
-                (token.Kind == tokenKind3);
+                token.Kind == tokenKind1 ||
+                token.Kind == tokenKind2 ||
+                token.Kind == tokenKind3;
         }
 
         /// <summary>
@@ -374,10 +374,10 @@ namespace PasPasPas.Parsing.Parser {
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
             var token = CurrentToken();
             return
-                (token.Kind == tokenKind1) ||
-                (token.Kind == tokenKind2) ||
-                (token.Kind == tokenKind3) ||
-                (token.Kind == tokenKind4);
+                token.Kind == tokenKind1 ||
+                token.Kind == tokenKind2 ||
+                token.Kind == tokenKind3 ||
+                token.Kind == tokenKind4;
         }
 
         /// <summary>
@@ -392,11 +392,11 @@ namespace PasPasPas.Parsing.Parser {
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             var token = CurrentToken();
             return
-                (token.Kind == tokenKind1) ||
-                (token.Kind == tokenKind2) ||
-                (token.Kind == tokenKind3) ||
-                (token.Kind == tokenKind4) ||
-                (token.Kind == tokenKind5);
+                token.Kind == tokenKind1 ||
+                token.Kind == tokenKind2 ||
+                token.Kind == tokenKind3 ||
+                token.Kind == tokenKind4 ||
+                token.Kind == tokenKind5;
         }
 
         /// <summary>
@@ -412,12 +412,12 @@ namespace PasPasPas.Parsing.Parser {
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
             var token = CurrentToken();
             return
-                (token.Kind == tokenKind1) ||
-                (token.Kind == tokenKind2) ||
-                (token.Kind == tokenKind3) ||
-                (token.Kind == tokenKind4) ||
-                (token.Kind == tokenKind5) ||
-                (token.Kind == tokenKind6);
+                token.Kind == tokenKind1 ||
+                token.Kind == tokenKind2 ||
+                token.Kind == tokenKind3 ||
+                token.Kind == tokenKind4 ||
+                token.Kind == tokenKind5 ||
+                token.Kind == tokenKind6;
         }
 
         /// <summary>
@@ -434,13 +434,13 @@ namespace PasPasPas.Parsing.Parser {
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
             var token = CurrentToken();
             return
-                (token.Kind == tokenKind1) ||
-                (token.Kind == tokenKind2) ||
-                (token.Kind == tokenKind3) ||
-                (token.Kind == tokenKind4) ||
-                (token.Kind == tokenKind5) ||
-                (token.Kind == tokenKind6) ||
-                (token.Kind == tokenKind7);
+                token.Kind == tokenKind1 ||
+                token.Kind == tokenKind2 ||
+                token.Kind == tokenKind3 ||
+                token.Kind == tokenKind4 ||
+                token.Kind == tokenKind5 ||
+                token.Kind == tokenKind6 ||
+                token.Kind == tokenKind7;
         }
 
         /// <summary>
@@ -459,15 +459,15 @@ namespace PasPasPas.Parsing.Parser {
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9) {
             var token = CurrentToken();
             return
-                (token.Kind == tokenKind1) ||
-                (token.Kind == tokenKind2) ||
-                (token.Kind == tokenKind3) ||
-                (token.Kind == tokenKind4) ||
-                (token.Kind == tokenKind5) ||
-                (token.Kind == tokenKind6) ||
-                (token.Kind == tokenKind7) ||
-                (token.Kind == tokenKind8) ||
-                (token.Kind == tokenKind9);
+                token.Kind == tokenKind1 ||
+                token.Kind == tokenKind2 ||
+                token.Kind == tokenKind3 ||
+                token.Kind == tokenKind4 ||
+                token.Kind == tokenKind5 ||
+                token.Kind == tokenKind6 ||
+                token.Kind == tokenKind7 ||
+                token.Kind == tokenKind8 ||
+                token.Kind == tokenKind9;
         }
 
 
@@ -487,14 +487,14 @@ namespace PasPasPas.Parsing.Parser {
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
             var token = CurrentToken();
             return
-                (token.Kind == tokenKind1) ||
-                (token.Kind == tokenKind2) ||
-                (token.Kind == tokenKind3) ||
-                (token.Kind == tokenKind4) ||
-                (token.Kind == tokenKind5) ||
-                (token.Kind == tokenKind6) ||
-                (token.Kind == tokenKind7) ||
-                (token.Kind == tokenKind8);
+                token.Kind == tokenKind1 ||
+                token.Kind == tokenKind2 ||
+                token.Kind == tokenKind3 ||
+                token.Kind == tokenKind4 ||
+                token.Kind == tokenKind5 ||
+                token.Kind == tokenKind6 ||
+                token.Kind == tokenKind7 ||
+                token.Kind == tokenKind8;
         }
 
 
@@ -669,7 +669,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         /// <returns></returns>
         protected Terminal ContinueWith(int tokenKind1, int tokenKind2) {
-            var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) || (tokenKind2 == TokenKind.Identifier);
+            var requiresIdentifier = tokenKind1 == TokenKind.Identifier || tokenKind2 == TokenKind.Identifier;
 
             if (!Tokenizer.HasNextToken) {
                 return null;
@@ -696,9 +696,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected Terminal ContinueWith(int tokenKind1, int tokenKind2, int tokenKind3) {
             var requiresIdentifier =
-                (tokenKind1 == TokenKind.Identifier) ||
-                (tokenKind2 == TokenKind.Identifier) ||
-                (tokenKind3 == TokenKind.Identifier);
+                tokenKind1 == TokenKind.Identifier ||
+                tokenKind2 == TokenKind.Identifier ||
+                tokenKind3 == TokenKind.Identifier;
 
             if (!Tokenizer.HasNextToken) {
                 return null;
