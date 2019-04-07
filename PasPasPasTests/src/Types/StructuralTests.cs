@@ -21,7 +21,6 @@ namespace PasPasPasTests.Types {
 
         private void AssertTypeForAccessModifier(string modifier, string decl, string expression, AccessModifierTestMode mode, int typeId, bool classFunction = false) {
             var file = "SimpleExpr";
-            var decl0 = string.Empty;
             var decl1 = string.Empty;
             var decl2 = string.Empty;
             var cf = classFunction ? " class " : string.Empty;

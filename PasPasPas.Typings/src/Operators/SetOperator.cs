@@ -104,7 +104,7 @@ namespace PasPasPas.Typings.Operators {
                 if (left.IsConstant() && right.IsConstant())
                     return Runtime.Structured.InSet(TypeRegistry, left, right);
 
-                return TypeRegistry.MakeReference(KnownTypeIds.BooleanType);
+                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
             }
 
             return GetErrorTypeReference();

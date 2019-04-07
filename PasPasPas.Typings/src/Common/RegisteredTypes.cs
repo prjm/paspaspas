@@ -384,7 +384,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="typeId">type id</param>
         /// <returns>type reference</returns>
-        public ITypeReference MakeReference(int typeId)
+        public ITypeReference MakeTypeInstanceReference(int typeId)
             => Runtime.Types.MakeTypeInstanceReference(typeId, GetTypeKindOf(typeId));
 
         private int ResolveAlias(int typeId) {

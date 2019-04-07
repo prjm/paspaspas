@@ -5,12 +5,9 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Typings.Operators {
 
     /// <summary>
-    ///     base class for operators
+    ///     common base class for operators
     /// </summary>
     public abstract class OperatorBase : IOperator {
-
-        private readonly int kind;
-        private readonly int arity;
 
         /// <summary>
         ///     create a new operator definition
@@ -18,22 +15,20 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="withKind">operator kind</param>
         /// <param name="withArity">operator arity</param>
         protected OperatorBase(int withKind, int withArity) {
-            kind = withKind;
-            arity = withArity;
+            Kind = withKind;
+            Arity = withArity;
         }
 
         /// <summary>
         ///     operator kind
         /// </summary>
         /// <see cref="DefinedOperators"/>
-        public int Kind
-            => kind;
+        public int Kind { get; }
 
         /// <summary>
         ///     operator arity (number of operands)
         /// </summary>
-        public int Arity
-            => arity;
+        public int Arity { get; }
 
         /// <summary>
         ///     operator name (optional)
@@ -49,7 +44,7 @@ namespace PasPasPas.Typings.Operators {
         ///     runtime values
         /// </summary>
         public IRuntimeValueFactory Runtime
-            => TypeRegistry?.Runtime;
+            => TypeRegistry.Runtime;
 
         /// <summary>
         ///     get the output type for an operation
@@ -57,7 +52,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="input">input signature</param>
         /// <returns>output type id</returns>
         public ITypeReference EvaluateOperator(Signature input) {
-            switch (arity) {
+            switch (Arity) {
                 case 1:
                     return EvaluateUnaryOperator(input);
                 case 2:
@@ -88,7 +83,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <returns></returns>
         protected ITypeReference GetErrorTypeReference()
-            => TypeRegistry.MakeReference(KnownTypeIds.ErrorType);
+            => TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 
         /// <summary>
         ///     create a type reference to the smallest integral type for two operands
@@ -98,7 +93,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="minBitSize">minimal operator size</param>
         /// <returns>type reference</returns>
         protected ITypeReference GetSmallestIntegralType(ITypeReference left, ITypeReference right, int minBitSize)
-            => TypeRegistry.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+            => TypeRegistry.MakeTypeInstanceReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
 
         /// <summary>
         ///     create a type reference to the smallest integral type for two operands
@@ -111,7 +106,7 @@ namespace PasPasPas.Typings.Operators {
             if (left.TypeKind == CommonTypeKind.RealType || right.TypeKind == CommonTypeKind.RealType)
                 return GetExtendedType();
 
-            return TypeRegistry.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+            return TypeRegistry.MakeTypeInstanceReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
         }
 
         /// <summary>
@@ -124,15 +119,15 @@ namespace PasPasPas.Typings.Operators {
         protected ITypeReference GetSmallestBoolOrIntegralType(ITypeReference left, ITypeReference right, int minBitSize) {
 
             if (TypeRegistry.IsSubrangeType(left.TypeId, out var subrangeType1))
-                return GetSmallestBoolOrIntegralType(TypeRegistry.MakeReference(subrangeType1.BaseType.TypeId), right, minBitSize);
+                return GetSmallestBoolOrIntegralType(TypeRegistry.MakeTypeInstanceReference(subrangeType1.BaseType.TypeId), right, minBitSize);
 
             if (TypeRegistry.IsSubrangeType(right.TypeId, out var subrangeType2))
-                return GetSmallestBoolOrIntegralType(left, TypeRegistry.MakeReference(subrangeType2.BaseType.TypeId), minBitSize);
+                return GetSmallestBoolOrIntegralType(left, TypeRegistry.MakeTypeInstanceReference(subrangeType2.BaseType.TypeId), minBitSize);
 
             if (left.TypeKind == CommonTypeKind.BooleanType && right.TypeKind == CommonTypeKind.BooleanType)
-                return TypeRegistry.MakeReference(TypeRegistry.GetSmallestBooleanTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+                return TypeRegistry.MakeTypeInstanceReference(TypeRegistry.GetSmallestBooleanTypeOrNext(left.TypeId, right.TypeId, minBitSize));
 
-            return TypeRegistry.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+            return TypeRegistry.MakeTypeInstanceReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
         }
 
 
@@ -141,7 +136,23 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <returns>type reference</returns>
         protected ITypeReference GetExtendedType()
-            => TypeRegistry.MakeReference(KnownTypeIds.Extended);
+            => TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.Extended);
+
+        /// <summary>
+        ///     get a referenced type definition by id
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        protected ITypeDefinition GetTypeByIdOrUndefinedType(int typeId)
+            => TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
+
+        /// <summary>
+        ///     get a reference to the a specified type
+        /// </summary>
+        /// <returns>type reference</returns>
+        protected ITypeReference MakeTypeInstanceReference(int typeId)
+            => TypeRegistry.MakeTypeInstanceReference(typeId);
+
 
     }
 }

@@ -639,7 +639,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected Terminal ContinueWith(int tokenKind, out bool hasSymbol) {
             var result = ContinueWith(tokenKind);
-            hasSymbol = result != null;
+            hasSymbol = result != default;
             return result;
         }
 
@@ -652,9 +652,8 @@ namespace PasPasPas.Parsing.Parser {
             var requiresIdentifier = tokenKind == TokenKind.Identifier;
 
             if (!Match(tokenKind) &&
-                (!requiresIdentifier ||
-                (requiresIdentifier && !AllowIdentifier()))) {
-                return null;
+                (!requiresIdentifier || requiresIdentifier && !AllowIdentifier())) {
+                return default;
             }
 
             var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
@@ -671,15 +670,12 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ContinueWith(int tokenKind1, int tokenKind2) {
             var requiresIdentifier = tokenKind1 == TokenKind.Identifier || tokenKind2 == TokenKind.Identifier;
 
-            if (!Tokenizer.HasNextToken) {
-                return null;
-            }
+            if (!Tokenizer.HasNextToken)
+                return default;
 
             if (!Match(tokenKind1, tokenKind2) &&
-                (!requiresIdentifier ||
-                (requiresIdentifier && !AllowIdentifier()))) {
-                return null;
-            }
+                (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
+                return default;
 
             var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
@@ -701,14 +697,12 @@ namespace PasPasPas.Parsing.Parser {
                 tokenKind3 == TokenKind.Identifier;
 
             if (!Tokenizer.HasNextToken) {
-                return null;
+                return default;
             }
 
             if (!Match(tokenKind1, tokenKind2, tokenKind3) &&
-                (!requiresIdentifier ||
-                (requiresIdentifier && !AllowIdentifier()))) {
-                return null;
-            }
+                (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
+                return default;
 
             var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
@@ -727,20 +721,18 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected Terminal ContinueWith(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
             var requiresIdentifier =
-                (tokenKind1 == TokenKind.Identifier) ||
-                (tokenKind2 == TokenKind.Identifier) ||
-                (tokenKind3 == TokenKind.Identifier) ||
-                (tokenKind4 == TokenKind.Identifier);
+                tokenKind1 == TokenKind.Identifier ||
+                tokenKind2 == TokenKind.Identifier ||
+                tokenKind3 == TokenKind.Identifier ||
+                tokenKind4 == TokenKind.Identifier;
 
-            if (!Tokenizer.HasNextToken) {
-                return null;
-            }
+            if (!Tokenizer.HasNextToken)
+                return default;
 
             if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4) &&
-                (!requiresIdentifier ||
-                (requiresIdentifier && !AllowIdentifier()))) {
-                return null;
-            }
+                (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
+                return default;
+
 
             var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
@@ -758,21 +750,18 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected Terminal ContinueWith(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             var requiresIdentifier =
-                (tokenKind1 == TokenKind.Identifier) ||
-                (tokenKind2 == TokenKind.Identifier) ||
-                (tokenKind3 == TokenKind.Identifier) ||
-                (tokenKind4 == TokenKind.Identifier) ||
-                (tokenKind5 == TokenKind.Identifier);
+                tokenKind1 == TokenKind.Identifier ||
+                tokenKind2 == TokenKind.Identifier ||
+                tokenKind3 == TokenKind.Identifier ||
+                tokenKind4 == TokenKind.Identifier ||
+                tokenKind5 == TokenKind.Identifier;
 
-            if (!Tokenizer.HasNextToken) {
-                return null;
-            }
+            if (!Tokenizer.HasNextToken)
+                return default;
 
             if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5) &&
-                (!requiresIdentifier ||
-                (requiresIdentifier && !AllowIdentifier()))) {
-                return null;
-            }
+                (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
+                return default;
 
             var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
@@ -791,21 +780,19 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected Terminal ContinueWith(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
             var requiresIdentifier =
-                (tokenKind1 == TokenKind.Identifier) ||
-                (tokenKind2 == TokenKind.Identifier) ||
-                (tokenKind3 == TokenKind.Identifier) ||
-                (tokenKind4 == TokenKind.Identifier) ||
-                (tokenKind5 == TokenKind.Identifier) ||
-                (tokenKind6 == TokenKind.Identifier);
+                tokenKind2 == TokenKind.Identifier ||
+                tokenKind1 == TokenKind.Identifier ||
+                tokenKind3 == TokenKind.Identifier ||
+                tokenKind4 == TokenKind.Identifier ||
+                tokenKind5 == TokenKind.Identifier ||
+                tokenKind6 == TokenKind.Identifier;
 
             if (!Tokenizer.HasNextToken)
-                return null;
+                return default;
 
             if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6) &&
-                (!requiresIdentifier ||
-                (requiresIdentifier && !AllowIdentifier()))) {
-                return null;
-            }
+                (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
+                return default;
 
             var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
@@ -826,23 +813,21 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected Terminal ContinueWith(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
             var requiresIdentifier =
-                (tokenKind1 == TokenKind.Identifier) ||
-                (tokenKind2 == TokenKind.Identifier) ||
-                (tokenKind3 == TokenKind.Identifier) ||
-                (tokenKind4 == TokenKind.Identifier) ||
-                (tokenKind5 == TokenKind.Identifier) ||
-                (tokenKind6 == TokenKind.Identifier) ||
-                (tokenKind7 == TokenKind.Identifier) ||
-                (tokenKind8 == TokenKind.Identifier);
+                tokenKind1 == TokenKind.Identifier ||
+                tokenKind2 == TokenKind.Identifier ||
+                tokenKind3 == TokenKind.Identifier ||
+                tokenKind4 == TokenKind.Identifier ||
+                tokenKind5 == TokenKind.Identifier ||
+                tokenKind6 == TokenKind.Identifier ||
+                tokenKind7 == TokenKind.Identifier ||
+                tokenKind8 == TokenKind.Identifier;
 
             if (!Tokenizer.HasNextToken)
-                return null;
+                return default;
 
             if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8) &&
-                (!requiresIdentifier ||
-                (requiresIdentifier && !AllowIdentifier()))) {
-                return null;
-            }
+                (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
+                return default;
 
             var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
@@ -875,7 +860,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ContinueWithOrMissing(int tokenKind) {
             var terminal = ContinueWith(tokenKind);
 
-            if (terminal == null)
+            if (terminal == default)
                 return ErrorMissingToken(tokenKind);
 
             return terminal;
@@ -889,7 +874,7 @@ namespace PasPasPas.Parsing.Parser {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind);
             logSource.LogError(MissingToken, data);
-            return null;
+            return default;
         }
 
         /// <summary>
@@ -901,7 +886,7 @@ namespace PasPasPas.Parsing.Parser {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind1, tokenKind2);
             logSource.LogError(MissingToken, data);
-            return null;
+            return default;
         }
 
 
@@ -915,7 +900,7 @@ namespace PasPasPas.Parsing.Parser {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3);
             logSource.LogError(MissingToken, data);
-            return null;
+            return default;
         }
 
         /// <summary>
@@ -929,7 +914,7 @@ namespace PasPasPas.Parsing.Parser {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
             logSource.LogError(MissingToken, data);
-            return null;
+            return default;
         }
 
         /// <summary>
@@ -944,7 +929,7 @@ namespace PasPasPas.Parsing.Parser {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
             logSource.LogError(MissingToken, data);
-            return null;
+            return default;
         }
 
         /// <summary>
@@ -960,7 +945,7 @@ namespace PasPasPas.Parsing.Parser {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
             logSource.LogError(MissingToken, data);
-            return null;
+            return default;
         }
 
         /// <summary>
@@ -971,7 +956,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ContinueWithOrMissing(int tokenKind1, int tokenKind2) {
             var terminal = ContinueWith(tokenKind1, tokenKind2);
 
-            if (terminal == null)
+            if (terminal == default)
                 return ErrorMissingToken(tokenKind1, tokenKind2);
 
             return terminal;
@@ -987,7 +972,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ContinueWithOrMissing(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
             var terminal = ContinueWith(tokenKind1, tokenKind2, tokenKind3, tokenKind4);
 
-            if (terminal == null)
+            if (terminal == default)
                 return ErrorMissingToken(tokenKind1, tokenKind2, tokenKind3, tokenKind4);
 
             return terminal;
@@ -1004,7 +989,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ContinueWithOrMissing(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             var terminal = ContinueWith(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
 
-            if (terminal == null)
+            if (terminal == default)
                 return ErrorMissingToken(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
 
             return terminal;
@@ -1019,7 +1004,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ContinueWithOrMissing(int tokenKind1, int tokenKind2, int tokenKind3) {
             var terminal = ContinueWith(tokenKind1, tokenKind2, tokenKind3);
 
-            if (terminal == null)
+            if (terminal == default)
                 return ErrorMissingToken(tokenKind1, tokenKind2, tokenKind3);
 
             return terminal;
@@ -1037,7 +1022,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ContinueWithOrMissing(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
             var terminal = ContinueWith(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
 
-            if (terminal == null)
+            if (terminal == default)
                 return ErrorMissingToken(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
 
             return terminal;
@@ -1062,9 +1047,9 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing) {
-            if (Tokenizer != null) {
+            if (Tokenizer != default) {
                 tokenizer.Dispose();
-                tokenizer = null;
+                tokenizer = default;
             }
         }
 

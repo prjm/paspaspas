@@ -24,7 +24,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="typeId">type id</param>
         /// <returns>type reference</returns>
-        ITypeReference MakeReference(int typeId);
+        ITypeReference MakeTypeInstanceReference(int typeId);
 
         /// <summary>
         ///     get a type by type id

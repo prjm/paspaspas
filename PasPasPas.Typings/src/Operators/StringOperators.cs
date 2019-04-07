@@ -65,12 +65,12 @@ namespace PasPasPas.Typings.Operators {
             var rightType = TypeRegistry.GetTypeByIdOrUndefinedType(right.TypeId);
 
             if (leftType.TypeKind == CommonTypeKind.UnicodeStringType || right.TypeKind == CommonTypeKind.UnicodeStringType)
-                return TypeRegistry.MakeReference(KnownTypeIds.UnicodeStringType);
+                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnicodeStringType);
 
             if (leftType.TypeKind == CommonTypeKind.WideCharType || rightType.TypeKind == CommonTypeKind.WideCharType)
-                return TypeRegistry.MakeReference(KnownTypeIds.UnicodeStringType);
+                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnicodeStringType);
 
-            return TypeRegistry.MakeReference(KnownTypeIds.AnsiStringType);
+            return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.AnsiStringType);
         }
     }
 }

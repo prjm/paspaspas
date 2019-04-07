@@ -94,9 +94,9 @@ namespace PasPasPas.Typings.Routines {
             }
 
             if (useUnicode)
-                return TypeRegistry.MakeReference(KnownTypeIds.UnicodeStringType);
+                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnicodeStringType);
             else
-                return TypeRegistry.MakeReference(KnownTypeIds.AnsiStringType);
+                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.AnsiStringType);
 
         }
     }

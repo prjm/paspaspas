@@ -69,7 +69,7 @@ namespace PasPasPasTests.Infra {
                         result.Append(reader.NextChar());
                         len++;
 
-                        if (len == (Content2.Length + splitIndex) || len == (Content1.Length + Content2.Length))
+                        if (len == (Content2.Length + splitIndex) || len == Content1.Length + Content2.Length)
                             Assert.IsTrue(reader.AtEof);
                         else
                             Assert.IsFalse(reader.AtEof);

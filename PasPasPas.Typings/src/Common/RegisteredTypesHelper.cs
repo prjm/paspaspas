@@ -295,10 +295,10 @@ namespace PasPasPas.Typings.Common {
                 return DefinedOperators.Undefined;
 
             if (typeRegistry.IsSubrangeType(left.TypeId, out var subrangeType1))
-                return typeRegistry.GetOperatorId(kind, typeRegistry.MakeReference(subrangeType1.BaseType.TypeId), right);
+                return typeRegistry.GetOperatorId(kind, typeRegistry.MakeTypeInstanceReference(subrangeType1.BaseType.TypeId), right);
 
             if (typeRegistry.IsSubrangeType(right.TypeId, out var subrangeType2))
-                return typeRegistry.GetOperatorId(kind, left, typeRegistry.MakeReference(subrangeType2.BaseType.TypeId));
+                return typeRegistry.GetOperatorId(kind, left, typeRegistry.MakeTypeInstanceReference(subrangeType2.BaseType.TypeId));
 
             switch (kind) {
                 case ExpressionKind.LessThen:
@@ -450,17 +450,17 @@ namespace PasPasPas.Typings.Common {
             if (elementType == default)
                 baseType = types.Runtime.Types.MakeErrorTypeReference();
             else if (baseType == default)
-                baseType = types.MakeReference(elementType.TypeId);
+                baseType = types.MakeTypeInstanceReference(elementType.TypeId);
             else if (baseType.TypeKind.IsIntegral() && elementType.TypeKind.IsIntegral())
-                baseType = types.MakeReference(types.GetSmallestIntegralTypeOrNext(baseType.TypeId, elementType.TypeId));
+                baseType = types.MakeTypeInstanceReference(types.GetSmallestIntegralTypeOrNext(baseType.TypeId, elementType.TypeId));
             else if (baseType.TypeKind.IsTextual() && elementType.TypeKind.IsTextual())
-                baseType = types.MakeReference(types.GetSmallestTextTypeOrNext(baseType.TypeId, elementType.TypeId));
+                baseType = types.MakeTypeInstanceReference(types.GetSmallestTextTypeOrNext(baseType.TypeId, elementType.TypeId));
             else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == elementType.TypeId)
-                baseType = types.MakeReference(elementType.TypeId);
+                baseType = types.MakeTypeInstanceReference(elementType.TypeId);
             else if (baseType.TypeKind == CommonTypeKind.RealType && elementType.TypeKind == CommonTypeKind.RealType)
-                baseType = types.MakeReference(KnownTypeIds.Extended);
+                baseType = types.MakeTypeInstanceReference(KnownTypeIds.Extended);
             else if (baseType.TypeKind == CommonTypeKind.RecordType && types.AreRecordTypesCompatible(baseType.TypeId, elementType.TypeId))
-                baseType = types.MakeReference(elementType.TypeId);
+                baseType = types.MakeTypeInstanceReference(elementType.TypeId);
 
             return baseType;
         }
@@ -478,11 +478,11 @@ namespace PasPasPas.Typings.Common {
                 return types.Runtime.Types.MakeErrorTypeReference();
 
             if (!newType) {
-                return types.MakeReference(left.TypeId);
+                return types.MakeTypeInstanceReference(left.TypeId);
             }
 
             var type = types.TypeCreator.CreateSetType(baseType);
-            return types.MakeReference(type.TypeId);
+            return types.MakeTypeInstanceReference(type.TypeId);
         }
 
         /// <summary>
@@ -559,6 +559,40 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public static uint GetPointerSize(this ITypeRegistry typeRegistry)
             => typeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.GenericPointer).TypeSizeInBytes;
+
+        /// <summary>
+        ///     check if two types have a common base class
+        /// </summary>
+        /// <param name="typeRegistry"></param>
+        /// <param name="leftTypeId"></param>
+        /// <param name="rightTypeId"></param>
+        /// <returns></returns>
+        public static bool AreCommonBaseClasses(this ITypeRegistry typeRegistry, int leftTypeId, int rightTypeId) {
+            var leftClass = typeRegistry.GetTypeByIdOrUndefinedType(leftTypeId) as IStructuredType;
+            var rightClass = typeRegistry.GetTypeByIdOrUndefinedType(rightTypeId) as IStructuredType;
+
+            if (leftClass.TypeId == rightClass.TypeId)
+                return true;
+
+            var metaBaseClass = typeRegistry.GetTypeByIdOrUndefinedType(leftClass.BaseClass?.TypeId ?? KnownTypeIds.ErrorType) as IMetaStructuredType;
+            while (metaBaseClass != default) {
+                var baseClass = typeRegistry.GetTypeByIdOrUndefinedType(metaBaseClass.BaseType) as IStructuredType;
+                if (baseClass.TypeId == rightClass.TypeId)
+                    return true;
+                metaBaseClass = typeRegistry.GetTypeByIdOrUndefinedType(baseClass.BaseClass?.TypeId ?? KnownTypeIds.ErrorType) as IMetaStructuredType;
+            }
+
+            metaBaseClass = typeRegistry.GetTypeByIdOrUndefinedType(rightClass.BaseClass?.TypeId ?? KnownTypeIds.ErrorType) as IMetaStructuredType;
+            while (metaBaseClass != default) {
+                var baseClass = typeRegistry.GetTypeByIdOrUndefinedType(metaBaseClass.BaseType) as IStructuredType;
+                if (baseClass.TypeId == leftClass.TypeId)
+                    return true;
+                metaBaseClass = typeRegistry.GetTypeByIdOrUndefinedType(baseClass.BaseClass?.TypeId ?? KnownTypeIds.ErrorType) as IMetaStructuredType;
+            }
+
+
+            return false;
+        }
 
     }
 }

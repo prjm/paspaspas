@@ -139,9 +139,9 @@ namespace PasPasPas.Typings.Operators {
             }
 
             if (intType.BitSize < 32)
-                return TypeRegistry.MakeReference(KnownTypeIds.IntegerType);
+                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.IntegerType);
 
-            return TypeRegistry.MakeReference(intType.TypeId);
+            return TypeRegistry.MakeTypeInstanceReference(intType.TypeId);
         }
 
         private ITypeReference EvaluateXorOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {

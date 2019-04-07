@@ -152,7 +152,7 @@ namespace PasPasPas.Runtime.Values {
                 // TODO: add some type checking here
                 if (value.IsType())
                     return types.MakeTypeReference(typeId);
-                return types.MakeReference(typeId);
+                return types.MakeTypeInstanceReference(typeId);
             }
 
             if (value is IStringValue stringValue) {
@@ -202,7 +202,7 @@ namespace PasPasPas.Runtime.Values {
                 // TODO: add some type checking here
                 if (value.IsType())
                     return types.MakeTypeReference(typeId);
-                return types.MakeReference(typeId);
+                return types.MakeTypeInstanceReference(typeId);
             }
 
             if (!(value is ICharValue charValue))

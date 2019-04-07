@@ -53,7 +53,7 @@ namespace PasPasPas.Typings.Common {
             if (baseTypeValue == default)
                 return ResolveByName(default, name, numberOfTypeArguments, ResolverFlags.None);
             else
-                return ResolveByName(TypeRegistry.MakeReference(baseTypeValue.Symbol.TypeId), name, numberOfTypeArguments, ResolverFlags.None);
+                return ResolveByName(TypeRegistry.MakeTypeInstanceReference(baseTypeValue.Symbol.TypeId), name, numberOfTypeArguments, ResolverFlags.None);
         }
 
         /// <summary>
@@ -79,13 +79,13 @@ namespace PasPasPas.Typings.Common {
                         return scopeEntry.Value;
 
                     if (scopeEntry.Value.Kind == ReferenceKind.RefToSelf) {
-                        var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0, flags);
+                        var importedEntry = ResolveByName(TypeRegistry.MakeTypeInstanceReference(scopeEntry.Value.Symbol.TypeId), name, 0, flags);
                         if (importedEntry != default)
                             return importedEntry;
                     }
 
                     if (scopeEntry.Value.Kind == ReferenceKind.RefToUnit) {
-                        var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0, flags | ResolverFlags.FromAnotherUnit);
+                        var importedEntry = ResolveByName(TypeRegistry.MakeTypeInstanceReference(scopeEntry.Value.Symbol.TypeId), name, 0, flags | ResolverFlags.FromAnotherUnit);
                         if (importedEntry != default)
                             return importedEntry;
                     }
@@ -96,7 +96,7 @@ namespace PasPasPas.Typings.Common {
                 return default;
 
             if (baseTypeValue.TypeKind == CommonTypeKind.Type)
-                baseTypeValue = TypeRegistry.MakeReference(baseTypeValue.TypeId);
+                baseTypeValue = TypeRegistry.MakeTypeInstanceReference(baseTypeValue.TypeId);
 
             if (baseTypeValue.TypeKind == CommonTypeKind.Unit) {
                 var unit = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as UnitType;
@@ -134,7 +134,7 @@ namespace PasPasPas.Typings.Common {
 
         private ITypeReference GetTypeReference(Reference reference) {
             if (reference == default || reference.Symbol == default)
-                return TypeRegistry.MakeReference(KnownTypeIds.ErrorType);
+                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 
             var baseTypeValue = TypeRegistry.GetTypeByIdOrUndefinedType(reference.Symbol.TypeId);
 
@@ -149,7 +149,7 @@ namespace PasPasPas.Typings.Common {
                 return TypeRegistry.MakeTypeReference(reference.Symbol.TypeId);
             }
 
-            return TypeRegistry.MakeReference(reference.Symbol.TypeId);
+            return TypeRegistry.MakeTypeInstanceReference(reference.Symbol.TypeId);
         }
 
         private Reference ResolveNameInMetaType(MetaStructuredTypeDeclaration metaType, ScopedName scopedName) {

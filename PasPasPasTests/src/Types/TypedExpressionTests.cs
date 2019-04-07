@@ -811,6 +811,15 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestClassOperators() {
             AssertExprType("a is TObject", KnownTypeIds.BooleanType, "var a: TObject;");
+            AssertExprType("a is system.TObject", KnownTypeIds.BooleanType, "var a: TObject;");
+            AssertExprType("a is TObject", KnownTypeIds.BooleanType, "type ta = class end; var a: ta;");
+            AssertExprType("a is tb", KnownTypeIds.ErrorType, "type ta = class end; tb = class end; var a: ta;");
+            AssertExprType("a is tb", KnownTypeIds.BooleanType, "type ta = class end; tb = class(ta) end; var a: ta;");
+            AssertExprType("a is ta", KnownTypeIds.BooleanType, "type ta = class end; tb = class(ta) end; var a: tb;");
+            AssertExprType("a is tb", KnownTypeIds.BooleanType, "type ta = class end; tc = ta; tb = class(tc) end; var a: ta;");
+            AssertExprType("a is ta", KnownTypeIds.BooleanType, "type ta = class end; tc = ta; tb = class(tc) end; var a: tb;");
+            //AssertExprType("a is TObject", KnownTypeIds.BooleanType, "var a: TObject;");
+            //AssertExprType("a is system.TObject", KnownTypeIds.BooleanType, "var a: TObject;");
         }
 
     }

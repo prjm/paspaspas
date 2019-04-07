@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
 
@@ -62,17 +59,31 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.IsOperator)
                 return EvaluateIsOperator(input);
 
-            return TypeRegistry.Runtime.Types.MakeErrorTypeReference();
+            if (Kind == DefinedOperators.AsOperator)
+                return EvaluateAsOperator(input);
+
+            return GetErrorTypeReference();
         }
 
         private ITypeReference EvaluateIsOperator(Signature input) {
+            var classObject = GetTypeByIdOrUndefinedType(input[0].TypeId) as IStructuredType;
+            var classType = GetTypeByIdOrUndefinedType(input[1].TypeId) as IMetaStructuredType;
+
+            if (classObject == default || classType == default)
+                return GetErrorTypeReference();
+
+            if (!TypeRegistry.AreCommonBaseClasses(classObject.TypeId, classType.BaseType))
+                return GetErrorTypeReference();
+
+            return MakeTypeInstanceReference(KnownTypeIds.BooleanType);
+        }
+
+        private ITypeReference EvaluateAsOperator(Signature input) {
             var leftOperand = TypeRegistry.GetTypeByIdOrUndefinedType(input[0].TypeId) as IStructuredType;
             var rightOperand = TypeRegistry.GetTypeByIdOrUndefinedType(input[1].TypeId) as IMetaStructuredType;
 
-            if (leftOperand == default || rightOperand == default)
-                return Runtime.Types.MakeErrorTypeReference();
-
-            return Runtime.Types.MakeTypeInstanceReference(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType);
+            return Runtime.Types.MakeErrorTypeReference();
         }
+
     }
 }

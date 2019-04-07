@@ -104,7 +104,7 @@ namespace PasPasPas.Typings.Common {
             => environment.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
 
         private ITypeReference GetInstanceTypeById(int typeId)
-            => environment.TypeRegistry.MakeReference(typeId);
+            => environment.TypeRegistry.MakeTypeInstanceReference(typeId);
 
         private ITypeReference GetTypeReferenceById(int typeId)
             => environment.TypeRegistry.MakeTypeReference(typeId);
@@ -362,7 +362,7 @@ namespace PasPasPas.Typings.Common {
                     typeId = KnownTypeIds.ErrorType;
                 }
 
-                element.TypeInfo = environment.TypeRegistry.MakeReference(typeId);
+                element.TypeInfo = environment.TypeRegistry.MakeTypeInstanceReference(typeId);
             }
 
             else if (element.Kind == MetaTypeKind.StringType) {
@@ -829,7 +829,7 @@ namespace PasPasPas.Typings.Common {
                 if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
                     methodParams.ResultType = element.TypeValue.TypeInfo;
                 else
-                    methodParams.ResultType = TypeRegistry.MakeReference(KnownTypeIds.ErrorType);
+                    methodParams.ResultType = TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
             }
         }
 
@@ -1046,7 +1046,7 @@ namespace PasPasPas.Typings.Common {
                         !ExpandRangeOperator(part, requiresArray, values, out var setBaseType) ||
                         (baseType != default && baseType.TypeId != setBaseType))
                         return GetErrorTypeReference(part);
-                    baseType = TypeRegistry.MakeReference(setBaseType);
+                    baseType = TypeRegistry.MakeTypeInstanceReference(setBaseType);
                     continue;
                 }
 

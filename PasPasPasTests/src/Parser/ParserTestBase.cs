@@ -252,7 +252,7 @@ namespace PasPasPasTests.Parser {
 
                                 Assert.AreEqual(subPart, terminals.ResultBuilder.ToString());
                             }
-                            hasFoundInput = (reader.CurrentFile == null || reader.AtEof) || hasFoundInput;
+                            hasFoundInput = reader.CurrentFile == null || reader.AtEof || hasFoundInput;
 
                             visitor.IncludeInput = reader;
                             if (result != null)

@@ -60,8 +60,8 @@ namespace PasPasPas.Typings.Operators {
             if (!input[1].IsArrayValue(out var i1))
                 return TypeRegistry.Runtime.Types.MakeErrorTypeReference();
 
-            var b0 = TypeRegistry.MakeReference(i0.BaseType);
-            var b1 = TypeRegistry.MakeReference(i1.BaseType);
+            var b0 = TypeRegistry.MakeTypeInstanceReference(i0.BaseType);
+            var b1 = TypeRegistry.MakeTypeInstanceReference(i1.BaseType);
             var baseType = TypeRegistry.GetBaseTypeForArrayOrSet(b0, b1);
 
             if (baseType.TypeId == KnownTypeIds.ErrorType)
@@ -69,7 +69,7 @@ namespace PasPasPas.Typings.Operators {
 
             if (!input.IsConstant) {
                 var arrayType = TypeRegistry.TypeCreator.CreateDynamicArrayType(baseType.TypeId, false);
-                return TypeRegistry.MakeReference(arrayType.TypeId);
+                return TypeRegistry.MakeTypeInstanceReference(arrayType.TypeId);
             }
 
             var leftValue = input[0] as IArrayValue;

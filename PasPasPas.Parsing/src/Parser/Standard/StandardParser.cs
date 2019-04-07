@@ -132,7 +132,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
         #region assembler symbols
 
-        private HashSet<string> lockPrefixes =
+        private readonly HashSet<string> lockPrefixes =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "lock",
                 "repne",
@@ -141,11 +141,11 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 "repe",
                 "repz" };
 
-        private HashSet<string> segmentPrefixes =
+        private readonly HashSet<string> segmentPrefixes =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "cs", "ds", "es", "fs", "gs", "ss"};
 
-        private HashSet<string> asmPtr =
+        private readonly HashSet<string> asmPtr =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "byte", "word", "dword", "qword", "tbyte" };
 

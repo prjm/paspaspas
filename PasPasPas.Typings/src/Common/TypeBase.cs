@@ -22,7 +22,7 @@ namespace PasPasPas.Typings.Common {
         ///     get the type id
         /// </summary>
         public ITypeReference TypeInfo
-            => TypeRegistry.MakeReference(TypeId);
+            => TypeRegistry.MakeTypeInstanceReference(TypeId);
 
         /// <summary>
         ///     get the type kind

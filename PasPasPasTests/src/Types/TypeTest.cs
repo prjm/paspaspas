@@ -96,7 +96,7 @@ namespace PasPasPasTests.Types {
             var program = $"program {file};{decls} begin Writeln({expression}); end. ";
 
             SymbolReferencePart searchfunction(object x) {
-                if ((x is SymbolReferencePart part) && string.Equals(part.Name, "writeln", StringComparison.OrdinalIgnoreCase))
+                if (x is SymbolReferencePart part && string.Equals(part.Name, "writeln", StringComparison.OrdinalIgnoreCase))
                     return part;
                 return default;
             };

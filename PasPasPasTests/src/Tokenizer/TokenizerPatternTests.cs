@@ -102,7 +102,6 @@ namespace PasPasPasTests.Tokenizer {
         private IList<Token> RunTestPattern(InputPatterns patterns, Guid expectedMessage, string input) {
             var result = new List<Token>();
             var env = CreateEnvironment();
-            var api = new TokenizerApi(env);
             using (var reader = ReaderApi.CreateReaderForString(TestFileName, input)) {
                 var log = new LogSource(env.Log, LogGuid);
                 var logTarget = new ListLogTarget();
