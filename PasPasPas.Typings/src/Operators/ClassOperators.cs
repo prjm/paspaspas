@@ -72,6 +72,9 @@ namespace PasPasPas.Typings.Operators {
             if (classObject == default || classType == default)
                 return GetErrorTypeReference();
 
+            if (classObject.StructTypeKind == StructuredTypeKind.Interface)
+                return MakeTypeInstanceReference(KnownTypeIds.BooleanType);
+
             if (!TypeRegistry.AreCommonBaseClasses(classObject.TypeId, classType.BaseType))
                 return GetErrorTypeReference();
 
@@ -79,10 +82,16 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeReference EvaluateAsOperator(Signature input) {
-            var leftOperand = TypeRegistry.GetTypeByIdOrUndefinedType(input[0].TypeId) as IStructuredType;
-            var rightOperand = TypeRegistry.GetTypeByIdOrUndefinedType(input[1].TypeId) as IMetaStructuredType;
+            var classObject = GetTypeByIdOrUndefinedType(input[0].TypeId) as IStructuredType;
+            var classType = GetTypeByIdOrUndefinedType(input[1].TypeId) as IMetaStructuredType;
 
-            return Runtime.Types.MakeErrorTypeReference();
+            if (classObject == default || classType == default)
+                return GetErrorTypeReference();
+
+            if (!TypeRegistry.AreCommonBaseClasses(classObject.TypeId, classType.BaseType))
+                return GetErrorTypeReference();
+
+            return MakeTypeInstanceReference(classType.BaseType);
         }
 
     }

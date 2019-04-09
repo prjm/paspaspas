@@ -17,6 +17,9 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         ITypeReference MetaType { get; set; }
 
-
+        /// <summary>
+        ///     structured type kind
+        /// </summary>
+        StructuredTypeKind StructTypeKind { get; }
     }
 }

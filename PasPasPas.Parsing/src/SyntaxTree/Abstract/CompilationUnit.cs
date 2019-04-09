@@ -131,7 +131,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, RequiredUnits, visitor);
+            AcceptPart(this, InterfaceSymbols, visitor);
+            AcceptPart(this, ImplementationSymbols, visitor);
+            AcceptPart(this, Symbols, visitor);
+            AcceptPart(this, InitializationBlock, visitor);
+            AcceptPart(this, FinalizationBlock, visitor);
             visitor.EndVisit(this);
         }
     }

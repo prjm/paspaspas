@@ -59,7 +59,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public Terminal ColonSymbol { get; }
 
-
         /// <summary>
         ///     semicolon
         /// </summary>

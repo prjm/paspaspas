@@ -68,6 +68,17 @@ namespace PasPasPasTests.Types {
         public void TestConstantArrays()
             => AssertExprValue("a", GetArrayValue(RegisteredTypes.SmallestUserTypeId, KnownTypeIds.CardinalType, GetIntegerValue(0x7E3), GetIntegerValue(0x81B), GetIntegerValue(0x819), GetIntegerValue(0x81A)), "const a: array [0..3] of Cardinal = ($000007E3, $0000081B, $00000819, $0000081A);");
 
+        [TestMethod]
+        public void TestDeclaredSymbols() {
+            var p1 = "unit p; interface const A = 5; implementation procedure x; begin writeln(A); end; end;";
+            var p2 = "unit p; interface implementation const A = 5; procedure x; begin writeln(A); end; end;";
+            var p3 = "unit p; interface implementation procedure x; const A = 5; begin writeln(A); end; end;";
+            //var p4 = "unit p; interface type TA = class const X = 5; procedure X; end; implementation procedure TA.x; begin writeln(A); end; end;";
+            AssertExprValue("", GetIntegerValue((sbyte)5), "", KnownTypeIds.UnspecifiedType, true, p1);
+            AssertExprValue("", GetIntegerValue((sbyte)5), "", KnownTypeIds.UnspecifiedType, true, p2);
+            AssertExprValue("", GetIntegerValue((sbyte)5), "", KnownTypeIds.UnspecifiedType, true, p3);
+            //AssertExprValue("", GetIntegerValue((sbyte)5), "", KnownTypeIds.UnspecifiedType, true, p4);
+        }
 
     }
 }

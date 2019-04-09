@@ -42,7 +42,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     generic typey
+        ///     generic type
         /// </summary>
         public GenericTypeCollection Generics { get; set; }
 

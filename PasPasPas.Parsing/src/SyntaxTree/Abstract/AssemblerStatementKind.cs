@@ -16,17 +16,17 @@
         ParamsOperation = 1,
 
         /// <summary>
-        ///     pushenv pseudo-op
+        ///     push environment pseudo-op
         /// </summary>
         PushEnvOperation = 2,
 
         /// <summary>
-        ///     savenec pseudo-op
+        ///     save environment pseudo-op
         /// </summary>
         SaveEnvOperation = 3,
 
         /// <summary>
-        ///     noframe pseudo-op
+        ///     no frame pseudo-op
         /// </summary>
         NoFrameOperation = 4,
     }

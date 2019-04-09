@@ -12,7 +12,6 @@ namespace PasPasPas.Typings.Structured {
     /// </summary>
     public class StructuredTypeDeclaration : StructuredTypeBase, IStructuredType {
 
-        private readonly StructuredTypeKind typeKind;
 
         /// <summary>
         ///     create a new structured type declaration
@@ -20,14 +19,19 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="withId"></param>
         /// <param name="kind"></param>
         public StructuredTypeDeclaration(int withId, StructuredTypeKind kind) : base(withId)
-            => typeKind = kind;
+            => StructTypeKind = kind;
+
+        /// <summary>
+        ///     structured type kind
+        /// </summary>
+        public StructuredTypeKind StructTypeKind { get; }
 
         /// <summary>
         ///     get the type kind
         /// </summary>
         public override CommonTypeKind TypeKind {
             get {
-                switch (typeKind) {
+                switch (StructTypeKind) {
 
                     case StructuredTypeKind.Class:
                         return CommonTypeKind.ClassType;
@@ -46,6 +50,9 @@ namespace PasPasPas.Typings.Structured {
 
                     case StructuredTypeKind.RecordHelper:
                         return CommonTypeKind.RecordHelperType;
+
+                    case StructuredTypeKind.Interface:
+                        return CommonTypeKind.InterfaceType;
 
                     default:
                         return CommonTypeKind.UnknownType;
@@ -74,7 +81,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public override uint TypeSizeInBytes {
             get {
-                switch (typeKind) {
+                switch (StructTypeKind) {
 
                     case StructuredTypeKind.Class:
                     case StructuredTypeKind.ClassHelper:
@@ -184,7 +191,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public bool IsConstant {
             get {
-                if (typeKind != StructuredTypeKind.Record)
+                if (StructTypeKind != StructuredTypeKind.Record)
                     return false;
 
                 foreach (var field in Fields)
@@ -215,7 +222,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <returns></returns>
         public override string ToString() {
-            switch (typeKind) {
+            switch (StructTypeKind) {
                 case StructuredTypeKind.Class:
                     return $"class {TypeId}";
                 case StructuredTypeKind.ClassHelper:

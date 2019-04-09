@@ -818,8 +818,20 @@ namespace PasPasPasTests.Types {
             AssertExprType("a is ta", KnownTypeIds.BooleanType, "type ta = class end; tb = class(ta) end; var a: tb;");
             AssertExprType("a is tb", KnownTypeIds.BooleanType, "type ta = class end; tc = ta; tb = class(tc) end; var a: ta;");
             AssertExprType("a is ta", KnownTypeIds.BooleanType, "type ta = class end; tc = ta; tb = class(tc) end; var a: tb;");
-            //AssertExprType("a is TObject", KnownTypeIds.BooleanType, "var a: TObject;");
-            //AssertExprType("a is system.TObject", KnownTypeIds.BooleanType, "var a: TObject;");
+
+            AssertExprType("a as TObject", KnownTypeIds.TObject, "var a: TObject;");
+            AssertExprType("a as System.TObject", KnownTypeIds.TObject, "var a: TObject;");
+            AssertExprType("a as TObject", KnownTypeIds.TObject, "type ta = class end; var a: ta;");
+            AssertExprType("a as tb", KnownTypeIds.ErrorType, "type ta = class end; tb = class end; var a: ta;");
+            AssertExprType("a as tb", 2 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tb = class(ta) end; var a: ta;");
+            AssertExprType("a as ta", RegisteredTypes.SmallestUserTypeId, "type ta = class end; tb = class(ta) end; var a: tb;");
+            AssertExprType("a as tb", 2 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tc = ta; tb = class(tc) end; var a: ta;");
+            AssertExprType("a as ta", RegisteredTypes.SmallestUserTypeId, "type ta = class end; tc = ta; tb = class(tc) end; var a: tb;");
+
+            AssertExprType("a is TObject", KnownTypeIds.BooleanType, "type ia = interface end; var a: ia;");
+            AssertExprType("a as ia", RegisteredTypes.SmallestUserTypeId, "type ia = interface end; ta = class(ia) end; var a: ta;");
+            AssertExprType("a as ia", RegisteredTypes.SmallestUserTypeId, "type ia = interface end; ta = class(tobject, ia) end; var a: ta;");
+            AssertExprType("a as ia", KnownTypeIds.ErrorType, "type ia = interface end; ta = class end; var a: ta;");
         }
 
     }

@@ -46,5 +46,39 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             }
         }
 
+        /// <summary>
+        ///     accept parts
+        /// </summary>
+        /// <typeparam name="TParent"></typeparam>
+        /// <typeparam name="TChild"></typeparam>
+        /// <param name="element"></param>
+        /// <param name="parts"></param>
+        /// <param name="visitor"></param>
+        protected static void AcceptPart<TParent, TChild>(TParent element, ISyntaxPartCollection<TChild> parts, IStartEndVisitor visitor) where TChild : class, ISyntaxPart {
+            if (parts.Count < 1)
+                return;
+
+            for (var i = 0; i < parts.Count; i++)
+                AcceptPart(element, parts[i], visitor);
+        }
+
+        /// <summary>
+        ///     visit a child node
+        /// </summary>
+        /// <typeparam name="T">visitor type</typeparam>
+        /// <param name="element"></param>
+        /// <param name="part"></param>
+        /// <param name="visitor"></param>
+        protected static void AcceptPart<T>(T element, ISyntaxPart part, IStartEndVisitor visitor) {
+
+            if (part == null)
+                return;
+
+            var childVisitor = visitor as IChildVisitor;
+            childVisitor?.StartVisitChild<T>(element, part);
+            part.Accept(visitor);
+            childVisitor?.EndVisitChild<T>(element, part);
+        }
+
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
 
