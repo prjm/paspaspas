@@ -2056,11 +2056,15 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var heading = ParseProcedureDeclarationHeading();
             var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
             var directives = ParseFunctionDirectives();
-            var body = ParseBlock();
             var semicolon2 = default(Terminal);
+            var body = default(BlockSymbol);
 
-            if ((body != default) && (body.Body != default))
-                semicolon2 = ContinueWithOrMissing(TokenKind.Semicolon);
+            if (!directives.IsForwardDeclaration) {
+                body = ParseBlock();
+
+                if (body != default && body.Body != default)
+                    semicolon2 = ContinueWithOrMissing(TokenKind.Semicolon);
+            }
 
             return new ProcedureDeclarationSymbol(attributes, heading, semicolon, directives, body, semicolon2);
         }

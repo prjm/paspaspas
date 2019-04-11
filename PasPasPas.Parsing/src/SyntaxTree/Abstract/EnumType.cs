@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart<EnumTypeCollection, EnumTypeValue>(this, visitor);
             visitor.EndVisit(this);
         }
 

@@ -95,9 +95,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptBaseParts(visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     accepts parts of base class
+        /// </summary>
+        /// <param name="visitor"></param>
+        protected void AcceptBaseParts(IStartEndVisitor visitor)
+            => AcceptParts(this, visitor);
 
         /// <summary>
         ///     create a signature for the given parameters

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -10,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class ExportedMethodDeclaration : MethodDeclaration, IExpressionTarget {
 
         /// <summary>
-        ///     <b>true</b> if the exported symbol name stays in memory 
+        ///     <b>true</b> if the exported symbol name stays in memory
         ///     (only for backwards compatibility)
         /// </summary>
         public bool IsResident { get; internal set; }
@@ -58,5 +59,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             }
         }
 
+        /// <summary>
+        ///     accept parts
+        /// </summary>
+        /// <param name="visitor"></param>
+        public override void Accept(IStartEndVisitor visitor) {
+            visitor.StartVisit(this);
+            AcceptBaseParts(visitor);
+            AcceptPart(this, indexExpression, visitor);
+            AcceptPart(this, nameExpression, visitor);
+            visitor.EndVisit(this);
+        }
     }
 }

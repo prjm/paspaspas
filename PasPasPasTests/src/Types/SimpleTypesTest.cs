@@ -73,11 +73,11 @@ namespace PasPasPasTests.Types {
             var p1 = "unit p; interface const A = 5; implementation procedure x; begin writeln(A); end; end;";
             var p2 = "unit p; interface implementation const A = 5; procedure x; begin writeln(A); end; end;";
             var p3 = "unit p; interface implementation procedure x; const A = 5; begin writeln(A); end; end;";
-            //var p4 = "unit p; interface type TA = class const X = 5; procedure X; end; implementation procedure TA.x; begin writeln(A); end; end;";
+            var p4 = "unit p; interface type TA = class const A = 5; procedure X; end; implementation procedure TA.x; begin writeln(A); end; end;";
             AssertExprValue("", GetIntegerValue((sbyte)5), "", KnownTypeIds.UnspecifiedType, true, p1);
             AssertExprValue("", GetIntegerValue((sbyte)5), "", KnownTypeIds.UnspecifiedType, true, p2);
             AssertExprValue("", GetIntegerValue((sbyte)5), "", KnownTypeIds.UnspecifiedType, true, p3);
-            //AssertExprValue("", GetIntegerValue((sbyte)5), "", KnownTypeIds.UnspecifiedType, true, p4);
+            AssertExprValue("", GetIntegerValue((sbyte)5), "", KnownTypeIds.UnspecifiedType, true, p4);
         }
 
     }

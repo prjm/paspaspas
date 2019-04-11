@@ -75,7 +75,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => default;
 
         /// <summary>
-        ///     check if duplicates are allowd
+        ///     check if duplicates are allowed
         /// </summary>
         protected virtual bool HasDuplicateReplacement
             => false;
@@ -106,7 +106,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => symbols == null ? 0 : symbols.Count;
 
         /// <summary>
-        ///     acces item by index
+        ///     access item by index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -164,6 +164,5 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <returns></returns>
         public T this[string key]
             => symbols[key];
-
     }
 }

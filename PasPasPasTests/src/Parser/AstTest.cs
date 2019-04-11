@@ -818,7 +818,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; local; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Local);
             RunAstTest("unit z.x; interface implementation procedure p; far; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Far);
             RunAstTest("unit z.x; interface implementation procedure p; unsafe; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Unsafe);
-            RunAstTest("unit z.x; interface implementation procedure p; forward; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Forward);
+            RunAstTest("unit z.x; interface implementation procedure p; forward; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Forward);
             RunAstTest("unit z.x; interface implementation procedure p; varargs; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.VarArgs);
             RunAstTest("unit z.x; interface implementation procedure p; external; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.External);
             RunAstTest("unit z.x; interface implementation procedure p; experimental; begin end; end.", t => i(t)?.Hints?.SymbolIsExperimental, true);

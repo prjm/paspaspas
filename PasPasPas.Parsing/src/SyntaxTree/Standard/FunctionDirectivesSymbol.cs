@@ -31,5 +31,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public override int Length => ItemLength;
 
+        /// <summary>
+        ///     test if this is a forward declaration
+        /// </summary>
+        public bool IsForwardDeclaration {
+            get {
+                for (var i = 0; i < Items.Length; i++) {
+                    var directive = Items[i] as ForwardDirectiveSymbol;
+                    if (directive != default)
+                        return true;
+                }
+                return false;
+            }
+        }
     }
 }

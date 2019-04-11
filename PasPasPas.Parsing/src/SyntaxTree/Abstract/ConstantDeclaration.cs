@@ -18,11 +18,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public DeclarationMode Mode { get; set; }
 
         /// <summary>
-        ///     declared constant type
-        /// </summary>
-        public DeclaredType ConstantType { get; set; }
-
-        /// <summary>
         ///     symbol hints
         /// </summary>
         public SymbolHints Hints { get; set; }
