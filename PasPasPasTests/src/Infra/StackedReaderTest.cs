@@ -56,7 +56,6 @@ namespace PasPasPasTests.Infra {
             var result = new StringBuilder();
             var path1 = GenerateTempFile(Content1);
             var path2 = GenerateTempFile(Content2);
-            var readerApi = new ReaderApi(CreateEnvironment());
 
             try {
                 using (var reader = ReaderApi.CreateReaderForPath(path1)) {
@@ -69,7 +68,7 @@ namespace PasPasPasTests.Infra {
                         result.Append(reader.NextChar());
                         len++;
 
-                        if (len == (Content2.Length + splitIndex) || len == Content1.Length + Content2.Length)
+                        if (len == Content2.Length + splitIndex || len == Content1.Length + Content2.Length)
                             Assert.IsTrue(reader.AtEof);
                         else
                             Assert.IsFalse(reader.AtEof);

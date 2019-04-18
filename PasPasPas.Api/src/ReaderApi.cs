@@ -54,5 +54,12 @@ namespace PasPasPas.Api {
             var localPath = new FileReference(path);
             reader.AddFileToRead(localPath);
         }
+
+        /// <summary>
+        ///    system environment
+        /// </summary>
+        public IBasicEnvironment SystemEnvironment
+            => systemEnvironment;
+
     }
 }

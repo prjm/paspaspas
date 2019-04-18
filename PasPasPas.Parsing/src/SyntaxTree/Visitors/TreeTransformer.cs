@@ -2226,11 +2226,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(ProcedureDeclarationSymbol element) {
             var symbolTarget = LastValue as IDeclaredSymbolTarget;
             var result = new MethodImplementation();
+            var anchor = new SingleDeclaredSymbol(result);
             InitNode(result, element);
             result.Name = ExtractSymbolName(element.Heading.Name);
             result.Kind = TokenKindMapper.MapMethodKind(element.Heading.Kind);
-            symbolTarget.Symbols.Items.Add(new SingleDeclaredSymbol(result));
+            result.Flags = MethodImplementationFlags.None;
+            result.Anchor = anchor;
+
+            if (element.Directives != default && element.Directives.IsForwardDeclaration)
+                result.Flags |= MethodImplementationFlags.ForwardDeclaration;
+
             symbolTarget.Symbols.Add(result, LogSource);
+            if (result.Anchor != default) {
+                symbolTarget.Symbols.Items.Add(result.Anchor);
+            }
+            else {
+                anchor.Symbol = default;
+            }
 
             DefineResultVariables(result);
         }

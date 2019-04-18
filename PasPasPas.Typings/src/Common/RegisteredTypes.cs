@@ -33,9 +33,17 @@ namespace PasPasPas.Typings.Common {
         private readonly object idLock = new object();
 
         /// <summary>
-        ///     first use type id
+        ///     unit type id
+        /// </summary>
+        public const int UnitTypeId = 999;
+
+        /// <summary>
+        ///     first used type id
         /// </summary>
         public const int SmallestUserTypeId = 1000;
+
+
+
         private int userTypeIds = SmallestUserTypeId;
 
         /// <summary>

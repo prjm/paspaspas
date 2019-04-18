@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     sybols
+    ///     symbols
     /// </summary>
     public interface IDeclaredSymbolTarget {
 

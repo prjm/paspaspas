@@ -9,23 +9,19 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Api {
 
     /// <summary>
-    ///     encapsulation for tokenizer api
+    ///     encapsulation for tokenizer API
     /// </summary>
     public class ParserApi {
 
-        private readonly ITypedEnvironment env;
-        private readonly TokenizerApi tokenizerApi;
-        private readonly OptionSet parseOptions;
-
         /// <summary>
-        ///     create a new parser api
+        ///     create a new parser API
         /// </summary>
         /// <param name="parserEnvironment"></param>
         /// <param name="options">options</param>
         public ParserApi(ITypedEnvironment parserEnvironment, OptionSet options = null) {
-            env = parserEnvironment;
-            parseOptions = options ?? new OptionSet(parserEnvironment);
-            tokenizerApi = new TokenizerApi(parserEnvironment, options);
+            Environment = parserEnvironment;
+            Options = options ?? new OptionSet(parserEnvironment);
+            Tokenizer = new TokenizerApi(parserEnvironment, options);
         }
 
         /// <summary>
@@ -36,7 +32,7 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public IParser CreateParserForString(string path, string input) {
             var reader = ReaderApi.CreateReaderForString(path, input);
-            var parser = new StandardParser(env, parseOptions, reader);
+            var parser = new StandardParser(Environment, Options, reader);
             return parser;
         }
         /// <summary>
@@ -46,7 +42,7 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public IParser CreateParserForPath(string path) {
             var reader = ReaderApi.CreateReaderForPath(path);
-            var parser = new StandardParser(env, parseOptions, reader);
+            var parser = new StandardParser(Environment, Options, reader);
             return parser;
         }
 
@@ -57,7 +53,7 @@ namespace PasPasPas.Api {
         /// <returns>abstract syntax tree</returns>
         public ProjectItemCollection CreateAbstractSyntraxTree(ISyntaxPart bst) {
             var root = new ProjectItemCollection();
-            var visitor = new TreeTransformer(env, root);
+            var visitor = new TreeTransformer(Environment, root);
             bst.Accept(visitor.AsVisitor());
             return root;
         }
@@ -65,16 +61,26 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     used option sets
         /// </summary>
-        public OptionSet Options
-            => parseOptions;
+        public OptionSet Options { get; }
 
         /// <summary>
         ///     annotate an abstract syntax tree with types
         /// </summary>
         /// <param name="ast">tree to annotate</param>
         public void AnnotateWithTypes(ProjectItemCollection ast) {
-            var typeVisitor = new TypeAnnotator(env);
+            var typeVisitor = new TypeAnnotator(Environment);
             ast.Accept(typeVisitor.AsVisitor());
         }
+
+        /// <summary>
+        ///     access tokenizer functions
+        /// </summary>
+        public TokenizerApi Tokenizer { get; }
+
+        /// <summary>
+        ///     system environment
+        /// </summary>
+        public ITypedEnvironment Environment { get; }
+
     }
 }

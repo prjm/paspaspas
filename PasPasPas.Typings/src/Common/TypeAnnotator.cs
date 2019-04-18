@@ -407,7 +407,9 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(CompilationUnit element) {
+            var unitType = TypeRegistry.TypeCreator.CreateUnitType();
             CurrentUnit = element;
+            CurrentUnit.TypeInfo = GetTypeReferenceById(unitType.TypeId);
             resolver.OpenScope();
             resolver.AddToScope("System", ReferenceKind.RefToUnit, environment.TypeRegistry.SystemUnit);
         }
@@ -1123,6 +1125,17 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(MethodImplementation element) {
+            var isClassMethod = element.Declaration?.DefiningType != default;
+            var isForward = element.Flags.HasFlag(MethodImplementationFlags.ForwardDeclaration);
+
+            if (!isClassMethod && !isForward) {
+                var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
+                var routine = new Routine(TypeRegistry, element.SymbolName, element.Kind);
+                unitType.AddGlobal(routine);
+                resolver.AddToScope(element.SymbolName, ReferenceKind.RefToGlobalRoutine, routine);
+                currentMethodParameters.Push(routine.AddParameterGroup());
+            }
+
             resolver.OpenScope();
             currentMethodImplementation.Push(element);
 
@@ -1138,7 +1151,7 @@ namespace PasPasPas.Typings.Common {
                 }
             }
 
-            if (element.Declaration?.DefiningType != default) {
+            if (isClassMethod) {
                 var metaTypeDef = GetTypeByIdOrUndefinedType(element.Declaration.DefiningType.TypeId) as IMetaStructuredType;
                 var baseTypeDef = default(IStructuredType);
 
@@ -1160,6 +1173,19 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(MethodImplementation element) {
             resolver.CloseScope();
+
+            var isForward = element.Flags.HasFlag(MethodImplementationFlags.ForwardDeclaration);
+            var isClassMethod = element.Declaration?.DefiningType != default;
+
+            if (!isClassMethod && !isForward) {
+                var parameters = currentMethodParameters.Pop();
+                if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
+                    parameters.ResultType = element.TypeValue.TypeInfo;
+                else
+                    parameters.ResultType = TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
+
+            }
+
             currentMethodImplementation.Pop();
         }
 

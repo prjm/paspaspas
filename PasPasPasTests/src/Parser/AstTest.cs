@@ -190,7 +190,7 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestSetOfType() {
-            SetTypeDeclaration u(object t) => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as ConstantDeclaration)?.TypeValue as SetTypeDeclaration;
+            SetTypeDeclaration u(object t) => ((t as CompilationUnit)?.InterfaceSymbols["x"] as ConstantDeclaration)?.TypeValue as SetTypeDeclaration;
 
             RunAstTest("unit z.x; interface const x : set of array of const = nil; implementation end.", t => ((u(t)?.TypeValue as ArrayTypeDeclaration)?.TypeValue as MetaType)?.Kind, MetaTypeKind.Const);
         }
@@ -898,7 +898,7 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestLabel() {
-            MethodImplementation r(object t) => ((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation);
+            MethodImplementation r(object t) => (t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation;
 
             RunAstTest("unit z.x; interface implementation procedure p; label l; begin l: s; end; end.", t => r(t)?.Symbols[0]?.Name?.CompleteName, "l");
             RunAstTest("unit z.x; interface implementation procedure p; label 1; begin 1: s; end; end.", t => r(t)?.Symbols[0]?.Name?.CompleteName, "1");

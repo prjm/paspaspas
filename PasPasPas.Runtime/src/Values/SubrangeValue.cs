@@ -68,7 +68,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(SubrangeValue other)
-            => (other.TypeId == TypeId) && (other.Value.Equals(Value));
+            => other.TypeId == TypeId && other.Value.Equals(Value);
 
         /// <summary>
         ///     compute a hash code
@@ -77,8 +77,8 @@ namespace PasPasPas.Runtime.Values {
         public override int GetHashCode() {
             var result = 17;
             unchecked {
-                result = result + 31 * TypeId;
-                result = result + 31 * Value.GetHashCode();
+                result += 31 * TypeId;
+                result += 31 * Value.GetHashCode();
                 return result;
             }
         }

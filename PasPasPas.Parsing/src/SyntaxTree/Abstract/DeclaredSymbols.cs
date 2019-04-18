@@ -78,5 +78,43 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             AcceptPart(this, Items, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     returns always <c>true</c>
+        /// </summary>
+        protected override bool HasDuplicateReplacement
+            => true;
+
+        /// <summary>
+        ///     try to merge duplicate declarations
+        /// </summary>
+        /// <param name="existingEntry"></param>
+        /// <param name="entry"></param>
+        /// <returns></returns>
+        protected override DeclaredSymbol MergeDuplicates(DeclaredSymbol existingEntry, DeclaredSymbol entry) {
+            var methodGroup = existingEntry as MethodGroup;
+            var newEntry = entry as MethodImplementation;
+            var oldEntry = existingEntry as MethodImplementation;
+
+            if (methodGroup != default && newEntry != default && methodGroup.TryToAdd(newEntry)) {
+                newEntry.Anchor = default;
+                return methodGroup;
+            }
+
+            else if (oldEntry != default && newEntry != default) {
+                methodGroup = new MethodGroup();
+                methodGroup.Add(oldEntry);
+
+                var anchor = oldEntry.Anchor;
+                anchor.Symbol = methodGroup;
+                oldEntry.Anchor = default;
+                newEntry.Anchor = default;
+
+                if (methodGroup.TryToAdd(newEntry))
+                    return methodGroup;
+            }
+
+            return default;
+        }
     }
 }

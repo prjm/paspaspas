@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -9,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     basic representation of a compilation unit
     /// </summary>
-    public class CompilationUnit : SymbolTableEntryBase, IBlockTarget, IDeclaredSymbolTarget {
+    public class CompilationUnit : SymbolTableEntryBase, IBlockTarget, IDeclaredSymbolTarget, ITypedSyntaxNode {
 
         /// <summary>
         ///     unit file type
@@ -106,6 +108,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         private IList<SymbolAttributeItem> AssemblyAttributes { get; }
             = new List<SymbolAttributeItem>();
+
+        /// <summary>
+        ///     unit type
+        /// </summary>
+        public ITypeReference TypeInfo { get; set; }
 
         /// <summary>
         ///     add an assembly attribute

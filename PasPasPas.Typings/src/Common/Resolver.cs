@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
@@ -143,6 +144,15 @@ namespace PasPasPas.Typings.Common {
 
             if (reference.Kind == ReferenceKind.RefToEnumMember) {
                 return (reference.Symbol as EnumValue)?.Value;
+            }
+
+            if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
+                if (reference.Symbol is IRoutine routine) {
+                    var callableRoutines = new List<ParameterGroup>();
+                    routine.ResolveCall(callableRoutines, new Signature());
+                    if (callableRoutines.Count == 1)
+                        return callableRoutines[0].ResultType;
+                }
             }
 
             if (reference.Kind == ReferenceKind.RefToType) {

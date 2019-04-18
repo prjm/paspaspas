@@ -11,7 +11,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     virtual unit type definition
     /// </summary>
-    public class UnitType : TypeBase {
+    public class UnitType : TypeBase, IUnitType {
 
         /// <summary>
         ///     declared symbols

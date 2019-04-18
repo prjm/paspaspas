@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -100,6 +101,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     previous declaration
         /// </summary>
         public StructureMethod Declaration { get; set; }
+
+        /// <summary>
+        ///     method flags
+        /// </summary>
+        public MethodImplementationFlags Flags { get; set; }
+
+        /// <summary>
+        ///     anchor point
+        /// </summary>
+        public SingleDeclaredSymbol Anchor { get; set; }
 
         /// <summary>
         ///     accept visitor

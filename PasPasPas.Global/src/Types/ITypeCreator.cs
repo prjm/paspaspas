@@ -75,5 +75,11 @@ namespace PasPasPas.Globals.Types {
         /// <param name="baseType"></param>
         /// <returns></returns>
         IMetaStructuredType CreateMetaType(int baseType);
+
+        /// <summary>
+        ///     create a new unit type
+        /// </summary>
+        /// <returns></returns>
+        IUnitType CreateUnitType();
     }
 }

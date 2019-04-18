@@ -139,5 +139,14 @@ namespace PasPasPas.Typings.Common {
             return result;
         }
 
+        /// <summary>
+        ///     create a new unit type
+        /// </summary>
+        /// <returns></returns>
+        public IUnitType CreateUnitType() {
+            var result = new UnitType(RegisteredTypes.UnitTypeId);
+            RegisteredTypes.RegisterType(result);
+            return result;
+        }
     }
 }

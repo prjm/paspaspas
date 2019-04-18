@@ -58,8 +58,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
             var replacement = MergeDuplicates(this[name], entry);
 
-            if (replacement == null)
+            if (replacement == default) {
+                LogDuplicateSymbolError(entry, logSource);
                 return false;
+            }
 
             symbols[name] = replacement;
             return true;

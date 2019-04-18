@@ -28,7 +28,7 @@ namespace PasPasPasTests.Infra {
 
                     while (!buffer.IsAtEnd) {
                         buffer.Position++;
-                        result = result + buffer.Content[buffer.BufferIndex];
+                        result += buffer.Content[buffer.BufferIndex];
                     }
 
                     Assert.IsTrue(buffer.IsAtEnd);
@@ -55,10 +55,10 @@ namespace PasPasPasTests.Infra {
 
                     while (!buffer.IsAtEnd) {
                         buffer.Position++;
-                        result1 = result1 + buffer.Content[buffer.BufferIndex];
+                        result1 += buffer.Content[buffer.BufferIndex];
                         buffer.Position--;
                         buffer.Position++;
-                        result2 = result2 + buffer.Content[buffer.BufferIndex];
+                        result2 += buffer.Content[buffer.BufferIndex];
                     }
 
                     Assert.AreEqual(data.Length - 1, buffer.Position);
@@ -83,7 +83,7 @@ namespace PasPasPasTests.Infra {
 
                     while (!buffer.IsAtEnd) {
                         buffer.Position++;
-                        result = result + buffer.Content[buffer.BufferIndex];
+                        result += buffer.Content[buffer.BufferIndex];
                     }
 
                     Assert.AreEqual(data.Length - 1, buffer.Position);
@@ -108,10 +108,10 @@ namespace PasPasPasTests.Infra {
 
                     while (!buffer.IsAtEnd) {
                         buffer.Position++;
-                        result1 = result1 + buffer.Content[buffer.BufferIndex];
+                        result1 += buffer.Content[buffer.BufferIndex];
                         buffer.Position--;
                         buffer.Position++;
-                        result2 = result2 + buffer.Content[buffer.BufferIndex];
+                        result2 += buffer.Content[buffer.BufferIndex];
                     }
 
                     Assert.AreEqual(data.Length - 1, buffer.Position);
@@ -174,10 +174,10 @@ namespace PasPasPasTests.Infra {
 
                         while (!buffer.IsAtEnd) {
                             buffer.Position++;
-                            result1 = result1 + buffer.Content[buffer.BufferIndex];
+                            result1 += buffer.Content[buffer.BufferIndex];
                             buffer.Position--;
                             buffer.Position++;
-                            result2 = result2 + buffer.Content[buffer.BufferIndex];
+                            result2 += buffer.Content[buffer.BufferIndex];
                         }
 
                         Assert.IsTrue(buffer.IsAtEnd);

@@ -9,14 +9,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class SingleDeclaredSymbol : DeclaredSymbolGroup {
 
-        private readonly AbstractSyntaxPartBase baseSymbolDefinition;
-
         /// <summary>
         ///     create a new symbol group
         /// </summary>
         /// <param name="baseSymbol">symbol to be wrapped</param>
         public SingleDeclaredSymbol(AbstractSyntaxPartBase baseSymbol)
-            => baseSymbolDefinition = baseSymbol;
+            => Symbol = baseSymbol;
 
         /// <summary>
         ///     visit this symbol group
@@ -33,9 +31,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                yield return baseSymbolDefinition;
+                yield return Symbol;
             }
         }
 
+        /// <summary>
+        ///     symbol
+        /// </summary>
+        public AbstractSyntaxPartBase Symbol { get; set; }
     }
 }
