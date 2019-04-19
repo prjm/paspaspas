@@ -12,6 +12,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// </summary>
         ITypeReference TypeInfo { get; }
 
-
     }
+
 }

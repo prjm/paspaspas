@@ -47,6 +47,18 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
+        ///     create a new file type
+        /// </summary>
+        /// <param name="baseTypeId"></param>
+        /// <returns></returns>
+        public IFileType CreateFileType(int baseTypeId) {
+            var newTypeId = RegisteredTypes.RequireUserTypeId();
+            var result = new FileType(newTypeId, baseTypeId);
+            RegisteredTypes.RegisterType(result);
+            return result;
+        }
+
+        /// <summary>
         ///     create a new meta type
         /// </summary>
         /// <param name="baseType"></param>

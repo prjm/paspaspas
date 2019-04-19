@@ -158,5 +158,9 @@
         /// </summary>
         Type = 29,
 
+        /// <summary>
+        ///     file type
+        /// </summary>
+        FileType = 30,
     }
 }

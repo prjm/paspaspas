@@ -190,6 +190,7 @@ namespace PasPasPas.Typings.Common {
             RegisterNativeIntTypes(intSize);
             RegisterHiddenTypes();
             RegisterSystemType(new GenericArrayType(KnownTypeIds.GenericArrayType), "TArray", 1);
+            RegisterSystemType(new FileType(KnownTypeIds.UntypedFile, KnownTypeIds.GenericPointer), "");
         }
 
         private void RegisterHiddenTypes()

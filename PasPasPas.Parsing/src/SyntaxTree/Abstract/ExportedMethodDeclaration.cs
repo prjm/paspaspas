@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     <b>true</b> if the exported symbol name stays in memory
         ///     (only for backwards compatibility)
         /// </summary>
-        public bool IsResident { get; internal set; }
+        public bool IsResident { get; set; }
 
         private IExpression nameExpression;
         private IExpression indexExpression;

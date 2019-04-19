@@ -35,6 +35,12 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestFileTypes() {
+            AssertDeclType("file", typeKind: CommonTypeKind.FileType);
+            AssertDeclType("file of string[20]", typeKind: CommonTypeKind.FileType);
+        }
+
+        [TestMethod]
         public void TestArrayTypes() {
 
             ITypeDefinition GetIndexType(ArrayType array) {

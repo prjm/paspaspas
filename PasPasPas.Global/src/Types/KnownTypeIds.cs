@@ -425,5 +425,10 @@
         /// </summary>
         public const int TClassAlias = 112;
 
+        /// <summary>
+        ///     untyped file type
+        /// </summary>
+        public const int UntypedFile = 113;
+
     }
 }

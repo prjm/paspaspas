@@ -81,5 +81,12 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <returns></returns>
         IUnitType CreateUnitType();
+
+        /// <summary>
+        ///     create a new file type
+        /// </summary>
+        /// <param name="baseTypeId"></param>
+        /// <returns></returns>
+        IFileType CreateFileType(int baseTypeId);
     }
 }

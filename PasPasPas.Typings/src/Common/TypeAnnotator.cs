@@ -49,7 +49,8 @@ namespace PasPasPas.Typings.Common {
         IStartVisitor<RecordConstant>, IEndVisitor<RecordConstant>,
         IStartVisitor<MethodImplementation>, IEndVisitor<MethodImplementation>,
         IEndVisitor<RecordConstantItem>,
-        IEndVisitor<ClassOfTypeDeclaration> {
+        IEndVisitor<ClassOfTypeDeclaration>,
+        IEndVisitor<FileTypeDeclaration> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -60,12 +61,12 @@ namespace PasPasPas.Typings.Common {
         private readonly Resolver resolver;
 
         /// <summary>
-        ///     current unit
+        ///     current unit definition
         /// </summary>
-        public CompilationUnit CurrentUnit { get; private set; }
+        public CompilationUnit CurrentUnit { get; set; }
 
         /// <summary>
-        ///     as common visitor
+        ///     cast this visitor as common visitor
         /// </summary>
         /// <returns></returns>
         public IStartEndVisitor AsVisitor()
@@ -85,12 +86,11 @@ namespace PasPasPas.Typings.Common {
             currentMethodImplementation = new Stack<MethodImplementation>();
         }
 
-        private ITypeReference GetTypeDefinition(ITypedSyntaxNode expression) {
-            if (expression != null && expression.TypeInfo != null)
-                return expression.TypeInfo;
+        private ITypeReference GetTypeRefence(ITypedSyntaxNode syntaxNode) {
+            if (syntaxNode != default && syntaxNode.TypeInfo != null)
+                return syntaxNode.TypeInfo;
 
-
-            return GetErrorTypeReference(expression);
+            return GetErrorTypeReference(syntaxNode);
         }
 
         private ITypeDefinition GetRegisteredType(ITypedSyntaxNode syntaxNode) {
@@ -121,6 +121,9 @@ namespace PasPasPas.Typings.Common {
         private ITypeRegistry TypeRegistry
             => environment.TypeRegistry;
 
+        private IRuntimeValueFactory Runtime
+            => environment.Runtime;
+
         /// <summary>
         ///     determine the type of a constant value
         /// </summary>
@@ -129,21 +132,21 @@ namespace PasPasPas.Typings.Common {
 
             // some constant literals have already assigned type information
             // nothing has to be done
-            if (element.TypeInfo != null)
+            if (element.TypeInfo != default)
                 return;
 
             if (element.Kind == ConstantValueKind.True) {
-                element.TypeInfo = environment.Runtime.Booleans.TrueValue;
+                element.TypeInfo = Runtime.Booleans.TrueValue;
                 return;
             }
 
             if (element.Kind == ConstantValueKind.False) {
-                element.TypeInfo = environment.Runtime.Booleans.FalseValue;
+                element.TypeInfo = Runtime.Booleans.FalseValue;
                 return;
             }
 
             if (element.Kind == ConstantValueKind.Nil) {
-                element.TypeInfo = environment.Runtime.Types.Nil;
+                element.TypeInfo = Runtime.Types.Nil;
                 return;
             }
 
@@ -167,8 +170,8 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element">operator to annotate</param>
         public void EndVisit(BinaryOperator element) {
-            var left = GetTypeDefinition(element.LeftOperand);
-            var right = GetTypeDefinition(element.RightOperand);
+            var left = GetTypeRefence(element.LeftOperand);
+            var right = GetTypeRefence(element.RightOperand);
 
             // special case range operator: the range operator is
             // part of a type definition and references types, not values
@@ -202,22 +205,22 @@ namespace PasPasPas.Typings.Common {
             }
 
             if (element.Kind == ExpressionKind.Not) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperator, GetTypeDefinition(operand));
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperator, GetTypeRefence(operand));
                 return;
             }
 
             if (element.Kind == ExpressionKind.UnaryMinus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, GetTypeDefinition(operand));
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, GetTypeRefence(operand));
                 return;
             }
 
             if (element.Kind == ExpressionKind.UnaryPlus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, GetTypeDefinition(operand));
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, GetTypeRefence(operand));
                 return;
             }
 
             if (element.Kind == ExpressionKind.AddressOf) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.AtOperator, GetTypeDefinition(operand));
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.AtOperator, GetTypeRefence(operand));
                 return;
             }
 
@@ -1189,8 +1192,28 @@ namespace PasPasPas.Typings.Common {
             currentMethodImplementation.Pop();
         }
 
+        /// <summary>
+        ///     file type declaration
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(FileTypeDeclaration element) {
+
+            if (element.TypeValue == default) {
+                element.TypeInfo = GetTypeReferenceById(KnownTypeIds.UntypedFile);
+                return;
+            }
+
+            if (element.TypeValue.TypeInfo == default) {
+                element.TypeInfo = GetErrorTypeReference(element);
+                return;
+            }
+
+            var type = TypeRegistry.TypeCreator.CreateFileType(element.TypeValue.TypeInfo.TypeId);
+            element.TypeInfo = GetTypeReferenceById(type.TypeId);
+        }
+
         private bool AreRecordTypesCompatible(int leftId, int rightId)
-        => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);
+    => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);
 
         private int GetSmallestTextTypeOrNext(int leftId, int rightId)
             => environment.TypeRegistry.GetSmallestTextTypeOrNext(leftId, rightId);
