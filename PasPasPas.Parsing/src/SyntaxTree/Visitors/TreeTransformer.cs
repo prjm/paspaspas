@@ -1872,13 +1872,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(ExportItemSymbol element) {
             var declarations = LastValue as IDeclaredSymbolTarget;
             var result = new ExportedMethodDeclaration();
+            var anchor = new SingleDeclaredSymbol(result);
             InitNode(result, element);
             result.Name = ExtractSymbolName(element.ExportName);
             result.IsResident = element.Resident.GetSymbolKind() == TokenKind.Resident;
             result.HasIndex = element.IndexParameter != null;
             result.HasName = element.NameParameter != null;
-            declarations.Symbols.Items.Add(new SingleDeclaredSymbol(result));
+            result.Anchor = anchor;
+
             declarations.Symbols.Add(result, LogSource);
+            if (result.Anchor != default) {
+                declarations.Symbols.Items.Add(result.Anchor);
+            }
+            else {
+                anchor.Symbol = default;
+            }
         }
 
         #endregion

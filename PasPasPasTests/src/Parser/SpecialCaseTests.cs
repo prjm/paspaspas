@@ -22,5 +22,12 @@ namespace PasPasPasTests.Parser {
             RunCstTest(t, p);
         }
 
+        [TestMethod]
+        public void TestExportDeclaration() {
+            var p = "program z.x; procedure x; begin end; exports x; begin end.";
+            ProgramSymbol t(StandardParser s) => s.ParseProgram(new FileReference(CstPath));
+            RunCstTest(t, p);
+        }
+
     }
 }

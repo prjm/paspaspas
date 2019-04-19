@@ -93,8 +93,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <returns></returns>
         protected override DeclaredSymbol MergeDuplicates(DeclaredSymbol existingEntry, DeclaredSymbol entry) {
             var methodGroup = existingEntry as MethodGroup;
-            var newEntry = entry as MethodImplementation;
-            var oldEntry = existingEntry as MethodImplementation;
+            var newEntry = entry as IMethodImplementation;
+            var oldEntry = existingEntry as IMethodImplementation;
 
             if (methodGroup != default && newEntry != default && methodGroup.TryToAdd(newEntry)) {
                 newEntry.Anchor = default;

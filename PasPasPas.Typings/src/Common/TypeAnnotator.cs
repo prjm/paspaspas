@@ -1213,7 +1213,7 @@ namespace PasPasPas.Typings.Common {
         }
 
         private bool AreRecordTypesCompatible(int leftId, int rightId)
-    => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);
+            => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);
 
         private int GetSmallestTextTypeOrNext(int leftId, int rightId)
             => environment.TypeRegistry.GetSmallestTextTypeOrNext(leftId, rightId);

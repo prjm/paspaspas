@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -9,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     method implementation
     /// </summary>
-    public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression, IParameterTarget, ITypeTarget {
+    public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression, IParameterTarget, ITypeTarget, IMethodImplementation {
 
         /// <summary>
         ///     calculated type value
@@ -111,6 +110,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     anchor point
         /// </summary>
         public SingleDeclaredSymbol Anchor { get; set; }
+
+        /// <summary>
+        ///     <c>true</c> if this is a forward declaration
+        /// </summary>
+        public bool IsForwardDeclaration
+            => (Flags & MethodImplementationFlags.ForwardDeclaration) == MethodImplementationFlags.ForwardDeclaration;
+
+        /// <summary>
+        ///     returns always <c>false</c>
+        /// </summary>
+        public bool IsExportedMethod
+            => false;
 
         /// <summary>
         ///     accept visitor

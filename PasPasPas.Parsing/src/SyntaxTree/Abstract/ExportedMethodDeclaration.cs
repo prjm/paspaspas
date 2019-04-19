@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     exported method declaration
     /// </summary>
-    public class ExportedMethodDeclaration : MethodDeclaration, IExpressionTarget {
+    public class ExportedMethodDeclaration : MethodDeclaration, IExpressionTarget, IMethodImplementation {
 
         /// <summary>
         ///     <b>true</b> if the exported symbol name stays in memory
@@ -58,6 +58,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return nameExpression;
             }
         }
+
+        /// <summary>
+        ///     anchor
+        /// </summary>
+        public SingleDeclaredSymbol Anchor { get; set; }
+
+        /// <summary>
+        ///     returns always <c>false</c>
+        /// </summary>
+        public bool IsForwardDeclaration
+            => false;
+
+        /// <summary>
+        ///     returns always <c>true</c>
+        /// </summary>
+        public bool IsExportedMethod
+            => true;
 
         /// <summary>
         ///     accept parts

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -12,8 +8,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class MethodGroup : DeclaredSymbol {
 
-        private readonly List<MethodImplementation>
-            methods = new List<MethodImplementation>();
+        private readonly List<IMethodImplementation>
+            methods = new List<IMethodImplementation>();
 
         /// <summary>
         ///     accept a visitor
@@ -31,16 +27,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="newEntry"></param>
         /// <returns></returns>
-        internal bool TryToAdd(MethodImplementation newEntry) {
+        internal bool TryToAdd(IMethodImplementation newEntry) {
 
-            if ((newEntry.Flags & MethodImplementationFlags.ForwardDeclaration) == MethodImplementationFlags.ForwardDeclaration)
+            if (newEntry.IsForwardDeclaration)
+                return true;
+
+            if (newEntry.IsExportedMethod)
                 return true;
 
             for (var i = 0; i < methods.Count; i++) {
                 var method = methods[i];
 
-                if ((method.Flags & MethodImplementationFlags.ForwardDeclaration) == MethodImplementationFlags.ForwardDeclaration)
+                if (method.IsForwardDeclaration)
                     continue;
+
+                if (method.IsExportedMethod)
+                    return true;
 
                 return false;
             }
@@ -53,7 +55,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     add a method entry
         /// </summary>
         /// <param name="entry"></param>
-        internal void Add(MethodImplementation entry)
+        internal void Add(IMethodImplementation entry)
             => methods.Add(entry);
     }
 }
