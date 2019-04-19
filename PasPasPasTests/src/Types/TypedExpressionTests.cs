@@ -834,5 +834,11 @@ namespace PasPasPasTests.Types {
             AssertExprType("a as ia", KnownTypeIds.ErrorType, "type ia = interface end; ta = class end; var a: ta;");
         }
 
+        [TestMethod]
+        public void TestFormattedExressions() {
+            AssertExprValue("'a' : -1", GetUnicodeStringValue("a"));
+            AssertExprValue("'a' : 4", GetUnicodeStringValue("   a"));
+        }
+
     }
 }

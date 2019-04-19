@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -15,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ISyntaxPartCollection<IExpression> Expressions { get; }
 
         /// <summary>
-        ///     expressiona
+        ///     expression value
         /// </summary>
         public IExpression Value {
             get => Expressions.LastOrDefault();
@@ -44,8 +45,29 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Expressions, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     check if this expression is constant
+        /// </summary>
+        public bool IsConstant {
+            get {
+                for (var i = 0; i < Expressions.Count; i++) {
+
+                    var expression = Expressions[i];
+
+                    if (expression.TypeInfo == default)
+                        return false;
+
+                    if (!expression.TypeInfo.IsConstant())
+                        return false;
+                }
+
+                return true;
+            }
+        }
+
     }
 }

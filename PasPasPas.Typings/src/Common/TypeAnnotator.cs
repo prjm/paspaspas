@@ -50,7 +50,8 @@ namespace PasPasPas.Typings.Common {
         IStartVisitor<MethodImplementation>, IEndVisitor<MethodImplementation>,
         IEndVisitor<RecordConstantItem>,
         IEndVisitor<ClassOfTypeDeclaration>,
-        IEndVisitor<FileTypeDeclaration> {
+        IEndVisitor<FileTypeDeclaration>,
+        IEndVisitor<FormattedExpression> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -1210,6 +1211,23 @@ namespace PasPasPas.Typings.Common {
 
             var type = TypeRegistry.TypeCreator.CreateFileType(element.TypeValue.TypeInfo.TypeId);
             element.TypeInfo = GetTypeReferenceById(type.TypeId);
+        }
+
+        /// <summary>
+        ///     visit a formatted expression
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(FormattedExpression element) {
+            if (element.IsConstant) {
+                using (var list = environment.ListPools.GetList<ITypeReference>()) {
+                    for (var i = 0; i < element.Expressions.Count; i++) {
+                        list.Item.Add(element.Expressions[i].TypeInfo);
+                    }
+                    element.TypeInfo = Runtime.FormatExpression(environment.ListPools.GetFixedArray(list));
+                }
+            }
+            else
+                element.TypeInfo = GetTypeReferenceById(KnownTypeIds.StringType);
         }
 
         private bool AreRecordTypesCompatible(int leftId, int rightId)

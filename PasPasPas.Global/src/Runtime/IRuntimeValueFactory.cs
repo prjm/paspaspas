@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System.Collections.Immutable;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
 
@@ -65,5 +66,13 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="value"></param>
         /// <returns></returns>
         ITypeReference MakeEnumValue(int typeId, ITypeReference value);
+
+        /// <summary>
+        ///     format a constant expression
+        /// </summary>
+        /// <param name="values">input data</param>
+        /// <returns></returns>
+        ITypeReference FormatExpression(ImmutableArray<ITypeReference> values);
+
     }
 }

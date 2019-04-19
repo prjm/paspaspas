@@ -39,6 +39,7 @@
         /// </summary>
         /// <returns></returns>
         ITypeReference EmptyString { get; }
+
     }
 }
 

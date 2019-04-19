@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Environment;
+﻿using System.Collections.Immutable;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Runtime.Values.BooleanValues;
 using PasPasPas.Runtime.Values.CharValues;
@@ -23,7 +24,10 @@ namespace PasPasPas.Runtime.Values {
             Integers = new IntegerOperations(Booleans, Types);
             RealNumbers = new RealNumberOperations(Booleans, Integers);
             Strings = new StringOperations(Booleans);
+            formatter = new SimpleFormatter(this);
         }
+
+        private readonly SimpleFormatter formatter;
 
         /// <summary>
         ///     integer operations: value factory and arithmetics
@@ -64,5 +68,14 @@ namespace PasPasPas.Runtime.Values {
         ///     list pools
         /// </summary>
         public IListPools ListPools { get; }
+
+        /// <summary>
+        ///     format a simple type
+        /// </summary>
+        /// <param name="values">values to format</param>
+        /// <returns></returns>
+        public ITypeReference FormatExpression(ImmutableArray<ITypeReference> values)
+            => formatter.Format(values);
+
     }
 }
