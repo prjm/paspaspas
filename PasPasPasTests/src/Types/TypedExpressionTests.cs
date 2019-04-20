@@ -838,7 +838,30 @@ namespace PasPasPasTests.Types {
         public void TestFormattedExressions() {
             AssertExprValue("'a' : -1", GetUnicodeStringValue("a"));
             AssertExprValue("'a' : 4", GetUnicodeStringValue("   a"));
+            AssertExprValue("true : 5", GetUnicodeStringValue(" TRUE"));
+            AssertExprValue("faLsE : 7", GetUnicodeStringValue("  FALSE"));
+            AssertExprValue("'aba' : -1", GetUnicodeStringValue("aba"));
+            AssertExprValue("'aca' : 4", GetUnicodeStringValue(" aca"));
+            AssertExprValue("-12 : -1", GetUnicodeStringValue("-12"));
+            AssertExprValue("-12 : 5", GetUnicodeStringValue("  -12"));
+            AssertExprValue("pi : 5 : 2", GetUnicodeStringValue(" 3.14"));
+            AssertExprValue("5.2 : 8", GetUnicodeStringValue("5.20000000e+0000"));
         }
+
+        [TestMethod]
+        public void TestFormattedExressionsIndirect() {
+            AssertExprValue("a : -1", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Char;", isConstant: false);
+            AssertExprValue("a : 4", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Char;", isConstant: false);
+            AssertExprValue("a : 5", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Boolean;", isConstant: false);
+            AssertExprValue("a : 7", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Boolean;", isConstant: false);
+            AssertExprValue("a : -1", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: String;", isConstant: false);
+            AssertExprValue("a : 4", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: String;", isConstant: false);
+            AssertExprValue("a : -1", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Byte;", isConstant: false);
+            AssertExprValue("a : 5", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Byte;", isConstant: false);
+            AssertExprValue("a : 5 : 2", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: String;", isConstant: false);
+            AssertExprValue("a : 8", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: String;", isConstant: false);
+        }
+
 
     }
 }

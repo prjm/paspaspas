@@ -1226,9 +1226,17 @@ namespace PasPasPas.Typings.Common {
                     element.TypeInfo = Runtime.FormatExpression(environment.ListPools.GetFixedArray(list));
                 }
             }
-            else
-                element.TypeInfo = GetTypeReferenceById(KnownTypeIds.StringType);
+            else {
+                var baseTypeId = element.Expressions[0].TypeInfo?.TypeId ?? KnownTypeIds.ErrorType;
+                var type = GetTypeByIdOrUndefinedType(baseTypeId);
+
+                if (type.TypeKind.IsString() || type.TypeKind.IsChar() || type.TypeKind.IsNumerical() || type.TypeKind == CommonTypeKind.BooleanType)
+                    element.TypeInfo = GetInstanceTypeById(KnownTypeIds.StringType);
+                else
+                    element.TypeInfo = GetErrorTypeReference(element);
+            }
         }
+
 
         private bool AreRecordTypesCompatible(int leftId, int rightId)
             => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);

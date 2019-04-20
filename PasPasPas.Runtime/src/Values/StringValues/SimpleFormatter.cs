@@ -1,5 +1,9 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
+using System.Globalization;
+using System.Text;
 using PasPasPas.Globals.Runtime;
+using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.StringValues {
 
@@ -21,6 +25,10 @@ namespace PasPasPas.Runtime.Values.StringValues {
         public SimpleFormatter(IRuntimeValueFactory runtime)
             => Runtime = runtime;
 
+        /// <summary>
+        ///     used runtime
+        /// </summary>
+        public IRuntimeValueFactory Runtime { get; }
 
         private static FormatInfo GetFormat(ImmutableArray<ITypeReference> values) {
             if (values.Length < 1 || values.Length > 3)
@@ -68,16 +76,73 @@ namespace PasPasPas.Runtime.Values.StringValues {
             switch (format.Value) {
                 case ICharValue c:
                     return FormatChar(c, format.Width);
+
+                case IBooleanValue b:
+                    return FormatBoolean(b, format.Width);
+
+                case IStringValue s:
+                    return FormatString(s, format.Width);
+
+                case IIntegerValue i:
+                    return FormatInteger(i, format.Width);
+
+                case IRealNumberValue r:
+                    return FormatReal(r, format.Width, format.Precision);
             }
 
             return Runtime.Types.MakeErrorTypeReference();
         }
 
-        /// <summary>
-        ///     used runtime
-        /// </summary>
-        public IRuntimeValueFactory Runtime { get; }
+        private ITypeReference FormatReal(IRealNumberValue r, int width, int precision) {
+            var sb = new StringBuilder();
 
+            if (precision < 0) {
+                var adjustedWidth = Math.Max(8, Math.Min(17, width));
+                ExtF80.PrintFloat80(sb, r.AsExtended, PrintFloatFormat.ScientificFormat, adjustedWidth);
+            }
+            else {
+                var adjustedPrecision = Math.Max(0, Math.Min(216, precision));
+                ExtF80.PrintFloat80(sb, r.AsExtended, PrintFloatFormat.PositionalFormat, adjustedPrecision);
+            }
+
+            var v = sb.ToString();
+
+            if (width <= v.Length)
+                return Runtime.Strings.ToUnicodeString(v);
+
+            var d = new string(' ', width - v.Length);
+            return Runtime.Strings.ToUnicodeString(d + v);
+        }
+
+        private ITypeReference FormatInteger(IIntegerValue i, int width) {
+            var v = i.AsBigInteger.ToString(CultureInfo.InvariantCulture);
+
+            if (width <= v.Length)
+                return Runtime.Strings.ToUnicodeString(v);
+
+            var d = new string(' ', width - v.Length);
+            return Runtime.Strings.ToUnicodeString(d + v);
+        }
+
+        private ITypeReference FormatString(IStringValue s, int width) {
+            var v = s.AsUnicodeString;
+
+            if (width <= v.Length)
+                return Runtime.Strings.ToUnicodeString(v);
+
+            var d = new string(' ', width - v.Length);
+            return Runtime.Strings.ToUnicodeString(d + v);
+        }
+
+        private ITypeReference FormatBoolean(IBooleanValue b, int width) {
+            var v = b.AsBoolean ? "TRUE" : "FALSE";
+
+            if (width <= v.Length)
+                return Runtime.Strings.ToUnicodeString(v);
+
+            var s = new string(' ', width - v.Length);
+            return Runtime.Strings.ToUnicodeString(s + v);
+        }
 
         private ITypeReference FormatChar(ICharValue c, int width) {
             if (width < 0)
