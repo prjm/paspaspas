@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Collections.Immutable;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
@@ -147,6 +148,18 @@ namespace PasPasPas.Typings.Common {
         public IAliasedType CreateTypeAlias(int baseType, bool newType, int systemTypeId = -1) {
             var usedTypeId = systemTypeId < 0 ? RegisteredTypes.RequireUserTypeId() : systemTypeId;
             var result = new TypeAlias(usedTypeId, baseType, newType);
+            RegisteredTypes.RegisterType(result);
+            return result;
+        }
+
+        /// <summary>
+        ///     create a new generic type parameter
+        /// </summary>
+        /// <param name="constraints"></param>
+        /// <returns></returns>
+        public IGenericTypeParameter CreateUnboundGenericTypeParameter(ImmutableArray<int> constraints) {
+            var typeId = RegisteredTypes.RequireUserTypeId();
+            var result = new GenericTypeParameter(typeId, constraints);
             RegisteredTypes.RegisterType(result);
             return result;
         }

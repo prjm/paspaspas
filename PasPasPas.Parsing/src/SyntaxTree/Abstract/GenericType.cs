@@ -1,11 +1,13 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     generic type
     /// </summary>
-    public class GenericTypeNameCollection : SymbolTableBaseCollection<GenericConstraint>, ISymbolTableEntry {
+    public class GenericTypeNameCollection : SymbolTableBaseCollection<GenericConstraint>, ISymbolTableEntry, ITypedSyntaxNode {
 
         /// <summary>
         ///     type name
@@ -17,6 +19,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public string SymbolName
             => Name?.CompleteName;
+
+        /// <summary>
+        ///     type inf
+        /// </summary>
+        public ITypeReference TypeInfo { get; set; }
 
         /// <summary>
         ///     accept visitor

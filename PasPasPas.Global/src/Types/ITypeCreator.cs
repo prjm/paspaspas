@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Collections.Immutable;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
 
@@ -88,5 +89,12 @@ namespace PasPasPas.Globals.Types {
         /// <param name="baseTypeId"></param>
         /// <returns></returns>
         IFileType CreateFileType(int baseTypeId);
+
+        /// <summary>
+        ///     create a new generic type parameter
+        /// </summary>
+        /// <param name="constraints">type constraints</param>
+        /// <returns></returns>
+        IGenericTypeParameter CreateUnboundGenericTypeParameter(ImmutableArray<int> constraints);
     }
 }

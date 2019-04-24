@@ -8,7 +8,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     callable routine
     /// </summary>
-    public class Routine : IRoutine {
+    public class Routine : IRoutine, ITypeReference {
 
         /// <summary>
         ///     create a new routine
@@ -48,6 +48,24 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public int TypeId
             => 0;
+
+        /// <summary>
+        ///     internal type format
+        /// </summary>
+        public string InternalTypeFormat
+            => "p";
+
+        /// <summary>
+        ///     reference kind
+        /// </summary>
+        public TypeReferenceKind ReferenceKind
+            => TypeReferenceKind.ConstantValue;
+
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        public CommonTypeKind TypeKind
+            => CommonTypeKind.ProcedureType;
 
         /// <summary>
         ///     add a parameter group

@@ -430,5 +430,25 @@
         /// </summary>
         public const int UntypedFile = 113;
 
+        /// <summary>
+        ///     generic constraint: class type
+        /// </summary>
+        public const int GenericClassConstraint = 144;
+
+        /// <summary>
+        ///     generic constraint: record type
+        /// </summary>
+        public const int GenericRecordConstraint = 145;
+
+        /// <summary>
+        ///     generic constraints: constructible type
+        /// </summary>
+        public const int GenericConstructorConstraint = 146;
+
+        /// <summary>
+        ///     unconstrained generic parameter
+        /// </summary>
+        public const int UnconstrainedGenericTypeParameter = 147;
+
     }
 }

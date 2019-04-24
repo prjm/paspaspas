@@ -51,12 +51,14 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<RecordConstantItem>,
         IEndVisitor<ClassOfTypeDeclaration>,
         IEndVisitor<FileTypeDeclaration>,
-        IEndVisitor<FormattedExpression> {
+        IEndVisitor<FormattedExpression>,
+        IEndVisitor<GenericConstraint>,
+        IEndVisitor<GenericTypeNameCollection>,
+        IEndVisitor<GenericTypeCollection> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
         private readonly Stack<ITypeReference> currentTypeDefinition;
-        private readonly Stack<Routine> currentMethodDefinition;
         private readonly Stack<ParameterGroup> currentMethodParameters;
         private readonly Stack<MethodImplementation> currentMethodImplementation;
         private readonly Resolver resolver;
@@ -82,7 +84,6 @@ namespace PasPasPas.Typings.Common {
             environment = env;
             resolver = new Resolver(new Scope(env.TypeRegistry));
             currentTypeDefinition = new Stack<ITypeReference>();
-            currentMethodDefinition = new Stack<Routine>();
             currentMethodParameters = new Stack<ParameterGroup>();
             currentMethodImplementation = new Stack<MethodImplementation>();
         }
@@ -813,7 +814,7 @@ namespace PasPasPas.Typings.Common {
                 method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
             }
 
-            currentMethodDefinition.Push(method);
+            currentTypeDefinition.Push(method);
             currentMethodParameters.Push(method.AddParameterGroup());
         }
 
@@ -822,6 +823,8 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(MethodDeclaration element) {
+            var method = currentTypeDefinition.Pop() as Routine;
+
             if (element.Kind == ProcedureKind.Function) {
 
                 if (currentTypeDefinition.Count < 1)
@@ -829,7 +832,6 @@ namespace PasPasPas.Typings.Common {
 
                 var v = currentTypeDefinition.Peek();
                 var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
-                var method = currentMethodDefinition.Pop();
                 var methodParams = currentMethodParameters.Pop();
 
                 if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
@@ -1237,6 +1239,60 @@ namespace PasPasPas.Typings.Common {
             }
         }
 
+        /// <summary>
+        ///     visit a generic constraint
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(GenericConstraint element) {
+            if (element.Kind == GenericConstraintKind.Class) {
+                element.TypeInfo = GetInstanceTypeById(KnownTypeIds.GenericClassConstraint);
+                return;
+            }
+
+            if (element.Kind == GenericConstraintKind.Record) {
+                element.TypeInfo = GetInstanceTypeById(KnownTypeIds.GenericRecordConstraint);
+                return;
+            }
+
+            if (element.Kind == GenericConstraintKind.Constructor) {
+                element.TypeInfo = GetInstanceTypeById(KnownTypeIds.GenericConstructorConstraint);
+                return;
+            }
+        }
+
+        /// <summary>
+        ///     visit generic elements
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(GenericTypeNameCollection element) {
+            var hasError = false;
+            using (var list = environment.ListPools.GetList<int>()) {
+                foreach (var constraint in element) {
+
+                    if (constraint.TypeInfo != default)
+                        list.Item.Add(constraint.TypeInfo.TypeId);
+                    else
+                        hasError = true;
+                }
+
+                if (hasError)
+                    element.TypeInfo = GetErrorTypeReference(default);
+                else if (list.Item.Count < 1)
+                    element.TypeInfo = GetInstanceTypeById(KnownTypeIds.UnconstrainedGenericTypeParameter);
+                else {
+                    var typeDef = TypeRegistry.TypeCreator.CreateUnboundGenericTypeParameter(environment.ListPools.GetFixedArray(list));
+                    element.TypeInfo = GetInstanceTypeById(typeDef.TypeId);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     visit a generic type parameter
+        /// </summary>
+        /// <param name="genericTypeParameter"></param>
+        public void EndVisit(GenericTypeCollection genericTypeParameter) {
+
+        }
 
         private bool AreRecordTypesCompatible(int leftId, int rightId)
             => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);

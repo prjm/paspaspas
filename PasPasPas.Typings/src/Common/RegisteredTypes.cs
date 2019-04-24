@@ -42,8 +42,6 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public const int SmallestUserTypeId = 1000;
 
-
-
         private int userTypeIds = SmallestUserTypeId;
 
         /// <summary>
@@ -191,6 +189,9 @@ namespace PasPasPas.Typings.Common {
             RegisterHiddenTypes();
             RegisterSystemType(new GenericArrayType(KnownTypeIds.GenericArrayType), "TArray", 1);
             RegisterSystemType(new FileType(KnownTypeIds.UntypedFile, KnownTypeIds.GenericPointer), "");
+            RegisterSystemType(new GenericConstraintType(KnownTypeIds.GenericClassConstraint), "");
+            RegisterSystemType(new GenericConstraintType(KnownTypeIds.GenericRecordConstraint), "");
+            RegisterSystemType(new GenericConstraintType(KnownTypeIds.GenericConstructorConstraint), "");
         }
 
         private void RegisterHiddenTypes()

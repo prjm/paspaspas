@@ -1,11 +1,13 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     generic constraint
     /// </summary>
-    public class GenericConstraint : SymbolTableEntryBase {
+    public class GenericConstraint : SymbolTableEntryBase, ITypedSyntaxNode {
 
         /// <summary>
         ///     constraint kind
@@ -17,6 +19,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public SymbolName Name { get; set; }
 
+        /// <summary>
+        ///     type info
+        /// </summary>
+        public ITypeReference TypeInfo { get; set; }
 
         /// <summary>
         ///     symbol name
@@ -42,7 +48,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
             visitor.EndVisit(this);
         }
 
