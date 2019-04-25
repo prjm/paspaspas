@@ -26,7 +26,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     number of generic type parameters
         /// </summary>
-        public int NumberOfTypeParameters
+        public override int NumberOfTypeParameters
             => 1;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="typeIds"></param>
         /// <returns></returns>
-        public Reference Bind(ImmutableArray<int> typeIds) {
+        public override Reference Bind(ImmutableArray<int> typeIds) {
             if (typeIds.Length != 1)
                 return default;
 

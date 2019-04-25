@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Common;
@@ -56,6 +57,32 @@ namespace PasPasPas.Typings.Structured {
             return newMethod;
         }
 
+        /// <summary>
+        ///     add a generic parameter
+        /// </summary>
+        /// <param name="typeId"></param>
+        public void AddGenericParameter(int typeId) {
+            GenericParameters.Add(typeId);
+        }
+
+        /// <summary>
+        ///     list of generic parameter
+        /// </summary>
+        public virtual List<int> GenericParameters { get; } = new List<int>();
+
+        /// <summary>
+        ///     bind generic type
+        /// </summary>
+        /// <param name="typeIds"></param>
+        /// <returns></returns>
+        public virtual Reference Bind(ImmutableArray<int> typeIds)
+            => default;
+
+        /// <summary>
+        ///     number of type parameters
+        /// </summary>
+        public virtual int NumberOfTypeParameters
+            => GenericParameters.Count;
 
     }
 }

@@ -259,5 +259,6 @@ namespace PasPasPas.Typings.Structured {
 
             return false;
         }
+
     }
 }

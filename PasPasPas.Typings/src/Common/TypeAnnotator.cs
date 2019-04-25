@@ -35,7 +35,7 @@ namespace PasPasPas.Typings.Common {
         IStartVisitor<EnumTypeCollection>, IEndVisitor<EnumTypeCollection>,
         IEndVisitor<EnumTypeValue>,
         IEndVisitor<Parsing.SyntaxTree.Abstract.SubrangeType>,
-        IEndVisitor<TypeDeclaration>,
+        IStartVisitor<TypeDeclaration>, IEndVisitor<TypeDeclaration>,
         IEndVisitor<SetTypeDeclaration>,
         IEndVisitor<ArrayTypeDeclaration>,
         IStartVisitor<StructuredType>,
@@ -53,8 +53,7 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<FileTypeDeclaration>,
         IEndVisitor<FormattedExpression>,
         IEndVisitor<GenericConstraint>,
-        IEndVisitor<GenericTypeNameCollection>,
-        IEndVisitor<GenericTypeCollection> {
+        IEndVisitor<GenericTypeNameCollection> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -686,7 +685,32 @@ namespace PasPasPas.Typings.Common {
         ///     declare a type
         /// </summary>
         /// <param name="element"></param>
+        public void StartVisit(TypeDeclaration element) {
+            if (element.Generics != default && element.Generics.Count > 0) {
+                var placeholder = TypeCreator.CreateGenericPlaceholder();
+                var typeRef = GetInstanceTypeById(placeholder.TypeId);
+                currentTypeDefinition.Push(typeRef);
+            }
+        }
+
+        /// <summary>
+        ///     declare a type
+        /// </summary>
+        /// <param name="element"></param>
         public void EndVisit(TypeDeclaration element) {
+
+            if (element.Generics != default && element.Generics.Count > 0) {
+                var placeholderRef = currentTypeDefinition.Pop();
+                var placeholder = GetTypeByIdOrUndefinedType(placeholderRef.TypeId) as IExtensibleGenericType;
+
+                if (element.TypeValue is ITypedSyntaxNode type && type.TypeInfo != null) {
+                    var typedef = GetTypeByIdOrUndefinedType(type.TypeInfo.TypeId) as IExtensibleGenericType;
+
+                    if (typedef != default)
+                        foreach (var param in placeholder.GenericParameters)
+                            typedef.AddGenericParameter(param);
+                }
+            }
 
             if (element.TypeValue is ITypedSyntaxNode declaredType && declaredType.TypeInfo != null) {
                 element.TypeInfo = element.TypeValue.TypeInfo;
@@ -1266,6 +1290,8 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(GenericTypeNameCollection element) {
             var hasError = false;
+            var genericTypeRef = currentTypeDefinition.Peek();
+            var genericType = GetTypeByIdOrUndefinedType(genericTypeRef.TypeId) as IExtensibleGenericType;
             using (var list = environment.ListPools.GetList<int>()) {
                 foreach (var constraint in element) {
 
@@ -1283,15 +1309,10 @@ namespace PasPasPas.Typings.Common {
                     var typeDef = TypeRegistry.TypeCreator.CreateUnboundGenericTypeParameter(environment.ListPools.GetFixedArray(list));
                     element.TypeInfo = GetInstanceTypeById(typeDef.TypeId);
                 }
+
+                if (!hasError)
+                    genericType.AddGenericParameter(element.TypeInfo.TypeId);
             }
-        }
-
-        /// <summary>
-        ///     visit a generic type parameter
-        /// </summary>
-        /// <param name="genericTypeParameter"></param>
-        public void EndVisit(GenericTypeCollection genericTypeParameter) {
-
         }
 
         private bool AreRecordTypesCompatible(int leftId, int rightId)

@@ -184,9 +184,13 @@ namespace PasPasPasTests.Types {
         ///     test the type of a declared variable expression
         /// </summary>
         /// <param name="declaration">declaration</param>
-        protected void AssertDeclTypeDef<T>(string declaration, Func<T, bool> test, NativeIntSize intSize = NativeIntSize.Undefined, string expression = "x") where T : class, ITypeDefinition {
+        protected void AssertDeclTypeDef<T>(string declaration, Func<T, bool> test, NativeIntSize intSize = NativeIntSize.Undefined, string expression = "x", string typeName = "t") where T : class, ITypeDefinition {
             var file = "SimpleExpr";
-            var program = $"program {file}; type t = {declaration}; var x : t; begin Writeln({expression}); end. ";
+            var program = $"program {file}; type {typeName} = {declaration}; var x : {typeName}; begin Writeln({expression}); end. ";
+            AssertDeclTypeDef<T>(program, file, intSize, test);
+        }
+
+        protected void AssertDeclTypeDef<T>(string program, string file, NativeIntSize intSize, Func<T, bool> test) where T : class, ITypeDefinition {
             SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
             IExpression firstParam = null;
 

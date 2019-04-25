@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Hidden;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
 
@@ -55,6 +56,17 @@ namespace PasPasPas.Typings.Common {
         public IFileType CreateFileType(int baseTypeId) {
             var newTypeId = RegisteredTypes.RequireUserTypeId();
             var result = new FileType(newTypeId, baseTypeId);
+            RegisteredTypes.RegisterType(result);
+            return result;
+        }
+
+        /// <summary>
+        ///     create a new hidden placeholder type
+        /// </summary>
+        /// <returns></returns>
+        public IExtensibleGenericType CreateGenericPlaceholder() {
+            var typeId = RegisteredTypes.RequireUserTypeId();
+            var result = new GenericPlaceholderType(typeId);
             RegisteredTypes.RegisterType(result);
             return result;
         }

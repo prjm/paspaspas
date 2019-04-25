@@ -5,7 +5,7 @@ namespace PasPasPas.Globals.Types {
     /// <summary>
     ///     structured type definition
     /// </summary>
-    public interface IStructuredType : ITypeDefinition {
+    public interface IStructuredType : ITypeDefinition, IExtensibleGenericType {
 
         /// <summary>
         ///     base class

@@ -72,5 +72,14 @@ namespace PasPasPas.Typings.Structured {
         public override string ToString()
             => $"class of {BaseType}";
 
+        /// <summary>
+        ///     get the generic parameters from the base type
+        /// </summary>
+        public override List<int> GenericParameters {
+            get {
+                var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(BaseType) as IStructuredType;
+                return baseType.GenericParameters;
+            }
+        }
     }
 }
