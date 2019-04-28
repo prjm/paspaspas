@@ -1282,6 +1282,17 @@ namespace PasPasPas.Typings.Common {
                 element.TypeInfo = GetInstanceTypeById(KnownTypeIds.GenericConstructorConstraint);
                 return;
             }
+
+            if (element.Kind == GenericConstraintKind.Identifier) {
+                var reference = resolver.ResolveByName(default, element.SymbolName, 0, ResolverFlags.None);
+
+                if (reference.Kind == ReferenceKind.RefToType) {
+                    element.TypeInfo = GetTypeReferenceById(reference.Symbol.TypeId);
+                    return;
+                }
+
+                return;
+            }
         }
 
         /// <summary>

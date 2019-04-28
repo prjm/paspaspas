@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -19,9 +14,8 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="newTypeId"></param>
         /// <param name="baseTypeId"></param>
-        public FileType(int newTypeId, int baseTypeId) : base(newTypeId) {
-            BaseTypeId = baseTypeId;
-        }
+        public FileType(int newTypeId, int baseTypeId) : base(newTypeId)
+            => BaseTypeId = baseTypeId;
 
         /// <summary>
         ///     get
@@ -38,6 +32,6 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     base type id
         /// </summary>
-        public int BaseTypeId { get; }
+        public int BaseTypeId { get; set; }
     }
 }

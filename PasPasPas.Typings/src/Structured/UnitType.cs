@@ -16,13 +16,13 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     declared symbols
         /// </summary>
-        private IDictionary<string, Reference> symbols
+        private readonly IDictionary<string, Reference> symbols
             = new Dictionary<string, Reference>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         ///     global routines
         /// </summary>
-        private IList<IRoutine> globalRoutines
+        private readonly IList<IRoutine> globalRoutines
             = new List<IRoutine>();
 
         /// <summary>
