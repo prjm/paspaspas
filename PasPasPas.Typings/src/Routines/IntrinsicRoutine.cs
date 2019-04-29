@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Structured;
@@ -207,5 +208,11 @@ namespace PasPasPas.Typings.Routines {
         protected ITypeReference RuntimeException()
             => Runtime.Types.MakeErrorTypeReference(); // ... to be changed
 
+        /// <summary>
+        ///     add parameters
+        /// </summary>
+        /// <returns></returns>
+        public ParameterGroup AddParameterGroup()
+            => throw new InvalidOperationException();
     }
 }

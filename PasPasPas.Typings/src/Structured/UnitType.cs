@@ -22,8 +22,14 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     global routines
         /// </summary>
-        private readonly IList<IRoutine> globalRoutines
+        private readonly List<IRoutine> globalRoutines
             = new List<IRoutine>();
+
+        /// <summary>
+        ///     global routines
+        /// </summary>
+        public List<IRoutine> GlobalRoutines
+            => globalRoutines;
 
         /// <summary>
         ///     unit type
@@ -85,5 +91,33 @@ namespace PasPasPas.Typings.Structured {
             symbols.Add(routine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, routine));
         }
 
+        /// <summary>
+        ///     test if a routine with a given name exists
+        /// </summary>
+        /// <param name="symbolName"></param>
+        /// <returns></returns>
+        public bool HasGlobalRoutine(string symbolName) {
+            foreach (var routine in globalRoutines)
+                if (string.Equals(routine.Name, symbolName, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            return false;
+        }
+
+        /// <summary>
+        ///     add a routine implementation
+        /// </summary>
+        /// <param name="symbolName"></param>
+        /// <param name="routineToImplement"></param>
+        /// <returns></returns>
+        public bool AddGlobalImplementation(string symbolName, out IRoutine routineToImplement) {
+            foreach (var routine in globalRoutines)
+                if (string.Equals(routine.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
+                    routineToImplement = routine;
+                    return true;
+                }
+
+            routineToImplement = default;
+            return false;
+        }
     }
 }

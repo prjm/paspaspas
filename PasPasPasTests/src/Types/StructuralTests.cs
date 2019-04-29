@@ -1,5 +1,9 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System.Linq;
+using PasPasPas.Globals.Types;
+using PasPasPas.Options.DataTypes;
 using PasPasPas.Typings.Common;
+using PasPasPas.Typings.Simple;
+using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -130,6 +134,15 @@ namespace PasPasPasTests.Types {
             AssertExprTypeInProc("function a: Integer; begin Result := 5; end; procedure b; ", "a", typeId: KnownTypeIds.IntegerType);
             AssertExprTypeInProc("function a: integer; forward; function a: Integer; begin Result := 5; end; procedure b; ", "a", typeId: KnownTypeIds.IntegerType);
             AssertExprTypeInProc("function a: integer; forward; function a: integer; forward; function a: Integer; begin Result := 5; end; procedure b; ", "a", typeId: KnownTypeIds.IntegerType);
+        }
+
+        [TestMethod]
+        public void TestGlobalMethod() {
+            var f = "SimpleExpr";
+            var p = $"unit {f}; interface procedure a; implementation procedure a; begin WriteLn(x); end; end.";
+            bool v(ErrorType e) => (e.TypeRegistry.GetTypeByIdOrUndefinedType(RegisteredTypes.UnitTypeId) as UnitType)?.GlobalRoutines.Any(t => t.Name == "a") ?? false;
+
+            AssertDeclTypeDef<ErrorType>(program: p, f, NativeIntSize.Undefined, v);
         }
 
     }

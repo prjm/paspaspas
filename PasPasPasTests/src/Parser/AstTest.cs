@@ -1082,6 +1082,13 @@ namespace PasPasPasTests.Parser {
         }
 
         [TestMethod]
+        public void TestGlobalMethod() {
+            GlobalMethod r(object t) => (t as CompilationUnit)?.InterfaceSymbols["a"] as GlobalMethod;
+
+            RunAstTest("unit z.x; interface procedure a; implementation procedure a; begin end; end.", t => r(t)?.Kind, ProcedureKind.Procedure);
+        }
+
+        [TestMethod]
         public void TestGotoStatement() {
             StructuredStatement r(object t) => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Block as BlockOfStatements)?.Statements[0] as StructuredStatement;
 

@@ -5,7 +5,7 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     part of a generic ame
+    ///     part of a generic name
     /// </summary>
     public class GenericNameFragment : AbstractSyntaxPartBase, ITypeTarget {
 
@@ -46,10 +46,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="visitor">ndoe visitor</param>
+        /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, TypeValues, visitor);
             visitor.EndVisit(this);
         }
     }

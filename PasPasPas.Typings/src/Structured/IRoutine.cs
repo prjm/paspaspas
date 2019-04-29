@@ -19,5 +19,11 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="callableRoutines">list to collect callable routines</param>
         /// <param name="signature">used signature</param>
         void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature);
+
+        /// <summary>
+        ///     add a parameter group
+        /// </summary>
+        /// <returns></returns>
+        ParameterGroup AddParameterGroup();
     }
 }

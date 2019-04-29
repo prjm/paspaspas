@@ -818,24 +818,31 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(MethodDeclaration element) {
-            if (currentTypeDefinition.Count < 1)
-                return;
-
             if (element.Name == null)
                 return;
-
-            var v = currentTypeDefinition.Peek();
-            var classMethod = element is StructureMethod m ? m.ClassItem : false;
-            var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
             var method = default(Routine);
 
-            if (classMethod) {
-                var mm = GetTypeByIdOrUndefinedType(typeDef.MetaType.TypeId) as MetaStructuredTypeDeclaration;
-                method = mm.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
+            if (element is GlobalMethod gm) {
+                if (CurrentUnit.InterfaceSymbols != default) {
+                    var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
+                    method = new Routine(TypeRegistry, element.SymbolName, element.Kind);
+                    unitType.AddGlobal(method);
+                }
             }
-
             else {
-                method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
+
+                var v = currentTypeDefinition.Peek();
+                var classMethod = element is StructureMethod m ? m.ClassItem : false;
+                var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
+
+                if (classMethod) {
+                    var mm = GetTypeByIdOrUndefinedType(typeDef.MetaType.TypeId) as MetaStructuredTypeDeclaration;
+                    method = mm.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
+                }
+
+                else {
+                    method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
+                }
             }
 
             currentTypeDefinition.Push(method);
@@ -1160,9 +1167,17 @@ namespace PasPasPas.Typings.Common {
 
             if (!isClassMethod && !isForward) {
                 var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
-                var routine = new Routine(TypeRegistry, element.SymbolName, element.Kind);
-                unitType.AddGlobal(routine);
-                resolver.AddToScope(element.SymbolName, ReferenceKind.RefToGlobalRoutine, routine);
+                var routine = default(IRoutine);
+                if (unitType.HasGlobalRoutine(element.SymbolName)) {
+                    if (!unitType.AddGlobalImplementation(element.SymbolName, out routine)) {
+                        routine = new Routine(TypeRegistry, element.SymbolName, element.Kind);
+                    }
+                }
+                else {
+                    routine = new Routine(TypeRegistry, element.SymbolName, element.Kind);
+                    unitType.AddGlobal(routine);
+                    resolver.AddToScope(element.SymbolName, ReferenceKind.RefToGlobalRoutine, routine);
+                }
                 currentMethodParameters.Push(routine.AddParameterGroup());
             }
 
