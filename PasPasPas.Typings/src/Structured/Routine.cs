@@ -16,10 +16,12 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="name">routine name</param>
         /// <param name="kind">routine kind</param>
         /// <param name="types">type registry</param>
-        public Routine(ITypeRegistry types, string name, ProcedureKind kind) {
+        /// <param name="genericTypeId">generic type id</param>
+        public Routine(ITypeRegistry types, string name, ProcedureKind kind, int genericTypeId = KnownTypeIds.ErrorType) {
             Name = name;
             Kind = kind;
             TypeRegistry = types;
+            TypeId = genericTypeId;
         }
 
         /// <summary>
@@ -46,8 +48,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     type id
         /// </summary>
-        public int TypeId
-            => 0;
+        public int TypeId { get; }
 
         /// <summary>
         ///     internal type format

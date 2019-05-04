@@ -360,7 +360,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var symbol = ContinueWith(TokenKind.Const, TokenKind.Resourcestring);
 
             using (var list = GetList<ConstDeclarationSymbol>()) {
-                while ((!inClassDeclaration || !(Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) && MatchIdentifier(TokenKind.OpenBraces)) {
+                while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict)) && MatchIdentifier(TokenKind.OpenBraces)) {
                     AddToList(list, ParseConstDeclaration());
                 }
                 return new ConstSectionSymbol(symbol, GetFixedArray(list));

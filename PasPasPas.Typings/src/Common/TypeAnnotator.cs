@@ -830,18 +830,24 @@ namespace PasPasPas.Typings.Common {
                 }
             }
             else {
-
                 var v = currentTypeDefinition.Peek();
-                var classMethod = element is StructureMethod m ? m.ClassItem : false;
+                var m = element as StructureMethod;
+                var classMethod = m?.ClassItem ?? false;
+                var genericTypeId = KnownTypeIds.ErrorType;
                 var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
+
+                if (m != default && m.Generics != default && m.Generics.Count > 0) {
+                    var functionType = TypeCreator.CreateRoutineType();
+                    genericTypeId = functionType.TypeId;
+                }
 
                 if (classMethod) {
                     var mm = GetTypeByIdOrUndefinedType(typeDef.MetaType.TypeId) as MetaStructuredTypeDeclaration;
-                    method = mm.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
+                    method = mm.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId);
                 }
 
                 else {
-                    method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
+                    method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId);
                 }
             }
 
@@ -1318,6 +1324,7 @@ namespace PasPasPas.Typings.Common {
             var hasError = false;
             var genericTypeRef = currentTypeDefinition.Peek();
             var genericType = GetTypeByIdOrUndefinedType(genericTypeRef.TypeId) as IExtensibleGenericType;
+
             using (var list = environment.ListPools.GetList<int>()) {
                 foreach (var constraint in element) {
 

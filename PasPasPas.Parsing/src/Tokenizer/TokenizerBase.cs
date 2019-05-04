@@ -61,7 +61,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     registered input patterns
         /// </summary>
-        private InputPatterns characterClasses;
+        private readonly InputPatterns characterClasses;
 
         /// <summary>
         ///     create a new tokenizer

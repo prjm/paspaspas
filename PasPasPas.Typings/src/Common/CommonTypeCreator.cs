@@ -84,6 +84,17 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
+        ///     create a routine type
+        /// </summary>
+        /// <returns></returns>
+        public IRoutineType CreateRoutineType() {
+            var typeId = RegisteredTypes.RequireUserTypeId();
+            var result = new RoutineType(typeId);
+            RegisteredTypes.RegisterType(result);
+            return result;
+        }
+
+        /// <summary>
         ///     create a new set type
         /// </summary>
         /// <param name="baseType"></param>

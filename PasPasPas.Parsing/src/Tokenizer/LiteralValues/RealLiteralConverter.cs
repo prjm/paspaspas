@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     public class RealLiteralConverter : IEnvironmentItem, IRealConverter, ILookupFunction<string, ITypeReference> {
 
         private readonly IRuntimeValueFactory constantsValues;
-        private LookupTable<string, ITypeReference> data;
+        private readonly LookupTable<string, ITypeReference> data;
 
         /// <summary>
         ///     table entries

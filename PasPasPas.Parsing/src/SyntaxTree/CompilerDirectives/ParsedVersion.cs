@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     ///     pe version directive
     /// </summary>
     public class ParsedVersion : CompilerDirectiveBase {
-        private Terminal symbol;
+        private readonly Terminal symbol;
         private readonly Terminal number;
 
         /// <summary>

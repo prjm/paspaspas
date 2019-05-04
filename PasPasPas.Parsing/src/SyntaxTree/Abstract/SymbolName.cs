@@ -61,7 +61,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class NamespacedSymbolName : SymbolName {
 
-        private IList<string> names
+        private readonly List<string> names
             = new List<string>();
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parts
         /// </summary>
-        private IList<GenericSymbolNamePart> parts
+        private readonly List<GenericSymbolNamePart> parts
             = new List<GenericSymbolNamePart>();
 
         /// <summary>

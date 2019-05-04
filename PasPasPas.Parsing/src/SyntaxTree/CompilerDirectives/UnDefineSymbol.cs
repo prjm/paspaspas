@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     /// </summary>
     public class UnDefineSymbol : CompilerDirectiveBase {
         private readonly Terminal symbol;
-        private Terminal conditional;
+        private readonly Terminal conditional;
 
         /// <summary>
         ///     undefine directive

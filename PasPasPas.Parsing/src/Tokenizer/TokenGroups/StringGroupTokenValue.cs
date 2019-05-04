@@ -12,13 +12,13 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// </summary>
     public sealed class StringGroupTokenValue : PatternContinuation {
 
-        private QuotedStringTokenValue quotedString
+        private readonly QuotedStringTokenValue quotedString
             = new QuotedStringTokenValue(TokenKind.QuotedString, '\'');
 
-        private CharacterClassTokenGroupValue digitTokenizer
+        private readonly CharacterClassTokenGroupValue digitTokenizer
             = new CharacterClassTokenGroupValue(TokenKind.IntegralNumber, new DigitCharClass(false), 0, LiteralParserKind.IntegerNumbers, Guid.Empty);
 
-        private CharacterClassTokenGroupValue hexDigits
+        private readonly CharacterClassTokenGroupValue hexDigits
             = new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, TokenizerBase.IncompleteHexNumber);
 
         /// <summary>

@@ -10,7 +10,7 @@ namespace PasPasPas.Typings.Common {
     /// </summary>
     public class Scope {
 
-        private IOrderedDictionary<string, Reference> entries
+        private readonly IOrderedDictionary<string, Reference> entries
             = new OrderedDictionary<string, Reference>(StringComparer.OrdinalIgnoreCase);
 
         private readonly Scope parent;

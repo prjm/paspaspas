@@ -102,5 +102,11 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <returns></returns>
         IExtensibleGenericType CreateGenericPlaceholder();
+
+        /// <summary>
+        ///     create a routine type
+        /// </summary>
+        /// <returns></returns>
+        IRoutineType CreateRoutineType();
     }
 }

@@ -54,7 +54,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public sealed partial class TokenizerWithLookahead : ITokenizer, IDisposable {
 
-        private OptionSet options;
+        private readonly OptionSet options;
         private readonly TokenizerMode mode = TokenizerMode.Undefined;
         private readonly IParserEnvironment environment;
         private readonly IRuntimeValueFactory constValues;
@@ -78,13 +78,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     list of tokens
         /// </summary>
-        private QueueWithIndexCollection<IPoolItem<TokenSequence>> tokenList
+        private readonly QueueWithIndexCollection<IPoolItem<TokenSequence>> tokenList
             = new QueueWithIndexCollection<IPoolItem<TokenSequence>>();
 
         /// <summary>
         ///     list of invalid tokens (e.g. whitespace)
         /// </summary>
-        private Queue<Token> invalidTokens
+        private readonly Queue<Token> invalidTokens
             = new Queue<Token>();
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
     /// </summary>
     public class ExtendedValue : FloatValueBase {
 
-        private ExtF80 value;
+        private readonly ExtF80 value;
 
         /// <summary>
         ///     create a new extend value
@@ -23,7 +23,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         ///     test if the value is negative
         /// </summary>
         public override bool IsNegative
-            => value.IsNegative;
+            => ExtF80.IsNegativeValue(value);
 
         /// <summary>
         ///     get the extended value
@@ -53,7 +53,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => value.GetHashCode();
+            => ExtF80.GetHashCode(value);
 
         /// <summary>
         ///     format this floating point value as string

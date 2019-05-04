@@ -2,6 +2,7 @@
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Options.DataTypes;
+using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -32,6 +33,17 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef("T<A : record>", "Self", (Func<IStructuredType, bool>)t2);
             AssertDeclTypeDef("T<A : constructor>", "Self", (Func<IStructuredType, bool>)t3);
             AssertDeclTypeDef("T<A : TA>", "Self", (Func<IStructuredType, bool>)t4, "TA = class end; ");
+        }
+
+        [TestMethod]
+        public void TestGenericConstraints2() {
+            T r<T>(IMetaStructuredType s, int? i) where T : class
+                => s.TypeRegistry.GetTypeByIdOrUndefinedType(i ?? KnownTypeIds.ErrorType) as T;
+
+            bool t(IMetaStructuredType s)
+                => r<IExtensibleGenericType>(s, r<StructuredTypeDeclaration>(s, s.BaseType)?.Methods[0]?.TypeId) != default;
+
+            AssertDeclTypeDef("TB", "TA<TB>.A()", (Func<IMetaStructuredType, bool>)t, "TA = class procedure A<T>; end; ");
         }
 
     }
