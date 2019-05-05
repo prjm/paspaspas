@@ -9,7 +9,7 @@ namespace PasPasPas.Infrastructure.Log {
     public class LogSource : ILogSource {
 
         private readonly ILogManager manager;
-        private readonly Guid group;
+        private readonly uint group;
 
         /// <summary>
         ///     associated log manager
@@ -22,7 +22,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// </summary>
         /// <param name="logManager">used log manager</param>
         /// <param name="groupId">message group id</param>
-        public LogSource(ILogManager logManager, Guid groupId) {
+        public LogSource(ILogManager logManager, uint groupId) {
             if (groupId == default)
                 throw new ArgumentOutOfRangeException(nameof(groupId));
 

@@ -14,13 +14,6 @@ namespace PasPasPas.Parsing.Tokenizer {
     public sealed class TokenizerBase : ITokenizer, IDisposable {
 
         /// <summary>
-        ///     message group for tokenizer logs
-        /// </summary>
-        public static readonly Guid TokenizerLogMessage
-            = new Guid(new byte[] { 0xc6, 0x78, 0xdb, 0x93, 0x84, 0x6a, 0xff, 0x47, 0xaf, 0xe2, 0x82, 0xb3, 0xb3, 0x7f, 0x33, 0x26 });
-        /* {93db78c6-6a84-47ff-afe2-82b3b37f3326} */
-
-        /// <summary>
         ///     message: unexpected token
         /// </summary>
         public static readonly Guid UnexpectedCharacter
@@ -69,7 +62,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public TokenizerBase(IParserEnvironment environment, InputPatterns charClasses, StackedFileReader input) {
             Input = input ?? throw new ArgumentNullException(nameof(input));
-            Log = new LogSource(environment.Log, TokenizerLogMessage);
+            Log = new LogSource(environment.Log, MessageGroups.Tokenizer);
             characterClasses = charClasses ?? throw new ArgumentNullException(nameof(charClasses));
             state = new TokenizerState(environment, this, input, Log);
             FinishInput();

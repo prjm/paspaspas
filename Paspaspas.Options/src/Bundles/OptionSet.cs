@@ -11,11 +11,6 @@ namespace PasPasPas.Options.Bundles {
     /// </summary>
     public class OptionSet : IOptionSet {
 
-        private static readonly Guid messageSource
-            = new Guid(new byte[] { 0x21, 0x78, 0xd, 0xe5, 0x2f, 0xb2, 0xca, 0x42, 0xbf, 0x47, 0x71, 0xf1, 0x11, 0x1b, 0x31, 0xc9 });
-        /* {e50d7821-b22f-42ca-bf47-71f1111b31c9} */
-
-
         /// <summary>
         ///     open ifdef / ifndef
         /// </summary>
@@ -103,7 +98,7 @@ namespace PasPasPas.Options.Bundles {
         ///     reset definitions for a new unit
         /// </summary>
         public void ResetOnNewUnit(ILogManager logManager) {
-            var logSource = new LogSource(logManager, messageSource);
+            var logSource = new LogSource(logManager, MessageGroups.OptionSet);
 
             CompilerOptions.ResetOnNewUnit();
             ConditionalCompilation.ResetOnNewUnit(logSource);

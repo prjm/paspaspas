@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree;
@@ -42,13 +43,6 @@ namespace PasPasPas.Parsing.Parser {
     public abstract class ParserBase : IParser {
 
         /// <summary>
-        ///     message group for parser logs
-        /// </summary>
-        public static readonly Guid ParserLogMessage
-            = new Guid(new byte[] { 0x22, 0xc3, 0x76, 0x5e, 0x97, 0x6c, 0xe8, 0x49, 0xb7, 0x65, 0x1d, 0xa7, 0x31, 0xf4, 0x5b, 0x33 });
-        /* {5e76c322-6c97-49e8-b765-1da731f45b33} */
-
-        /// <summary>
         ///     message: unexpected token
         /// </summary>
         public static readonly Guid UnexpectedToken
@@ -83,7 +77,7 @@ namespace PasPasPas.Parsing.Parser {
         protected ParserBase(IParserEnvironment env, OptionSet parserOptions, TokenizerWithLookahead tokenizerWithLookAhead) {
             environment = env;
             tokenizer = tokenizerWithLookAhead;
-            logSource = new LogSource(env.Log, ParserLogMessage);
+            logSource = new LogSource(env.Log, MessageGroups.Parser);
             options = parserOptions;
         }
 

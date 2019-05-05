@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Log;
@@ -3307,13 +3308,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private LogSource logSource;
 
         /// <summary>
-        ///     message group id
-        /// </summary>
-        private static readonly Guid MessageGroupId
-            = new Guid(new byte[] { 0x9, 0x1b, 0x66, 0xae, 0xc7, 0x4c, 0xd3, 0x45, 0xb5, 0x75, 0x1d, 0x4f, 0x9, 0x7e, 0xcb, 0x68 });
-        /* {ae661b09-4cc7-45d3-b575-1d4f097ecb68} */
-
-        /// <summary>
         ///     tree states
         /// </summary>
         private readonly IDictionary<AbstractSyntaxPartBase, object> currentValues
@@ -3328,7 +3322,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     return logSource;
 
                 if (environment.Log != null) {
-                    logSource = new LogSource(environment.Log, MessageGroupId);
+                    logSource = new LogSource(environment.Log, MessageGroups.TreeTransformer);
                     return logSource;
                 }
 

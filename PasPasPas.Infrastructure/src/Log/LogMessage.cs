@@ -10,7 +10,7 @@ namespace PasPasPas.Infrastructure.Log {
     public class LogMessage : ILogMessage {
 
         private readonly object[] data;
-        private readonly Guid group;
+        private readonly uint group;
         private readonly Guid id;
         private readonly MessageSeverity severity;
 
@@ -21,7 +21,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="messageData">message data</param>
         /// <param name="groupId">group id</param>
         /// <param name="messageSeverity">severity</param>
-        public LogMessage(MessageSeverity messageSeverity, Guid groupId, Guid messageId, params object[] messageData) {
+        public LogMessage(MessageSeverity messageSeverity, uint groupId, Guid messageId, params object[] messageData) {
 
             if (messageSeverity == MessageSeverity.Undefined)
                 throw new ArgumentOutOfRangeException(nameof(messageSeverity));
@@ -41,7 +41,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <summary>
         ///     message group id
         /// </summary>
-        public Guid GroupID
+        public uint GroupID
             => group;
 
         /// <summary>

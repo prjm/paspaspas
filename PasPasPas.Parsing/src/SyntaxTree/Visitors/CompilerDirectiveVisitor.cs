@@ -103,7 +103,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             visitor = new Visitor(this);
             log = logMgr;
             path = filePath;
-            logSource = new LogSource(log, logSourceId);
+            logSource = new LogSource(log, MessageGroups.OptionSet);
         }
 
         /// <summary>
@@ -964,7 +964,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (element.MessageType == MessageSeverity.Undefined)
                 return;
 
-            LogSource.ProcessMessage(new LogMessage(element.MessageType, ParserBase.ParserLogMessage, ParserBase.UserGeneratedMessage, element.MessageType, element.MessageText));
+            LogSource.ProcessMessage(new LogMessage(element.MessageType, MessageGroups.Parser, ParserBase.UserGeneratedMessage, element.MessageType, element.MessageText));
         }
 
         /// <summary>
