@@ -1,5 +1,5 @@
-﻿using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Log;
+﻿using PasPasPas.Globals.Log;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing;
 using PasPasPas.Parsing.Tokenizer;

@@ -53,7 +53,7 @@ namespace PasPasPas.Typings.Structured {
         public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
 
             if (otherType.TypeKind == CommonTypeKind.StaticArrayType && otherType is ArrayType array) {
-                var isPackedString = (BaseType.TypeKind.IsChar() && array.BaseType.TypeKind.IsChar()) && (Packed && array.Packed);
+                var isPackedString = BaseType.TypeKind.IsChar() && array.BaseType.TypeKind.IsChar() && Packed && array.Packed;
                 return isPackedString;
             }
 

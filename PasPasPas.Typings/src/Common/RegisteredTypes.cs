@@ -319,12 +319,12 @@ namespace PasPasPas.Typings.Common {
             RegisterSystemType(new Integral64BitType(KnownTypeIds.Uint64Type, false), "UInt64");
             RegisterSystemType(new Integral64BitType(KnownTypeIds.Int64Type, true), "Int64");
 
-            RegisterSystemType(new TypeAlias(KnownTypeIds.UInt8, KnownTypeIds.ByteType), "UInt8");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Int8, KnownTypeIds.ShortInt), "Int8");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.UInt16, KnownTypeIds.WordType), "UInt16");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Int16, KnownTypeIds.SmallInt), "Int16");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.UInt32, KnownTypeIds.CardinalType), "UInt32");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Int32, KnownTypeIds.IntegerType), "Int32");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.Unsigned8BitInteger, KnownTypeIds.ByteType), "UInt8");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.Signed8BitInteger, KnownTypeIds.ShortInt), "Int8");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.Unsigned16BitInteger, KnownTypeIds.WordType), "UInt16");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.Signed16BitInteger, KnownTypeIds.SmallInt), "Int16");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.Unsigned32BitInteger, KnownTypeIds.CardinalType), "UInt32");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.Signed32BitInteger, KnownTypeIds.IntegerType), "Int32");
         }
 
         /// <summary>

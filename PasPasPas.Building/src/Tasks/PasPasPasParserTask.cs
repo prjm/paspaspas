@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using PasPasPas.Building.Definition;
 using PasPasPas.Building.Engine;
+using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;

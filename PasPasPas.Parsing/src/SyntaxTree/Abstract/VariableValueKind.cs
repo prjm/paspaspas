@@ -5,19 +5,18 @@
     /// </summary>
     public enum VariableValueKind {
 
-
         /// <summary>
         ///     unknown variable value
         /// </summary>
         Unknown = 0,
 
         /// <summary>
-        ///     initiali value
+        ///     initial value
         /// </summary>
         InitialValue = 1,
 
         /// <summary>
-        ///     absoluze value
+        ///     absolute value
         /// </summary>
         Absolute = 2,
     }

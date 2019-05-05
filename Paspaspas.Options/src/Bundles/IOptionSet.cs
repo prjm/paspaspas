@@ -1,4 +1,4 @@
-﻿using PasPasPas.Infrastructure.Log;
+﻿using PasPasPas.Globals.Log;
 using PasPasPas.Options.DataTypes;
 
 namespace PasPasPas.Options.Bundles {

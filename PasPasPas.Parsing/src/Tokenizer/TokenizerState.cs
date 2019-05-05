@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 

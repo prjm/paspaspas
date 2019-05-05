@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree;

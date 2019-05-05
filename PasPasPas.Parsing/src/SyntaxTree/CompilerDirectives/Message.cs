@@ -1,4 +1,4 @@
-﻿using PasPasPas.Infrastructure.Log;
+﻿using PasPasPas.Globals.Log;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {

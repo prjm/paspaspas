@@ -69,7 +69,7 @@ namespace PasPasPas.Typings.Common {
             if (registry.IsSubrangeType(typeId2, out var subrangeType2))
                 rightType = subrangeType2.BaseType;
 
-            if ((!leftType.TypeKind.IsChar()) || (!rightType.TypeKind.IsChar()))
+            if (!leftType.TypeKind.IsChar() || !rightType.TypeKind.IsChar())
                 return KnownTypeIds.ErrorType;
 
             var right = rightType as ICharType;

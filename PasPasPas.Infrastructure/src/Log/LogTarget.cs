@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Globals.Log;
 
 namespace PasPasPas.Infrastructure.Log {
 
@@ -41,7 +42,7 @@ namespace PasPasPas.Infrastructure.Log {
         ///     log target was registered at manager
         /// </summary>
         /// <param name="logManager"></param>
-        public void RegisteredAt(LogManager logManager) {
+        public void RegisteredAt(ILogManager logManager) {
             //..
         }
 
@@ -49,7 +50,7 @@ namespace PasPasPas.Infrastructure.Log {
         ///     log target was unregistered at manager
         /// </summary>
         /// <param name="logManager"></param>
-        public void UnregisteredAt(LogManager logManager) {
+        public void UnregisteredAt(ILogManager logManager) {
             //..
         }
 

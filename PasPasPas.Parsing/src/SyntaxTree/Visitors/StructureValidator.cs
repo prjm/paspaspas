@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 

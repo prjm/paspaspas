@@ -3,7 +3,7 @@
 namespace PasPasPas.Globals.Environment {
 
     /// <summary>
-    ///     list pool item
+    ///     generic object pool item
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IPoolItem<T> : IDisposable {

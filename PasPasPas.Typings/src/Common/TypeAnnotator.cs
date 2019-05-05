@@ -459,9 +459,9 @@ namespace PasPasPas.Typings.Common {
                     var signature = impl.Declaration.CreateSignature(TypeRegistry.Runtime);
                     var callableRoutines = new List<ParameterGroup>();
 
-                    var tdef = (GetTypeByIdOrUndefinedType(impl.Declaration.DefiningType.TypeId) as MetaStructuredTypeDeclaration);
-                    var bdef = (GetTypeByIdOrUndefinedType(tdef.BaseType) as StructuredTypeDeclaration);
-                    var idef = (GetTypeByIdOrUndefinedType(bdef.BaseClass.TypeId) as MetaStructuredTypeDeclaration);
+                    var tdef = GetTypeByIdOrUndefinedType(impl.Declaration.DefiningType.TypeId) as MetaStructuredTypeDeclaration;
+                    var bdef = GetTypeByIdOrUndefinedType(tdef.BaseType) as StructuredTypeDeclaration;
+                    var idef = GetTypeByIdOrUndefinedType(bdef.BaseClass.TypeId) as MetaStructuredTypeDeclaration;
 
                     if (idef == default)
                         continue;
@@ -470,7 +470,7 @@ namespace PasPasPas.Typings.Common {
                         idef.ResolveCall(impl.Name.Name, callableRoutines, signature);
                     }
                     else {
-                        var s = (GetTypeByIdOrUndefinedType(idef.BaseType) as StructuredTypeDeclaration);
+                        var s = GetTypeByIdOrUndefinedType(idef.BaseType) as StructuredTypeDeclaration;
                         s.ResolveCall(impl.Name.Name, callableRoutines, signature);
                     }
 
@@ -1089,7 +1089,7 @@ namespace PasPasPas.Typings.Common {
                 if (part is BinaryOperator binaryOperator && binaryOperator.Kind == ExpressionKind.RangeOperator) {
                     if (requiresArray ||
                         !ExpandRangeOperator(part, requiresArray, values, out var setBaseType) ||
-                        (baseType != default && baseType.TypeId != setBaseType))
+                        baseType != default && baseType.TypeId != setBaseType)
                         return GetErrorTypeReference(part);
                     baseType = TypeRegistry.MakeTypeInstanceReference(setBaseType);
                     continue;
@@ -1190,7 +1190,7 @@ namespace PasPasPas.Typings.Common {
             resolver.OpenScope();
             currentMethodImplementation.Push(element);
 
-            if (element.Parameters != default && (!element.DefaultParameters)) {
+            if (element.Parameters != default && !element.DefaultParameters) {
                 foreach (var parameter in element.Parameters) {
                     resolver.AddToScope(parameter.Name.Name, ReferenceKind.RefToParameter, parameter);
                 }

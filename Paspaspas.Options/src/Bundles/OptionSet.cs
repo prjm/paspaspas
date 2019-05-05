@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.DataTypes;

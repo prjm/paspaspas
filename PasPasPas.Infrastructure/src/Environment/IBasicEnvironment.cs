@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
-using PasPasPas.Infrastructure.Log;
+using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
 
 namespace PasPasPas.Infrastructure.Environment {

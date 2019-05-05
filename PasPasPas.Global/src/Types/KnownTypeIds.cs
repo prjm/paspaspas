@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
-    ///     common type ids, used for system types
+    ///     common type ids, used for system types and special cases
     /// </summary>
     public static class KnownTypeIds {
 
@@ -388,32 +388,32 @@
         /// <summary>
         ///     uint8
         /// </summary>
-        public const int UInt8 = 105;
+        public const int Unsigned8BitInteger = 105;
 
         /// <summary>
         ///     int8
         /// </summary>
-        public const int Int8 = 106;
+        public const int Signed8BitInteger = 106;
 
         /// <summary>
         ///     uint16
         /// </summary>
-        public const int UInt16 = 107;
+        public const int Unsigned16BitInteger = 107;
 
         /// <summary>
         ///     int16
         /// </summary>
-        public const int Int16 = 108;
+        public const int Signed16BitInteger = 108;
 
         /// <summary>
         ///     uint32
         /// </summary>
-        public const int UInt32 = 109;
+        public const int Unsigned32BitInteger = 109;
 
         /// <summary>
         ///     int32
         /// </summary>
-        public const int Int32 = 110;
+        public const int Signed32BitInteger = 110;
 
         /// <summary>
         ///     generic array type

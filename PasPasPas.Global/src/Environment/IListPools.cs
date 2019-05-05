@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 namespace PasPasPas.Globals.Environment {
 
     /// <summary>
-    ///     list pools
+    ///     an interface for pooled lists
     /// </summary>
     public interface IListPools {
 

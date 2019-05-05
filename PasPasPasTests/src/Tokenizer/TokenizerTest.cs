@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Api;
+using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPasTests.Common;

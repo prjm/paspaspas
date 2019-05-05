@@ -33,7 +33,7 @@ namespace PasPasPas.Typings.Routines {
 
             for (var i = 0; i < signature.Length; i++) {
 
-                if (signature[i].TypeKind.IsIntegral() || (IsSubrangeType(signature[i].TypeId, out var subrangeType) && (subrangeType.BaseType.TypeKind.IsIntegral())))
+                if (signature[i].TypeKind.IsIntegral() || IsSubrangeType(signature[i].TypeId, out var subrangeType) && subrangeType.BaseType.TypeKind.IsIntegral())
                     continue;
 
                 return false;

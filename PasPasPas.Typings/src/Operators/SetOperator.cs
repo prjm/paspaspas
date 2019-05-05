@@ -96,10 +96,10 @@ namespace PasPasPas.Typings.Operators {
 
             var setBaseType = TypeRegistry.ResolveAlias(setType.BaseTypeId);
 
-            if ((ordinalType.TypeKind.IsChar() && setBaseType.TypeKind.IsChar()) ||
-                (ordinalType.TypeKind == CommonTypeKind.BooleanType && setBaseType.TypeKind == CommonTypeKind.BooleanType) ||
-                (ordinalType.TypeKind.IsNumerical() && setBaseType.TypeKind.IsNumerical()) ||
-                (ordinalType.TypeKind == CommonTypeKind.EnumerationType && setBaseType.TypeId == ordinalType.TypeId)) {
+            if (ordinalType.TypeKind.IsChar() && setBaseType.TypeKind.IsChar() ||
+                ordinalType.TypeKind == CommonTypeKind.BooleanType && setBaseType.TypeKind == CommonTypeKind.BooleanType ||
+                ordinalType.TypeKind.IsNumerical() && setBaseType.TypeKind.IsNumerical() ||
+                ordinalType.TypeKind == CommonTypeKind.EnumerationType && setBaseType.TypeId == ordinalType.TypeId) {
 
                 if (left.IsConstant() && right.IsConstant())
                     return Runtime.Structured.InSet(TypeRegistry, left, right);

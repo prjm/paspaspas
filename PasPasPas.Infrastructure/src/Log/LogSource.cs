@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Globals.Log;
 
 namespace PasPasPas.Infrastructure.Log {
 

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using PasPasPas.Api;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
