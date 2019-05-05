@@ -1,11 +1,12 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
     /// <summary>
     ///     interface to convert real values
     /// </summary>
-    public interface IRealConverter {
+    public interface IRealConverter : IEnvironmentItem {
 
         /// <summary>
         ///     convert integer literals to one real literal

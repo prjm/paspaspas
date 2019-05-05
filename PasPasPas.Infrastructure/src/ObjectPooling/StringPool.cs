@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
 
@@ -9,7 +10,7 @@ namespace PasPasPas.Infrastructure.Environment {
     /// <summary>
     ///     basic string pool / lookup table
     /// </summary>
-    public class StringPool : IEnvironmentItem {
+    public class StringPool : IStringPool {
 
         private readonly HashSet<StringPoolEntry> pool
             = new HashSet<StringPoolEntry>();
@@ -52,15 +53,15 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <summary>
         ///     pool a string by a char array
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="item"></param>
         /// <returns></returns>
-        public string PoolString(StringBuilder value) {
+        public string PoolString(StringBuilder item) {
 
-            if (value.Length > MaxStringLength)
-                return value.ToString();
+            if (item.Length > MaxStringLength)
+                return item.ToString();
 
             using (var poolItem = Entries.Borrow(out var searchEntry)) {
-                searchEntry.Initialize(value);
+                searchEntry.Initialize(item);
 
                 lock (lockObject) {
                     if (pool.TryGetValue(searchEntry, out var data)) {

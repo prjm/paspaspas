@@ -1,5 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Infrastructure.Environment;
+﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing {
     /// <summary>
     ///     parser environment
     /// </summary>
-    public interface IParserEnvironment : IBasicEnvironment {
+    public interface IParserEnvironment : IEnvironment {
 
         /// <summary>
         ///     interface for constant operations

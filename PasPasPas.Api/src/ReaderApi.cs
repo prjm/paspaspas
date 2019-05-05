@@ -1,4 +1,4 @@
-﻿using PasPasPas.Infrastructure.Environment;
+﻿using PasPasPas.Globals.Environment;
 using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Api {
@@ -11,7 +11,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     file access
         /// </summary>
-        private readonly IBasicEnvironment systemEnvironment;
+        private readonly IEnvironment systemEnvironment;
 
         /// <summary>
         ///     create a new reader for a virtual file
@@ -30,7 +30,7 @@ namespace PasPasPas.Api {
         ///     create a new file reader
         /// </summary>
         /// <param name="environment">environment</param>
-        public ReaderApi(IBasicEnvironment environment)
+        public ReaderApi(IEnvironment environment)
             => systemEnvironment = environment;
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///    system environment
         /// </summary>
-        public IBasicEnvironment SystemEnvironment
+        public IEnvironment SystemEnvironment
             => systemEnvironment;
 
     }

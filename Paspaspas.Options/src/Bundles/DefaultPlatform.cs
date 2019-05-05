@@ -1,4 +1,4 @@
-﻿using PasPasPas.Infrastructure.Environment;
+﻿using PasPasPas.Globals.Environment;
 
 namespace PasPasPas.Options.Bundles {
 
@@ -16,7 +16,7 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     create a new platform
         /// </summary>
-        public DefaultPlatform(IBasicEnvironment environment) : base(PlatformKey.Default) {
+        public DefaultPlatform(IEnvironment environment) : base(PlatformKey.Default) {
             DefaultOptions = new OptionSet(environment);
             Configurations.Add(DefaultConfigurationName, DefaultOptions);
         }

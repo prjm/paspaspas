@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         ///     create a new pattern factory
         /// </summary>
         /// <param name="pool"></param>
-        public PatternFactory(StringPool pool) {
+        public PatternFactory(IStringPool pool) {
             StandardPatterns = CreateStandardPatterns();
             CompilerDirectivePatterns = CreateCompilerDirectivePatterns();
 

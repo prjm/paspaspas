@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Globals.Environment;
 
 namespace PasPasPas.Options.Bundles {
 
@@ -25,7 +25,7 @@ namespace PasPasPas.Options.Bundles {
         ///     creates a new set of options
         /// </summary>
         /// <param name="environment">environment</param>
-        public CompilerOptions(IBasicEnvironment environment) {
+        public CompilerOptions(IEnvironment environment) {
             var platforms = new Dictionary<PlatformKey, Platform>();
             var optionRoot = new DefaultPlatform(environment);
             platforms.Add(PlatformKey.Default, optionRoot);

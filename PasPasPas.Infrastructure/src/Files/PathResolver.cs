@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Globals.Environment;
 
 namespace PasPasPas.Infrastructure.Files {
 
@@ -59,13 +59,13 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     used string pool
         /// </summary>
-        public StringPool StringPool { get; }
+        public IStringPool StringPool { get; }
 
         /// <summary>
         ///     create a new path resolver
         /// </summary>
         /// <param name="pool">used string pool</param>
-        protected PathResolver(StringPool pool)
+        protected PathResolver(IStringPool pool)
             => StringPool = pool ?? throw new ArgumentNullException(nameof(pool));
 
         /// <summary>

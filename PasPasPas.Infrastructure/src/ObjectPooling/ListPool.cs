@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using PasPasPas.Globals.Environment;
-using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Infrastructure.ObjectPooling {
@@ -25,7 +24,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
     /// <summary>
     ///     manages list pools
     /// </summary>
-    public class ListPools : IListPools, IEnvironmentItem {
+    public class ListPools : IListPools {
 
         private readonly Dictionary<Type, object> pools
             = new Dictionary<Type, object>();

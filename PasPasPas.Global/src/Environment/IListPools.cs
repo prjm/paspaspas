@@ -6,7 +6,7 @@ namespace PasPasPas.Globals.Environment {
     /// <summary>
     ///     an interface for pooled lists
     /// </summary>
-    public interface IListPools {
+    public interface IListPools : IEnvironmentItem {
 
         /// <summary>
         ///     get a list pool item

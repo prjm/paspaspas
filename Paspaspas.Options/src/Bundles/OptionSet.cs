@@ -1,6 +1,6 @@
 ﻿using System;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
-using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.DataTypes;
 
@@ -39,12 +39,12 @@ namespace PasPasPas.Options.Bundles {
         ///     creates a new option set
         /// </summary>
         /// <param name="environment">environment</param>
-        public OptionSet(IBasicEnvironment environment) : this(null, environment) { }
+        public OptionSet(IEnvironment environment) : this(null, environment) { }
 
         /// <summary>
         ///     create a new option set
         /// </summary>
-        public OptionSet(OptionSet baseOptions, IBasicEnvironment environment) {
+        public OptionSet(OptionSet baseOptions, IEnvironment environment) {
             Environment = environment;
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
@@ -81,7 +81,7 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     used environment
         /// </summary>
-        public IBasicEnvironment Environment { get; private set; }
+        public IEnvironment Environment { get; private set; }
 
         /// <summary>
         ///     clear all option values

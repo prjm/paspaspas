@@ -10,10 +10,10 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
     ///     memory pressure. To reduce the number of allocations, an object pool
     ///     can be used.
     ///     Objects can be borrowed from the pool (where they are allocated by demand) and
-    ///     have to be returned later. This behavior can be implement with a usind
+    ///     have to be returned later. This behavior can be implement with a using
     ///     statement.
     /// </summary>
-    public abstract class ObjectPool {
+    public abstract class ObjectPool : IEnvironmentItem {
 
         /// <summary>
         ///     pool items;
@@ -32,7 +32,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
     ///     a generic object pool
     /// </summary>
     /// <typeparam name="TPoolItem">type of the items to pool</typeparam>
-    public abstract class ObjectPool<TPoolItem> : ObjectPool where TPoolItem : new() {
+    public abstract class ObjectPool<TPoolItem> : ObjectPool, IObjectPool<TPoolItem> where TPoolItem : new() {
 
         private readonly Queue<PoolItem<TPoolItem>> items
             = new Queue<PoolItem<TPoolItem>>();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
@@ -63,13 +64,13 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     string builder pool
         /// </summary>
-        public StringBuilderPool StringBuilderPool { get; }
+        public IObjectPool<StringBuilder> StringBuilderPool { get; }
             = new StringBuilderPool();
 
         /// <summary>
         ///     string pool
         /// </summary>
-        public StringPool StringPool { get; }
+        public IStringPool StringPool { get; }
             = new StringPool();
 
         /// <summary>
@@ -99,9 +100,9 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     all entries
         /// </summary>
-        public IEnumerable<object> Entries {
+        public IEnumerable<IEnvironmentItem> Entries {
             get {
-                var data = new object[] {
+                var data = new IEnvironmentItem[] {
                     IntegerParser,
                     HexNumberParser,
                     RealLiteralConverter,

@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Globals.Log;
+﻿using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
@@ -90,10 +89,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private OptionSet Options { get; }
         private readonly LogSource logSource;
         private readonly FileReference path;
-
-        private readonly Guid logSourceId
-             = new Guid(new byte[] { 0x67, 0x23, 0x1b, 0x2e, 0xf6, 0x4b, 0xdf, 0x40, 0xac, 0xf8, 0x2, 0xc3, 0x1d, 0x7c, 0x2e, 0xf2 });
-        /* {2e1b2367-4bf6-40df-acf8-02c31d7c2ef2} */
 
         /// <summary>
         ///     creates a new visitor
