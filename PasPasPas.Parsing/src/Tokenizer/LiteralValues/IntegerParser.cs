@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Environment;
 
@@ -7,7 +8,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     simple integer parser
     /// </summary>
-    public sealed class IntegerParser : IIntegerLiteralParser, ILookupFunction<string, ITypeReference> {
+    public sealed class IntegerParser : IILiteralParser, ILookupFunction<string, ITypeReference> {
 
         private readonly LookupTable<string, ITypeReference> data;
 

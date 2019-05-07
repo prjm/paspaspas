@@ -2,6 +2,7 @@
 using System.Text;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
@@ -32,28 +33,28 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     integer parser
         /// </summary>
-        public IIntegerLiteralParser IntegerParser { get; }
+        public IILiteralParser IntegerParser { get; }
 
         /// <summary>
         ///     hex number parser
         /// </summary>
-        public IIntegerLiteralParser HexNumberParser { get; }
+        public IILiteralParser HexNumberParser { get; }
 
         /// <summary>
         ///     real literal converter
         /// </summary>
-        public IRealConverter RealLiteralConverter { get; }
+        public IILiteralParser RealLiteralConverter { get; }
 
         /// <summary>
         ///     token sequence pool
         /// </summary>
-        public TokenSequences TokenSequencePool { get; }
+        public IEnvironmentItem TokenSequencePool { get; }
             = new TokenSequences();
 
         /// <summary>
         ///     tokenizer patterns
         /// </summary>
-        public PatternFactory Patterns { get; }
+        public IEnvironmentItem Patterns { get; }
 
         /// <summary>
         ///     log manager

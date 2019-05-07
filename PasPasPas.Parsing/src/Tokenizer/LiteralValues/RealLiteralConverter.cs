@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Parsing;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
 using SharpFloat.FloatingPoint;
@@ -9,7 +10,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     helper class to convert real literals
     /// </summary>
-    public class RealLiteralConverter : IRealConverter, ILookupFunction<string, ITypeReference> {
+    public class RealLiteralConverter : IILiteralParser, ILookupFunction<string, ITypeReference> {
 
         private readonly IRuntimeValueFactory constantsValues;
         private readonly LookupTable<string, ITypeReference> data;
@@ -52,7 +53,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         ///     convert a parsed real number to a real literal
         /// </summary>
         /// <returns></returns>
-        public ITypeReference Convert(string value)
-            => data.GetValue(value);
+        public ITypeReference Parse(string input)
+            => data.GetValue(input);
     }
 };

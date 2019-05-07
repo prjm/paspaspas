@@ -56,7 +56,7 @@ namespace PasPasPas.Api {
             => new TokenizerBase(env, CreateStandardPatterns(), fileReader);
 
         private InputPatterns CreateStandardPatterns()
-            => env.Patterns.StandardPatterns;
+            => ((PatternFactory)env.Patterns).StandardPatterns;
 
         /// <summary>
         ///     create a tokenizer for a string

@@ -166,7 +166,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="literal">literal value</param>
         /// <returns></returns>
         public ITypeReference ConvertRealLiteral(string literal)
-            => Environment.RealLiteralConverter.Convert(literal);
+            => Environment.RealLiteralConverter.Parse(literal);
 
         /// <summary>
         ///     get the buffer content as pooled string

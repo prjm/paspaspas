@@ -173,8 +173,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
     }
 
-
-
     /// <summary>
     ///     object pooling for token arrays
     /// </summary>

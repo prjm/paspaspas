@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
     public partial class StandardParser : ParserBase, IParser {
 
         private static InputPatterns GetPatternsFromFactory(IParserEnvironment environment)
-            => environment.Patterns.StandardPatterns;
+            => ((PatternFactory)environment.Patterns).StandardPatterns;
 
         private static TokenizerWithLookahead CreateTokenizer(IParserEnvironment environment, StackedFileReader reader, OptionSet options)
             => new TokenizerWithLookahead(environment, options, new Tokenizer.TokenizerBase(environment, GetPatternsFromFactory(environment), reader), TokenizerMode.Standard);

@@ -34,6 +34,5 @@ namespace PasPasPas.Globals.Environment {
         /// </summary>
         IEnumerable<IEnvironmentItem> Entries { get; }
 
-
     }
 }

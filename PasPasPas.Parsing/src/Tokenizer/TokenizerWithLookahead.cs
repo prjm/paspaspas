@@ -115,7 +115,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 var nextToken = BaseTokenizer.CurrentToken;
 
                 if (IsValidToken(ref nextToken)) {
-                    var entry = environment.TokenSequencePool.Borrow();
+                    var pool = (TokenSequences)environment.TokenSequencePool;
+                    var entry = pool.Borrow();
                     entry.Item.Position = position;
                     entry.Item.Value = nextToken;
                     entry.Item.AssignPrefix(invalidTokens, environment);
@@ -178,7 +179,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="nextToken"></param>
         /// <param name="path">current path</param>
         private void ProcessMacroToken(FileReference path, ref Token nextToken) {
-            var patterns = environment.Patterns.CompilerDirectivePatterns;
             using (var reader = new StackedFileReader()) {
                 var macroValue = nextToken.ParsedValue as IStringValue;
                 reader.AddStringToRead(path, macroValue.AsUnicodeString);

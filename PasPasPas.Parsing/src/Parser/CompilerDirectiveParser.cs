@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.Parser {
     public class CompilerDirectiveParser : ParserBase {
 
         private static InputPatterns GetPatternsFromFactory(IParserEnvironment environment)
-            => environment.Patterns.CompilerDirectivePatterns;
+            => ((PatternFactory)environment.Patterns).CompilerDirectivePatterns;
 
         private static Tokenizer.TokenizerBase CreateTokenizer(IParserEnvironment env, StackedFileReader reader)
             => new Tokenizer.TokenizerBase(env, GetPatternsFromFactory(env), reader);
