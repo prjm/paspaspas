@@ -11,16 +11,16 @@ namespace PasPasPas.Globals.Environment {
         /// <summary>
         ///     get a list pool item
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">list type</typeparam>
         /// <returns></returns>
         IPoolItem<List<T>> GetList<T>();
 
         /// <summary>
         ///     get a fixed array
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">list type</typeparam>
+        /// <param name="list">list to convert</param>
+        /// <returns>immutable array</returns>
         ImmutableArray<T> GetFixedArray<T>(IPoolItem<List<T>> list);
 
     }

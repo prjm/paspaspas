@@ -8,11 +8,11 @@ namespace PasPasPas.Globals.Environment {
     public static class ListPoolHelper {
 
         /// <summary>
-        ///     list pool helper: add an item
+        ///     list pool helper: add an item to the pooled list
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="poolItem"></param>
-        /// <param name="item"></param>
+        /// <typeparam name="T">list type</typeparam>
+        /// <param name="poolItem">pooled list</param>
+        /// <param name="item">item to add</param>
         public static void Add<T>(this IPoolItem<List<T>> poolItem, T item)
             => poolItem.Item.Add(item);
 

@@ -1,20 +1,16 @@
-﻿using PasPasPas.Globals.Log;
+﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.Bundles;
-using PasPasPas.Parsing;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 
 namespace PasPasPas.Api {
 
     /// <summary>
-    ///     encapsulation for tokenizing services
+    ///     encapsulation for the tokenizer
     /// </summary>
     public class TokenizerApi {
-
-        private readonly ReaderApi reader;
-        private readonly OptionSet options;
-        private readonly IParserEnvironment env;
 
         /// <summary>
         ///     create a new tokenizer
@@ -22,9 +18,9 @@ namespace PasPasPas.Api {
         /// <param name="parserEnvironment">environment</param>
         /// <param name="optionsSet">options (can be <c>null</c>)</param>
         public TokenizerApi(IParserEnvironment parserEnvironment, OptionSet optionsSet = null) {
-            env = parserEnvironment;
-            options = optionsSet ?? new OptionSet(env);
-            reader = new ReaderApi(parserEnvironment);
+            SystemEnvironment = parserEnvironment;
+            Options = optionsSet ?? new OptionSet(SystemEnvironment);
+            Readers = new ReaderApi(parserEnvironment);
         }
 
         /// <summary>
@@ -44,7 +40,7 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public ITokenizer CreateBufferedTokenizerForPath(string path) {
             var tokenizer = CreateTokenizerForPath(path);
-            return new TokenizerWithLookahead(env, options, tokenizer, TokenizerMode.Standard);
+            return new TokenizerWithLookahead(SystemEnvironment, Options, tokenizer, TokenizerMode.Standard);
         }
 
         /// <summary>
@@ -53,10 +49,10 @@ namespace PasPasPas.Api {
         /// <param name="fileReader"></param>
         /// <returns></returns>
         private ITokenizer CreateTokenizer(StackedFileReader fileReader)
-            => new TokenizerBase(env, CreateStandardPatterns(), fileReader);
+            => new TokenizerBase(SystemEnvironment, CreateStandardPatterns(), fileReader);
 
         private InputPatterns CreateStandardPatterns()
-            => ((PatternFactory)env.Patterns).StandardPatterns;
+            => ((PatternFactory)SystemEnvironment.Patterns).StandardPatterns;
 
         /// <summary>
         ///     create a tokenizer for a string
@@ -72,13 +68,22 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     access to reader api
         /// </summary>
-        public ReaderApi Readers
-            => reader;
+        public ReaderApi Readers { get; }
 
         /// <summary>
         ///     log manager
         /// </summary>
         public ILogManager Log
-            => env.Log;
+            => SystemEnvironment.Log;
+
+        /// <summary>
+        ///     environment
+        /// </summary>
+        public IParserEnvironment SystemEnvironment { get; }
+
+        /// <summary>
+        ///     tokenizer options
+        /// </summary>
+        public OptionSet Options { get; }
     }
 }

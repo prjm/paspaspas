@@ -45,5 +45,9 @@
         /// </summary>
         FindConstants,
 
+        /// <summary>
+        ///     create an assembly
+        /// </summary>
+        CreateAssembly,
     }
 }

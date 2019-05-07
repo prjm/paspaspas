@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -35,7 +37,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokens"></param>
         /// <param name="environment"></param>
         public void AssignPrefix(Queue<Token> tokens, IParserEnvironment environment)
-            => Prefix = environment.TokenArrays.GetTokenArray(tokens);
+            => Prefix = ((TokenArrays)environment.TokenArrays).GetTokenArray(tokens);
 
         /// <summary>
         ///     get the current suffix of invalid tokens
@@ -43,7 +45,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokens"></param>
         /// <param name="environment"></param>
         public void AssignSuffix(Queue<Token> tokens, IParserEnvironment environment)
-            => Suffix = environment.TokenArrays.GetTokenArray(tokens);
+            => Suffix = ((TokenArrays)environment.TokenArrays).GetTokenArray(tokens);
 
         /// <summary>
         ///     clear the tokenizer

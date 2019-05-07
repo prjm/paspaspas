@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using PasPasPas.Api;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Typings.Common;
 
 namespace SampleRunner.Scenarios {
 

@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Globals.Environment {
 
     /// <summary>
-    ///     maintenance interface for environment items
+    ///     maintenance interface for environment items / caches
     /// </summary>
     public interface IEnvironmentItem {
 

@@ -73,7 +73,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         public override int GetHashCode()
             => ComputedHashCode;
 
-
         /// <summary>
         ///     check for equality
         /// </summary>

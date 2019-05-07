@@ -650,7 +650,7 @@ namespace PasPasPas.Parsing.Parser {
                 return default;
             }
 
-            var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
+            var terminal = ((Terminals)environment.TerminalPool).GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
             return terminal;
         }
@@ -671,7 +671,7 @@ namespace PasPasPas.Parsing.Parser {
                 (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
                 return default;
 
-            var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
+            var terminal = ((Terminals)environment.TerminalPool).GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
             return terminal;
         }
@@ -698,7 +698,7 @@ namespace PasPasPas.Parsing.Parser {
                 (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
                 return default;
 
-            var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
+            var terminal = ((Terminals)environment.TerminalPool).GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
             return terminal;
         }
@@ -728,7 +728,7 @@ namespace PasPasPas.Parsing.Parser {
                 return default;
 
 
-            var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
+            var terminal = ((Terminals)environment.TerminalPool).GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
             return terminal;
         }
@@ -757,7 +757,7 @@ namespace PasPasPas.Parsing.Parser {
                 (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
                 return default;
 
-            var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
+            var terminal = ((Terminals)environment.TerminalPool).GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
             return terminal;
         }
@@ -788,7 +788,7 @@ namespace PasPasPas.Parsing.Parser {
                 (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
                 return default;
 
-            var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
+            var terminal = ((Terminals)environment.TerminalPool).GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
             return terminal;
         }
@@ -823,7 +823,7 @@ namespace PasPasPas.Parsing.Parser {
                 (!requiresIdentifier || requiresIdentifier && !AllowIdentifier()))
                 return default;
 
-            var terminal = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
+            var terminal = ((Terminals)environment.TerminalPool).GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
             return terminal;
         }
@@ -842,7 +842,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
         protected Terminal CreateByError() {
-            var invalid = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
+            var invalid = ((Terminals)environment.TerminalPool).GetTerminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
             return invalid;
         }

@@ -3,7 +3,7 @@
     /// <summary>
     ///     object pool
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">type of the pooled object</typeparam>
     public interface IObjectPool<T> : IEnvironmentItem {
 
         /// <summary>

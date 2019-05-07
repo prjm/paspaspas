@@ -1,4 +1,5 @@
-﻿using PasPasPas.Options.Bundles;
+﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Parser.Standard;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -9,7 +10,7 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Api {
 
     /// <summary>
-    ///     encapsulation for tokenizer API
+    ///     encapsulation for the parser
     /// </summary>
     public class ParserApi {
 
@@ -35,6 +36,7 @@ namespace PasPasPas.Api {
             var parser = new StandardParser(Environment, Options, reader);
             return parser;
         }
+
         /// <summary>
         ///     create a parser for a given path
         /// </summary>

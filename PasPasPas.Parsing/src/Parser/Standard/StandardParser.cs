@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree;
@@ -4817,7 +4818,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         public IdentifierSymbol RequireIdentifier(bool allowReserverdWords = false) {
 
             if (Match(TokenKind.Identifier)) {
-                return Environment.IdentifierPool.GetIdentifier(ContinueWithOrMissing(TokenKind.Identifier));
+                return ((Identifiers)Environment.IdentifierPool).GetIdentifier(ContinueWithOrMissing(TokenKind.Identifier));
             };
 
             var token = CurrentToken();

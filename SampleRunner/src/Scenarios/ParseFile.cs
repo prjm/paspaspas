@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using PasPasPas.Api;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Typings.Common;
 
 namespace SampleRunner.Scenarios {
     public static class ParseFile {

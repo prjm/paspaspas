@@ -8,8 +8,6 @@ using PasPasPas.Globals.Environment;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing;
-using PasPasPas.Typings.Common;
 using SampleRunner.Scenarios;
 
 namespace SampleRunner {
@@ -22,9 +20,9 @@ namespace SampleRunner {
 
         private static void Main() {
 
-            var testPath = @"C:\temp\Testfiles\Spring.pas";
+            var testPath = @"C:\temp\Demo.pas";
             //var testPath = @"C:\temp\Testfiles\all";
-            var mode = SampleMode.TypeAnnotateFile;
+            var mode = SampleMode.CreateAssembly;
             var repeat = 1;
             var result = System.Console.Out;
             var environment = new DefaultEnvironment();
@@ -82,7 +80,7 @@ namespace SampleRunner {
             result.WriteLine($"{status.CollectionCount2} collections level 2.");
         }
 
-        private static Action<TextWriter> PrepareSample(ITypedEnvironment environment, string testPath, SampleMode mode, int repeat, bool useHistograms) {
+        private static Action<TextWriter> PrepareSample(IAssemblyBuilderEnvironment environment, string testPath, SampleMode mode, int repeat, bool useHistograms) {
 
             Histograms.Enable = useHistograms;
 
@@ -130,6 +128,10 @@ namespace SampleRunner {
 
                     case SampleMode.FindConstants:
                         action = (b) => ConstantValueFinder.Run(b, environment, file, repeat);
+                        break;
+
+                    case SampleMode.CreateAssembly:
+                        action = (b) => CreateAssembly.Run(b, environment, file, repeat);
                         break;
 
                     default:

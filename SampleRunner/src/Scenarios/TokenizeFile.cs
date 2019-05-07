@@ -3,11 +3,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using PasPasPas.Api;
-using PasPasPas.Parsing;
+using PasPasPas.Globals.Environment;
 
 namespace SampleRunner.Scenarios {
 
     internal class TokenInfo {
+
         public TokenInfo(ulong tokenCount, ulong length) {
             TokenCount = tokenCount;
             TokenLength = length;

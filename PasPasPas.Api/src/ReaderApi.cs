@@ -9,11 +9,6 @@ namespace PasPasPas.Api {
     public class ReaderApi {
 
         /// <summary>
-        ///     file access
-        /// </summary>
-        private readonly IEnvironment systemEnvironment;
-
-        /// <summary>
         ///     create a new reader for a virtual file
         /// </summary>
         /// <param name="path">file path</param>
@@ -31,7 +26,7 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="environment">environment</param>
         public ReaderApi(IEnvironment environment)
-            => systemEnvironment = environment;
+            => SystemEnvironment = environment;
 
         /// <summary>
         ///     get a reader for a given path
@@ -58,8 +53,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///    system environment
         /// </summary>
-        public IEnvironment SystemEnvironment
-            => systemEnvironment;
+        public IEnvironment SystemEnvironment { get; }
 
     }
 }

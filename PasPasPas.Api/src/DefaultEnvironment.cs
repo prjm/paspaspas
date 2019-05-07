@@ -23,7 +23,7 @@ namespace PasPasPas.Api {
     ///     default environment: contains all registries and
     ///     factories needed
     /// </summary>
-    public class DefaultEnvironment : ITypedEnvironment {
+    public class DefaultEnvironment : IAssemblyBuilderEnvironment {
 
         /// <summary>
         ///     runtime values: constants and type references
@@ -126,19 +126,19 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     terminal pools
         /// </summary>
-        public Terminals TerminalPool { get; }
+        public IEnvironmentItem TerminalPool { get; }
             = new Terminals();
 
         /// <summary>
         ///     identifiers
         /// </summary>
-        public Identifiers IdentifierPool { get; }
+        public IEnvironmentItem IdentifierPool { get; }
             = new Identifiers();
 
         /// <summary>
         ///     token array pool
         /// </summary>
-        public TokenArrays TokenArrays { get; }
+        public IEnvironmentItem TokenArrays { get; }
             = new TokenArrays();
 
     }
