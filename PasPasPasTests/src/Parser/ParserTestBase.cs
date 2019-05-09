@@ -224,7 +224,7 @@ namespace PasPasPasTests.Parser {
 
             var directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var directivePart in directives) {
-                testOptions.ResetOnNewUnit(env.Log);
+                testOptions.ResetOnNewUnit();
                 var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var subPart in subParts) {

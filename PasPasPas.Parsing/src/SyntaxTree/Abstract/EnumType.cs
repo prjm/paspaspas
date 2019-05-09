@@ -1,5 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Infrastructure.Log;
+﻿using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="newDuplicate"></param>
         /// <param name="logSource"></param>
-        protected override void LogDuplicateSymbolError(EnumTypeValue newDuplicate, LogSource logSource) {
+        protected override void LogDuplicateSymbolError(EnumTypeValue newDuplicate, ILogSource logSource) {
             base.LogDuplicateSymbolError(newDuplicate, logSource);
             logSource.LogError(StructuralErrors.RedeclaredEnumName, newDuplicate);
         }

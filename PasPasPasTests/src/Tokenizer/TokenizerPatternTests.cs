@@ -103,7 +103,7 @@ namespace PasPasPasTests.Tokenizer {
             var result = new List<Token>();
             var env = CreateEnvironment();
             using (var reader = ReaderApi.CreateReaderForString(TestFileName, input)) {
-                var log = new LogSource(env.Log, LogGuid);
+                var log = env.Log.CreateLogSource(LogGuid);
                 var logTarget = new ListLogTarget();
                 env.Log.RegisterTarget(logTarget);
 

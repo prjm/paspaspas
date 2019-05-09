@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 
@@ -63,7 +62,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public TokenizerBase(IParserEnvironment environment, InputPatterns charClasses, StackedFileReader input) {
             Input = input ?? throw new ArgumentNullException(nameof(input));
-            Log = new LogSource(environment.Log, MessageGroups.Tokenizer);
+            Log = environment.Log.CreateLogSource(MessageGroups.Tokenizer);
             characterClasses = charClasses ?? throw new ArgumentNullException(nameof(charClasses));
             state = new TokenizerState(environment, this, input, Log);
             FinishInput();

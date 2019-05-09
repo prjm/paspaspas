@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Utils;
@@ -64,7 +63,7 @@ namespace PasPasPas.Parsing.Parser {
         /* {9fb11f84-2fe3-489c-b715-dd29458e434e} */
 
         private TokenizerWithLookahead tokenizer;
-        private readonly LogSource logSource;
+        private readonly ILogSource logSource;
         private readonly OptionSet options;
         private readonly IParserEnvironment environment;
 
@@ -77,7 +76,7 @@ namespace PasPasPas.Parsing.Parser {
         protected ParserBase(IParserEnvironment env, OptionSet parserOptions, TokenizerWithLookahead tokenizerWithLookAhead) {
             environment = env;
             tokenizer = tokenizerWithLookAhead;
-            logSource = new LogSource(env.Log, MessageGroups.Parser);
+            logSource = env.Log.CreateLogSource(MessageGroups.Parser);
             options = parserOptions;
         }
 

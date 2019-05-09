@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using PasPasPas.Globals.Log;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
@@ -46,19 +45,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     log source
         /// </summary>
-        private LogSource logSource
+        private ILogSource logSource
             = null;
 
         /// <summary>
         ///     log source
         /// </summary>
-        public LogSource Log {
+        public ILogSource Log {
             get {
                 if (logSource != null)
                     return logSource;
 
                 if (Manager != null) {
-                    logSource = new LogSource(Manager, MessageGroups.StructureValidation);
+                    logSource = Manager.CreateLogSource(MessageGroups.StructureValidation);
                     return logSource;
                 }
 

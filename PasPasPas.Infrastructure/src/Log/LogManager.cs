@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
+using PasPasPas.Infrastructure1.Log;
 
 namespace PasPasPas.Infrastructure.Log {
 
@@ -81,5 +82,13 @@ namespace PasPasPas.Infrastructure.Log {
 
             return found;
         }
+
+        /// <summary>
+        ///     create a new log source
+        /// </summary>
+        /// <param name="logGroup"></param>
+        /// <returns></returns>
+        public ILogSource CreateLogSource(uint logGroup)
+            => new LogSource(this, logGroup);
     }
 }

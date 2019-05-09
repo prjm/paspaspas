@@ -13,6 +13,13 @@ namespace PasPasPas.Globals.Log {
         ILogManager Manager { get; }
 
         /// <summary>
+        ///     create a warning message
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="data"></param>
+        void LogFatalError(Guid id, params object[] data);
+
+        /// <summary>
         ///     log an error message
         /// </summary>
         /// <param name="id"></param>
@@ -20,10 +27,17 @@ namespace PasPasPas.Globals.Log {
         void LogError(Guid id, params object[] data);
 
         /// <summary>
-        ///     process a generated message
+        ///     create a warning message
         /// </summary>
-        /// <param name="message">log message</param>
-        void ProcessMessage(ILogMessage message);
+        /// <param name="id"></param>
+        /// <param name="data"></param>
+        void LogWarning(Guid id, params object[] data);
 
+        /// <summary>
+        ///     create a hint message
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="data"></param>
+        void LogHint(Guid id, params object[] data);
     }
 }

@@ -4,7 +4,6 @@ using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
@@ -965,7 +964,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             value.IsNewType = element.NewType != default;
 
             if (element.TypeOf != default)
-                LogSource.Warning(StructuralErrors.UnsupportedTypeOfConstruct, element);
+                LogSource.LogWarning(StructuralErrors.UnsupportedTypeOfConstruct, element);
 
             typeTarget.TypeValue = value;
         }
@@ -3306,7 +3305,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         #endregion
 
-        private LogSource logSource;
+        private ILogSource logSource;
 
         /// <summary>
         ///     tree states
@@ -3317,13 +3316,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     log source
         /// </summary>
-        public LogSource LogSource {
+        public ILogSource LogSource {
             get {
                 if (logSource != null)
                     return logSource;
 
                 if (environment.Log != null) {
-                    logSource = new LogSource(environment.Log, MessageGroups.TreeTransformer);
+                    logSource = environment.Log.CreateLogSource(MessageGroups.TreeTransformer);
                     return logSource;
                 }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.DataTypes;
 
 namespace PasPasPas.Options.Bundles {
@@ -46,6 +45,7 @@ namespace PasPasPas.Options.Bundles {
         /// </summary>
         public OptionSet(OptionSet baseOptions, IEnvironment environment) {
             Environment = environment;
+            LogSource = environment.Log.CreateLogSource(MessageGroups.OptionSet);
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
             Meta = new MetaInformation(this, baseOptions?.Meta);
@@ -81,7 +81,12 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     used environment
         /// </summary>
-        public IEnvironment Environment { get; private set; }
+        public IEnvironment Environment { get; }
+
+        /// <summary>
+        ///     log source
+        /// </summary>
+        public ILogSource LogSource { get; }
 
         /// <summary>
         ///     clear all option values
@@ -97,12 +102,10 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     reset definitions for a new unit
         /// </summary>
-        public void ResetOnNewUnit(ILogManager logManager) {
-            var logSource = new LogSource(logManager, MessageGroups.OptionSet);
-
+        public void ResetOnNewUnit() {
             CompilerOptions.ResetOnNewUnit();
-            ConditionalCompilation.ResetOnNewUnit(logSource);
-            Meta.ResetOnNewUnit(logSource);
+            ConditionalCompilation.ResetOnNewUnit(LogSource);
+            Meta.ResetOnNewUnit(LogSource);
             Warnings.ResetOnNewUnit();
         }
 

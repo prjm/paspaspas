@@ -1,5 +1,5 @@
 ﻿using System;
-using PasPasPas.Infrastructure.Log;
+using PasPasPas.Globals.Log;
 using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
@@ -82,7 +82,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     reset local conditionals
         /// </summary>
-        public void ResetOnNewUnit(LogSource logSource) {
+        public void ResetOnNewUnit(ILogSource logSource) {
             DenyInPackages.ResetToDefault();
             DesignOnly.ResetToDefault();
 

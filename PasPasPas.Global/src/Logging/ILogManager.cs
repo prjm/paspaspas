@@ -27,5 +27,11 @@ namespace PasPasPas.Globals.Log {
         /// <returns><b>true</b> if a target was unregistered</returns>
         bool UnregisterTarget(ILogTarget target);
 
+        /// <summary>
+        ///     create a new log source
+        /// </summary>
+        /// <param name="logGroup"></param>
+        /// <returns></returns>
+        ILogSource CreateLogSource(uint logGroup);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using PasPasPas.Infrastructure.Log;
+using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="logSource"></param>
         /// <param name="numberOfTypeParameters">number of generic type parameters</param>
         /// <returns></returns>
-        public bool Add(T entry, LogSource logSource, int numberOfTypeParameters = 0) {
+        public bool Add(T entry, ILogSource logSource, int numberOfTypeParameters = 0) {
             var name = entry.SymbolName;
 
             if (numberOfTypeParameters > 0)
@@ -120,7 +120,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="newDuplicate"></param>
         /// <param name="logSource"></param>
-        protected virtual void LogDuplicateSymbolError(T newDuplicate, LogSource logSource) {
+        protected virtual void LogDuplicateSymbolError(T newDuplicate, ILogSource logSource) {
             //...
         }
 

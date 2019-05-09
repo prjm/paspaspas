@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
@@ -87,7 +86,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private readonly Visitor visitor;
         private readonly ILogManager log;
         private OptionSet Options { get; }
-        private readonly LogSource logSource;
+        private readonly ILogSource logSource;
         private readonly FileReference path;
 
         /// <summary>
@@ -98,7 +97,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             visitor = new Visitor(this);
             log = logMgr;
             path = filePath;
-            logSource = new LogSource(log, MessageGroups.OptionSet);
+            logSource = log.CreateLogSource(MessageGroups.OptionSet);
         }
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     log source
         /// </summary>
-        public LogSource LogSource
+        public ILogSource LogSource
             => logSource;
 
         /// <summary>
@@ -959,7 +958,28 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (element.MessageType == MessageSeverity.Undefined)
                 return;
 
-            LogSource.ProcessMessage(new LogMessage(element.MessageType, MessageGroups.Parser, ParserBase.UserGeneratedMessage, element.MessageType, element.MessageText));
+            switch (element.MessageType) {
+
+                case MessageSeverity.Hint:
+                    logSource.LogHint(ParserBase.UserGeneratedMessage, element.MessageText);
+                    break;
+
+                case MessageSeverity.Warning:
+                    logSource.LogError(ParserBase.UserGeneratedMessage, element.MessageText);
+                    break;
+
+                case MessageSeverity.Error:
+                    logSource.LogError(ParserBase.UserGeneratedMessage, element.MessageText);
+                    break;
+
+                case MessageSeverity.FatalError:
+                    logSource.LogFatalError(ParserBase.UserGeneratedMessage, element.MessageText);
+                    break;
+
+                default:
+                    LogSource.LogError(ParserBase.UserGeneratedMessage, element.MessageText);
+                    break;
+            }
         }
 
         /// <summary>

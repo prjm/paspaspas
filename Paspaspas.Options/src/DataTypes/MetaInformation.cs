@@ -1,6 +1,6 @@
-﻿using PasPasPas.Infrastructure.Log;
+﻿using System.Collections.Generic;
+using PasPasPas.Globals.Log;
 using PasPasPas.Options.Bundles;
-using System.Collections.Generic;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -146,7 +146,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     reset on new unit
         /// </summary>
-        public void ResetOnNewUnit(LogSource logSource) {
+        public void ResetOnNewUnit(ILogSource logSource) {
 
             foreach (var region in Regions) {
                 logSource.LogError(OptionSet.PendingRegion, region);

@@ -1,4 +1,4 @@
-﻿using PasPasPas.Infrastructure.Log;
+﻿using PasPasPas.Globals.Log;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="logSource">log source</param>
         /// <param name="numberOfTypeParameters">number of generic type paremeters</param>
         /// <returns><c>true</c> if added</returns>
-        bool Add(T entry, LogSource logSource, int numberOfTypeParameters = 0);
+        bool Add(T entry, ILogSource logSource, int numberOfTypeParameters = 0);
 
         /// <summary>
         ///     try to remove the symbol

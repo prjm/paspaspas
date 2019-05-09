@@ -1,21 +1,19 @@
 ﻿using System;
 using PasPasPas.Globals.Log;
+using PasPasPas.Infrastructure.Log;
 
-namespace PasPasPas.Infrastructure.Log {
+namespace PasPasPas.Infrastructure1.Log {
 
     /// <summary>
     ///     standard log source
     /// </summary>
     public class LogSource : ILogSource {
-
-        private readonly ILogManager manager;
         private readonly uint group;
 
         /// <summary>
         ///     associated log manager
         /// </summary>
-        public ILogManager Manager
-            => manager;
+        public ILogManager Manager { get; }
 
         /// <summary>
         ///     create a new log source
@@ -26,7 +24,7 @@ namespace PasPasPas.Infrastructure.Log {
             if (groupId == default)
                 throw new ArgumentOutOfRangeException(nameof(groupId));
 
-            manager = logManager ?? throw new ArgumentNullException(nameof(logManager));
+            Manager = logManager ?? throw new ArgumentNullException(nameof(logManager));
             group = groupId;
         }
 
@@ -39,7 +37,7 @@ namespace PasPasPas.Infrastructure.Log {
             if (message == null)
                 throw new ArgumentNullException(nameof(message));
 
-            manager.RouteMessage(this, message);
+            Manager.RouteMessage(this, message);
         }
 
         /// <summary>
@@ -51,12 +49,29 @@ namespace PasPasPas.Infrastructure.Log {
             => MessageForGuid(MessageSeverity.Error, id, data);
 
         /// <summary>
-        ///     generate an warning message
+        ///     generate a warning message
         /// </summary>
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
-        public void Warning(Guid id, params object[] data)
+        public void LogWarning(Guid id, params object[] data)
             => MessageForGuid(MessageSeverity.Warning, id, data);
+
+        /// <summary>
+        ///     generate a fatal error message
+        /// </summary>
+        /// <param name="id">message id</param>
+        /// <param name="data">message parameters</param>
+        public void LogFatalError(Guid id, params object[] data)
+            => MessageForGuid(MessageSeverity.FatalError, id, data);
+
+        /// <summary>
+        ///     generate a hint message
+        /// </summary>
+        /// <param name="id">message id</param>
+        /// <param name="data">message parameters</param>
+        public void LogHint(Guid id, params object[] data)
+            => MessageForGuid(MessageSeverity.Hint, id, data);
+
 
         /// <summary>
         ///     generate an information message
