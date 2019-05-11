@@ -30,5 +30,10 @@
         /// </summary>
         public const int Tokenizer = 14;
 
+        /// <summary>
+        ///     assembly builder log message
+        /// </summary>
+        public const int AssemblyBuilder = 15;
+
     }
 }

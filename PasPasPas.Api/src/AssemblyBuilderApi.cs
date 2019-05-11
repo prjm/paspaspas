@@ -25,12 +25,26 @@ namespace PasPasPas.Api {
         ///     create an assembly for a given project
         /// </summary>
         /// <param name="path"></param>
-        public void CreateAssemblyForProject(string path) {
+        public IAssemblyReference CreateAssemblyForProject(string path) {
             using (var parser = Parser.CreateParserForPath(path)) {
                 var result = parser.Parse();
                 var project = Parser.CreateAbstractSyntraxTree(result);
                 Parser.AnnotateWithTypes(project);
-                CreateAssembly(project);
+                return CreateAssembly(project);
+            }
+        }
+
+        /// <summary>
+        ///     create an assembly for a given input string
+        /// </summary>
+        /// <param name="program"></param>
+        /// <param name="file"></param>
+        public IAssemblyReference CreateAssemblyForString(string file, string program) {
+            using (var parser = Parser.CreateParserForString(file, program)) {
+                var result = parser.Parse();
+                var project = Parser.CreateAbstractSyntraxTree(result);
+                Parser.AnnotateWithTypes(project);
+                return CreateAssembly(project);
             }
         }
 
@@ -38,9 +52,10 @@ namespace PasPasPas.Api {
         ///     create a assembly for a given project
         /// </summary>
         /// <param name="project"></param>
-        private void CreateAssembly(ProjectItemCollection project) {
+        private IAssemblyReference CreateAssembly(ProjectItemCollection project) {
             var builder = new ProjectAssemblyBuilder(SystemEnvironment);
             project.Accept(builder.AsVisitor());
+            return builder.CreateAssemblyReference();
         }
 
         /// <summary>

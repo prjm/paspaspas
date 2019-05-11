@@ -21,7 +21,7 @@ namespace PasPasPasTests.Common {
         ///     get the basic environment
         /// </summary>
         /// <returns></returns>
-        protected static ITypedEnvironment CreateEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
+        protected static IAssemblyBuilderEnvironment CreateEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
             => new DefaultEnvironment(intSize);
 
         /// <summary>

@@ -1138,14 +1138,19 @@ namespace PasPasPasTests.Parser {
         [TestMethod]
         public void TestUnitNameAndKind() {
             CompilationUnit u(object t) => t as CompilationUnit;
+            ProjectItemCollection r(object t) => t as ProjectItemCollection;
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.SymbolName, "z.x");
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.FileType, CompilationUnitType.Unit);
+            RunAstTest("unit z.x; interface implementation end.", t => r(t)?.ProjectName, string.Empty);
             RunAstTest("program z.x; begin end.", t => u(t)?.SymbolName, "z.x");
             RunAstTest("program z.x; begin end.", t => u(t)?.FileType, CompilationUnitType.Program);
+            RunAstTest("program z.x; begin end.", t => r(t)?.ProjectName, "z.x");
             RunAstTest("library z.x; begin end.", t => u(t)?.SymbolName, "z.x");
             RunAstTest("library z.x; begin end.", t => u(t)?.FileType, CompilationUnitType.Library);
+            RunAstTest("library z.x; begin end.", t => r(t)?.ProjectName, "z.x");
             RunAstTest("package z.x; requires k; contains q; end.", t => u(t)?.SymbolName, "z.x");
             RunAstTest("package z.x; requires k; contains q; end.", t => u(t)?.FileType, CompilationUnitType.Package);
+            RunAstTest("package z.x; requires k; contains q; end.", t => r(t)?.ProjectName, "z.x");
         }
 
     }

@@ -1,8 +1,7 @@
 ﻿using System;
 using PasPasPas.Globals.Log;
-using PasPasPas.Infrastructure.Log;
 
-namespace PasPasPas.Infrastructure1.Log {
+namespace PasPasPas.Infrastructure.Log {
 
     /// <summary>
     ///     standard log source
