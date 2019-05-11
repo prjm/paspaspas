@@ -40,10 +40,4 @@
         <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Reference Include="Lokad.ILPack">
-            <HintPath>lib\Lokad.ILPack.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
 </Project>

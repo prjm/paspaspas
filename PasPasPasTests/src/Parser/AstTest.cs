@@ -1135,5 +1135,18 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = a as TObject; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.As);
         }
 
+        [TestMethod]
+        public void TestUnitNameAndKind() {
+            CompilationUnit u(object t) => t as CompilationUnit;
+            RunAstTest("unit z.x; interface implementation end.", t => u(t)?.SymbolName, "z.x");
+            RunAstTest("unit z.x; interface implementation end.", t => u(t)?.FileType, CompilationUnitType.Unit);
+            RunAstTest("program z.x; begin end.", t => u(t)?.SymbolName, "z.x");
+            RunAstTest("program z.x; begin end.", t => u(t)?.FileType, CompilationUnitType.Program);
+            RunAstTest("library z.x; begin end.", t => u(t)?.SymbolName, "z.x");
+            RunAstTest("library z.x; begin end.", t => u(t)?.FileType, CompilationUnitType.Library);
+            RunAstTest("package z.x; requires k; contains q; end.", t => u(t)?.SymbolName, "z.x");
+            RunAstTest("package z.x; requires k; contains q; end.", t => u(t)?.FileType, CompilationUnitType.Package);
+        }
+
     }
 }

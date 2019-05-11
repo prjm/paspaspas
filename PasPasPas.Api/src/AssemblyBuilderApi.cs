@@ -41,7 +41,6 @@ namespace PasPasPas.Api {
         private void CreateAssembly(ProjectItemCollection project) {
             var builder = new ProjectAssemblyBuilder(SystemEnvironment);
             project.Accept(builder.AsVisitor());
-            builder.SaveToFile();
         }
 
         /// <summary>
