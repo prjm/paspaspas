@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Globals.Environment;
+﻿using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
 using PasPasPas.Options.DataTypes;
 
@@ -13,16 +12,14 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     open ifdef / ifndef
         /// </summary>
-        public static readonly Guid PendingCondition
-            = new Guid(new byte[] { 0x31, 0xb0, 0xe3, 0x39, 0x3e, 0x22, 0xef, 0x42, 0xb7, 0x4f, 0x88, 0x18, 0x47, 0x17, 0x2b, 0x6d });
-        /* {39e3b031-223e-42ef-b74f-881847172b6d} */
+        public const uint PendingCondition
+            = 0x0301;
 
         /// <summary>
         ///     pending region
         /// </summary>
-        public static readonly Guid PendingRegion
-            = new Guid(new byte[] { 0xdc, 0x6e, 0x35, 0x28, 0x76, 0xcd, 0xba, 0x47, 0xbe, 0x3, 0xf5, 0x37, 0x3c, 0x5, 0x8b, 0xbf });
-        /* {28356edc-cd76-47ba-be03-f5373c058bbf} */
+        public const uint PendingRegion
+            = 0x0302;
 
         /// <summary>
         ///     debug configuration

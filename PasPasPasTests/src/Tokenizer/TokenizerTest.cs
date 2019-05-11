@@ -12,7 +12,7 @@ namespace PasPasPasTests.Tokenizer {
 
     public class TokenizerTest : CommonTest {
 
-        public static void TokenizerMessageIsGenerated(Guid messageNumber, string input) {
+        public static void TokenizerMessageIsGenerated(uint messageNumber, string input) {
             var messages = new List<ILogMessage>();
             var result = RunTokenizer(input, messages);
             var hasMessage = messages.Any(t => t.MessageID == messageNumber);

@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
@@ -16,7 +15,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             = new QuotedStringTokenValue(TokenKind.QuotedString, '\'');
 
         private readonly CharacterClassTokenGroupValue digitTokenizer
-            = new CharacterClassTokenGroupValue(TokenKind.IntegralNumber, new DigitCharClass(false), 0, LiteralParserKind.IntegerNumbers, Guid.Empty);
+            = new CharacterClassTokenGroupValue(TokenKind.IntegralNumber, new DigitCharClass(false), 0, LiteralParserKind.IntegerNumbers, 0);
 
         private readonly CharacterClassTokenGroupValue hexDigits
             = new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, TokenizerBase.IncompleteHexNumber);

@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
@@ -15,9 +14,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// </summary>
         /// <param name="tokenId"></param>
         /// <param name="charClass">character class</param>
-        /// <param name="minLength">minimun token length</param>
+        /// <param name="minLength">minimum token length</param>
         public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength = 0)
-            : this(tokenId, charClass, minLength, LiteralParserKind.Undefined, Guid.Empty) { }
+            : this(tokenId, charClass, minLength, LiteralParserKind.Undefined, 0) { }
 
         /// <summary>
         ///     create a new character class token group value
@@ -27,13 +26,13 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// <param name="literalParserKind">literal parser (optional)</param>
         /// <param name="minLength">minimal length</param>
         /// <param name="minLengthMessageId">error message id for too short tokens</param>
-        public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength, LiteralParserKind literalParserKind, Guid minLengthMessageId) {
+        public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength, LiteralParserKind literalParserKind, uint minLengthMessageId) {
             TokenId = tokenId;
             MinLength = minLength;
             CharClass = charClass;
             ValueParser = literalParserKind;
 
-            if (minLengthMessageId != Guid.Empty)
+            if (minLengthMessageId != 0)
                 MinLengthMessage = minLengthMessageId;
         }
 
@@ -55,7 +54,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// <summary>
         ///     error message
         /// </summary>
-        private Guid MinLengthMessage { get; }
+        private uint MinLengthMessage { get; }
             = TokenizerBase.UnexpectedEndOfToken;
 
         private LiteralParserKind ValueParser { get; }

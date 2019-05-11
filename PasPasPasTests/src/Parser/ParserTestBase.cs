@@ -66,7 +66,7 @@ namespace PasPasPasTests.Parser {
                 var errorText = string.Empty;
 
                 log.ProcessMessage += (x, y) => {
-                    errorText += y.Message.MessageID.ToString() + Environment.NewLine;
+                    errorText += y.Message.MessageID.ToString(MessageNumbers.NumberFormat, CultureInfo.InvariantCulture) + Environment.NewLine;
                     hasError = hasError ||
                     y.Message.Severity == MessageSeverity.Error ||
                     y.Message.Severity == MessageSeverity.FatalError;
@@ -81,7 +81,7 @@ namespace PasPasPasTests.Parser {
             }
         }
 
-        protected ISyntaxPart RunAstTest<T>(string completeInput, Func<object, T> searchFunction, T expectedResult, bool withTypes = false, params Guid[] errorMessages) {
+        protected ISyntaxPart RunAstTest<T>(string completeInput, Func<object, T> searchFunction, T expectedResult, bool withTypes = false, params uint[] errorMessages) {
             var env = CreateEnvironment();
             var msgs = new List<ILogMessage>();
             var log = new LogTarget();
@@ -92,7 +92,7 @@ namespace PasPasPasTests.Parser {
 
             log.ProcessMessage += (x, y) => {
                 msgs.Add(y.Message);
-                errorText += y.Message.MessageID.ToString() + Environment.NewLine;
+                errorText += y.Message.MessageID.ToString(MessageNumbers.NumberFormat, CultureInfo.InvariantCulture) + Environment.NewLine;
                 hasError = hasError ||
                 y.Message.Severity == MessageSeverity.Error ||
                 y.Message.Severity == MessageSeverity.FatalError;
@@ -137,7 +137,7 @@ namespace PasPasPasTests.Parser {
             return tree;
         }
 
-        protected T RunCstTest<T>(Func<StandardParser, T> tester, string tokens = "", params Guid[] errorMessages) {
+        protected T RunCstTest<T>(Func<StandardParser, T> tester, string tokens = "", params uint[] errorMessages) {
             var env = CreateEnvironment();
             var msgs = new List<ILogMessage>();
             var log = new LogTarget();
@@ -148,7 +148,7 @@ namespace PasPasPasTests.Parser {
 
             log.ProcessMessage += (x, y) => {
                 msgs.Add(y.Message);
-                errorText += y.Message.MessageID.ToString() + Environment.NewLine;
+                errorText += y.Message.MessageID.ToString(MessageNumbers.NumberFormat, CultureInfo.InvariantCulture) + Environment.NewLine;
                 hasError = hasError ||
                 y.Message.Severity == MessageSeverity.Error ||
                 y.Message.Severity == MessageSeverity.FatalError;
@@ -207,7 +207,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest(statement, search, true, true);
         }
 
-        protected void RunCompilerDirective(string directive, object expected, Func<OptionSet, object> actual, params Guid[] messages) {
+        protected void RunCompilerDirective(string directive, object expected, Func<OptionSet, object> actual, params uint[] messages) {
 
             var env = CreateEnvironment();
             var fileCounter = 0;
@@ -270,11 +270,11 @@ namespace PasPasPasTests.Parser {
             env.Log.UnregisterTarget(msgs);
             Assert.AreEqual(messages.Length, msgs.Messages.Count);
 
-            var m = new HashSet<Guid>(msgs.Messages.Select(t => t.MessageID));
+            var m = new HashSet<uint>(msgs.Messages.Select(t => t.MessageID));
             foreach (var guid in messages)
                 Assert.IsTrue(m.Contains(guid));
 
-            m = new HashSet<Guid>(messages);
+            m = new HashSet<uint>(messages);
             foreach (var guid in msgs.Messages.Select(t => t.MessageID))
                 Assert.IsTrue(m.Contains(guid));
 

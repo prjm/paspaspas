@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace PasPasPas.Globals.Log {
+﻿namespace PasPasPas.Globals.Log {
 
     /// <summary>
-    ///     a common log message (immutable)
+    ///     interface for log messages (immutable)
     /// </summary>
     public interface ILogMessage {
 
@@ -16,7 +14,7 @@ namespace PasPasPas.Globals.Log {
         /// <summary>
         ///     message id
         /// </summary>
-        Guid MessageID { get; }
+        uint MessageID { get; }
 
         /// <summary>
         ///     message group id

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PasPasPas.Globals.Log {
+﻿namespace PasPasPas.Globals.Log {
 
     /// <summary>
     ///     interface for log event generators
@@ -17,27 +15,27 @@ namespace PasPasPas.Globals.Log {
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>
-        void LogFatalError(Guid id, params object[] data);
+        void LogFatalError(uint id, params object[] data);
 
         /// <summary>
         ///     log an error message
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>
-        void LogError(Guid id, params object[] data);
+        void LogError(uint id, params object[] data);
 
         /// <summary>
         ///     create a warning message
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>
-        void LogWarning(Guid id, params object[] data);
+        void LogWarning(uint id, params object[] data);
 
         /// <summary>
         ///     create a hint message
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>
-        void LogHint(Guid id, params object[] data);
+        void LogHint(uint id, params object[] data);
     }
 }

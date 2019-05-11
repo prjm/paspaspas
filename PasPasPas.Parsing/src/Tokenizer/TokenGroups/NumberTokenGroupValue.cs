@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
@@ -12,7 +11,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     public sealed class NumberTokenGroupValue : PatternContinuation {
 
         private readonly CharacterClassTokenGroupValue digitTokenizer
-            = new CharacterClassTokenGroupValue(TokenKind.IntegralNumber, new DigitCharClass(false), 0, LiteralParserKind.IntegerNumbers, Guid.Empty);
+            = new CharacterClassTokenGroupValue(TokenKind.IntegralNumber, new DigitCharClass(false), 0, LiteralParserKind.IntegerNumbers, 0);
 
         private readonly IdentifierCharacterClass allIdents
             = new IdentifierCharacterClass(ampersands: true, digits: true, dots: true);

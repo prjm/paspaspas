@@ -16,9 +16,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     message: unexpected token
         /// </summary>
-        public static readonly Guid UnexpectedCharacter
-            = new Guid(new byte[] { 0xd0, 0x79, 0xa5, 0xd0, 0x34, 0xa6, 0xba, 0x4c, 0x9d, 0x6, 0xc, 0x69, 0xde, 0xa6, 0x9e, 0xb });
-        /* {d0a579d0-a634-4cba-9d06-0c69dea69e0b} */
+        public const uint UnexpectedCharacter
+            = 0x0390;
 
         /// <summary>
         ///     message: unexpected end of token
@@ -26,31 +25,26 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <remarks>
         ///     data: expected-token-end sequence
         /// </remarks>
-        public static readonly Guid UnexpectedEndOfToken
-            = new Guid(new byte[] { 0x7d, 0xd3, 0xfc, 0xf2, 0x4a, 0x89, 0x71, 0x4e, 0x8a, 0xaa, 0x2f, 0x1a, 0x95, 0x6b, 0xdc, 0x49 });
-        /* {f2fcd37d-894a-4e71-8aaa-2f1a956bdc49} */
-
+        public const uint UnexpectedEndOfToken
+            = 0x0391;
 
         /// <summary>
         ///     message id: incomplete hex number
         /// </summary>
-        public static readonly Guid IncompleteHexNumber
-            = new Guid(new byte[] { 0xfc, 0x7b, 0x96, 0xb1, 0xaf, 0x9e, 0x7e, 0x4a, 0x88, 0x7c, 0xc9, 0xa9, 0xaa, 0xab, 0xa7, 0xa8 });
-        /* {b1967bfc-9eaf-4a7e-887c-c9a9aaaba7a8} */
+        public const uint IncompleteHexNumber
+            = 0x0392;
 
         /// <summary>
         ///     message id: incomplete identifier
         /// </summary>
-        public static readonly Guid IncompleteIdentifier
-            = new Guid(new byte[] { 0x68, 0x3f, 0x9c, 0x79, 0x2, 0xe0, 0xf3, 0x42, 0x98, 0x8a, 0xef, 0xa3, 0x59, 0x4f, 0xf9, 0x42 });
-        /* {799c3f68-e002-42f3-988a-efa3594ff942} */
+        public const uint IncompleteIdentifier
+            = 0x0393;
 
         /// <summary>
         ///     message id: incomplete string
         /// </summary>
-        public static readonly Guid IncompleteString
-            = new Guid(new byte[] { 0xc, 0x14, 0xd4, 0xaa, 0x13, 0x18, 0xcd, 0x4f, 0xa4, 0xae, 0x42, 0x7e, 0xc9, 0x2e, 0xd6, 0xab });
-        /* {aad4140c-1813-4fcd-a4ae-427ec92ed6ab} */
+        public const uint IncompleteString
+            = 0x0394;
 
         /// <summary>
         ///     registered input patterns

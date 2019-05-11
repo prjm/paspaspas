@@ -5,7 +5,6 @@
     /// </summary>
     public static class MessageGroups {
 
-
         /// <summary>
         ///     tree transformer message
         /// </summary>

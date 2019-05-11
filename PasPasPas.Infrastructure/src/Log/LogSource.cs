@@ -45,7 +45,7 @@ namespace PasPasPas.Infrastructure1.Log {
         /// </summary>
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
-        public void LogError(Guid id, params object[] data)
+        public void LogError(uint id, params object[] data)
             => MessageForGuid(MessageSeverity.Error, id, data);
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace PasPasPas.Infrastructure1.Log {
         /// </summary>
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
-        public void LogWarning(Guid id, params object[] data)
+        public void LogWarning(uint id, params object[] data)
             => MessageForGuid(MessageSeverity.Warning, id, data);
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace PasPasPas.Infrastructure1.Log {
         /// </summary>
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
-        public void LogFatalError(Guid id, params object[] data)
+        public void LogFatalError(uint id, params object[] data)
             => MessageForGuid(MessageSeverity.FatalError, id, data);
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace PasPasPas.Infrastructure1.Log {
         /// </summary>
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
-        public void LogHint(Guid id, params object[] data)
+        public void LogHint(uint id, params object[] data)
             => MessageForGuid(MessageSeverity.Hint, id, data);
 
 
@@ -78,10 +78,10 @@ namespace PasPasPas.Infrastructure1.Log {
         /// </summary>
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
-        public void Information(Guid id, params object[] data)
+        public void Information(uint id, params object[] data)
             => MessageForGuid(MessageSeverity.Information, id, data);
 
-        private void MessageForGuid(MessageSeverity severity, Guid id, object[] data)
+        private void MessageForGuid(MessageSeverity severity, uint id, object[] data)
             => ProcessMessage(new LogMessage(severity, group, id, data));
 
     }

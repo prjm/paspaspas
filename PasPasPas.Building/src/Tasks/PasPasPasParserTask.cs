@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using PasPasPas.Building.Definition;
 using PasPasPas.Building.Engine;
@@ -65,7 +66,7 @@ namespace PasPasPas.Building.Tasks {
                     var hasError = false;
 
                     log.ProcessMessage += (x, y) => {
-                        result.Append(y.Message.MessageID.ToString() + Environment.NewLine);
+                        result.Append(y.Message.MessageID.ToString(MessageNumbers.NumberFormat, CultureInfo.InvariantCulture) + Environment.NewLine);
                         hasError = hasError ||
                         y.Message.Severity == MessageSeverity.Error ||
                         y.Message.Severity == MessageSeverity.FatalError;

@@ -42,25 +42,22 @@ namespace PasPasPas.Parsing.Parser {
     public abstract class ParserBase : IParser {
 
         /// <summary>
-        ///     message: unexpected token
+        ///     message: unexpected token message id
         /// </summary>
-        public static readonly Guid UnexpectedToken
-            = new Guid(new byte[] { 0xe0, 0xbb, 0xd3, 0x5, 0xe2, 0x32, 0xeb, 0x43, 0x85, 0xb, 0xeb, 0xdb, 0x2b, 0x7e, 0xf2, 0x72 });
-        /* {05d3bbe0-32e2-43eb-850b-ebdb2b7ef272} */
+        public const uint UnexpectedToken
+            = 0x0101;
 
         /// <summary>
-        ///     message: user generated message
+        ///     message: user generated message id
         /// </summary>
-        public static readonly Guid UserGeneratedMessage
-            = new Guid(new byte[] { 0xac, 0xe2, 0xd4, 0x74, 0xdd, 0x54, 0xcc, 0x4a, 0x90, 0x8a, 0x9f, 0x2e, 0x8a, 0x2d, 0x91, 0x65 });
-        /* {74d4e2ac-54dd-4acc-908a-9f2e8a2d9165} */
+        public const uint UserGeneratedMessage
+            = 0x0102;
 
         /// <summary>
-        ///     missing token
+        ///     message: missing token error message id
         /// </summary>
-        public static readonly Guid MissingToken
-            = new Guid(new byte[] { 0x84, 0x1f, 0xb1, 0x9f, 0xe3, 0x2f, 0x9c, 0x48, 0xb7, 0x15, 0xdd, 0x29, 0x45, 0x8e, 0x43, 0x4e });
-        /* {9fb11f84-2fe3-489c-b715-dd29458e434e} */
+        public const uint MissingToken
+            = 0x0103;
 
         private TokenizerWithLookahead tokenizer;
         private readonly ILogSource logSource;
@@ -120,7 +117,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="message">message id</param>
         /// <param name="expectedTokens">expected tokens (or)</param>
         /// <returns></returns>
-        protected Terminal ErrorAndSkip(Guid message, int[] expectedTokens) {
+        protected Terminal ErrorAndSkip(uint message, int[] expectedTokens) {
             logSource.LogError(message, expectedTokens);
             return CreateByError();
         }
@@ -131,7 +128,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="message">message id</param>
         /// <param name="values">error values</param>
         /// <returns></returns>
-        protected void ErrorLastPart(Guid message, params object[] values)
+        protected void ErrorLastPart(uint message, params object[] values)
             => logSource.LogError(message, values);
 
         /// <summary>

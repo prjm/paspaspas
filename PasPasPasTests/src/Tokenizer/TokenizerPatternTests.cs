@@ -99,7 +99,7 @@ namespace PasPasPasTests.Tokenizer {
         private const int PatternB = 3;
         private readonly uint LogGuid = 99999;
 
-        private IList<Token> RunTestPattern(InputPatterns patterns, Guid expectedMessage, string input) {
+        private IList<Token> RunTestPattern(InputPatterns patterns, uint expectedMessage, string input) {
             var result = new List<Token>();
             var env = CreateEnvironment();
             using (var reader = ReaderApi.CreateReaderForString(TestFileName, input)) {
@@ -114,7 +114,7 @@ namespace PasPasPasTests.Tokenizer {
                     }
                 }
 
-                if (expectedMessage != Guid.Empty) {
+                if (expectedMessage != 0) {
                     Assert.AreEqual(1, logTarget.Messages.Count);
                     Assert.AreEqual(expectedMessage, logTarget.Messages[0].MessageID);
                 }
@@ -127,9 +127,9 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         public Token TestPattern(InputPatterns patterns, string input, params int[] tokenValues)
-            => TestPattern(patterns, Guid.Empty, input, tokenValues);
+            => TestPattern(patterns, 0, input, tokenValues);
 
-        public Token TestPattern(InputPatterns patterns, Guid expectedMessage, string input, params int[] tokenValues) {
+        public Token TestPattern(InputPatterns patterns, uint expectedMessage, string input, params int[] tokenValues) {
             var result = RunTestPattern(patterns, expectedMessage, input);
             var values = new List<string>();
 

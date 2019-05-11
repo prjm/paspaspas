@@ -141,7 +141,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     create an error message
         /// </summary>
         /// <param name="errorId">error id</param>
-        public void Error(Guid errorId)
+        public void Error(uint errorId)
             => log.LogError(errorId);
 
         /// <summary>
