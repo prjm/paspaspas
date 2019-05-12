@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PasPasPas.Desktop</RootNamespace>
     <AssemblyName>PasPasPas.Desktop</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -69,6 +70,9 @@
       <Link>%(RecursiveDir)%(FileName)</Link>
     </Compile>
     <Compile Include="..\PasPasPas.Typings\src\**\*.cs" Exclude="..\PasPasPas.Typings\src\AssemblyInfo.cs">
+      <Link>%(RecursiveDir)%(FileName)</Link>
+    </Compile>
+    <Compile Include="..\PasPasPas.AssemblyBuilder\src\**\*.cs" Exclude="..\PasPasPas.Typings\src\AssemblyInfo.cs">
       <Link>%(RecursiveDir)%(FileName)</Link>
     </Compile>
   </ItemGroup>

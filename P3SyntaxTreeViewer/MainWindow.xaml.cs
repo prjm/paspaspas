@@ -9,6 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using PasPasPas.Api;
+using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Log;
@@ -17,7 +19,6 @@ using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Typings.Common;
 
 namespace P3SyntaxTreeViewer {
 
@@ -170,7 +171,7 @@ namespace P3SyntaxTreeViewer {
 
             foreach (var logentry in messages) {
                 var block = new TextBlock();
-                var key = "m_" + logentry.MessageID.ToString("n", CultureInfo.InvariantCulture);
+                var key = "m_" + logentry.MessageID.ToString("X4", CultureInfo.InvariantCulture);
                 var m = key;
                 var r = P3SyntaxTreeViewer.Messages.ResourceManager.GetString(key, CultureInfo.CurrentCulture);
                 if (r != null)
