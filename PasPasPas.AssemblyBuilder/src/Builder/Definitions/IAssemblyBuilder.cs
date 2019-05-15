@@ -1,11 +1,17 @@
 ﻿using PasPasPas.Globals.Environment;
 
-namespace PasPasPas.AssemblyBuilder.Builder {
+namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
 
     /// <summary>
     ///     interface for an assembly builder
     /// </summary>
     public interface IAssemblyBuilder {
+
+        /// <summary>
+        ///     create an assembly reference
+        /// </summary>
+        /// <returns></returns>
+        IAssemblyReference CreateAssemblyReference();
 
         /// <summary>
         ///     start building an assembly
@@ -19,9 +25,11 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         void EndAssembly();
 
         /// <summary>
-        ///     create an assembly reference
+        ///     Start a unit definition
         /// </summary>
-        /// <returns></returns>
-        IAssemblyReference CreateAssemblyReference();
+        /// <param name="symbolName"></param>
+        /// <returns>unit type</returns>
+        ITypeBuilder StartUnit(string symbolName);
+
     }
 }

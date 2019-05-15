@@ -6,7 +6,7 @@
     public static class KnownTypeIds {
 
         /// <summary>
-        ///     no type
+        ///     no type / void type
         /// </summary>
         public const int NoType = -4;
 

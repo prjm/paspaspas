@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using PasPasPas.Api;
-using PasPasPas.AssemblyBuilder.Builder;
 using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Log;
 using PasPasPasTests.Common;
@@ -51,13 +50,24 @@ namespace PasPasPasTests.Assemblies {
 
         }
 
+        private void RunTypeTest(string file, string program, Func<Type, bool> tester, string typeName, params uint[] errorMessages) {
+            bool v(Assembly a) => tester(a?.GetType(typeName));
+            RunAssemblyTest(file, program, v, errorMessages);
+        }
+
         [TestMethod]
         public void TestAssemblyName() {
             bool t(Assembly a) => string.Equals(a.GetName().Name, "x.z", StringComparison.OrdinalIgnoreCase);
             RunAssemblyTest("x.z", "program x.z; begin end.", t);
-            RunAssemblyTest("x.z", "unit x.z; interface implementation end.", default, BuilderErrorMessages.UndefinedProjectName);
+            //RunAssemblyTest("x.z", "unit x.z; interface implementation end.", default, BuilderErrorMessages.UndefinedProjectName);
         }
 
+        [TestMethod]
+        public void TestUnitType() {
+            const string typeName = "P3.x_z.<UnitClass>";
+            bool d(Type t) => string.Equals(t?.FullName, typeName, StringComparison.OrdinalIgnoreCase);
+            RunTypeTest("x.z", "program x.z; begin end.", d, typeName);
+        }
 
     }
 }

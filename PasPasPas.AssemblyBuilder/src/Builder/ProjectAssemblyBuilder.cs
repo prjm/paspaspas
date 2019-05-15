@@ -1,5 +1,9 @@
-﻿using PasPasPas.Globals.Environment;
+﻿using System.Collections.Generic;
+using PasPasPas.AssemblyBuilder.Builder.Definitions;
+using PasPasPas.AssemblyBuilder.Builder.Net;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -10,7 +14,9 @@ namespace PasPasPas.AssemblyBuilder.Builder {
     /// </summary>
     public class ProjectAssemblyBuilder :
 
-        IStartVisitor<ProjectItemCollection>, IEndVisitor<ProjectItemCollection> {
+        IStartVisitor<ProjectItemCollection>, IEndVisitor<ProjectItemCollection>,
+        IStartVisitor<CompilationUnit>, IEndVisitor<CompilationUnit>,
+        IStartVisitor<BlockOfStatements>, IEndVisitor<BlockOfStatements> {
 
         private readonly IStartEndVisitor visitor;
 
@@ -30,6 +36,21 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         private IAssemblyBuilder Builder { get; }
 
         /// <summary>
+        ///     current unit
+        /// </summary>
+        private CompilationUnit CurrentUnit { get; set; }
+
+        /// <summary>
+        ///     unit type
+        /// </summary>
+        private ITypeBuilder UnitType { get; set; }
+
+        /// <summary>
+        ///     current method definition
+        /// </summary>
+        private Stack<IMethodBuilder> CurrentMethod { get; }
+
+        /// <summary>
         ///     create a new builder
         /// </summary>
         /// <param name="environment"></param>
@@ -38,6 +59,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
             Environment = environment;
             LogSource = environment.Log.CreateLogSource(MessageGroups.AssemblyBuilder);
             Builder = new NetAssemblyBuilder();
+            CurrentMethod = new Stack<IMethodBuilder>();
         }
 
         /// <summary>
@@ -76,5 +98,48 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         /// <returns></returns>
         public IAssemblyReference CreateAssemblyReference()
             => Builder.CreateAssemblyReference();
+
+        /// <summary>
+        ///     start visiting a block of statements
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(BlockOfStatements element) {
+            if (CurrentUnit.FileType == CompilationUnitType.Program && CurrentMethod.Count < 1) {
+                var mainMethod = UnitType.StartClassMethodDefinition("Main");
+                mainMethod.ReturnType = KnownTypeIds.NoType;
+                mainMethod.DefineMethodBody();
+                CurrentMethod.Push(mainMethod);
+            }
+        }
+
+        /// <summary>
+        ///     end visiting a block of statements
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(BlockOfStatements element) {
+            if (CurrentUnit.FileType == CompilationUnitType.Program && CurrentMethod.Count == 1) {
+                var mainMethod = CurrentMethod.Pop();
+                mainMethod.FinishMethod();
+            }
+        }
+
+        /// <summary>
+        ///     start visiting a unit
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(CompilationUnit element) {
+            CurrentUnit = element;
+            UnitType = Builder.StartUnit(element.SymbolName);
+        }
+
+        /// <summary>
+        ///     end visiting unit
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(CompilationUnit element) {
+            UnitType.CreateType();
+            CurrentUnit = default;
+            UnitType = default;
+        }
     }
 }

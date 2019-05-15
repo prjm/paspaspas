@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using PasPasPas.Globals.Environment;
 
-namespace PasPasPas.AssemblyBuilder.Builder {
+namespace PasPasPas.AssemblyBuilder.Builder.Net {
 
     /// <summary>
     ///     assembly reference
@@ -13,11 +13,12 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         /// </summary>
         /// <param name="generatedAssembly"></param>
         public AssemblyReference(Assembly generatedAssembly)
-            => this.GeneratedAssembly = generatedAssembly;
+            => GeneratedAssembly = generatedAssembly;
 
         /// <summary>
         ///     assembly reference
         /// </summary>
         public Assembly GeneratedAssembly { get; }
+
     }
 }
