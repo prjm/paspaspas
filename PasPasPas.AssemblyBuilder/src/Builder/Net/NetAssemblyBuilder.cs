@@ -19,9 +19,8 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         private TypeMapper Mapper { get; }
         public Assembly GeneratedAssembly { get; private set; }
 
-        public NetAssemblyBuilder() {
-            Mapper = new TypeMapper();
-        }
+        public NetAssemblyBuilder()
+            => Mapper = new TypeMapper();
 
         public void StartAssembly(string projectName) {
             var name = new AssemblyName(projectName);

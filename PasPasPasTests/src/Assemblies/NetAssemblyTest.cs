@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using PasPasPas.Api;
+using PasPasPas.AssemblyBuilder.Builder;
 using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Log;
 using PasPasPasTests.Common;
@@ -59,7 +60,7 @@ namespace PasPasPasTests.Assemblies {
         public void TestAssemblyName() {
             bool t(Assembly a) => string.Equals(a.GetName().Name, "x.z", StringComparison.OrdinalIgnoreCase);
             RunAssemblyTest("x.z", "program x.z; begin end.", t);
-            //RunAssemblyTest("x.z", "unit x.z; interface implementation end.", default, BuilderErrorMessages.UndefinedProjectName);
+            RunAssemblyTest("x.z", "unit x.z; interface implementation end.", default, BuilderErrorMessages.UndefinedProjectName);
         }
 
         [TestMethod]

@@ -76,10 +76,11 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         public void StartVisit(ProjectItemCollection element) {
             var projectName = element.ProjectName;
 
-            if (string.IsNullOrWhiteSpace(projectName))
+            if (string.IsNullOrWhiteSpace(projectName)) {
                 LogError(BuilderErrorMessages.UndefinedProjectName);
-            else
-                Builder.StartAssembly(projectName);
+                projectName = element[element.Count - 1].SymbolName;
+            }
+            Builder.StartAssembly(projectName);
         }
 
         private void LogError(uint messageNumber)
