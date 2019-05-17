@@ -49,7 +49,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => (unchecked((int)value) ^ (int)(value >> 32));
+            => unchecked(((int)value) ^ (int)(value >> 32));
 
         /// <summary>
         ///     invert all bits

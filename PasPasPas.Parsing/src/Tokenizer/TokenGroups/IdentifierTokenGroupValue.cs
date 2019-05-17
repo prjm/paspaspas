@@ -51,7 +51,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
             var value = state.GetBufferContent();
 
-            if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out var tokenKind)))
+            if (!ignoreKeywords && knownKeywords.TryGetValue(value, out var tokenKind))
                 return new Token(tokenKind, state);
             else
                 return new Token(TokenKind.Identifier, state);

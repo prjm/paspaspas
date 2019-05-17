@@ -20,8 +20,8 @@
         /// <param name="input"></param>
         /// <returns></returns>
         public override bool Matches(char input)
-            => (('0' <= input) && (input <= '9')) ||
-                (allowHexChars && (('a' <= input) && (input <= 'f') ||
-                                   ('A' <= input) && (input <= 'F')));
+            => '0' <= input && input <= '9' ||
+                allowHexChars && ('a' <= input && input <= 'f' ||
+                                   'A' <= input && input <= 'F');
     }
 }

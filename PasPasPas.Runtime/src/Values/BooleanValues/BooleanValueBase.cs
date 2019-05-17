@@ -66,19 +66,19 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
             => boolean1.AsBoolean == boolean2.AsBoolean;
 
         internal static bool GreaterThen(IBooleanValue boolean1, IBooleanValue boolean2)
-            => boolean1.AsBoolean && (!boolean2.AsBoolean);
+            => boolean1.AsBoolean && !boolean2.AsBoolean;
 
         internal static bool LessThenOrEqual(IBooleanValue boolean1, IBooleanValue boolean2)
-            => ((!boolean1.AsBoolean) && boolean2.AsBoolean) || (boolean1.AsBoolean == boolean2.AsBoolean);
+            => !boolean1.AsBoolean && boolean2.AsBoolean || boolean1.AsBoolean == boolean2.AsBoolean;
 
         internal static bool NotEquals(IBooleanValue boolean1, IBooleanValue boolean2)
             => boolean1.AsBoolean != boolean2.AsBoolean;
 
         internal static bool GreaterThenEqual(IBooleanValue boolean1, IBooleanValue boolean2)
-            => (boolean1.AsBoolean && (!boolean2.AsBoolean)) || (boolean1.AsBoolean == boolean2.AsBoolean);
+            => boolean1.AsBoolean && !boolean2.AsBoolean || boolean1.AsBoolean == boolean2.AsBoolean;
 
         internal static bool LessThen(IBooleanValue boolean1, IBooleanValue boolean2)
-            => (!boolean1.AsBoolean) && boolean2.AsBoolean;
+            => !boolean1.AsBoolean && boolean2.AsBoolean;
 
         /// <summary>
         ///     compare this value to another boolean value

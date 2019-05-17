@@ -93,10 +93,10 @@ namespace PasPasPas.Parsing.SyntaxTree {
             if (!Token.Equals(other.Token))
                 return false;
 
-            if ((other.Prefix == null && Prefix != null) || (other.Prefix != null && Prefix == null))
+            if (other.Prefix == null && Prefix != null || other.Prefix != null && Prefix == null)
                 return false;
 
-            if ((other.Suffix == null && Suffix != null) || (other.Suffix != null && Suffix == null))
+            if (other.Suffix == null && Suffix != null || other.Suffix != null && Suffix == null)
                 return false;
 
             if (Prefix != null) {

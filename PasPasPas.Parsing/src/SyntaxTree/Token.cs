@@ -62,7 +62,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(Token other)
-            => (Kind == other.Kind) && (string.Equals(Value, other.Value, StringComparison.Ordinal));
+            => Kind == other.Kind && string.Equals(Value, other.Value, StringComparison.Ordinal);
 
         /// <summary>
         ///     compare tokens

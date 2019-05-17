@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
             using (var builder = StoreValue ? state.FetchStringBuilder() : null) {
 
-                while ((!found) && (!state.AtEof)) {
+                while (!found && !state.AtEof) {
                     if (StoreValue)
                         builder.Item.Append(state.CurrentCharacter);
 

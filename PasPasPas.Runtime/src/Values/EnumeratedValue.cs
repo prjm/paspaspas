@@ -115,7 +115,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(IEnumeratedValue other)
-            => (other.TypeId == TypeId) && (Value.Equals(other.Value));
+            => other.TypeId == TypeId && Value.Equals(other.Value);
 
         /// <summary>
         ///     get the ordinal value

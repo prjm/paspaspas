@@ -86,7 +86,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 }
             }
 
-            if (newType != default || (MatchIdentifier(TokenKind.ShortString, TokenKind.StringKeyword, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && (!LookAhead(1, TokenKind.DotDot)))) {
+            if (newType != default || MatchIdentifier(TokenKind.ShortString, TokenKind.StringKeyword, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && !LookAhead(1, TokenKind.DotDot)) {
                 using (var list = GetList<GenericNamespaceNameSymbol>()) {
                     var item = default(GenericNamespaceNameSymbol);
                     var openParen = default(Terminal);

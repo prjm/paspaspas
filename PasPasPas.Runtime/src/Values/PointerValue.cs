@@ -59,7 +59,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(PointerValue other)
-            => (TypeId == other.TypeId) && (Value.Equals(other.Value));
+            => TypeId == other.TypeId && Value.Equals(other.Value);
 
         /// <summary>
         ///     check for equality

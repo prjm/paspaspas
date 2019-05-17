@@ -35,13 +35,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// <returns></returns>
         public T this[int index] {
             get {
-                if ((index >= 0) && (index < Count))
+                if (index >= 0 && index < Count)
                     return internalList[index];
                 throw new ArgumentOutOfRangeException(nameof(index), $"Index {index} out of range [0..{Count}]");
             }
 
             set {
-                if ((index >= 0) && (index < Count))
+                if (index >= 0 && index < Count)
                     internalList[index] = value;
                 else
                     throw new ArgumentOutOfRangeException(nameof(index), $"Index {index} out of range [0..{Count}]");

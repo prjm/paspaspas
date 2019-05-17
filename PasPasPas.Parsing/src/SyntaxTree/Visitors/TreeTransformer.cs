@@ -1112,7 +1112,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             typeTarget.TypeValue = result;
             result.Kind = TokenKindMapper.MapMethodKind(element.Kind);
             result.AllowAnonymousMethods = element.AllowAnonymousMethods;
-            result.MethodDeclaration = (element.OfSymbol != default) && (element.ObjectSymbol != default);
+            result.MethodDeclaration = element.OfSymbol != default && element.ObjectSymbol != default;
 
             if (element.ReturnTypeAttributes != null)
                 ExtractAttributes(element.ReturnTypeAttributes as UserAttributesSymbol, CurrentUnit, result.ReturnAttributes);
@@ -1132,7 +1132,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             typeTarget.TypeValue = result;
             result.Kind = TokenKindMapper.MapMethodKind(element.ProcedureType.Kind);
             result.AllowAnonymousMethods = true;
-            result.MethodDeclaration = (element.ProcedureType.OfSymbol != default) && (element.ProcedureType.ObjectSymbol != default);
+            result.MethodDeclaration = element.ProcedureType.OfSymbol != default && element.ProcedureType.ObjectSymbol != default;
 
             if (element.ProcedureType.ReturnTypeAttributes != null)
                 ExtractAttributes(element.ProcedureType.ReturnTypeAttributes as UserAttributesSymbol, CurrentUnit, result.ReturnAttributes);

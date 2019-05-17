@@ -172,7 +172,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
             for (var i = 0; i < input.Length; i++) {
                 var value = GetValueOfChar(input[input.Length - 1 - i], allowHex);
 
-                if (i > 19 || (allowHex && i >= 16)) {
+                if (i > 19 || allowHex && i >= 16) {
                     return constants.Integers.Overflow;
                 }
 
@@ -181,9 +181,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
                 }
 
                 if (allowHex)
-                    newresult = result + (value * hexFactors[i]);
+                    newresult = result + value * hexFactors[i];
                 else
-                    newresult = result + (value * factors[i]);
+                    newresult = result + value * factors[i];
 
                 if (newresult < result)
                     return constants.Integers.Overflow;

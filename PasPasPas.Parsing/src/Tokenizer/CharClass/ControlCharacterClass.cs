@@ -11,9 +11,9 @@
         /// <param name="input">input char</param>
         /// <returns><c>true</c> if the character is a control character</returns>
         public override bool Matches(char input)
-            => (input != 0x1A) && // soft end-of-line
-               (!WhiteSpaceCharacterClass.IsAsciiWhitespace(input)) &&
-               (char.IsControl(input));
+            => input != 0x1A && // soft end-of-line
+               !WhiteSpaceCharacterClass.IsAsciiWhitespace(input) &&
+               char.IsControl(input);
 
     }
 

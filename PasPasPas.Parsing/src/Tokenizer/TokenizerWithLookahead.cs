@@ -91,7 +91,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     check if a next token exists
         /// </summary>
         public bool HasNextToken
-            => (tokenList.Count > 0) || !BaseTokenizer.AtEof;
+            => tokenList.Count > 0 || !BaseTokenizer.AtEof;
 
         /// <summary>
         ///     fetch a next token / fill token list
@@ -147,11 +147,11 @@ namespace PasPasPas.Parsing.Tokenizer {
             switch (mode) {
 
                 case TokenizerMode.Standard:
-                    return (nextToken.Kind != TokenKind.WhiteSpace) &&
+                    return nextToken.Kind != TokenKind.WhiteSpace &&
                         nextToken.Kind != TokenKind.ControlChar &&
                         nextToken.Kind != TokenKind.Comment &&
                         nextToken.Kind != TokenKind.Preprocessor &&
-                        (!options.ConditionalCompilation.Skip);
+                        !options.ConditionalCompilation.Skip;
 
                 case TokenizerMode.CompilerDirective:
                     return nextToken.Kind != TokenKind.WhiteSpace &&
@@ -240,7 +240,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns>token</returns>
         public TokenSequence LookAhead(int number) {
             checked {
-                while (!BaseTokenizer.AtEof && (tokenList.Count < Math.Max(2, 1 + number))) {
+                while (!BaseTokenizer.AtEof && tokenList.Count < Math.Max(2, 1 + number)) {
                     InternalFetchNextToken();
                 }
             }

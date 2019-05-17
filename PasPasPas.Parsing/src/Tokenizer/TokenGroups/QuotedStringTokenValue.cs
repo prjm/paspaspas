@@ -38,12 +38,12 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             var quote = QuoteChar;
             using (var resultBuilder = state.FetchStringBuilder()) {
 
-                while ((!found) && (!state.AtEof)) {
+                while (!found && !state.AtEof) {
                     var nextChar1 = state.LookAhead(1);
                     var nextChar2 = state.LookAhead(2);
 
-                    found = (nextChar1 == quote) && (nextChar2 != quote);
-                    var escapedQuote = (nextChar1 == quote) && (nextChar2 == quote);
+                    found = nextChar1 == quote && nextChar2 != quote;
+                    var escapedQuote = nextChar1 == quote && nextChar2 == quote;
 
                     if (!found)
                         resultBuilder.Item.Append(state.NextChar(true));

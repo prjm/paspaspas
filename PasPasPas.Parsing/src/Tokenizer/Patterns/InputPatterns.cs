@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
-using System;
 
 namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
@@ -134,7 +134,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
             var len = tokenGroup.Length;
 
-            while (state.Length < len && (!state.AtEof)) {
+            while (state.Length < len && !state.AtEof) {
                 state.NextChar(true);
             }
 

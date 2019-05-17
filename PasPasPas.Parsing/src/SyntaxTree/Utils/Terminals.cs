@@ -117,10 +117,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             if (!terminal.Token.Equals(other.Value))
                 return false;
 
-            if ((other.Prefix == null && terminal.Prefix != null) || (other.Prefix != null && terminal.Prefix == null))
+            if (other.Prefix == null && terminal.Prefix != null || other.Prefix != null && terminal.Prefix == null)
                 return false;
 
-            if ((other.Suffix == null && terminal.Suffix != null) || (other.Suffix != null && terminal.Suffix == null))
+            if (other.Suffix == null && terminal.Suffix != null || other.Suffix != null && terminal.Suffix == null)
                 return false;
 
             if (other.Prefix != null) {
@@ -147,10 +147,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             if (!terminal.Value.Equals(other.Value))
                 return false;
 
-            if ((other.Prefix == null && terminal.Prefix != null) || (other.Prefix != null && terminal.Prefix == null))
+            if (other.Prefix == null && terminal.Prefix != null || other.Prefix != null && terminal.Prefix == null)
                 return false;
 
-            if ((other.Suffix == null && terminal.Suffix != null) || (other.Suffix != null && terminal.Suffix == null))
+            if (other.Suffix == null && terminal.Suffix != null || other.Suffix != null && terminal.Suffix == null)
                 return false;
 
             if (other.Prefix != null) {

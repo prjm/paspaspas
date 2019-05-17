@@ -38,13 +38,13 @@
         /// <param name="input">input</param>
         /// <returns><c>true</c> if the char can be part of an identifier</returns>
         public override bool Matches(char input) =>
-            (input >= 'A' && input <= 'Z') ||
-            (input >= 'a' && input <= 'z') ||
+            input >= 'A' && input <= 'Z' ||
+            input >= 'a' && input <= 'z' ||
             input == '_' ||
-            (allowAmpersand && input == '&') ||
-            (allowDigits && (input >= '0' && input <= '9')) ||
-            (allowDot && input == '.') ||
-            (input > 127 && ((allowDigits && char.IsLetterOrDigit(input)) || char.IsLetter(input)));
+            allowAmpersand && input == '&' ||
+            allowDigits && input >= '0' && input <= '9' ||
+            allowDot && input == '.' ||
+            input > 127 && (allowDigits && char.IsLetterOrDigit(input) || char.IsLetter(input));
     }
 
 }
