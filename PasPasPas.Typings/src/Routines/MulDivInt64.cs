@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Routines {
     /// <summary>
     /// <c>MulDivInt64</c> function
     /// </summary>
-    public class MulDivInt64 : IntrinsicRoutine, IVariadicRoutine {
+    public class MulDivInt64 : IntrinsicRoutine, IConstantVariadicRoutine {
 
         /// <summary>
         ///     routine name

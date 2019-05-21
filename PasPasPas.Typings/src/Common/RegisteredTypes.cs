@@ -2,12 +2,12 @@
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Hidden;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Routines;
+using PasPasPas.Typings.Routines.Runtime;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
 
@@ -135,6 +135,9 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new Sqr());
             systemUnit.AddGlobal(new Swap());
             systemUnit.AddGlobal(new Trunc());
+
+            // dynamic units
+            systemUnit.AddGlobal(new WriteLn());
         }
 
         /// <summary>
@@ -194,8 +197,10 @@ namespace PasPasPas.Typings.Common {
             RegisterSystemType(new GenericConstraintType(KnownTypeIds.GenericConstructorConstraint), "");
         }
 
-        private void RegisterHiddenTypes()
-            => RegisterSystemType(new UnspecifiedType(KnownTypeIds.UnspecifiedType), null);
+        private void RegisterHiddenTypes() {
+            RegisterSystemType(new UnspecifiedType(KnownTypeIds.UnspecifiedType), null);
+            RegisterSystemType(new VoidType(KnownTypeIds.NoType), null);
+        }
 
         /// <summary>
         ///     register type alias

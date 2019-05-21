@@ -194,8 +194,8 @@ namespace PasPasPas.Typings.Routines {
                 result.AddParameter($"AValue{signature}").SymbolType = signature[0];
             callableRoutines.Add(result);
 
-            if (variadicRoutine.IsConstant && signature.IsConstant)
-                result.ResultType = variadicRoutine.ExecuteCall(signature);
+            if (variadicRoutine.IsConstant && signature.IsConstant && variadicRoutine is IConstantVariadicRoutine cvr)
+                result.ResultType = cvr.ExecuteCall(signature);
             else
                 result.ResultType = variadicRoutine.ResolveCall(signature);
         }

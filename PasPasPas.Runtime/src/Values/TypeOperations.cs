@@ -29,11 +29,6 @@ namespace PasPasPas.Runtime.Values {
         public ITypeReference Nil { get; }
             = new SpecialValue(SpecialConstantKind.Nil, KnownTypeIds.GenericPointer);
 
-        /// <summary>
-        ///     type registry
-        /// </summary>
-        public ITypeRegistry TypeRegistry { get; }
-
         private ITypeReference MakeIndeterminedValue((int typeId, CommonTypeKind typeKind) data)
             => new IndeterminedRuntimeValue(data.typeId, data.typeKind);
 
@@ -88,5 +83,16 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public ITypeReference MakePointerValue(int baseType, ITypeReference value)
             => new PointerValue(baseType, value);
+
+        /// <summary>
+        ///     make a new method invocation result
+        /// </summary>
+        /// <param name="resultType"></param>
+        /// <param name="signature"></param>
+        /// <param name="routine"></param>
+        /// <param name="resultKind"></param>
+        /// <returns></returns>
+        public ITypeReference MakeInvocationResult(int resultType, CommonTypeKind resultKind, Signature signature, IRefSymbol routine)
+            => new InvocationResult(resultType, resultKind, signature, routine);
     }
 }

@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Routines {
     /// <summary>
     ///     <c>concat</c> routine
     /// </summary>
-    public class Concat : IntrinsicRoutine, IVariadicRoutine {
+    public class Concat : IntrinsicRoutine, IConstantVariadicRoutine {
 
         /// <summary>
         ///     routine name

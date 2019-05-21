@@ -85,6 +85,39 @@ namespace PasPasPasTests.Types {
 
         }
 
+        protected void AssertStatementType(string statemnt, ITypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType, string completeSource = null, TypeReferenceKind kind = TypeReferenceKind.Undefined) {
+            var file = "SimpleExpr";
+            var program = completeSource ?? $"program {file};{decls} begin {statemnt}; end. ";
+
+            BlockOfStatements searchfunction(object x) {
+                if (x is BlockOfStatements b)
+                    return b;
+                return default;
+            };
+
+            var block = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined, out var env) as BlockOfStatements;
+            Assert.IsNotNull(block);
+
+            var statement = block.Statements[0] as StructuredStatement;
+            Assert.IsNotNull(statement);
+
+            var e = statement.Expressions[0] as SymbolReference;
+            Assert.IsNotNull(e);
+
+            var p = e.SymbolParts[0] as SymbolReferencePart;
+            Assert.IsNotNull(p);
+            Assert.IsNotNull(p.Value);
+
+            if (value != default)
+                Assert.AreEqual(value, e.TypeInfo);
+
+            if (kind != TypeReferenceKind.Undefined)
+                Assert.AreEqual(kind, e.TypeInfo.ReferenceKind);
+
+            if (typeId != KnownTypeIds.UnspecifiedType)
+                Assert.AreEqual(typeId, e.TypeInfo.TypeId);
+        }
+
         /// <summary>
         ///     test the value of a given expression
         /// </summary>

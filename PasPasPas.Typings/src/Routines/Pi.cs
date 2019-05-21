@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Routines {
     /// <summary>
     ///     <c>pi</c> constant value
     /// </summary>
-    public class Pi : IntrinsicRoutine, IVariadicRoutine {
+    public class Pi : IntrinsicRoutine, IConstantVariadicRoutine {
 
         /// <summary>
         ///     constant function

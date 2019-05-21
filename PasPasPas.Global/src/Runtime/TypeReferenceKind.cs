@@ -23,8 +23,12 @@
         /// <summary>
         ///     reference to a type
         /// </summary>
-        TypeName = 3
+        TypeName = 3,
 
+        /// <summary>
+        ///     result of a method invocation
+        /// </summary>
+        InvocationResult = 4
     }
 
 }

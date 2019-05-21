@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     value factory for undefined types
@@ -25,6 +27,16 @@
         /// <param name="value">constant value</param>
         /// <returns>enumerated type value</returns>
         ITypeReference MakeEnumValue(int enumTypeId, ITypeReference value);
+
+        /// <summary>
+        ///     make an invocation result
+        /// </summary>
+        /// <param name="resultType"></param>
+        /// <param name="signature"></param>
+        /// <param name="routine"></param>
+        /// <param name="resultKind"></param>
+        /// <returns></returns>
+        ITypeReference MakeInvocationResult(int resultType, CommonTypeKind resultKind, Signature signature, IRefSymbol routine);
 
         /// <summary>
         ///     make a pointer value

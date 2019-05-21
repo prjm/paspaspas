@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Typings.Common;
@@ -143,6 +144,12 @@ namespace PasPasPasTests.Types {
             bool v(ErrorType e) => (e.TypeRegistry.GetTypeByIdOrUndefinedType(RegisteredTypes.UnitTypeId) as UnitType)?.GlobalRoutines.Any(t => t.Name == "a") ?? false;
 
             AssertDeclTypeDef<ErrorType>(program: p, f, NativeIntSize.Undefined, v);
+        }
+
+        [TestMethod]
+        public void TestGlobalMethodInvocation() {
+            var p = "WriteLn('a')";
+            AssertStatementType(p, default, kind: TypeReferenceKind.InvocationResult);
         }
 
     }

@@ -27,11 +27,5 @@ namespace PasPasPas.Typings.Routines {
         /// <returns></returns>
         ITypeReference ResolveCall(Signature signature);
 
-        /// <summary>
-        ///     execute a call
-        /// </summary>
-        /// <param name="signature"></param>
-        /// <returns></returns>
-        ITypeReference ExecuteCall(Signature signature);
     }
 }
