@@ -56,5 +56,12 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
 
             throw new InvalidOperationException();
         }
+
+        /// <summary>
+        ///     load a constant string
+        /// </summary>
+        /// <param name="value"></param>
+        public void LoadConstantString(string value)
+            => Generator.Emit(OpCodes.Ldstr, value);
     }
 }

@@ -19,5 +19,11 @@
         ///     finish the method
         /// </summary>
         void FinishMethod();
+
+        /// <summary>
+        ///     load a constant string to the working stack
+        /// </summary>
+        /// <param name="value"></param>
+        void LoadConstantString(string value);
     }
 }

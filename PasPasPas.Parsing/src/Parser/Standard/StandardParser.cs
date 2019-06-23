@@ -308,13 +308,9 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
         [Rule("InterfaceDeclaration", "{ InterfaceDeclarationItem }")]
         public InterfaceDeclarationSymbol ParseInterfaceDeclaration() {
-            var result = new InterfaceDeclarationSymbol(default);
-            var item = default(SyntaxPartBase);
-
             using (var list = GetList<SyntaxPartBase>()) {
-                do {
-                    item = AddToList(list, ParseInterfaceDeclarationItem());
-                } while (item != null);
+
+                while (list.Add(ParseInterfaceDeclarationItem()) != default) { }
 
                 return new InterfaceDeclarationSymbol(GetFixedArray(list));
             }

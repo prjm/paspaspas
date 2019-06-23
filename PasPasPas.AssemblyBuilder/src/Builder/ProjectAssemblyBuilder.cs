@@ -3,6 +3,7 @@ using PasPasPas.AssemblyBuilder.Builder.Definitions;
 using PasPasPas.AssemblyBuilder.Builder.Net;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
@@ -16,7 +17,8 @@ namespace PasPasPas.AssemblyBuilder.Builder {
 
         IStartVisitor<ProjectItemCollection>, IEndVisitor<ProjectItemCollection>,
         IStartVisitor<CompilationUnit>, IEndVisitor<CompilationUnit>,
-        IStartVisitor<BlockOfStatements>, IEndVisitor<BlockOfStatements> {
+        IStartVisitor<BlockOfStatements>, IEndVisitor<BlockOfStatements>,
+        IEndVisitor<ConstantValue> {
 
         private readonly IStartEndVisitor visitor;
 
@@ -142,5 +144,22 @@ namespace PasPasPas.AssemblyBuilder.Builder {
             CurrentUnit = default;
             UnitType = default;
         }
+
+        /// <summary>
+        ///     visit a constant value
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(ConstantValue element) {
+            if (CurrentMethod.Count < 1)
+                return;
+
+            var method = CurrentMethod.Peek();
+
+            if (element.Kind == ConstantValueKind.QuotedString) {
+                var stringValue = element.TypeInfo as IStringValue;
+                method.LoadConstantString(stringValue.AsUnicodeString);
+            }
+        }
+
     }
 }
