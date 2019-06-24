@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="PasPasPas" Description=" " ToolsVersion="15.0">
+<RuleSet Name="PasPasPas" Description=" " ToolsVersion="16.0">
   <IncludeAll Action="Warning" />
   <Rules AnalyzerId="ErrorProne.NET" RuleNamespace="ErrorProne.NET">
     <Rule Id="ERP001" Action="Warning" />
@@ -23,6 +23,9 @@
     <Rule Id="EPS06" Action="Warning" />
     <Rule Id="EPS07" Action="Warning" />
     <Rule Id="EPS08" Action="Warning" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1303" Action="None" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
     <Rule Id="CA1000" Action="Warning" />
@@ -165,7 +168,6 @@
     <Rule Id="CA9999" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="Microsoft.NetFramework.CSharp.Analyzers" RuleNamespace="Microsoft.NetFramework.CSharp.Analyzers">
-    <Rule Id="CA3077" Action="Warning" />
     <Rule Id="CA1300" Action="Warning" />
     <Rule Id="CA1301" Action="Warning" />
     <Rule Id="CA1306" Action="Warning" />
@@ -176,6 +178,7 @@
     <Rule Id="CA2239" Action="Warning" />
     <Rule Id="CA2240" Action="Warning" />
     <Rule Id="CA3076" Action="Warning" />
+    <Rule Id="CA3077" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="Text.CSharp.Analyzers" RuleNamespace="Text.CSharp.Analyzers">
     <Rule Id="CA1704" Action="Warning" />

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="PasPasPas" Description=" " ToolsVersion="15.0">
+<RuleSet Name="PasPasPas" Description=" " ToolsVersion="16.0">
   <IncludeAll Action="Warning" />
   <Rules AnalyzerId="ErrorProne.NET" RuleNamespace="ErrorProne.NET">
     <Rule Id="ERP001" Action="Warning" />
@@ -25,6 +25,7 @@
     <Rule Id="EPS08" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1303" Action="None" />
     <Rule Id="CA1502" Action="None" />
     <Rule Id="CA1506" Action="None" />
     <Rule Id="CA1822" Action="None" />
