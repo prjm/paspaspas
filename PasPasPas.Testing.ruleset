@@ -25,6 +25,7 @@
     <Rule Id="EPS08" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1062" Action="None" />
     <Rule Id="CA1303" Action="None" />
     <Rule Id="CA1502" Action="None" />
     <Rule Id="CA1506" Action="None" />
