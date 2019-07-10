@@ -88,7 +88,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     accepts parts of base class
         /// </summary>
         /// <param name="visitor"></param>
-        protected void AcceptBaseParts(IStartEndVisitor visitor) {
+        protected virtual void AcceptBaseParts(IStartEndVisitor visitor) {
             AcceptPart(this, Parameters.Items, visitor);
             AcceptPart(this, TypeValue, visitor);
             if (Overloads != null)

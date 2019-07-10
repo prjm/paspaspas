@@ -41,13 +41,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public StructuredType DefiningType { get; internal set; }
 
         /// <summary>
-        ///     accept a visitor
+        ///     accept base parts
         /// </summary>
         /// <param name="visitor"></param>
-        public override void Accept(IStartEndVisitor visitor) {
-            AcceptBaseParts(visitor);
+        protected override void AcceptBaseParts(IStartEndVisitor visitor) {
+            base.AcceptBaseParts(visitor);
             AcceptPart(this, Generics, visitor);
             AcceptPart(this, Directives, visitor);
         }
+
     }
 }
