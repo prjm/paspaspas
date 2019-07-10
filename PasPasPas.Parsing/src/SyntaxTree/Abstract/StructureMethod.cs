@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Types;
-using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using PasPasPas.Globals.Types;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -13,21 +12,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     generic method parameter
         /// </summary>
         public GenericTypeCollection Generics { get; set; }
-
-        /// <summary>
-        ///     parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var part in base.Parts)
-                    yield return part;
-                if (Generics != null)
-                    foreach (var genericType in Generics)
-                        yield return genericType;
-                foreach (var directive in Directives)
-                    yield return directive;
-            }
-        }
 
         /// <summary>
         ///     <c>true</c> if class method
@@ -56,5 +40,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public StructuredType DefiningType { get; internal set; }
 
+        /// <summary>
+        ///     accept a visitor
+        /// </summary>
+        /// <param name="visitor"></param>
+        public override void Accept(IStartEndVisitor visitor) {
+            AcceptBaseParts(visitor);
+            AcceptPart(this, Generics, visitor);
+            AcceptPart(this, Directives, visitor);
+        }
     }
 }

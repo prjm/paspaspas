@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -27,17 +25,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         protected override string InternalSymbolName
             => Name?.CompleteName;
-
-        /// <summary>
-        ///     enum value
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                if (Value != null)
-                    yield return Value;
-            }
-        }
-
 
         /// <summary>
         ///     type information

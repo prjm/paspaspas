@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -24,16 +23,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public GenericNameFragment()
             => TypeValues = new SyntaxPartCollection<ITypeSpecification>();
-
-        /// <summary>
-        ///     children
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var value in TypeValues)
-                    yield return value;
-            }
-        }
 
         /// <summary>
         ///     type value

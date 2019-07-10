@@ -3,7 +3,6 @@ using System.Globalization;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -59,26 +58,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public CompilationUnit() =>
             RequiredUnits = new RequiredUnitNameListCollection();
-
-        /// <summary>
-        ///     get all parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var unit in RequiredUnits)
-                    yield return unit;
-                if (InterfaceSymbols != null)
-                    yield return InterfaceSymbols;
-                if (ImplementationSymbols != null)
-                    yield return ImplementationSymbols;
-                if (Symbols != null)
-                    yield return Symbols;
-                if (InitializationBlock != null)
-                    yield return InitializationBlock;
-                if (FinalizationBlock != null)
-                    yield return FinalizationBlock;
-            }
-        }
 
         /// <summary>
         ///     initialization

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -20,18 +19,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public StructureFields()
             => Fields = new SyntaxPartCollection<StructureField>();
-
-        /// <summary>
-        ///     enumerate all parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var field in Fields)
-                    yield return field;
-                if (TypeValue != null)
-                    yield return TypeValue;
-            }
-        }
 
         /// <summary>
         ///     field type
@@ -60,7 +47,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Fields, visitor);
+            AcceptPart(this, TypeValue, visitor);
             visitor.EndVisit(this);
         }
     }

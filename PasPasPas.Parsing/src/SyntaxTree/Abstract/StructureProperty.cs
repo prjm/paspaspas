@@ -37,23 +37,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         protected override string InternalSymbolName
             => Name?.CompleteName;
 
-
-        /// <summary>
-        ///     enumerate syntax parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var parameter in Parameters.Items)
-                    yield return parameter;
-                if (TypeValue != null)
-                    yield return TypeValue;
-                if (Value != null)
-                    yield return Value;
-                foreach (var accessor in Accessors)
-                    yield return accessor;
-            }
-        }
-
         /// <summary>
         ///     property type
         /// </summary>
@@ -83,7 +66,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+
+            foreach (var parameter in Parameters.Items)
+                AcceptPart(this, parameter, visitor);
+
+            AcceptPart(this, TypeValue, visitor);
+            AcceptPart(this, Value, visitor);
+
+            foreach (var accessor in Accessors)
+                AcceptPart(this, accessor, visitor);
+
             visitor.EndVisit(this);
         }
     }

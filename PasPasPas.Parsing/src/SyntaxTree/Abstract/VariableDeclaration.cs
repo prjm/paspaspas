@@ -38,19 +38,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => Names = new SyntaxPartCollection<VariableName>();
 
         /// <summary>
-        ///     enumerate part
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var name in Names)
-                    yield return name;
-
-                if (TypeValue != null)
-                    yield return TypeValue;
-            }
-        }
-
-        /// <summary>
         ///     attributes
         /// </summary>
         public List<SymbolAttributeItem> Attributes { get; }
@@ -78,7 +65,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Names, visitor);
+            AcceptPart(this, TypeValue, visitor);
             visitor.EndVisit(this);
         }
 

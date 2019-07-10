@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -29,18 +28,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public MethodDirective()
             => Specifiers = new SyntaxPartCollection<MethodDirectiveSpecifier>();
-
-        /// <summary>
-        ///     enumerate parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                if (Value != null)
-                    yield return Value;
-                foreach (var specifier in Specifiers)
-                    yield return specifier;
-            }
-        }
 
         /// <summary>
         ///     accept visitor

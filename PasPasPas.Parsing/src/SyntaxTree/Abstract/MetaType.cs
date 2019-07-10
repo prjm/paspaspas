@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -21,18 +20,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <remarks>used for string length / string code page</remarks>
         public IExpression Value { get; set; }
-
-        /// <summary>
-        ///     parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                if (Value != null)
-                    yield return Value;
-                foreach (var fragment in Fragments)
-                    yield return fragment;
-            }
-        }
 
         /// <summary>
         ///     creates a new meta type definition

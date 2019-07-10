@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -24,18 +22,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     right operand
         /// </summary>
         public IExpression RightOperand { get; set; }
-
-        /// <summary>
-        ///     enumerate parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                if (LeftOperand != null)
-                    yield return LeftOperand;
-                if (RightOperand != null)
-                    yield return RightOperand;
-            }
-        }
 
         /// <summary>
         ///     expression value

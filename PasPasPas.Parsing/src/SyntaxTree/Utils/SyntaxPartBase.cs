@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Utils;
@@ -24,12 +22,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
             if (Histograms.Enable)
                 Histograms.Value(HistogramKeys.SyntaxNodes, GetType().Name);
         }
-
-        /// <summary>
-        ///     syntax parts
-        /// </summary>
-        public IEnumerable<ISyntaxPart> Parts
-            => Enumerable.Empty<ISyntaxPart>();
 
         /// <summary>
         ///     symbol length

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
@@ -7,11 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
     ///     common interface for syntax tree elements
     /// </summary>
     public interface ISyntaxPart {
-
-        /// <summary>
-        ///     child nodes
-        /// </summary>
-        IEnumerable<ISyntaxPart> Parts { get; }
 
         /// <summary>
         ///     length (number of characters) of a syntax item

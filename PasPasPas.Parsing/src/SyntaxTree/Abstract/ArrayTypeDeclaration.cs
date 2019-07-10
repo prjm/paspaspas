@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -19,19 +18,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public ArrayTypeDeclaration()
             => IndexItems = new SyntaxPartCollection<IExpression>();
-
-        /// <summary>
-        ///     constant array items
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var item in IndexItems)
-                    yield return item;
-                if (TypeValue != null)
-                    yield return TypeValue;
-            }
-        }
-
 
         /// <summary>
         ///     array indexes

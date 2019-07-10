@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -44,20 +42,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     export has an index
         /// </summary>
         public bool HasIndex { get; set; }
-
-        /// <summary>
-        ///     enumerate all parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var part in base.Parts)
-                    yield return part;
-                if (indexExpression != null)
-                    yield return indexExpression;
-                if (nameExpression != null)
-                    yield return nameExpression;
-            }
-        }
 
         /// <summary>
         ///     anchor

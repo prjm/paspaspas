@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -29,17 +28,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => Expressions = new SyntaxPartCollection<IExpression>();
 
         /// <summary>
-        ///     enumerate parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var part in Expressions)
-                    yield return part;
-
-            }
-        }
-
-        /// <summary>
         ///     <c>true</c> if this set expression is used to create an modern-style array
         /// </summary>
         public bool RequiresArray { get; set; }
@@ -50,7 +38,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">visitor to accept</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Expressions, visitor);
             visitor.EndVisit(this);
         }
     }

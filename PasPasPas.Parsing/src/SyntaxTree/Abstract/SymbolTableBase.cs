@@ -91,17 +91,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => symbols == null ? false : symbols.ContainsKey(key);
 
         /// <summary>
-        ///     parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                if (symbols != null)
-                    foreach (var value in symbols.Values)
-                        yield return value;
-            }
-        }
-
-        /// <summary>
         ///     number of symbols
         /// </summary>
         public int Count

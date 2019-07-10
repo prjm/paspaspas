@@ -41,8 +41,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     overloaded methods
         /// </summary>
-        public IList<MethodDeclaration> Overloads { get; }
-            = new List<MethodDeclaration>();
+        public ISyntaxPartCollection<MethodDeclaration> Overloads { get; }
+            = new SyntaxPartCollection<MethodDeclaration>();
 
         /// <summary>
         ///     creates a new method declaration
@@ -50,21 +50,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         protected MethodDeclaration() {
             Directives = new SyntaxPartCollection<MethodDirective>();
             Parameters = new ParameterDefinitionCollection();
-        }
-
-        /// <summary>
-        ///     parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var parameter in Parameters.Items)
-                    yield return parameter;
-                if (TypeValue != null)
-                    yield return TypeValue;
-                if (Overloads != null)
-                    foreach (var overload in Overloads)
-                        yield return overload;
-            }
         }
 
         /// <summary>
@@ -103,8 +88,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     accepts parts of base class
         /// </summary>
         /// <param name="visitor"></param>
-        protected void AcceptBaseParts(IStartEndVisitor visitor)
-            => AcceptParts(this, visitor);
+        protected void AcceptBaseParts(IStartEndVisitor visitor) {
+            AcceptPart(this, Parameters.Items, visitor);
+            AcceptPart(this, TypeValue, visitor);
+            if (Overloads != null)
+                AcceptPart(this, Overloads, visitor);
+        }
 
         /// <summary>
         ///     create a signature for the given parameters

@@ -2,7 +2,6 @@
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -27,18 +26,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public List<SymbolAttributeItem> Attributes { get; }
             = new List<SymbolAttributeItem>();
-
-        /// <summary>
-        ///     enumerate all children
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                if (TypeValue != null)
-                    yield return TypeValue;
-                if (Value != null)
-                    yield return Value;
-            }
-        }
 
         /// <summary>
         ///     expression value

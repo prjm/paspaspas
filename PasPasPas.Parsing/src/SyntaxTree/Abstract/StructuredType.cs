@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -67,28 +66,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var baseType in BaseTypes)
-                    yield return baseType;
-                foreach (var fields in Fields.Items)
-                    yield return fields;
-                foreach (var method in Methods)
-                    yield return method;
-                foreach (var property in Properties)
-                    yield return property;
-                foreach (var resolution in MethodResolutions.Resolutions)
-                    yield return resolution;
-                foreach (var symbol in Symbols)
-                    yield return symbol;
-                foreach (var variant in Variants.Items)
-                    yield return variant;
-            }
-        }
-
-        /// <summary>
         ///     sealed class
         /// </summary>
         public bool AbstractClass { get; set; }
@@ -128,7 +105,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, BaseTypes, visitor);
+            AcceptPart(this, Fields.Items, visitor);
+            AcceptPart(this, Methods, visitor);
+            AcceptPart(this, Properties, visitor);
+            AcceptPart(this, MethodResolutions.Resolutions, visitor);
+            AcceptPart(this, Symbols, visitor);
+            AcceptPart(this, Variants, visitor);
             visitor.EndVisit(this);
         }
 

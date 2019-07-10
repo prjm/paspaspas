@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -19,12 +18,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public ArrayConstant()
             => Items = new SyntaxPartCollection<IExpression>();
-
-        /// <summary>
-        ///     constant array items
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-            => Items;
 
         /// <summary>
         ///     value

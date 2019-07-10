@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -13,16 +11,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     type value
         /// </summary>
         public ITypeSpecification TypeValue { get; set; }
-
-        /// <summary>
-        ///     parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                if (TypeValue != null)
-                    yield return TypeValue;
-            }
-        }
 
         /// <summary>
         ///     accept visitor

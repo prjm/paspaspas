@@ -2,7 +2,6 @@
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -26,20 +25,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     symbol hints
         /// </summary>
         public SymbolHints Hints { get; set; }
-
-        /// <summary>
-        ///     enumerate all children
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                if (Generics != null)
-                    foreach (var generic in Generics)
-                        yield return generic;
-
-                if (TypeValue != null)
-                    yield return TypeValue;
-            }
-        }
 
         /// <summary>
         ///     generic type
@@ -75,7 +60,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Generics, visitor);
+            AcceptPart(this, TypeValue, visitor);
             visitor.EndVisit(this);
         }
     }

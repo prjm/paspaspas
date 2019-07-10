@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -37,27 +36,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public MethodImplementation() {
             Directives = new SyntaxPartCollection<MethodDirective>();
             Parameters = new ParameterDefinitionCollection();
-        }
-
-        /// <summary>
-        ///     statements
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var parameter in Parameters.Items)
-                    yield return parameter;
-
-                if (TypeValue != default)
-                    yield return TypeValue;
-
-                foreach (var directive in Directives)
-                    yield return directive;
-
-                yield return Symbols;
-
-                if (Block != null)
-                    yield return Block;
-            }
         }
 
         /// <summary>
@@ -129,7 +107,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Parameters.Items, visitor);
+            AcceptPart(this, TypeValue, visitor);
+            AcceptPart(this, Directives, visitor);
+            AcceptPart(this, Symbols, visitor);
+            AcceptPart(this, Block, visitor);
             visitor.EndVisit(this);
         }
 

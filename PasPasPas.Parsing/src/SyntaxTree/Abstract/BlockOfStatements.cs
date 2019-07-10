@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -26,16 +25,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="part">statement part to add</param>
         public void Add(StatementBase part)
             => Statements.Add(part);
-
-        /// <summary>
-        ///     statement parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var part in Statements)
-                    yield return part;
-            }
-        }
 
 
         /// <summary>

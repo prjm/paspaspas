@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -34,16 +33,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public bool IsNewType { get; set; }
 
         /// <summary>
-        ///     parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var fragment in Fragments)
-                    yield return fragment;
-            }
-        }
-
-        /// <summary>
         ///     get the complete type name,
         /// </summary>
         public ScopedName AsScopedName {
@@ -66,7 +55,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Fragments, visitor);
             visitor.EndVisit(this);
         }
     }

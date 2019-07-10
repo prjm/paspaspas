@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -28,16 +27,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public FormattedExpression()
             => Expressions = new SyntaxPartCollection<IExpression>();
-
-        /// <summary>
-        ///     parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var expression in Expressions)
-                    yield return expression;
-            }
-        }
 
         /// <summary>
         ///     accept visitor

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -51,16 +50,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public IExpression Value {
             get => Operands.LastOrDefault();
             set => Operands.Add(value);
-        }
-
-        /// <summary>
-        ///     get all operands
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var operand in Operands)
-                    yield return operand;
-            }
         }
 
         /// <summary>

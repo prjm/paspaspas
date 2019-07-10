@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Log;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -18,16 +17,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         protected override void LogDuplicateSymbolError(DeclaredSymbol newDuplicate, ILogSource logSource) {
             base.LogDuplicateSymbolError(newDuplicate, logSource);
             logSource.LogError(StructuralErrors.RedeclaredSymbol, newDuplicate);
-        }
-
-        /// <summary>
-        ///     enumerate all parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                foreach (var part in Items)
-                    yield return part;
-            }
         }
 
         /// <summary>

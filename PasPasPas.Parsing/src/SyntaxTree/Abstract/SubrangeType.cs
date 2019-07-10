@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -26,18 +24,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public IExpression RangeEnd { get; set; }
 
         /// <summary>
-        ///     enumerate parts
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts {
-            get {
-                if (RangeStart != null)
-                    yield return RangeStart;
-                if (RangeEnd != null)
-                    yield return RangeEnd;
-            }
-        }
-
-        /// <summary>
         ///     expression value
         /// </summary>
         public IExpression Value {
@@ -61,7 +47,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, RangeStart, visitor);
+            AcceptPart(this, RangeEnd, visitor);
             visitor.EndVisit(this);
         }
 
