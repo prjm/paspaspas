@@ -16,8 +16,13 @@ namespace PasPasPasTests.Common {
             => A.Equal(expected, actual);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AreEqual(string expected, string actual, StringComparer comp)
-            => A.Equal(expected, actual, comp);
+        public static bool AreEqual(string expected, string actual, StringComparer comp = default) {
+            if (comp == default)
+                comp = StringComparer.OrdinalIgnoreCase;
+
+            A.Equal(expected, actual, comp);
+            return true;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void AreEqual(in ExtF80 expected, in ExtF80 actual)

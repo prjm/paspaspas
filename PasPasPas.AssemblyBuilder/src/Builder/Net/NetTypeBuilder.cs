@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using PasPasPas.AssemblyBuilder.Builder.Definitions;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.AssemblyBuilder.Builder.Net {
 
@@ -44,5 +45,14 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
             var builder = InternalBuilder.DefineMethod(name, MethodAttributes.HideBySig | MethodAttributes.Static);
             return new NetMethodBuilder(builder, Mapper);
         }
+
+        /// <summary>
+        ///     define a class variable
+        /// </summary>
+        /// <param name="symbolName"></param>
+        /// <param name="typeInfo"></param>
+        public void DefineClassVariable(string symbolName, ITypeReference typeInfo)
+            => InternalBuilder.DefineField(symbolName, Mapper.Map(typeInfo.TypeId), FieldAttributes.Static);
+
     }
 }

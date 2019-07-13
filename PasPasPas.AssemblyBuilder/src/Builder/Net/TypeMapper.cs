@@ -17,6 +17,32 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
             if (value == KnownTypeIds.NoType)
                 return typeof(void);
 
+            if (value == KnownTypeIds.ShortInt)
+                return typeof(sbyte);
+
+            if (value == KnownTypeIds.SmallInt)
+                return typeof(short);
+
+            if (value == KnownTypeIds.IntegerType)
+                return typeof(int);
+
+            if (value == KnownTypeIds.Int64Type)
+                return typeof(long);
+
+            if (value == KnownTypeIds.ByteType)
+                return typeof(byte);
+
+            if (value == KnownTypeIds.WordType)
+                return typeof(ushort);
+
+            if (value == KnownTypeIds.CardinalType)
+                return typeof(uint);
+
+            if (value == KnownTypeIds.Uint64Type)
+                return typeof(ulong);
+
+
+
             throw new InvalidOperationException();
         }
 

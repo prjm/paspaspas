@@ -25,5 +25,6 @@
         /// </summary>
         /// <param name="value"></param>
         void LoadConstantString(string value);
+
     }
 }

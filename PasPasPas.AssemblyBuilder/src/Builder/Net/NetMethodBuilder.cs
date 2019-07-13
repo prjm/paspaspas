@@ -39,6 +39,7 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         ///     set the return type
         /// </summary>
         public int ReturnType { get; set; }
+
         /// <summary>
         ///     define the method body
         /// </summary>
@@ -63,5 +64,6 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         /// <param name="value"></param>
         public void LoadConstantString(string value)
             => Generator.Emit(OpCodes.Ldstr, value);
+
     }
 }

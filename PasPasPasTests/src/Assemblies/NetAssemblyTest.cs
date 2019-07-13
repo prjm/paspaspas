@@ -70,5 +70,19 @@ namespace PasPasPasTests.Assemblies {
             RunTypeTest("x.z", "program x.z; begin end.", d, typeName);
         }
 
+        [TestMethod]
+        public void TestUnitVariable() {
+            const string typeName = "P3.x_z.<UnitClass>";
+            Func<Type, bool> d(string a) => t => Assert.AreEqual(a, t?.GetField("a", BindingFlags.Static | BindingFlags.NonPublic)?.FieldType?.Name);
+            RunTypeTest("x.z", "program x.z; var a: ShortInt; begin end.", d("SByte"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: SmallInt; begin end.", d("Int16"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: Integer; begin end.", d("Int32"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: Int64; begin end.", d("Int64"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: Byte; begin end.", d("Byte"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: Word; begin end.", d("UInt16"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: Cardinal; begin end.", d("UInt32"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: UInt64; begin end.", d("UInt64"), typeName);
+        }
+
     }
 }

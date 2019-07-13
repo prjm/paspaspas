@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
+﻿using PasPasPas.Globals.Runtime;
+
+namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
 
     /// <summary>
     ///     interface for a type builder
@@ -16,5 +18,12 @@
         /// <param name="name"></param>
         /// <returns></returns>
         IMethodBuilder StartClassMethodDefinition(string name);
+
+        /// <summary>
+        ///     define a class variable
+        /// </summary>
+        /// <param name="symbolName">variable name</param>
+        /// <param name="typeInfo">type info</param>
+        void DefineClassVariable(string symbolName, ITypeReference typeInfo);
     }
 }

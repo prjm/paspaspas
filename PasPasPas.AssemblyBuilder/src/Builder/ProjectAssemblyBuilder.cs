@@ -18,6 +18,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         IStartVisitor<ProjectItemCollection>, IEndVisitor<ProjectItemCollection>,
         IStartVisitor<CompilationUnit>, IEndVisitor<CompilationUnit>,
         IStartVisitor<BlockOfStatements>, IEndVisitor<BlockOfStatements>,
+        IStartVisitor<VariableDeclaration>,
         IEndVisitor<ConstantValue> {
 
         private readonly IStartEndVisitor visitor;
@@ -161,5 +162,17 @@ namespace PasPasPas.AssemblyBuilder.Builder {
             }
         }
 
+        /// <summary>
+        ///     define a variable
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(VariableDeclaration element) {
+            if (CurrentUnit.FileType == CompilationUnitType.Program && CurrentMethod.Count < 1) {
+
+                foreach (var name in element.Names) {
+                    UnitType.DefineClassVariable(name.SymbolName, element.TypeInfo);
+                }
+            }
+        }
     }
 }
