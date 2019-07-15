@@ -69,6 +69,16 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
             if (value == KnownTypeIds.BooleanType)
                 return typeof(bool);
 
+            if (value == KnownTypeIds.ByteBoolType)
+                return typeof(byte);
+
+            if (value == KnownTypeIds.WordBoolType)
+                return typeof(ushort);
+
+            if (value == KnownTypeIds.LongBoolType)
+                return typeof(uint);
+
+
             throw new InvalidOperationException();
         }
 

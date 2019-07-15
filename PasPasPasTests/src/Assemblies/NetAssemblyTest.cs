@@ -93,6 +93,10 @@ namespace PasPasPasTests.Assemblies {
             RunTypeTest("x.z", "program x.z; var a: WideChar; begin end.", d("Char"), typeName);
             RunTypeTest("x.z", "program x.z; var a: Char; begin end.", d("Char"), typeName);
 
+            RunTypeTest("x.z", "program x.z; var a: Boolean; begin end.", d("Boolean"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: ByteBool; begin end.", d("Byte"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: WordBool; begin end.", d("UInt16"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: LongBool; begin end.", d("UInt32"), typeName);
         }
 
     }
