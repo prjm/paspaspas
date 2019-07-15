@@ -52,7 +52,7 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         /// <param name="symbolName"></param>
         /// <param name="typeInfo"></param>
         public void DefineClassVariable(string symbolName, ITypeReference typeInfo)
-            => InternalBuilder.DefineField(symbolName, Mapper.Map(typeInfo.TypeId), FieldAttributes.Static);
+            => InternalBuilder.DefineField(symbolName, Mapper.Map(typeInfo), FieldAttributes.Static);
 
     }
 }

@@ -71,9 +71,10 @@ namespace PasPasPasTests.Assemblies {
         }
 
         [TestMethod]
-        public void TestUnitVariable() {
+        public void TestVariablesAndTypes() {
             const string typeName = "P3.x_z.<UnitClass>";
             Func<Type, bool> d(string a) => t => Assert.AreEqual(a, t?.GetField("a", BindingFlags.Static | BindingFlags.NonPublic)?.FieldType?.Name);
+
             RunTypeTest("x.z", "program x.z; var a: ShortInt; begin end.", d("SByte"), typeName);
             RunTypeTest("x.z", "program x.z; var a: SmallInt; begin end.", d("Int16"), typeName);
             RunTypeTest("x.z", "program x.z; var a: Integer; begin end.", d("Int32"), typeName);
@@ -82,6 +83,16 @@ namespace PasPasPasTests.Assemblies {
             RunTypeTest("x.z", "program x.z; var a: Word; begin end.", d("UInt16"), typeName);
             RunTypeTest("x.z", "program x.z; var a: Cardinal; begin end.", d("UInt32"), typeName);
             RunTypeTest("x.z", "program x.z; var a: UInt64; begin end.", d("UInt64"), typeName);
+
+            RunTypeTest("x.z", "program x.z; var a: NativeInt; begin end.", d("Int32"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: NativeUInt; begin end.", d("UInt32"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: LongInt; begin end.", d("Int32"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: LongWord; begin end.", d("UInt32"), typeName);
+
+            RunTypeTest("x.z", "program x.z; var a: AnsiChar; begin end.", d("Byte"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: WideChar; begin end.", d("Char"), typeName);
+            RunTypeTest("x.z", "program x.z; var a: Char; begin end.", d("Char"), typeName);
+
         }
 
     }

@@ -1,5 +1,7 @@
 ﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.AssemblyBuilder.Builder.Net {
 
@@ -9,11 +11,28 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
     public class TypeMapper {
 
         /// <summary>
+        ///     create a new type mapper
+        /// </summary>
+        /// <param name="typeRegistry"></param>
+        public TypeMapper(ITypeRegistry typeRegistry)
+            => Types = typeRegistry;
+
+        /// <summary>
+        ///     type registry
+        /// </summary>
+        public ITypeRegistry Types { get; }
+
+        /// <summary>
         ///     map  a type to the target
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="typeRef"></param>
         /// <returns></returns>
-        internal Type Map(int value) {
+        internal Type Map(ITypeReference typeRef) {
+
+            var type = Types.GetTypeByIdOrUndefinedType(typeRef.TypeId);
+            var baseType = TypeBase.ResolveAlias(type);
+            var value = baseType.TypeId;
+
             if (value == KnownTypeIds.NoType)
                 return typeof(void);
 
@@ -41,7 +60,14 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
             if (value == KnownTypeIds.Uint64Type)
                 return typeof(ulong);
 
+            if (value == KnownTypeIds.WideCharType)
+                return typeof(char);
 
+            if (value == KnownTypeIds.AnsiCharType)
+                return typeof(byte);
+
+            if (value == KnownTypeIds.BooleanType)
+                return typeof(bool);
 
             throw new InvalidOperationException();
         }

@@ -2,6 +2,7 @@
 using System.Reflection.Emit;
 using PasPasPas.AssemblyBuilder.Builder.Definitions;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.AssemblyBuilder.Builder.Net {
 
@@ -19,8 +20,8 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         private TypeMapper Mapper { get; }
         public Assembly GeneratedAssembly { get; private set; }
 
-        public NetAssemblyBuilder()
-            => Mapper = new TypeMapper();
+        public NetAssemblyBuilder(ITypeRegistry types)
+            => Mapper = new TypeMapper(types);
 
         public void StartAssembly(string projectName) {
             var name = new AssemblyName(projectName);

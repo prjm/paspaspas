@@ -61,7 +61,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
             visitor = new ChildVisitor(this);
             Environment = environment;
             LogSource = environment.Log.CreateLogSource(MessageGroups.AssemblyBuilder);
-            Builder = new NetAssemblyBuilder();
+            Builder = new NetAssemblyBuilder(environment.TypeRegistry);
             CurrentMethod = new Stack<IMethodBuilder>();
         }
 
