@@ -1,6 +1,7 @@
-﻿using PasPasPas.Globals.Environment;
+﻿using PasPasPas.Globals.Api;
+using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.Patterns;
@@ -24,22 +25,12 @@ namespace PasPasPas.Api {
         }
 
         /// <summary>
-        ///     create a tokenizer for a given path
-        /// </summary>
-        /// <param name="path">file path</param>
-        /// <returns>tokenizer</returns>
-        public ITokenizer CreateTokenizerForPath(string path) {
-            var fileReader = ReaderApi.CreateReaderForPath(path);
-            return CreateTokenizer(fileReader);
-        }
-
-        /// <summary>
         ///     create a buffered tokenizer with lookahead symbols
         /// </summary>
-        /// <param name="path">path to read</param>
+        /// <param name="data">data to read</param>
         /// <returns></returns>
-        public ITokenizer CreateBufferedTokenizerForPath(string path) {
-            var tokenizer = CreateTokenizerForPath(path);
+        public ITokenizer CreateBufferedTokenizer(IReaderInput data) {
+            var tokenizer = CreateTokenizer(data);
             return new TokenizerWithLookahead(SystemEnvironment, Options, tokenizer, TokenizerMode.Standard);
         }
 
@@ -48,7 +39,7 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="fileReader"></param>
         /// <returns></returns>
-        private ITokenizer CreateTokenizer(StackedFileReader fileReader)
+        private ITokenizer CreateTokenizer(IStackedFileReader fileReader)
             => new TokenizerBase(SystemEnvironment, CreateStandardPatterns(), fileReader);
 
         private InputPatterns CreateStandardPatterns()
@@ -57,18 +48,17 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create a tokenizer for a string
         /// </summary>
-        /// <param name="virtualPath">virtual path</param>
-        /// <param name="content">string to read</param>
+        /// <param name="input">input</param>
         /// <returns></returns>
-        public ITokenizer CreateTokenizerForString(string virtualPath, string content) {
-            var fileReader = ReaderApi.CreateReaderForString(virtualPath, content);
+        public ITokenizer CreateTokenizer(IReaderInput input) {
+            var fileReader = Readers.CreateReader(input);
             return CreateTokenizer(fileReader);
         }
 
         /// <summary>
-        ///     access to reader api
+        ///     access to reader API
         /// </summary>
-        public ReaderApi Readers { get; }
+        public IReaderApi Readers { get; }
 
         /// <summary>
         ///     log manager

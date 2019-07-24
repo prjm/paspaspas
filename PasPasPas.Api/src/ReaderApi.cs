@@ -1,4 +1,6 @@
-﻿using PasPasPas.Globals.Environment;
+﻿using PasPasPas.Globals.Api;
+using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Api {
@@ -6,54 +8,47 @@ namespace PasPasPas.Api {
     /// <summary>
     ///     encapsulation for file reading
     /// </summary>
-    public class ReaderApi {
+    internal class ReaderApi : IReaderApi {
 
         /// <summary>
-        ///     create a new reader for a virtual file
-        /// </summary>
-        /// <param name="path">file path</param>
-        /// <param name="content">file content</param>
-        /// <returns>file reader</returns>
-        public static StackedFileReader CreateReaderForString(string path, string content) {
-            var localPath = new FileReference(path);
-            var reader = new StackedFileReader();
-            reader.AddStringToRead(localPath, content);
-            return reader;
-        }
-
-        /// <summary>
-        ///     create a new file reader
+        ///     create a new file reader API
         /// </summary>
         /// <param name="environment">environment</param>
         public ReaderApi(IEnvironment environment)
             => SystemEnvironment = environment;
 
         /// <summary>
-        ///     get a reader for a given path
+        ///    system environment
         /// </summary>
-        /// <param name="path">path to resolve</param>
+        public IEnvironment SystemEnvironment { get; }
+
+        /// <summary>
+        ///     create a new reader for input source
+        /// </summary>
+        /// <param name="input">input</param>
         /// <returns>file reader</returns>
-        public static StackedFileReader CreateReaderForPath(string path) {
-            var localPath = new FileReference(path);
+        public IStackedFileReader CreateReader(IReaderInput input) {
             var reader = new StackedFileReader();
-            reader.AddFileToRead(localPath);
+            reader.AddInputToRead(input);
             return reader;
         }
 
         /// <summary>
-        ///     switch to another path
+        ///     create an input for a string
         /// </summary>
-        /// <param name="reader">reader to switch</param>
-        /// <param name="path">path to ope</param>
-        public static void SwitchToPath(StackedFileReader reader, string path) {
-            var localPath = new FileReference(path);
-            reader.AddFileToRead(localPath);
-        }
+        /// <param name="path"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public IReaderInput CreateInputForString(string path, string input)
+            => new StringReaderInput(path, input);
 
         /// <summary>
-        ///    system environment
+        ///     create an input for a file
         /// </summary>
-        public IEnvironment SystemEnvironment { get; }
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public IReaderInput CreateInputForPath(string path)
+            => new FileReaderInput(path);
 
     }
 }

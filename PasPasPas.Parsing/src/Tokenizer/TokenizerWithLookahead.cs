@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
@@ -181,7 +182,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         private void ProcessMacroToken(FileReference path, ref Token nextToken) {
             using (var reader = new StackedFileReader()) {
                 var macroValue = nextToken.ParsedValue as IStringValue;
-                reader.AddStringToRead(path, macroValue.AsUnicodeString);
+                var input = new StringReaderInput(path.Path, macroValue?.AsUnicodeString ?? string.Empty);
+                reader.AddInputToRead(input);
 
                 using (var parser = new CompilerDirectiveParser(environment, options, reader)) {
                     var result = parser.Parse();
@@ -218,7 +220,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     file input
         /// </summary>
-        public StackedFileReader Input
+        public IStackedFileReader Input
             => BaseTokenizer.Input;
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Log;
+﻿using PasPasPas.Globals.Files;
+using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
@@ -1072,7 +1073,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 basePath, new FileReference(fileName)).TargetPath;
 
             if (IncludeInput != null) {
-                IncludeInput.AddFileToRead(targetPath);
+                IncludeInput.AddInputToRead(new FileReaderInput(targetPath.Path));
             }
         }
 

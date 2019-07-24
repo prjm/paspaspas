@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     current input
         /// </summary>
-        StackedFileReader Input { get; }
+        IStackedFileReader Input { get; }
 
         /// <summary>
         ///     log manager

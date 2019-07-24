@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 

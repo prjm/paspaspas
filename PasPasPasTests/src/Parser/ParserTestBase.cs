@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
@@ -58,10 +59,11 @@ namespace PasPasPasTests.Parser {
             var log = new LogTarget();
             var env = new DefaultEnvironment();
             var api = new ParserApi(env, testOptions);
+            var data = api.Tokenizer.Readers.CreateInputForString("test.pas", input);
 
             env.Log.RegisterTarget(log);
 
-            using (var parser = api.CreateParserForString("test.pas", input)) {
+            using (var parser = api.CreateParser(data)) {
                 var hasError = false;
                 var errorText = string.Empty;
 
@@ -156,9 +158,10 @@ namespace PasPasPasTests.Parser {
 
             var testOptions = new OptionSet(env);
             var api = new ParserApi(env, testOptions);
+            var data = api.Tokenizer.Readers.CreateInputForString(CstPath, tokens);
 
             ClearOptions(testOptions);
-            using (var parser = api.CreateParserForString(CstPath, tokens)) {
+            using (var parser = api.CreateParser(data)) {
                 var standard = parser as StandardParser;
                 Assert.IsNotNull(standard);
                 var value = tester(standard);
@@ -179,10 +182,11 @@ namespace PasPasPasTests.Parser {
         protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env) {
             var testOptions = new OptionSet(env);
             var api = new ParserApi(env, testOptions);
+            var data = api.Tokenizer.Readers.CreateInputForString("z.x.pas", input);
 
             ClearOptions(testOptions);
 
-            using (var parser = api.CreateParserForString("z.x.pas", input)) {
+            using (var parser = api.CreateParser(data)) {
                 return parser.Parse();
             }
         }
@@ -239,7 +243,8 @@ namespace PasPasPasTests.Parser {
                         reader.AddMockupFile(resFile2, "RES RES RES");
                         reader.AddMockupFile(linkDll, "MZE!");
 
-                        reader.AddStringToRead(path, subPart);
+                        reader.AddInputToRead(new StringReaderInput(path.Path, subPart));
+
                         var parser = new CompilerDirectiveParser(env, testOptions, reader) {
                             IncludeInput = reader
                         };

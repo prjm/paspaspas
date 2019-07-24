@@ -1,4 +1,4 @@
-﻿using PasPasPas.Infrastructure.Files;
+﻿using PasPasPas.Globals.Files;
 
 namespace PasPasPas.Options.DataTypes {
 

@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Parser.Standard;
@@ -28,22 +29,10 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create a parser for a given input string
         /// </summary>
-        /// <param name="path">file path</param>
         /// <param name="input">input</param>
         /// <returns></returns>
-        public IParser CreateParserForString(string path, string input) {
-            var reader = ReaderApi.CreateReaderForString(path, input);
-            var parser = new StandardParser(Environment, Options, reader);
-            return parser;
-        }
-
-        /// <summary>
-        ///     create a parser for a given path
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public IParser CreateParserForPath(string path) {
-            var reader = ReaderApi.CreateReaderForPath(path);
+        public IParser CreateParser(IReaderInput input) {
+            var reader = Tokenizer.Readers.CreateReader(input);
             var parser = new StandardParser(Environment, Options, reader);
             return parser;
         }
@@ -59,6 +48,30 @@ namespace PasPasPas.Api {
             bst.Accept(visitor.AsVisitor());
             return root;
         }
+
+        /*
+
+        /// <summary>
+        ///     process a complete project
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="mainFile"></param>
+        /// <returns></returns>
+        public ProjectItemCollection CreateProjectForStrings(string path, string mainFile, string[] otherFiles) {
+            var result = new ProjectItemCollection();
+            var input = new Stack<string>();
+            input.Push(path);
+            while (input.Count > 0) {
+                using (var parser = CreateParserForString(path, mainFile)) {
+                    var cst = parser.Parse();
+                    var visitor = new TreeTransformer(Environment, result);
+                    cst.Accept(visitor.AsVisitor());
+                }
+            }
+
+            return result;
+        }
+        */
 
         /// <summary>
         ///     used option sets

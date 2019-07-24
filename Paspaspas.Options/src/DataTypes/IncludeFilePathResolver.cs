@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Files;
+﻿using PasPasPas.Globals.Files;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
@@ -17,7 +18,7 @@ namespace PasPasPas.Options.DataTypes {
         }
 
         /// <summary>
-        ///     resolve a path 
+        ///     resolve a path
         /// </summary>
         /// <param name="basePath"></param>
         /// <param name="pathToResolve"></param>

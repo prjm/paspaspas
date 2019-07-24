@@ -1,5 +1,6 @@
 ﻿using PasPasPas.AssemblyBuilder.Builder;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 
@@ -26,7 +27,8 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="path"></param>
         public IAssemblyReference CreateAssemblyForProject(string path) {
-            using (var parser = Parser.CreateParserForPath(path)) {
+            var data = Parser.Tokenizer.Readers.CreateInputForPath(path);
+            using (var parser = Parser.CreateParser(data)) {
                 var result = parser.Parse();
                 var project = Parser.CreateAbstractSyntraxTree(result);
                 Parser.AnnotateWithTypes(project);
@@ -37,10 +39,9 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create an assembly for a given input string
         /// </summary>
-        /// <param name="program"></param>
-        /// <param name="file"></param>
-        public IAssemblyReference CreateAssemblyForString(string file, string program) {
-            using (var parser = Parser.CreateParserForString(file, program)) {
+        /// <param name="input">input</param>
+        public IAssemblyReference CreateAssembly(IReaderInput input) {
+            using (var parser = Parser.CreateParser(input)) {
                 var result = parser.Parse();
                 var project = Parser.CreateAbstractSyntraxTree(result);
                 Parser.AnnotateWithTypes(project);

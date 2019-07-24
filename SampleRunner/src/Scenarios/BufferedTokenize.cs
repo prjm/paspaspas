@@ -15,7 +15,8 @@ namespace SampleRunner.Scenarios {
 
             for (var i = 0; i < reapeat; i++) {
                 var tokenizerApi = new TokenizerApi(environment);
-                using (var tokenizer = tokenizerApi.CreateBufferedTokenizerForPath(testPath)) {
+                var data = tokenizerApi.Readers.CreateInputForPath(testPath);
+                using (var tokenizer = tokenizerApi.CreateBufferedTokenizer(data)) {
 
                     while (!tokenizer.AtEof) {
                         var token = tokenizer.CurrentToken;

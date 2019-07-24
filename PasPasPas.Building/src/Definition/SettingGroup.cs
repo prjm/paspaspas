@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using PasPasPas.Globals.Files;
 using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Building.Definition {
 

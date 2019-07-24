@@ -80,7 +80,8 @@ namespace SampleRunner.Scenarios {
 
             for (var i = 0; i < reapeat; i++) {
                 var parserApi = new ParserApi(environment);
-                using (var parser = parserApi.CreateParserForPath(testPath)) {
+                var data = parserApi.Tokenizer.Readers.CreateInputForPath(testPath);
+                using (var parser = parserApi.CreateParser(data)) {
                     var result = parser.Parse();
                     var visitor = new ConstantVisitor();
                     result.Accept(visitor.AsVisitor());
@@ -89,9 +90,10 @@ namespace SampleRunner.Scenarios {
                         var filePath = Path.GetFullPath(testPath);
                         var path = Path.Combine(Path.GetDirectoryName(filePath), "dummy.dpr");
                         var dummyProgram = $"program dummy; const {item} begin end.";
-
                         var parserApi2 = new ParserApi(environment);
-                        using (var parser2 = parserApi2.CreateParserForString(path, dummyProgram)) {
+                        var data2 = parserApi2.Tokenizer.Readers.CreateInputForString(path, dummyProgram);
+
+                        using (var parser2 = parserApi2.CreateParser(data2)) {
 
                             var result2 = parser2.Parse();
                             var project = parserApi2.CreateAbstractSyntraxTree(result2);

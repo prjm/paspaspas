@@ -62,7 +62,7 @@ namespace PasPasPas.Building.Tasks {
                     var parser = new StandardParser(null, options, reader);
 
                     result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");
-                    reader.AddFileToRead(file);
+                    reader.AddInputToRead(new FileReaderInput(file.Path));
                     var hasError = false;
 
                     log.ProcessMessage += (x, y) => {

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using PasPasPas.Globals.Files;
 
 namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     read from a combination of text files
     /// </summary>
-    public sealed class StackedFileReader : IDisposable {
+    public sealed class StackedFileReader : IDisposable, IStackedFileReader {
 
         /// <summary>
         ///     mock-up files
@@ -26,43 +26,22 @@ namespace PasPasPas.Infrastructure.Files {
         private NestedInput input = null;
 
         /// <summary>
-        ///     adds a file to read
-        /// </summary>
-        /// <param name="input">input to add</param>
-        public void AddFileToRead(FileReference input) {
-            if (input == null)
-                throw new ArgumentNullException(nameof(input));
-
-            if (mockups != default && mockups.TryGetValue(input, out var data)) {
-                AddStringToRead(input, data);
-                return;
-            }
-
-            var bufferSize = 1024;
-            var stream = new FileStream(input.Path, FileMode.Open, FileAccess.Read, FileShare.Read);
-
-            this.input = new NestedInput() {
-                File = input,
-                Input = new FileBuffer(new Utf8StreamBufferSource(stream, bufferSize, bufferSize), 2 * bufferSize),
-                Parent = this.input
-            };
-        }
-
-        /// <summary>
         ///     add a string to read
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="source"></param>
-        public void AddStringToRead(FileReference path, string source) {
-            if (path == null)
-                throw new ArgumentNullException(nameof(path));
+        /// <param name="inputToRead">input source</param>
+        public void AddInputToRead(IReaderInput inputToRead) {
+            if (inputToRead.Path == null)
+                throw new ArgumentNullException(nameof(inputToRead.Path));
+
+            if (mockups != default && mockups.TryGetValue(new FileReference(inputToRead.Path), out var data)) {
+                inputToRead = new StringReaderInput(inputToRead.Path, data);
+            }
 
             input = new NestedInput() {
-                File = path,
-                Input = new FileBuffer(new StringBufferSource(source), 1024),
+                File = new FileReference(inputToRead.Path),
+                Input = new FileBuffer(inputToRead.CreateBufferSource(), 2 * inputToRead.BufferSize),
                 Parent = input
             };
-
         }
 
         /// <summary>

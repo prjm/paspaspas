@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Globals.Files;
 
 namespace PasPasPas.Infrastructure.Files {
 
@@ -8,7 +9,7 @@ namespace PasPasPas.Infrastructure.Files {
     public class ResolvedFile {
 
         /// <summary>
-        ///     desciption of a resolved file
+        ///     description of a resolved file
         /// </summary>
         /// <param name="currentDirectory">current directory</param>
         /// <param name="pathToResolve">path to resolve</param>

@@ -297,7 +297,9 @@ namespace PasPasPasTests.Types {
 
             env = CreateEnvironment(intSize);
             var api = new ParserApi(env);
-            using (var reader = api.CreateParserForString($"{file}.dpr", program)) {
+            var data = api.Tokenizer.Readers.CreateInputForString($"{file}.dpr", program);
+
+            using (var reader = api.CreateParser(data)) {
 
                 api.Options.Meta.NativeIntegerSize.Value = intSize;
 

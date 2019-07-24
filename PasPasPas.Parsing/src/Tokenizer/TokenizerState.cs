@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         private StringBuilder buffer;
         private readonly TokenizerBase tokenizer;
-        private readonly StackedFileReader input;
+        private readonly IStackedFileReader input;
         private readonly ILogSource log;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="currentInput">current input file</param>
         /// <param name="logSource">log source</param>
         /// <param name="parserEnvironment">parser environment</param>
-        public TokenizerState(IParserEnvironment parserEnvironment, TokenizerBase parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
+        public TokenizerState(IParserEnvironment parserEnvironment, TokenizerBase parentTokenizer, IStackedFileReader currentInput, ILogSource logSource) {
             tokenizer = parentTokenizer;
             log = logSource;
             input = currentInput;

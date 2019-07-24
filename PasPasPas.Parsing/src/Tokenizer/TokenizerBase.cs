@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 
@@ -54,7 +54,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        public TokenizerBase(IParserEnvironment environment, InputPatterns charClasses, StackedFileReader input) {
+        public TokenizerBase(IParserEnvironment environment, InputPatterns charClasses, IStackedFileReader input) {
             Input = input ?? throw new ArgumentNullException(nameof(input));
             Log = environment.Log.CreateLogSource(MessageGroups.Tokenizer);
             characterClasses = charClasses ?? throw new ArgumentNullException(nameof(charClasses));
@@ -114,7 +114,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     tokenizer input
         /// </summary>
-        public StackedFileReader Input { get; }
+        public IStackedFileReader Input { get; }
 
         /// <summary>
         ///     registered keywords

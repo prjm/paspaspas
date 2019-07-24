@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 
 namespace PasPasPas.Infrastructure.Files {
 
