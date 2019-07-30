@@ -1,15 +1,17 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Globals.Options;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     pe version information
     /// </summary>
-    public class PEVersion {
+    public class PEVersion : IPEVersion {
 
         /// <summary>
         ///     create a new pe version
         /// </summary>
         /// <param name="baseVersion">base version</param>
-        public PEVersion(PEVersion baseVersion) {
+        public PEVersion(IPEVersion baseVersion) {
             MajorVersion = new DerivedValueOption<int>(baseVersion?.MajorVersion);
             MinorVersion = new DerivedValueOption<int>(baseVersion?.MinorVersion);
         }
@@ -17,12 +19,12 @@
         /// <summary>
         ///     major version
         /// </summary>
-        public DerivedValueOption<int> MajorVersion { get; }
+        public IOption<int> MajorVersion { get; }
 
         /// <summary>
         ///     minor version
         /// </summary>
-        public DerivedValueOption<int> MinorVersion { get; }
+        public IOption<int> MinorVersion { get; }
 
         /// <summary>
         ///     clear values

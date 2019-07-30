@@ -1,6 +1,6 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Parsing;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
@@ -70,7 +70,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     }
                 } while (!state.AtEof);
 
-                return new Token(TokenKind.QuotedString, state, parsedValue);
+                return new Token(TokenKind.QuotedString, state.GetBufferContent(), parsedValue);
             }
         }
     }

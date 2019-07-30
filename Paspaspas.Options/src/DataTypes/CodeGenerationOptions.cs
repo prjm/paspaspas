@@ -1,15 +1,18 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     code generation options
     /// </summary>
-    public class CodeGenerationOptions {
+    public class CodeGenerationOptions : ICodeGenerationOptions {
 
         /// <summary>
         ///     create a new set of code generation options
         /// </summary>
         /// <param name="baseOptions"></param>
-        public CodeGenerationOptions(CodeGenerationOptions baseOptions) {
+        public CodeGenerationOptions(ICodeGenerationOptions baseOptions) {
             PublishedRtti = new DerivedValueOption<RttiForPublishedPropertieMode>(baseOptions?.PublishedRtti);
             MinimumEnumSize = new DerivedValueOption<EnumSize>(baseOptions?.MinimumEnumSize);
             Optimization = new DerivedValueOption<CompilerOptimization>(baseOptions?.Optimization);
@@ -24,47 +27,47 @@
         /// <summary>
         ///     flag to generate rtti for published fields
         /// </summary>
-        public DerivedValueOption<RttiForPublishedPropertieMode> PublishedRtti { get; }
+        public IOption<RttiForPublishedPropertieMode> PublishedRtti { get; }
 
         /// <summary>
         ///     minimum enum size
         /// </summary>
-        public DerivedValueOption<EnumSize> MinimumEnumSize { get; }
+        public IOption<EnumSize> MinimumEnumSize { get; }
 
         /// <summary>
         ///     flag to enable optimization
         /// </summary>
-        public DerivedValueOption<CompilerOptimization> Optimization { get; }
+        public IOption<CompilerOptimization> Optimization { get; }
 
         /// <summary>
         ///     save divide option
         /// </summary>
-        public DerivedValueOption<FDivSafeDivide> SafeDivide { get; }
+        public IOption<FDivSafeDivide> SafeDivide { get; }
 
         /// <summary>
         ///     value alignment
         /// </summary>
-        public DerivedValueOption<Alignment> Align { get; }
+        public IOption<Alignment> Align { get; }
 
         /// <summary>
         ///     generate all stack frames
         /// </summary>
-        public DerivedValueOption<StackFrameGeneration> StackFrames { get; }
+        public IOption<StackFrameGeneration> StackFrames { get; }
 
         /// <summary>
         ///     code alignment
         /// </summary>
-        public DerivedValueOption<CodeAlignment> CodeAlign { get; }
+        public IOption<CodeAlignment> CodeAlign { get; }
 
         /// <summary>
         ///     rtti options
         /// </summary>
-        public RttiOptions Rtti { get; }
+        public IRttiOptions Rtti { get; }
 
         /// <summary>
         ///     enable or disable method info generation
         /// </summary>
-        public DerivedValueOption<MethodInfoRttiMode> MethodInfo { get; }
+        public IOption<MethodInfoRttiMode> MethodInfo { get; }
 
         /// <summary>
         ///     clear values

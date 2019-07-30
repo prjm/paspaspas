@@ -2,6 +2,7 @@
 using System.Text;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -9,7 +10,6 @@ using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;

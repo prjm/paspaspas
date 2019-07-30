@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
@@ -772,12 +773,12 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestRegion() {
-            object f(OptionSet o) => o.Meta.Regions.Count;
-            RunCompilerDirective("", 0, f);
-            RunCompilerDirective("REGION", 0, f, CompilerDirectiveParserErrors.InvalidRegionDirective);
-            RunCompilerDirective("REGION 'XXX' | DEFINE Q  ", 0, f, OptionSet.PendingRegion);
-            RunCompilerDirective("REGION 'XXX' § ENDREGION", 0, f);
-            RunCompilerDirective("ENDREGION", 0, f, CompilerDirectiveParserErrors.EndRegionWithoutRegion);
+            object f(OptionSet o) => o.Meta.HasRegions;
+            RunCompilerDirective("", false, f);
+            RunCompilerDirective("REGION", false, f, CompilerDirectiveParserErrors.InvalidRegionDirective);
+            RunCompilerDirective("REGION 'XXX' | DEFINE Q  ", false, f, OptionSet.PendingRegion);
+            RunCompilerDirective("REGION 'XXX' § ENDREGION", false, f);
+            RunCompilerDirective("ENDREGION", false, f, CompilerDirectiveParserErrors.EndRegionWithoutRegion);
         }
 
         [TestMethod]

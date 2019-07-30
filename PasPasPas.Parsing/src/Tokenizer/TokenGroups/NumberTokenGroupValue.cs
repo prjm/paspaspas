@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
@@ -35,8 +35,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             var withExponent = false;
 
             if (state.AtEof) {
-                var number = state.ParserLiteral(state.GetBufferContent(), LiteralParserKind.IntegerNumbers);
-                return new Token(TokenKind.IntegralNumber, state, number);
+                var content = state.GetBufferContent();
+                var number = state.ParserLiteral(content, LiteralParserKind.IntegerNumbers);
+                return new Token(TokenKind.IntegralNumber, content, number);
             }
 
             state.Clear();
@@ -87,15 +88,15 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
             if (AllowIdents && allIdents.Matches(state.LookAhead())) {
                 identTokenizer.Tokenize(state);
-                return new Token(TokenKind.Identifier, state);
+                return new Token(TokenKind.Identifier, state.GetBufferContent());
             }
 
             if (withDot || withExponent) {
                 var literalValue = string.Concat(digits, ".", decimals, "E", minus ? "-" : "+", exp);
-                return new Token(TokenKind.RealNumber, state, state.ConvertRealLiteral(literalValue));
+                return new Token(TokenKind.RealNumber, state.GetBufferContent(), state.ConvertRealLiteral(literalValue));
             }
             else {
-                return new Token(TokenKind.IntegralNumber, state, digitValue);
+                return new Token(TokenKind.IntegralNumber, state.GetBufferContent(), digitValue);
             }
         }
 

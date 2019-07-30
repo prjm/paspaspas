@@ -1,17 +1,19 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Globals.Options;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     derived option for single values
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DerivedValueOption<T> : DerivedOptionBase {
+    public class DerivedValueOption<T> : DerivedOptionBase, IOption<T> {
 
         private bool hasValue = false;
 
         /// <summary>
         ///     parent option
         /// </summary>
-        public DerivedValueOption<T> Parent { get; }
+        public IOption<T> Parent { get; }
 
         /// <summary>
         ///     creates a root option without parent
@@ -23,7 +25,7 @@
         ///     creates a derived option
         /// </summary>
         /// <param name="parentOption">parent option</param>
-        public DerivedValueOption(DerivedValueOption<T> parentOption) : base()
+        public DerivedValueOption(IOption<T> parentOption) : base()
             => Parent = parentOption;
 
         /// <summary>
@@ -61,4 +63,5 @@
             }
         }
     }
+
 }

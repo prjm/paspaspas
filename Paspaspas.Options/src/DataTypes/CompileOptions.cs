@@ -1,15 +1,17 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Globals.Options;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     compile-specific options
     /// </summary>
-    public class CompileOptions {
+    public class CompileOptions : ICompilerOptions {
 
         /// <summary>
         ///     compiler-specific options
         /// </summary>
         /// <param name="baseOptions"></param>
-        public CompileOptions(CompileOptions baseOptions) {
+        public CompileOptions(ICompilerOptions baseOptions) {
             DebugOptions = new DebugOptions(baseOptions?.DebugOptions);
             RuntimeChecks = new RuntimeCheckOptions(baseOptions?.RuntimeChecks);
             CodeGeneration = new CodeGenerationOptions(baseOptions?.CodeGeneration);
@@ -23,37 +25,37 @@
         /// <summary>
         ///     Debug-related options
         /// </summary>
-        public DebugOptions DebugOptions { get; }
+        public IDebugOptions DebugOptions { get; }
 
         /// <summary>
         ///     runtime checks
         /// </summary>
-        public RuntimeCheckOptions RuntimeChecks { get; }
+        public IRuntimeOptions RuntimeChecks { get; }
 
         /// <summary>
         ///     code generation options
         /// </summary>
-        public CodeGenerationOptions CodeGeneration { get; }
+        public ICodeGenerationOptions CodeGeneration { get; }
 
         /// <summary>
         ///     syntax options
         /// </summary>
-        public SyntaxOptions Syntax { get; }
+        public ISyntaxOptions Syntax { get; }
 
         /// <summary>
         ///     additional compiler options
         /// </summary>
-        public AdditionalCompilerOptions AdditionalOptions { get; }
+        public IAdditionalOptions AdditionalOptions { get; }
 
         /// <summary>
         ///     link options
         /// </summary>
-        public LinkOptions LinkOptions { get; }
+        public ILinkOptions LinkOptions { get; }
 
         /// <summary>
         ///     hints and warnings
         /// </summary>
-        public HintsAndWarningsOptions HintsAndWarnings { get; }
+        public IHintsAndWarnigs HintsAndWarnings { get; }
 
         /// <summary>
         ///     clear options

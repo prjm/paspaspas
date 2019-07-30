@@ -1,15 +1,18 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     runtime check options
     /// </summary>
-    public class RuntimeCheckOptions {
+    public class RuntimeCheckOptions : IRuntimeOptions {
 
         /// <summary>
         ///     create new runtime check options
         /// </summary>
         /// <param name="baseOptions"></param>
-        public RuntimeCheckOptions(RuntimeCheckOptions baseOptions) {
+        public RuntimeCheckOptions(IRuntimeOptions baseOptions) {
             RangeChecks = new DerivedValueOption<RuntimeRangeCheckMode>(baseOptions?.RangeChecks);
             IoChecks = new DerivedValueOption<IoCallCheck>(baseOptions?.IoChecks);
             CheckOverflows = new DerivedValueOption<RuntimeOverflowCheck>(baseOptions?.CheckOverflows);
@@ -18,17 +21,17 @@
         /// <summary>
         ///     generate runtime range checks
         /// </summary>
-        public DerivedValueOption<RuntimeRangeCheckMode> RangeChecks { get; }
+        public IOption<RuntimeRangeCheckMode> RangeChecks { get; }
 
         /// <summary>
         ///     io checks flag
         /// </summary>
-        public DerivedValueOption<IoCallCheck> IoChecks { get; }
+        public IOption<IoCallCheck> IoChecks { get; }
 
         /// <summary>
         ///     flag to enable overflow checks
         /// </summary>
-        public DerivedValueOption<RuntimeOverflowCheck> CheckOverflows { get; }
+        public IOption<RuntimeOverflowCheck> CheckOverflows { get; }
 
         /// <summary>
         ///     clear options

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.Environment;
-using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.Tokenizer {

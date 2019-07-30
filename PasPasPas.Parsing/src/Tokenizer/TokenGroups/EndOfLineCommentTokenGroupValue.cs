@@ -1,4 +1,4 @@
-﻿using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
@@ -21,7 +21,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     state.NextChar(true);
             }
 
-            return new Token(TokenKind.Comment, state);
+            return new Token(TokenKind.Comment, state.GetBufferContent());
         }
 
     }

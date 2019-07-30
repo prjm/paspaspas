@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Globals.Options.DataTypes;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     condition for ifopt

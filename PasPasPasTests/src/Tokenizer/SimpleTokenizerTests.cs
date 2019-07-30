@@ -1,5 +1,5 @@
 ﻿using System;
-using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Runtime.Values.BooleanValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPasTests.Common;

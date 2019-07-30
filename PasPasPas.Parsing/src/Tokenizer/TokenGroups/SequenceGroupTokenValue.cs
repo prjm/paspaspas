@@ -1,4 +1,4 @@
-﻿using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// <summary>
@@ -62,10 +62,10 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     for (var i = 0; i < EndSequence.Length - 1 && builder.Item.Length > 0; i++)
                         builder.Item.Remove(builder.Item.Length - 1, 1);
                     var stringValue = state.RuntimeValues.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(builder.Item));
-                    return new Token(TokenId, state, stringValue);
+                    return new Token(TokenId, state.GetBufferContent(), stringValue);
                 }
                 else
-                    return new Token(TokenId, state);
+                    return new Token(TokenId, state.GetBufferContent());
             }
         }
     }

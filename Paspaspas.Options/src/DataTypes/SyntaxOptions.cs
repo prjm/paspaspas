@@ -1,15 +1,18 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     syntax options
     /// </summary>
-    public class SyntaxOptions {
+    public class SyntaxOptions : ISyntaxOptions {
 
         /// <summary>
         ///     create a new set of syntax options
         /// </summary>
         /// <param name="baseOptions"></param>
-        public SyntaxOptions(SyntaxOptions baseOptions) {
+        public SyntaxOptions(ISyntaxOptions baseOptions) {
             UseExtendedSyntax = new DerivedValueOption<ExtendedSyntax>(baseOptions?.UseExtendedSyntax);
             OpenStrings = new DerivedValueOption<OpenStringTypeMode>(baseOptions?.OpenStrings);
             LongStrings = new DerivedValueOption<LongStringMode>(baseOptions?.LongStrings);
@@ -26,57 +29,57 @@
         /// <summary>
         ///     switch to enable extended syntax
         /// </summary>
-        public DerivedValueOption<ExtendedSyntax> UseExtendedSyntax { get; }
+        public IOption<ExtendedSyntax> UseExtendedSyntax { get; }
 
         /// <summary>
         ///     flag for open strings
         /// </summary>
-        public DerivedValueOption<OpenStringTypeMode> OpenStrings { get; }
+        public IOption<OpenStringTypeMode> OpenStrings { get; }
 
         /// <summary>
         ///     flag for long strings
         /// </summary>
-        public DerivedValueOption<LongStringMode> LongStrings { get; }
+        public IOption<LongStringMode> LongStrings { get; }
 
         /// <summary>
         ///     var string checks
         /// </summary>
-        public DerivedValueOption<ShortVarStringCheck> VarStringChecks { get; }
+        public IOption<ShortVarStringCheck> VarStringChecks { get; }
 
         /// <summary>
         ///     pointers with types
         /// </summary>
-        public DerivedValueOption<UsePointersWithTypeChecking> TypedPointers { get; }
+        public IOption<UsePointersWithTypeChecking> TypedPointers { get; }
 
         /// <summary>
         ///     boolean evaluation style
         /// </summary>
-        public DerivedValueOption<BooleanEvaluation> BoolEval { get; }
+        public IOption<BooleanEvaluation> BoolEval { get; }
 
         /// <summary>
         ///     writable constants
         /// </summary>
-        public DerivedValueOption<ConstantValue> WritableConstants { get; }
+        public IOption<ConstantValue> WritableConstants { get; }
 
         /// <summary>
         ///     index of first char in a string
         /// </summary>
-        public DerivedValueOption<FirstCharIndex> IndexOfFirstCharInString { get; }
+        public IOption<FirstCharIndex> IndexOfFirstCharInString { get; }
 
         /// <summary>
         ///     flag to scoped enumerations
         /// </summary>
-        public DerivedValueOption<RequireScopedEnumMode> ScopedEnums { get; }
+        public IOption<RequireScopedEnumMode> ScopedEnums { get; }
 
         /// <summary>
         ///     switch for pointer math
         /// </summary>
-        public DerivedValueOption<PointerManipulation> PointerMath { get; }
+        public IOption<PointerManipulation> PointerMath { get; }
 
         /// <summary>
         ///     var prop setter mode
         /// </summary>
-        public DerivedValueOption<VarPropSetterMode> VarPropSetter { get; }
+        public IOption<VarPropSetterMode> VarPropSetter { get; }
 
         /// <summary>
         ///     clear options

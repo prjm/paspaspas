@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using PasPasPas.Globals.Options;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -7,14 +8,14 @@ namespace PasPasPas.Options.DataTypes {
     ///     option class for derived lists
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DerivedListOptionCollection<T> : DerivedOptionBase, IEnumerable<T> {
+    public class DerivedListOptionCollection<T> : DerivedOptionBase, IEnumerable<T>, IEnumerableOption<T> {
 
 
         /// <summary>
         ///     creates a new derived list
         /// </summary>
         /// <param name="baseOption">base option</param>
-        public DerivedListOptionCollection(DerivedListOptionCollection<T> baseOption) {
+        public DerivedListOptionCollection(IEnumerableOption<T> baseOption) {
             Parent = baseOption;
             IncludeParentValues = true;
         }
@@ -26,7 +27,7 @@ namespace PasPasPas.Options.DataTypes {
             = new List<T>();
 
         /// <summary>
-        ///     test if the default is override    
+        ///     test if the default is override
         /// </summary>
         public override bool OverwritesDefaultValue
             => OwnValues.Count > 0 || !IncludeParentValues;
@@ -34,7 +35,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     parent list
         /// </summary>
-        public DerivedListOptionCollection<T> Parent { get; }
+        public IEnumerableOption<T> Parent { get; }
 
         /// <summary>
         ///     switch, if <c>true</c> include parent values in enumeration

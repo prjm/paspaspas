@@ -1,5 +1,7 @@
 ﻿using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Options.DataTypes;
 
 namespace PasPasPas.Options.Bundles {
@@ -10,7 +12,7 @@ namespace PasPasPas.Options.Bundles {
     public class OptionSet : IOptionSet {
 
         /// <summary>
-        ///     open ifdef / ifndef
+        ///     error code for a open <c>ifdef</c> / <c>ifndef</c>
         /// </summary>
         public const uint PendingCondition
             = 0x0301;
@@ -53,17 +55,17 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     compiler-related options
         /// </summary>
-        public CompileOptions CompilerOptions { get; }
+        public ICompilerOptions CompilerOptions { get; }
 
         /// <summary>
         ///     conditional compilation options
         /// </summary>
-        public ConditionalCompilationOptions ConditionalCompilation { get; }
+        public IConditionalCompilationOptions ConditionalCompilation { get; }
 
         /// <summary>
         ///     meta information
         /// </summary>
-        public MetaInformation Meta { get; }
+        public IMetaOptions Meta { get; }
 
         /// <summary>
         ///     path options
@@ -73,7 +75,7 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     warning options
         /// </summary>
-        public WarningOptions Warnings { get; }
+        public IWarningOptions Warnings { get; }
 
         /// <summary>
         ///     used environment
@@ -106,7 +108,7 @@ namespace PasPasPas.Options.Bundles {
             Warnings.ResetOnNewUnit();
         }
 
-        private static SwitchInfo GetSwitchInfo<T>(DerivedValueOption<T> value, T enabled, T disabled)
+        private static SwitchInfo GetSwitchInfo<T>(IOption<T> value, T enabled, T disabled)
             where T : struct {
             if (value.Value.Equals(enabled))
                 return SwitchInfo.Enabled;

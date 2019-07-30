@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 

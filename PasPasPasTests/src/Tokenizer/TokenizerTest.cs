@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Api;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.SyntaxTree;
 using PasPasPasTests.Common;
 using SharpFloat.FloatingPoint;
 
@@ -32,11 +32,11 @@ namespace PasPasPasTests.Tokenizer {
         public static IList<Token> RunTokenizer(string input, IList<ILogMessage> messages = null) {
             var result = new List<Token>();
             var messageHandler = new ListLogTarget();
-            var api = new TokenizerApi(CreateEnvironment());
+            var api = Factory.CreateTokenizerApi(CreateEnvironment(), default);
             var data = api.Readers.CreateInputForString("test.pas", input);
 
             using (var tokenizer = api.CreateTokenizer(data)) {
-                api.Log.RegisterTarget(messageHandler);
+                api.Environment.Log.RegisterTarget(messageHandler);
 
                 while (!tokenizer.AtEof) {
                     tokenizer.FetchNextToken();

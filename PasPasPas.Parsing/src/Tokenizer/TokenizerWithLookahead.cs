@@ -4,13 +4,13 @@ using System.Diagnostics;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
-using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.Tokenizer {
@@ -55,7 +55,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public sealed partial class TokenizerWithLookahead : ITokenizer, IDisposable {
 
-        private readonly OptionSet options;
+        private readonly IOptionSet options;
         private readonly TokenizerMode mode = TokenizerMode.Undefined;
         private readonly IParserEnvironment environment;
         private readonly IRuntimeValueFactory constValues;
@@ -63,7 +63,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     create a new tokenizer with lookahead
         /// </summary>
-        public TokenizerWithLookahead(IParserEnvironment env, OptionSet optionsSet, ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
+        public TokenizerWithLookahead(IParserEnvironment env, IOptionSet optionsSet, ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
             mode = tokenizerMode;
             BaseTokenizer = baseTokenizer;
             options = optionsSet;

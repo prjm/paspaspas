@@ -1,15 +1,18 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     link options
     /// </summary>
-    public class LinkOptions {
+    public class LinkOptions : ILinkOptions {
 
         /// <summary>
         ///     create a new set of linking options
         /// </summary>
         /// <param name="baseOptions"></param>
-        public LinkOptions(LinkOptions baseOptions) {
+        public LinkOptions(ILinkOptions baseOptions) {
             ApplicationType = new DerivedValueOption<AppType>(baseOptions?.ApplicationType);
             ExportCppObjects = new DerivedValueOption<ExportCppObjectMode>(baseOptions?.ExportCppObjects);
             ImageBase = new DerivedValueOption<ulong>(baseOptions?.ImageBase);
@@ -24,47 +27,47 @@
         /// <summary>
         ///     Application type
         /// </summary>
-        public DerivedValueOption<AppType> ApplicationType { get; }
+        public IOption<AppType> ApplicationType { get; }
 
         /// <summary>
         ///     export all cpp objects
         /// </summary>
-        public DerivedValueOption<ExportCppObjectMode> ExportCppObjects { get; }
+        public IOption<ExportCppObjectMode> ExportCppObjects { get; }
 
         /// <summary>
         ///     image base address
         /// </summary>
-        public DerivedValueOption<ulong> ImageBase { get; }
+        public IOption<ulong> ImageBase { get; }
 
         /// <summary>
         ///     maximum stack memory size
         /// </summary>
-        public DerivedValueOption<ulong> MaximumStackMemorySize { get; }
+        public IOption<ulong> MaximumStackMemorySize { get; }
 
         /// <summary>
         ///     minimum stack memory size
         /// </summary>
-        public DerivedValueOption<ulong> MinimumStackMemorySize { get; }
+        public IOption<ulong> MinimumStackMemorySize { get; }
 
         /// <summary>
         ///     flag to link all types
         /// </summary>
-        public DerivedValueOption<StrongTypeLinking> LinkAllTypes { get; }
+        public IOption<StrongTypeLinking> LinkAllTypes { get; }
 
         /// <summary>
         ///     weak unit packaging
         /// </summary>
-        public DerivedValueOption<WeakPackaging> WeakPackageUnit { get; }
+        public IOption<WeakPackaging> WeakPackageUnit { get; }
 
         /// <summary>
         ///     switch to prohibit this package at design time
         /// </summary>
-        public DerivedValueOption<RuntimePackageMode> RuntimeOnlyPackage { get; }
+        public IOption<RuntimePackageMode> RuntimeOnlyPackage { get; }
 
         /// <summary>
         ///     weak rtti linking
         /// </summary>
-        public DerivedValueOption<RttiLinkMode> WeakLinkRtti { get; }
+        public IOption<RttiLinkMode> WeakLinkRtti { get; }
 
         /// <summary>
         ///     clear link options

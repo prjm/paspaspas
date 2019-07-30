@@ -14,7 +14,7 @@ namespace SampleRunner.Scenarios {
             var registry = new Dictionary<int, Tuple<ulong, long>>();
 
             for (var i = 0; i < reapeat; i++) {
-                var tokenizerApi = new TokenizerApi(environment);
+                var tokenizerApi = Factory.CreateTokenizerApi(environment, default);
                 var data = tokenizerApi.Readers.CreateInputForPath(testPath);
                 using (var tokenizer = tokenizerApi.CreateBufferedTokenizer(data)) {
 

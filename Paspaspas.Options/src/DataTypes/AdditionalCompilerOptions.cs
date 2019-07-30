@@ -1,15 +1,18 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     additional compiler options
     /// </summary>
-    public class AdditionalCompilerOptions {
+    public class AdditionalCompilerOptions : IAdditionalOptions {
 
         /// <summary>
         ///     create new additional compiler options
         /// </summary>
         /// <param name="baseOptions"></param>
-        public AdditionalCompilerOptions(AdditionalCompilerOptions baseOptions) {
+        public AdditionalCompilerOptions(IAdditionalOptions baseOptions) {
             LegacyIfEnd = new DerivedValueOption<EndIfMode>(baseOptions?.LegacyIfEnd);
             ExtendedCompatibility = new DerivedValueOption<ExtendedCompatibilityMode>(baseOptions?.ExtendedCompatibility);
             ExcessPrecision = new DerivedValueOption<ExcessPrecisionForResult>(baseOptions?.ExcessPrecision);
@@ -22,37 +25,37 @@
         /// <summary>
         ///     legacy if / end if mode
         /// </summary>
-        public DerivedValueOption<EndIfMode> LegacyIfEnd { get; }
+        public IOption<EndIfMode> LegacyIfEnd { get; }
 
         /// <summary>
         ///     extended compatibility mode
         /// </summary>
-        public DerivedValueOption<ExtendedCompatibilityMode> ExtendedCompatibility { get; }
+        public IOption<ExtendedCompatibilityMode> ExtendedCompatibility { get; }
 
         /// <summary>
         ///     excess precision on x64
         /// </summary>
-        public DerivedValueOption<ExcessPrecisionForResult> ExcessPrecision { get; }
+        public IOption<ExcessPrecisionForResult> ExcessPrecision { get; }
 
         /// <summary>
         ///     high chars for unicode
         /// </summary>
-        public DerivedValueOption<HighCharsUnicode> HighCharUnicode { get; }
+        public IOption<HighCharsUnicode> HighCharUnicode { get; }
 
         /// <summary>
         ///     implicit build setting
         /// </summary>
-        public DerivedValueOption<ImplicitBuildUnit> ImplicitBuild { get; }
+        public IOption<ImplicitBuildUnit> ImplicitBuild { get; }
 
         /// <summary>
         ///     switch for 48-bit doubles
         /// </summary>
-        public DerivedValueOption<Real48> RealCompatibility { get; }
+        public IOption<Real48> RealCompatibility { get; }
 
         /// <summary>
         ///     switch for old record types
         /// </summary>
-        public DerivedValueOption<OldRecordTypeMode> OldTypeLayout { get; }
+        public IOption<OldRecordTypeMode> OldTypeLayout { get; }
 
         /// <summary>
         ///     clear options

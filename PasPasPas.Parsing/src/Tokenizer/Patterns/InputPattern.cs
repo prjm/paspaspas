@@ -1,7 +1,7 @@
-﻿using PasPasPas.Parsing.SyntaxTree;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
 

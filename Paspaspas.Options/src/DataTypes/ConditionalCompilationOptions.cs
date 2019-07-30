@@ -1,5 +1,7 @@
 ﻿using System;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
@@ -7,12 +9,12 @@ namespace PasPasPas.Options.DataTypes {
     /// <summary>
     ///     options for conditional compilation
     /// </summary>
-    public class ConditionalCompilationOptions {
+    public class ConditionalCompilationOptions : IConditionalCompilationOptions {
 
         /// <summary>
         ///     list of conditional defines
         /// </summary>
-        public DerivedListOptionCollection<ConditionalSymbol> Conditionals { get; }
+        public IEnumerableOption<ConditionalSymbol> Conditionals { get; }
 
         /// <summary>
         ///     active conditional
@@ -27,15 +29,15 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     deny unit in packages
         /// </summary>
-        public DerivedValueOption<DenyUnitInPackage> DenyInPackages { get; }
+        public IOption<DenyUnitInPackage> DenyInPackages { get; }
 
         /// <summary>
         ///     design-time only package
         /// </summary>
-        public DerivedValueOption<DesignOnlyUnit> DesignOnly { get; }
+        public IOption<DesignOnlyUnit> DesignOnly { get; }
 
         /// <summary>
-        ///     test fif conditions are availiabe
+        ///     test if conditions are available
         /// </summary>
         public bool HasConditions
             => CurrentCondition != null;
@@ -44,7 +46,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     create new option set for conditional compilation
         /// </summary>
         /// <param name="baseOptions"></param>
-        public ConditionalCompilationOptions(ConditionalCompilationOptions baseOptions) {
+        public ConditionalCompilationOptions(IConditionalCompilationOptions baseOptions) {
             Conditionals = new DerivedListOptionCollection<ConditionalSymbol>(baseOptions?.Conditionals);
             DenyInPackages = new DerivedValueOption<DenyUnitInPackage>(baseOptions?.DenyInPackages);
             DesignOnly = new DerivedValueOption<DesignOnlyUnit>(baseOptions?.DesignOnly);
@@ -175,17 +177,17 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     add a <c>ifndef</c> condition
         /// </summary>
-        /// <param name="value"></param>
-        public void AddIfNDefCondition(string value) {
-            if (string.IsNullOrWhiteSpace(value))
+        /// <param name="symbolName"></param>
+        public void AddIfNDefCondition(string symbolName) {
+            if (string.IsNullOrWhiteSpace(symbolName))
                 return;
 
-            AddNewCondition(new IfDefCondition() { Matches = !IsSymbolDefined(value), SymbolName = value });
+            AddNewCondition(new IfDefCondition() { Matches = !IsSymbolDefined(symbolName), SymbolName = symbolName });
             UpdateSkipState();
         }
 
         /// <summary>
-        ///     remove an ifdef condition
+        ///     remove an <c>ifdef</c> condition
         /// </summary>
         public void RemoveIfDefCondition() {
             CurrentCondition = CurrentCondition.ParentBranch;
@@ -193,14 +195,14 @@ namespace PasPasPas.Options.DataTypes {
         }
 
         /// <summary>
-        ///     add a ifdef condition
+        ///     add a <c>ifdef</c> condition
         /// </summary>
-        /// <param name="value">symbol to look for</param>
-        public void AddIfDefCondition(string value) {
-            if (string.IsNullOrWhiteSpace(value))
+        /// <param name="symbolName">symbol to look for</param>
+        public void AddIfDefCondition(string symbolName) {
+            if (string.IsNullOrWhiteSpace(symbolName))
                 return;
 
-            AddNewCondition(new IfDefCondition() { Matches = IsSymbolDefined(value), SymbolName = value });
+            AddNewCondition(new IfDefCondition() { Matches = IsSymbolDefined(symbolName), SymbolName = symbolName });
             UpdateSkipState();
         }
 

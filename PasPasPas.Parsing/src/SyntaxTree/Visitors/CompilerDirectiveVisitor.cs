@@ -1,7 +1,9 @@
 ﻿using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
@@ -86,14 +88,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private readonly Visitor visitor;
         private readonly ILogManager log;
-        private OptionSet Options { get; }
+        private IOptionSet Options { get; }
         private readonly ILogSource logSource;
         private readonly FileReference path;
 
         /// <summary>
         ///     creates a new visitor
         /// </summary>
-        public CompilerDirectiveVisitor(OptionSet options, FileReference filePath, ILogManager logMgr) {
+        public CompilerDirectiveVisitor(IOptionSet options, FileReference filePath, ILogManager logMgr) {
             Options = options;
             visitor = new Visitor(this);
             log = logMgr;
@@ -104,19 +106,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     compile options
         /// </summary>
-        public CompileOptions CompilerOptions
+        public ICompilerOptions CompilerOptions
             => Options.CompilerOptions;
 
         /// <summary>
         ///     conditional compilation options
         /// </summary>
-        public ConditionalCompilationOptions ConditionalCompilation
+        public IConditionalCompilationOptions ConditionalCompilation
             => Options.ConditionalCompilation;
 
         /// <summary>
         ///     warnings
         /// </summary>
-        public WarningOptions Warnings
+        public IWarningOptions Warnings
             => Options.Warnings;
 
         /// <summary>
@@ -128,7 +130,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     meta information
         /// </summary>
-        public MetaInformation Meta
+        public IMetaOptions Meta
             => Options.Meta;
 
         /// <summary>
@@ -242,7 +244,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///     conditional compilation ("ifdef")
+        ///     conditional compilation via <c>ifdef</c>
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(IfDef element) {
@@ -256,13 +258,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///     conditional compilation ("endif")
+        ///     conditional compilation via <c>endif</c>
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(EndIf element) {
             if (!CanVisit(element))
                 return;
-
 
             if (ConditionalCompilation.HasConditions) {
                 ConditionalCompilation.RemoveIfDefCondition();
@@ -642,7 +643,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(element))
                 return;
 
-
             if (element.Mode != SymbolDefinitionInfo.Undefined)
                 CompilerOptions.DebugOptions.SymbolDefinitions.Value = element.Mode;
 
@@ -652,7 +652,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
         /// <summary>
-        ///     type chedk pointers
+        ///     link all types
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(StrongLinkTypes element) {
@@ -744,7 +744,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///      nodefine
+        ///      <c>nodefine</c>
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(NoDefine element) {
@@ -752,7 +752,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             if (!string.IsNullOrEmpty(element.TypeName))
-                Meta.AddNoDefine(element.TypeName, element.TypeNameInHpp, element.TypeNameInUnion);
+                Meta.AddNoDefine(new DoNotDefineInHeader(element.TypeName, element.TypeNameInHpp, element.TypeNameInUnion));
         }
 
         /// <summary>
@@ -817,7 +817,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            if (Meta.Regions.Count > 0)
+            if (Meta.HasRegions)
                 Meta.StopRegion();
             else
                 LogSource.LogError(CompilerDirectiveParserErrors.EndRegionWithoutRegion, element);
@@ -1012,14 +1012,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
                 return;
 
-            var resolvedFile = Meta.LinkedFileResolver.ResolvePath(basePath, new FileReference(fileName));
-
-            var linkedFile = new LinkedFile() {
-                OriginalFileName = element.FileName,
-                TargetPath = resolvedFile.TargetPath,
-                IsResolved = resolvedFile.IsResolved
-            };
-            Meta.AddLinkedFile(linkedFile);
+            Meta.AddLinkedFile(basePath, new FileReference(fileName));
         }
 
 
@@ -1041,15 +1034,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(basePath, new FileReference(fileName));
-
-            var resourceReference = new ResourceReference() {
-                OriginalFileName = fileName,
-                TargetPath = resolvedFile.TargetPath,
-                RcFile = element.RcFile,
-                IsResolved = resolvedFile.IsResolved
-            };
-            Meta.AddResourceReference(resourceReference);
+            Meta.AddResourceReference(basePath, new FileReference(fileName), element.RcFile);
         }
 
         /// <summary>
@@ -1069,13 +1054,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
                 return;
 
-            var targetPath = Meta.IncludePathResolver.ResolvePath(
-                basePath, new FileReference(fileName)).TargetPath;
+            var includeFile = Meta.AddInclude(basePath, new FileReference(fileName));
 
             if (IncludeInput != null) {
-                IncludeInput.AddInputToRead(new FileReaderInput(targetPath.Path));
+                IncludeInput.AddInputToRead(new FileReaderInput(includeFile.Path));
             }
         }
+
 
         /// <summary>
         ///     common visitor

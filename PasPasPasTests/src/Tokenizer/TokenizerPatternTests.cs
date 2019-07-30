@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Api;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
@@ -17,7 +17,7 @@ namespace PasPasPasTests.Tokenizer {
         private const string TestFileName = "test_file_name.pas";
 
         protected static IList<Token> RunTestTokenizer(string input) {
-            var api = new TokenizerApi(CreateEnvironment());
+            var api = Factory.CreateTokenizerApi(CreateEnvironment(), default);
             var result = new List<Token>();
             var data = api.Readers.CreateInputForString(TestFileName, input);
 

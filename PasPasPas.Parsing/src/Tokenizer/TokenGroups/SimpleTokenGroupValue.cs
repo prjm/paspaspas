@@ -1,4 +1,4 @@
-﻿using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         ///     create a simple token
         /// </summary>
         public override Token Tokenize(TokenizerState state)
-            => new Token(TokenId, state);
+            => new Token(TokenId, state.GetBufferContent());
 
 
     }

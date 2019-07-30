@@ -1,6 +1,6 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Parsing;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
@@ -65,7 +65,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 else
                     value = state.RuntimeValues.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(resultBuilder.Item));
 
-                return new Token(TokenId, state, value);
+                return new Token(TokenId, state.GetBufferContent(), value);
             }
         }
     }

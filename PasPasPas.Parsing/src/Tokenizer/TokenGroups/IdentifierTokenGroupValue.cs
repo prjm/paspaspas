@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
             if (!allowAmpersands && hasAmpersand) {
                 state.Error(TokenizerBase.UnexpectedCharacter);
-                return new Token(TokenKind.Invalid, state);
+                return new Token(TokenKind.Invalid, state.GetBufferContent());
             }
 
             while (!state.AtEof) {
@@ -52,9 +52,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             var value = state.GetBufferContent();
 
             if (!ignoreKeywords && knownKeywords.TryGetValue(value, out var tokenKind))
-                return new Token(tokenKind, state);
+                return new Token(tokenKind, state.GetBufferContent());
             else
-                return new Token(TokenKind.Identifier, state);
+                return new Token(TokenKind.Identifier, state.GetBufferContent());
 
         }
     }

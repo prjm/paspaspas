@@ -1,15 +1,18 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     options for extended rtti generation
     /// </summary>
-    public class RttiOptions : DerivedOptionBase {
+    public class RttiOptions : DerivedOptionBase, IRttiOptions {
 
         /// <summary>
         ///     generate a new set of rtti options
         /// </summary>
         /// <param name="baseOptions"></param>
-        public RttiOptions(RttiOptions baseOptions)
+        public RttiOptions(IRttiOptions baseOptions)
             => BaseOptions = baseOptions;
 
         /// <summary>
@@ -20,7 +23,7 @@
         /// <summary>
         ///     base options
         /// </summary>
-        public RttiOptions BaseOptions { get; }
+        public IRttiOptions BaseOptions { get; }
 
 
         /// <summary>

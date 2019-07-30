@@ -1,4 +1,4 @@
-﻿using PasPasPas.Options.DataTypes;
+﻿using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
 
@@ -123,7 +123,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             }
 
             state.Error(TokenizerBase.UnexpectedCharacter);
-            return new Token(TokenKind.Invalid, state);
+            return new Token(TokenKind.Invalid, state.GetBufferContent());
         }
 
         /// <summary>

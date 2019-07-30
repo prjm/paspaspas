@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
-    ///     metainformation about the compiled project
+    ///     meta information about the compiled project
     /// </summary>
-    public class MetaInformation {
+    public class MetaInformation : IMetaOptions {
 
         /// <summary>
         ///     list of external symbols
@@ -34,7 +37,7 @@ namespace PasPasPas.Options.DataTypes {
             = new List<ObjectFileTypeName>();
 
         /// <summary>
-        ///     list of skipped inludes
+        ///     list of skipped includes
         /// </summary>
         public IList<string> NoIncludes { get; }
             = new List<string>();
@@ -62,7 +65,7 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="baseOption"></param>
         /// <param name="parentOptions">parent options</param>
-        public MetaInformation(OptionSet parentOptions, MetaInformation baseOption) {
+        public MetaInformation(OptionSet parentOptions, IMetaOptions baseOption) {
             ParentOptions = parentOptions;
             Description = new DerivedValueOption<string>(baseOption?.Description);
             FileExtension = new DerivedValueOption<string>(baseOption?.FileExtension);
@@ -81,12 +84,12 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     project description
         /// </summary>
-        public DerivedValueOption<string> Description { get; }
+        public IOption<string> Description { get; }
 
         /// <summary>
-        ///     compiled outpout bilfe extension
+        ///     compiled output file extension
         /// </summary>
-        public DerivedValueOption<string> FileExtension { get; }
+        public IOption<string> FileExtension { get; }
 
         /// <summary>
         ///     path resolver for includes
@@ -94,7 +97,7 @@ namespace PasPasPas.Options.DataTypes {
         public IncludeFilePathResolver IncludePathResolver { get; }
 
         /// <summary>
-        ///     path resolve for resouce files
+        ///     path resolve for resource files
         /// </summary>
         public ResourceFilePathResolver ResourceFilePathResolver { get; set; }
 
@@ -106,32 +109,32 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     lib prefix
         /// </summary>
-        public DerivedValueOption<string> LibPrefix { get; }
+        public IOption<string> LibPrefix { get; }
 
         /// <summary>
         ///     lib suffix
         /// </summary>
-        public DerivedValueOption<string> LibSuffix { get; }
+        public IOption<string> LibSuffix { get; }
 
         /// <summary>
         ///     lib version
         /// </summary>
-        public DerivedValueOption<string> LibVersion { get; }
+        public IOption<string> LibVersion { get; }
 
         /// <summary>
-        ///     required os version
+        ///     required operating system version
         /// </summary>
-        public PEVersion PEOsVersion { get; set; }
+        public IPEVersion PEOsVersion { get; }
 
         /// <summary>
         ///     required subsystem version
         /// </summary>
-        public PEVersion PESubsystemVersion { get; }
+        public IPEVersion PESubsystemVersion { get; }
 
         /// <summary>
         ///     user version
         /// </summary>
-        public PEVersion PEUserVersion { get; }
+        public IPEVersion PEUserVersion { get; }
 
         /// <summary>
         ///     resolver for directly linked input files
@@ -141,7 +144,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     native integer size
         /// </summary>
-        public DerivedValueOption<NativeIntSize> NativeIntegerSize { get; }
+        public IOption<NativeIntSize> NativeIntegerSize { get; }
 
         /// <summary>
         ///     reset on new unit
@@ -184,19 +187,19 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     register external symbol
         /// </summary>
-        /// <param name="identiferName"></param>
+        /// <param name="identifierName"></param>
         /// <param name="symbolName"></param>
         /// <param name="unionName"></param>
-        public void RegisterExternalSymbol(string identiferName, string symbolName, string unionName) {
+        public void RegisterExternalSymbol(string identifierName, string symbolName, string unionName) {
 
-            if (string.IsNullOrWhiteSpace(identiferName))
+            if (string.IsNullOrWhiteSpace(identifierName))
                 return;
 
-            ExternalSymbols.Add(new ExternalSymbol() {
-                IdentifierName = identiferName,
-                SymbolName = symbolName,
-                UnionName = unionName
-            });
+            ExternalSymbols.Add(new ExternalSymbol(
+                identifierName,
+                symbolName,
+                unionName
+            ));
         }
 
         /// <summary>
@@ -204,13 +207,11 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="mode">emit mode</param>
         /// <param name="emitValue">emit value</param>
-        public void HeaderEmit(HppEmitMode mode, string emitValue) => HeaderStrings.Add(new HeaderString() {
-            Mode = mode,
-            Value = emitValue
-        });
+        public void HeaderEmit(HppEmitMode mode, string emitValue)
+            => HeaderStrings.Add(new HeaderString(mode, emitValue));
 
         /// <summary>
-        ///     add a resoure reference
+        ///     add a resource reference
         /// </summary>
         /// <param name="resourceReference"></param>
         public void AddResourceReference(ResourceReference resourceReference) => ResourceReferences.Add(resourceReference);
@@ -230,27 +231,75 @@ namespace PasPasPas.Options.DataTypes {
         ///     add object file type name
         /// </summary>
         /// <param name="typeName">type name</param>
-        /// <param name="aliasName">name wranglin alias</param>
+        /// <param name="aliasName">name wrangling alias</param>
         public void AddObjectFileTypeName(string typeName, string aliasName) => ObjectFileTypeNames.Add(new ObjectFileTypeName(typeName, aliasName));
 
         /// <summary>
         ///     ignore a unit in header files in cpp
         /// </summary>
         /// <param name="unitName">unit name</param>
-        public void AddNoInclude(string unitName) => NoIncludes.Add(unitName);
+        public void AddNoInclude(string unitName)
+            => NoIncludes.Add(unitName);
 
         /// <summary>
         ///     add a type name which is excluded from the generated header file
         /// </summary>
-        /// <param name="typeName">type name</param>
-        /// <param name="nameInHpp">tpye name used in headers</param>
-        /// <param name="typeNameInUnion">type name used in unions</param>
-        public void AddNoDefine(string typeName, string nameInHpp, string typeNameInUnion) => NoDefines.Add(new DoNotDefineInHeader(typeName, nameInHpp, typeNameInUnion));
+        /// <param name="noDefine"></param>
+        public void AddNoDefine(DoNotDefineInHeader noDefine)
+            => NoDefines.Add(noDefine);
 
         /// <summary>
         ///     a a linked file
         /// </summary>
         /// <param name="linkedFile"></param>
-        public void AddLinkedFile(LinkedFile linkedFile) => LinkedFiles.Add(linkedFile);
+        public void AddLinkedFile(LinkedFile linkedFile)
+            => LinkedFiles.Add(linkedFile);
+
+        /// <summary>
+        ///     test for open regions
+        /// </summary>
+        public bool HasRegions
+            => Regions.Count > 0;
+
+        /// <summary>
+        ///     add a linked file
+        /// </summary>
+        /// <param name="basePath"></param>
+        /// <param name="fileReference"></param>
+        public void AddLinkedFile(FileReference basePath, FileReference fileReference) {
+            var resolvedFile = LinkedFileResolver.ResolvePath(basePath, fileReference);
+
+            var linkedFile = new LinkedFile() {
+                OriginalFileName = fileReference.Path,
+                TargetPath = resolvedFile.TargetPath,
+                IsResolved = resolvedFile.IsResolved
+            };
+            LinkedFiles.Add(linkedFile);
+        }
+
+        /// <summary>
+        ///     add a resource reference
+        /// </summary>
+        /// <param name="basePath"></param>
+        /// <param name="fileReference"></param>
+        /// <param name="rcFile"></param>
+        public void AddResourceReference(FileReference basePath, FileReference fileReference, string rcFile) {
+            var resolvedFile = ResourceFilePathResolver.ResolvePath(basePath, fileReference);
+
+            var resourceReference = new ResourceReference() {
+                OriginalFileName = fileReference.Path,
+                TargetPath = resolvedFile.TargetPath,
+                RcFile = rcFile,
+                IsResolved = resolvedFile.IsResolved
+            };
+
+            ResourceReferences.Add(resourceReference);
+        }
+
+        /// <summary>
+        ///     add a include
+        /// </summary>
+        public FileReference AddInclude(FileReference basePath, FileReference fileName)
+            => IncludePathResolver.ResolvePath(basePath, fileName).TargetPath;
     }
 }

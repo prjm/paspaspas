@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
 
 namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     warning options
     /// </summary>
-    public class WarningOptions {
+    public class WarningOptions : IWarningOptions {
 
         /// <summary>
         ///     create a new set of warning options
@@ -16,7 +18,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     create a new set of warning options
         /// </summary>
         /// <param name="parentOptions">parent options</param>
-        public WarningOptions(WarningOptions parentOptions) {
+        public WarningOptions(IWarningOptions parentOptions) {
             ParentOptions = parentOptions;
             options = new Dictionary<WarningKey, WarningOption>();
             AddOptions();
@@ -133,7 +135,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     parent options
         /// </summary>
-        public WarningOptions ParentOptions { get; }
+        public IWarningOptions ParentOptions { get; }
 
         /// <summary>
         ///     options
@@ -154,10 +156,10 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     check if a given identifier exists
         /// </summary>
-        /// <param name="ident"></param>
+        /// <param name="warningType"></param>
         /// <returns></returns>
-        public bool HasWarningIdent(string ident)
-            => options.ContainsKey(new WarningKey("", ident));
+        public bool HasWarningIdent(string warningType)
+            => options.ContainsKey(new WarningKey("", warningType));
 
         /// <summary>
         ///     get warning mode by warning identifier
@@ -170,9 +172,9 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     set a mode by key
         /// </summary>
-        /// <param name="ident">warning identifier</param>
-        /// <param name="mode">warnig mode</param>
-        public void SetModeByIdentifier(string ident, WarningMode mode) => SetModeByKey(new WarningKey("", ident), mode);
+        /// <param name="warningType">warning identifier</param>
+        /// <param name="mode">warning mode</param>
+        public void SetModeByIdentifier(string warningType, WarningMode mode) => SetModeByKey(new WarningKey("", warningType), mode);
 
         /// <summary>
         ///     set the warning mode by key

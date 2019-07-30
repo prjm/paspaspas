@@ -1,4 +1,4 @@
-﻿using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
@@ -84,10 +84,10 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 if (parseValue) {
                     var value = state.Environment.StringPool.PoolString(parsedValue.Item);
                     var parsed = state.ParserLiteral(value, ValueParser);
-                    return new Token(TokenId, state, parsed);
+                    return new Token(TokenId, state.GetBufferContent(), parsed);
                 }
                 else
-                    return new Token(TokenId, state);
+                    return new Token(TokenId, state.GetBufferContent());
             }
         }
     }

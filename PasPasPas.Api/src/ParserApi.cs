@@ -1,5 +1,7 @@
-﻿using PasPasPas.Globals.Environment;
+﻿using PasPasPas.Globals.Api;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
+using PasPasPas.Globals.Options;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Parser.Standard;
@@ -76,7 +78,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     used option sets
         /// </summary>
-        public OptionSet Options { get; }
+        public IOptionSet Options { get; }
 
         /// <summary>
         ///     annotate an abstract syntax tree with types
@@ -90,7 +92,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     access tokenizer functions
         /// </summary>
-        public TokenizerApi Tokenizer { get; }
+        public ITokenizerApi Tokenizer { get; }
 
         /// <summary>
         ///     system environment

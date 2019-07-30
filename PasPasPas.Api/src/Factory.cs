@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Options;
 
 namespace PasPasPas.Api {
 
@@ -22,6 +23,15 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public static IReaderApi CreateReaderApi(IEnvironment environment)
             => new ReaderApi(environment);
+
+        /// <summary>
+        ///     create a new tokenizer API
+        /// </summary>
+        /// <param name="environment"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static ITokenizerApi CreateTokenizerApi(IParserEnvironment environment, IOptionSet options)
+            => new TokenizerApi(environment, options);
 
     }
 }

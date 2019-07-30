@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
@@ -26,7 +28,7 @@ namespace PasPasPas.Parsing.Parser {
         private static Tokenizer.TokenizerBase CreateTokenizer(IParserEnvironment env, StackedFileReader reader)
             => new Tokenizer.TokenizerBase(env, GetPatternsFromFactory(env), reader);
 
-        private static TokenizerWithLookahead CreateTokenizer(IParserEnvironment env, StackedFileReader reader, OptionSet options)
+        private static TokenizerWithLookahead CreateTokenizer(IParserEnvironment env, StackedFileReader reader, IOptionSet options)
             => new TokenizerWithLookahead(env, options, CreateTokenizer(env, reader), TokenizerMode.CompilerDirective);
 
         /// <summary>
@@ -35,26 +37,26 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="env">services</param>
         /// <param name="input">input file</param>
         /// <param name="options">options</param>
-        public CompilerDirectiveParser(IParserEnvironment env, OptionSet options, StackedFileReader input)
+        public CompilerDirectiveParser(IParserEnvironment env, IOptionSet options, StackedFileReader input)
             : base(env, options, CreateTokenizer(env, input, options)) {
         }
 
         /// <summary>
         ///     compiler options
         /// </summary>
-        protected CompileOptions CompilerOptions
+        protected ICompilerOptions CompilerOptions
              => Options.CompilerOptions;
 
         /// <summary>
         ///     conditional compilation options
         /// </summary>
-        protected ConditionalCompilationOptions ConditionalCompilation
+        protected IConditionalCompilationOptions ConditionalCompilation
             => Options.ConditionalCompilation;
 
         /// <summary>
         ///     meta information
         /// </summary>
-        protected MetaInformation Meta
+        protected IMetaOptions Meta
             => Options.Meta;
 
         /// <summary>

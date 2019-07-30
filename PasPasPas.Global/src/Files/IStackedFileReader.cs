@@ -55,8 +55,8 @@ namespace PasPasPas.Globals.Files {
         /// <summary>
         ///     add input to read
         /// </summary>
-        /// <param name="input"></param>
-        void AddInputToRead(IReaderInput input);
+        /// <param name="inputToRead"></param>
+        void AddInputToRead(IReaderInput inputToRead);
 
     }
 }
