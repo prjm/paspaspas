@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Globals.Options.DataTypes;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Parser;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 

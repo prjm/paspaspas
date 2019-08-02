@@ -5,6 +5,7 @@ using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Parsing;
+using PasPasPas.Globals.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;

@@ -1,8 +1,10 @@
 ﻿using PasPasPas.AssemblyBuilder.Builder;
+using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
+using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Options.Bundles;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Api {
 
@@ -53,7 +55,7 @@ namespace PasPasPas.Api {
         ///     create a assembly for a given project
         /// </summary>
         /// <param name="project"></param>
-        private IAssemblyReference CreateAssembly(ProjectItemCollection project) {
+        private IAssemblyReference CreateAssembly(ISyntaxPart project) {
             var builder = new ProjectAssemblyBuilder(SystemEnvironment);
             project.Accept(builder.AsVisitor());
             return builder.CreateAssemblyReference();
@@ -67,11 +69,11 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     options
         /// </summary>
-        public OptionSet Options { get; }
+        public IOptionSet Options { get; }
 
         /// <summary>
         ///     parser API
         /// </summary>
-        public ParserApi Parser { get; }
+        public IParserApi Parser { get; }
     }
 }

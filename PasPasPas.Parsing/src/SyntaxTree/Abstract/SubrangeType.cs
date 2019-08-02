@@ -1,5 +1,5 @@
 ﻿using System;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
+using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 

@@ -13,7 +13,7 @@ namespace PasPasPas.Api {
         ///     create a global environment
         /// </summary>
         /// <returns></returns>
-        public static IEnvironment CreateEnvironment()
+        public static IAssemblyBuilderEnvironment CreateEnvironment()
             => new DefaultEnvironment();
 
         /// <summary>
@@ -32,6 +32,15 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public static ITokenizerApi CreateTokenizerApi(IParserEnvironment environment, IOptionSet options)
             => new TokenizerApi(environment, options);
+
+        /// <summary>
+        ///     create a new parser API
+        /// </summary>
+        /// <param name="env"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static IParserApi CreateParserApi(ITypedEnvironment env, IOptionSet options)
+            => new ParserApi(env, options);
 
     }
 }

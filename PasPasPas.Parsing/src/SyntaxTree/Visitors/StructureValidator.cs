@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {

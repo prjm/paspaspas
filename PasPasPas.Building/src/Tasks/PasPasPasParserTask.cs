@@ -5,11 +5,11 @@ using System.Text;
 using PasPasPas.Building.Definition;
 using PasPasPas.Building.Engine;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser.Standard;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Building.Tasks {
 

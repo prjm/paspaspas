@@ -9,6 +9,7 @@ using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options.DataTypes;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
@@ -16,7 +17,6 @@ using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Parser.Standard;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
@@ -57,8 +57,8 @@ namespace PasPasPasTests.Parser {
             ClearOptions(testOptions);
 
             var log = new LogTarget();
-            var env = new DefaultEnvironment();
-            var api = new ParserApi(env, testOptions);
+            var env = Factory.CreateEnvironment();
+            var api = Factory.CreateParserApi(env, testOptions);
             var data = api.Tokenizer.Readers.CreateInputForString("test.pas", input);
 
             env.Log.RegisterTarget(log);
@@ -157,7 +157,7 @@ namespace PasPasPasTests.Parser {
             };
 
             var testOptions = new OptionSet(env);
-            var api = new ParserApi(env, testOptions);
+            var api = Factory.CreateParserApi(env, testOptions);
             var data = api.Tokenizer.Readers.CreateInputForString(CstPath, tokens);
 
             ClearOptions(testOptions);
@@ -181,7 +181,7 @@ namespace PasPasPasTests.Parser {
 
         protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env) {
             var testOptions = new OptionSet(env);
-            var api = new ParserApi(env, testOptions);
+            var api = Factory.CreateParserApi(env, testOptions);
             var data = api.Tokenizer.Readers.CreateInputForString("z.x.pas", input);
 
             ClearOptions(testOptions);

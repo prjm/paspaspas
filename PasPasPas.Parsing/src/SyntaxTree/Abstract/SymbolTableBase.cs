@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 

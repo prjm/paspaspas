@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;

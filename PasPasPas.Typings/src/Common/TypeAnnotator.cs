@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Routines;

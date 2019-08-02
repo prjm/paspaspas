@@ -1,5 +1,4 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -21,12 +20,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     directive
         /// </summary>
-        public Terminal Directive { get;  }
+        public Terminal Directive { get; }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get;  }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     symbol length

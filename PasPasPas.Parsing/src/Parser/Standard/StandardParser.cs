@@ -5,6 +5,7 @@ using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Parsing;
+using PasPasPas.Globals.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Utils;
