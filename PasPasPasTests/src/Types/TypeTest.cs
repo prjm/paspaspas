@@ -5,7 +5,6 @@ using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPasTests.Common;
 using PasPasPasTests.Parser;
@@ -297,7 +296,7 @@ namespace PasPasPasTests.Types {
             IExpression firstParam;
 
             env = CreateEnvironment(intSize);
-            var options = new OptionSet(env);
+            var options = Factory.CreateOptions(env, default);
             var api = Factory.CreateParserApi(env, options);
             var data = api.Tokenizer.Readers.CreateInputForString($"{file}.dpr", program);
 

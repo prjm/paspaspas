@@ -4,7 +4,6 @@ using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Api {
 
@@ -18,9 +17,9 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="assemblyBuilderEnvironment"></param>
         /// <param name="options">options</param>
-        public AssemblyBuilderApi(IAssemblyBuilderEnvironment assemblyBuilderEnvironment, OptionSet options = null) {
+        public AssemblyBuilderApi(IAssemblyBuilderEnvironment assemblyBuilderEnvironment, IOptionSet options) {
             SystemEnvironment = assemblyBuilderEnvironment;
-            Options = options ?? new OptionSet(assemblyBuilderEnvironment);
+            Options = options;
             Parser = new ParserApi(assemblyBuilderEnvironment, Options);
         }
 

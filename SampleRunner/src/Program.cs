@@ -25,7 +25,7 @@ namespace SampleRunner {
             var mode = SampleMode.CreateAssembly;
             var repeat = 1;
             var result = System.Console.Out;
-            var environment = new DefaultEnvironment();
+            var environment = Factory.CreateEnvironment();
             var useHistograms = false;
             var action = PrepareSample(environment, testPath, mode, repeat, useHistograms);
 

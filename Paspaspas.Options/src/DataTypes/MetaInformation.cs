@@ -3,7 +3,6 @@ using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
-using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -65,7 +64,7 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="baseOption"></param>
         /// <param name="parentOptions">parent options</param>
-        public MetaInformation(OptionSet parentOptions, IMetaOptions baseOption) {
+        public MetaInformation(IOptionSet parentOptions, IMetaOptions baseOption) {
             ParentOptions = parentOptions;
             Description = new DerivedValueOption<string>(baseOption?.Description);
             FileExtension = new DerivedValueOption<string>(baseOption?.FileExtension);
@@ -104,7 +103,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     parent options
         /// </summary>
-        public OptionSet ParentOptions { get; }
+        public IOptionSet ParentOptions { get; }
 
         /// <summary>
         ///     lib prefix
@@ -152,7 +151,7 @@ namespace PasPasPas.Options.DataTypes {
         public void ResetOnNewUnit(ILogSource logSource) {
 
             foreach (var region in Regions) {
-                logSource.LogError(OptionSet.PendingRegion, region);
+                logSource.LogError(MessageNumbers.PendingRegion, region);
             }
 
             HeaderStrings.Clear();

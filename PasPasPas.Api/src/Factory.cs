@@ -1,6 +1,8 @@
 ﻿using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Options.DataTypes;
+using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Api {
 
@@ -13,8 +15,8 @@ namespace PasPasPas.Api {
         ///     create a global environment
         /// </summary>
         /// <returns></returns>
-        public static IAssemblyBuilderEnvironment CreateEnvironment()
-            => new DefaultEnvironment();
+        public static IAssemblyBuilderEnvironment CreateEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
+            => new DefaultEnvironment(intSize);
 
         /// <summary>
         ///     create a standard reader API
@@ -32,6 +34,13 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public static ITokenizerApi CreateTokenizerApi(IParserEnvironment environment, IOptionSet options)
             => new TokenizerApi(environment, options);
+
+        /// <summary>
+        ///     create a new option set
+        /// </summary>
+        /// <returns></returns>
+        public static IOptionSet CreateOptions(IEnvironment environment, IOptionSet baseOptions)
+            => new OptionSet(baseOptions, environment);
 
         /// <summary>
         ///     create a new parser API

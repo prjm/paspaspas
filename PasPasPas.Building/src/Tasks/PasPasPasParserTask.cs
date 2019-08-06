@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using PasPasPas.Api;
 using PasPasPas.Building.Definition;
 using PasPasPas.Building.Engine;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser.Standard;
 
 namespace PasPasPas.Building.Tasks {
@@ -54,7 +54,8 @@ namespace PasPasPas.Building.Tasks {
             foreach (var file in Path.AsFileList(null)) {
                 count++;
                 var log = new LogTarget();
-                var options = new OptionSet(null);
+                var env = Factory.CreateEnvironment();
+                var options = Factory.CreateOptions(env, default);
 
                 ISyntaxPart resultTree = null;
 

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using PasPasPas.Globals.Files;
+using PasPasPas.Globals.Options;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -13,13 +13,13 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///  parent option set
         /// </summary>
-        private readonly OptionSet optionSet;
+        private readonly IOptionSet optionSet;
 
         /// <summary>
         ///     Create a new search path resolve
         /// </summary>
         /// <param name="options"></param>
-        protected SearchPathResolver(OptionSet options) : base(options.Environment.StringPool)
+        protected SearchPathResolver(IOptionSet options) : base(options.Environment.StringPool)
             => optionSet = options;
 
         /// <summary>

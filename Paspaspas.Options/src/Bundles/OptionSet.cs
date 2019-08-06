@@ -9,19 +9,7 @@ namespace PasPasPas.Options.Bundles {
     /// <summary>
     ///     set of compiler options
     /// </summary>
-    public class OptionSet : IOptionSet {
-
-        /// <summary>
-        ///     error code for a open <c>ifdef</c> / <c>ifndef</c>
-        /// </summary>
-        public const uint PendingCondition
-            = 0x0301;
-
-        /// <summary>
-        ///     pending region
-        /// </summary>
-        public const uint PendingRegion
-            = 0x0302;
+    internal class OptionSet : IOptionSet {
 
         /// <summary>
         ///     debug configuration
@@ -42,7 +30,7 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     create a new option set
         /// </summary>
-        public OptionSet(OptionSet baseOptions, IEnvironment environment) {
+        public OptionSet(IOptionSet baseOptions, IEnvironment environment) {
             Environment = environment;
             LogSource = environment.Log.CreateLogSource(MessageGroups.OptionSet);
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
@@ -70,7 +58,7 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     path options
         /// </summary>
-        public PathOptionSet PathOptions { get; }
+        public IPathOptions PathOptions { get; }
 
         /// <summary>
         ///     warning options

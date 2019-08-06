@@ -8,12 +8,12 @@ using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Parser.Standard;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -53,11 +53,11 @@ namespace PasPasPasTests.Parser {
             if (string.IsNullOrEmpty(output))
                 output = input;
 
-            var testOptions = new OptionSet(CreateEnvironment());
+            var env = CreateEnvironment();
+            var testOptions = Factory.CreateOptions(env, default);
             ClearOptions(testOptions);
 
             var log = new LogTarget();
-            var env = Factory.CreateEnvironment();
             var api = Factory.CreateParserApi(env, testOptions);
             var data = api.Tokenizer.Readers.CreateInputForString("test.pas", input);
 
@@ -156,7 +156,7 @@ namespace PasPasPasTests.Parser {
                 y.Message.Severity == MessageSeverity.FatalError;
             };
 
-            var testOptions = new OptionSet(env);
+            var testOptions = Factory.CreateOptions(env, default);
             var api = Factory.CreateParserApi(env, testOptions);
             var data = api.Tokenizer.Readers.CreateInputForString(CstPath, tokens);
 
@@ -180,7 +180,7 @@ namespace PasPasPasTests.Parser {
         }
 
         protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env) {
-            var testOptions = new OptionSet(env);
+            var testOptions = Factory.CreateOptions(env, default);
             var api = Factory.CreateParserApi(env, testOptions);
             var data = api.Tokenizer.Readers.CreateInputForString("z.x.pas", input);
 
@@ -211,7 +211,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest(statement, search, true, true);
         }
 
-        protected void RunCompilerDirective(string directive, object expected, Func<OptionSet, object> actual, params uint[] messages) {
+        protected void RunCompilerDirective(string directive, object expected, Func<IOptionSet, object> actual, params uint[] messages) {
 
             var env = CreateEnvironment();
             var fileCounter = 0;
@@ -219,7 +219,7 @@ namespace PasPasPasTests.Parser {
             var resFile1 = new FileReference(Path.GetFullPath("res.res"));
             var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
             var linkDll = new FileReference(Path.GetFullPath("link.dll"));
-            var testOptions = new OptionSet(env);
+            var testOptions = Factory.CreateOptions(env, default);
 
             var msgs = new ListLogTarget();
             env.Log.RegisterTarget(msgs);
@@ -285,7 +285,7 @@ namespace PasPasPasTests.Parser {
 
         }
 
-        private void ClearOptions(OptionSet testOptions) {
+        private void ClearOptions(IOptionSet testOptions) {
             testOptions.Clear();
             testOptions.ConditionalCompilation.Conditionals.OwnValues.Add(new ConditionalSymbol() {
                 Name = "PASPASPAS_TEST"

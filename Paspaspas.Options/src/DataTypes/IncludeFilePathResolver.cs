@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Globals.Files;
+using PasPasPas.Globals.Options;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -13,7 +13,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     create a new include file pat resolve
         /// </summary>
         /// <param name="options"></param>
-        public IncludeFilePathResolver(OptionSet options)
+        public IncludeFilePathResolver(IOptionSet options)
             : base(options) {
         }
 

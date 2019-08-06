@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Globals.Files;
+using PasPasPas.Globals.Options;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -14,7 +14,7 @@ namespace PasPasPas.Options.DataTypes {
         ///        create a new file resolver
         /// </summary>
         /// <param name="parentOptions"></param>
-        public LinkedInputFileResolver(OptionSet parentOptions) : base(parentOptions) {
+        public LinkedInputFileResolver(IOptionSet parentOptions) : base(parentOptions) {
         }
 
         /// <summary>

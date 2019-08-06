@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using PasPasPas.Globals.Files;
+using PasPasPas.Globals.Options;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -15,7 +15,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     create a new path resolver
         /// </summary>
         /// <param name="options"></param>
-        public ResourceFilePathResolver(OptionSet options) : base(options) { }
+        public ResourceFilePathResolver(IOptionSet options) : base(options) { }
 
         /// <summary>
         ///     resolve a resource path

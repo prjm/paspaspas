@@ -2,7 +2,6 @@
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
-using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -97,7 +96,7 @@ namespace PasPasPas.Options.DataTypes {
             }
 
             while (CurrentCondition != null) {
-                logSource.LogError(OptionSet.PendingCondition, CurrentCondition);
+                logSource.LogError(MessageNumbers.PendingCondition, CurrentCondition);
                 CurrentCondition = CurrentCondition.ParentBranch;
             }
 

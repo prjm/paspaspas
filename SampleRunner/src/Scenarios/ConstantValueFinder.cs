@@ -4,7 +4,6 @@ using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
@@ -81,7 +80,7 @@ namespace SampleRunner.Scenarios {
             var hasName = false;
 
             for (var i = 0; i < reapeat; i++) {
-                var options = new OptionSet(environment);
+                var options = Factory.CreateOptions(environment, default);
                 var parserApi = Factory.CreateParserApi(environment, options);
                 var data = parserApi.Tokenizer.Readers.CreateInputForPath(testPath);
                 using (var parser = parserApi.CreateParser(data)) {
@@ -93,7 +92,8 @@ namespace SampleRunner.Scenarios {
                         var filePath = Path.GetFullPath(testPath);
                         var path = Path.Combine(Path.GetDirectoryName(filePath), "dummy.dpr");
                         var dummyProgram = $"program dummy; const {item} begin end.";
-                        var parserApi2 = Factory.CreateParserApi(environment, new OptionSet(environment));
+                        var options2 = Factory.CreateOptions(environment, default);
+                        var parserApi2 = Factory.CreateParserApi(environment, options2);
                         var data2 = parserApi2.Tokenizer.Readers.CreateInputForString(path, dummyProgram);
 
                         using (var parser2 = parserApi2.CreateParser(data2)) {

@@ -33,7 +33,8 @@ namespace PasPasPasTests.Assemblies {
                 y.Message.Severity == MessageSeverity.FatalError;
             };
 
-            var api = new AssemblyBuilderApi(env);
+            var opts = Factory.CreateOptions(env, default);
+            var api = new AssemblyBuilderApi(env, opts);
             var data = api.Parser.Tokenizer.Readers.CreateInputForString($"{file}.dpr", program);
             var asm = api.CreateAssembly(data);
 

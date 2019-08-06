@@ -39,6 +39,7 @@
     <ItemGroup>
         <ProjectReference Include="..\PasPasPas.AssemblyBuilder\PasPasPas.AssemblyBuilder.csproj" />
         <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
+        <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj" />
         <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
         <ProjectReference Include="..\PasPasPas.Runtime\PasPasPas.Runtime.csproj" />
         <ProjectReference Include="..\PasPasPas.Typings\PasPasPas.Typings.csproj" />

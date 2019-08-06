@@ -22,7 +22,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <returns></returns>
         protected static IAssemblyBuilderEnvironment CreateEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
-            => new DefaultEnvironment(intSize);
+            => Factory.CreateEnvironment(intSize);
 
         /// <summary>
         ///     create a temp runtime

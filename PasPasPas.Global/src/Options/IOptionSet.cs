@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Options.DataTypes;
+﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Options.DataTypes;
 
 namespace PasPasPas.Globals.Options {
 
@@ -28,10 +29,30 @@ namespace PasPasPas.Globals.Options {
         IMetaOptions Meta { get; }
 
         /// <summary>
+        ///     path options
+        /// </summary>
+        IPathOptions PathOptions { get; }
+
+        /// <summary>
+        ///     environment
+        /// </summary>
+        IEnvironment Environment { get; }
+
+        /// <summary>
         ///     switch info result
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         SwitchInfo GetSwitchInfo(string value);
+
+        /// <summary>
+        ///     clear all options
+        /// </summary>
+        void Clear();
+
+        /// <summary>
+        ///     reset options on a new unit
+        /// </summary>
+        void ResetOnNewUnit();
     }
 }

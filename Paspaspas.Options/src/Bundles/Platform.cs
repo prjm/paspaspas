@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Options;
 
 namespace PasPasPas.Options.Bundles {
 
@@ -21,8 +22,8 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     supported configurations
         /// </summary>
-        public IDictionary<string, OptionSet> Configurations { get; }
-            = new Dictionary<string, OptionSet>();
+        public IDictionary<string, IOptionSet> Configurations { get; }
+            = new Dictionary<string, IOptionSet>();
 
         /// <summary>
         ///     create a new platform entry

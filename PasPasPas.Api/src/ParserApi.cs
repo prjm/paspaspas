@@ -4,7 +4,6 @@ using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Parsing.Parser;
-using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser.Standard;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
@@ -22,9 +21,9 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="parserEnvironment"></param>
         /// <param name="options">options</param>
-        public ParserApi(ITypedEnvironment parserEnvironment, IOptionSet options = null) {
+        public ParserApi(ITypedEnvironment parserEnvironment, IOptionSet options) {
             Environment = parserEnvironment;
-            Options = options ?? new OptionSet(parserEnvironment);
+            Options = options;
             Tokenizer = new TokenizerApi(parserEnvironment, options);
         }
 

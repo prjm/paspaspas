@@ -12,5 +12,11 @@ namespace PasPasPas.Globals.Options {
         ///     own value
         /// </summary>
         IList<T> OwnValues { get; }
+
+        /// <summary>
+        ///     reset option
+        /// </summary>
+        void ResetToDefault();
+
     }
 }

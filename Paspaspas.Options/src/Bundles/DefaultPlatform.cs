@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Options;
 
 namespace PasPasPas.Options.Bundles {
 
@@ -24,6 +25,6 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     default options
         /// </summary>
-        public OptionSet DefaultOptions { get; }
+        public IOptionSet DefaultOptions { get; }
     }
 }

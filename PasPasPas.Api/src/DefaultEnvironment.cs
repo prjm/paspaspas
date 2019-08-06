@@ -23,7 +23,7 @@ namespace PasPasPas.Api {
     ///     default environment: contains all registries and
     ///     factories needed
     /// </summary>
-    public class DefaultEnvironment : IAssemblyBuilderEnvironment {
+    internal class DefaultEnvironment : IAssemblyBuilderEnvironment {
 
         /// <summary>
         ///     runtime values: constants and type references
