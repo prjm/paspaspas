@@ -33,9 +33,10 @@ namespace PasPasPasTests.Tokenizer {
             var result = new List<Token>();
             var messageHandler = new ListLogTarget();
             var api = Factory.CreateTokenizerApi(CreateEnvironment(), default);
-            var data = api.Readers.CreateInputForString("test.pas", input);
+            var path = api.Readers.CreateFileRef("test.pas");
+            var data = CommonApi.CreateResolverForSingleString(api.Readers, path, input);
 
-            using (var tokenizer = api.CreateTokenizer(data)) {
+            using (var tokenizer = api.CreateTokenizer(data, path)) {
                 api.Environment.Log.RegisterTarget(messageHandler);
 
                 while (!tokenizer.AtEof) {

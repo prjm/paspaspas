@@ -65,8 +65,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     dispose the tokenizer
         /// </summary>
-        public void Dispose()
-            => state.Dispose();
+        public void Dispose() {
+            state.Dispose();
+            Input.Dispose();
+        }
 
         /// <summary>
         ///     test if the end of the current file is reached

@@ -3,11 +3,9 @@ using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -136,7 +134,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     include reader
         /// </summary>
-        public StackedFileReader IncludeInput { get; set; }
+        public IStackedFileReader IncludeInput { get; set; }
 
         /// <summary>
         ///     test if an item can be visited
@@ -1057,7 +1055,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var includeFile = Meta.AddInclude(basePath, new FileReference(fileName));
 
             if (IncludeInput != null) {
-                IncludeInput.AddInputToRead(new FileReaderInput(includeFile.Path));
+                IncludeInput.AddInputToRead(includeFile);
             }
         }
 

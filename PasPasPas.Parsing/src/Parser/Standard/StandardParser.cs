@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
@@ -23,14 +24,14 @@ namespace PasPasPas.Parsing.Parser.Standard {
         private static InputPatterns GetPatternsFromFactory(IParserEnvironment environment)
             => ((PatternFactory)environment.Patterns).StandardPatterns;
 
-        private static TokenizerWithLookahead CreateTokenizer(IParserEnvironment environment, IStackedFileReader reader, IOptionSet options)
-            => new TokenizerWithLookahead(environment, options, new Tokenizer.TokenizerBase(environment, GetPatternsFromFactory(environment), reader), TokenizerMode.Standard);
+        private static TokenizerWithLookahead CreateTokenizer(ITokenizerApi api, IStackedFileReader reader)
+            => new TokenizerWithLookahead(api, new Tokenizer.TokenizerBase(api.Environment, GetPatternsFromFactory(api.Environment), reader), TokenizerMode.Standard);
 
         /// <summary>
         ///     creates a new standard parser
         /// </summary>
-        public StandardParser(IParserEnvironment env, IOptionSet options, IStackedFileReader input) :
-            base(env, options, CreateTokenizer(env, input, options)) { }
+        public StandardParser(ITokenizerApi api, IOptionSet options, IStackedFileReader input) :
+            base(api.Environment, options, CreateTokenizer(api, input)) { }
 
         #region Reserved Words
 

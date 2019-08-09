@@ -21,18 +21,19 @@ namespace PasPasPas.Api {
         /// <param name="optionsSet">options (can be <c>null</c>)</param>
         public TokenizerApi(IParserEnvironment parserEnvironment, IOptionSet optionsSet) {
             Environment = parserEnvironment;
-            Options = optionsSet;
+            Options = optionsSet ?? Factory.CreateOptions(parserEnvironment, default);
             Readers = new ReaderApi(parserEnvironment);
         }
 
         /// <summary>
         ///     create a buffered tokenizer with lookahead symbols
         /// </summary>
-        /// <param name="data">data to read</param>
+        /// <param name="resolver"></param>
+        /// <param name="path"></param>
         /// <returns></returns>
-        public ITokenizer CreateBufferedTokenizer(IReaderInput data) {
-            var tokenizer = CreateTokenizer(data);
-            return new TokenizerWithLookahead(Environment, Options, tokenizer, TokenizerMode.Standard);
+        public ITokenizer CreateBufferedTokenizer(IInputResolver resolver, FileReference path) {
+            var tokenizer = CreateTokenizer(resolver, path);
+            return new TokenizerWithLookahead(this, tokenizer, TokenizerMode.Standard);
         }
 
         /// <summary>
@@ -49,10 +50,11 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create a tokenizer for a string
         /// </summary>
-        /// <param name="input">input</param>
+        /// <param name="path"></param>
+        /// <param name="resolver"></param>
         /// <returns></returns>
-        public ITokenizer CreateTokenizer(IReaderInput input) {
-            var fileReader = Readers.CreateReader(input);
+        public ITokenizer CreateTokenizer(IInputResolver resolver, FileReference path) {
+            var fileReader = Readers.CreateReader(resolver, path);
             return CreateTokenizer(fileReader);
         }
 

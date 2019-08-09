@@ -82,8 +82,10 @@ namespace SampleRunner.Scenarios {
             for (var i = 0; i < reapeat; i++) {
                 var options = Factory.CreateOptions(environment, default);
                 var parserApi = Factory.CreateParserApi(environment, options);
-                var data = parserApi.Tokenizer.Readers.CreateInputForPath(testPath);
-                using (var parser = parserApi.CreateParser(data)) {
+                var file = parserApi.Tokenizer.Readers.CreateFileRef(testPath);
+                var resolver = CommonApi.CreateAnyFileResolver(parserApi.Tokenizer.Readers);
+
+                using (var parser = parserApi.CreateParser(resolver, file)) {
                     var result = parser.Parse();
                     var visitor = new ConstantVisitor();
                     result.Accept(visitor.AsVisitor());
@@ -94,9 +96,10 @@ namespace SampleRunner.Scenarios {
                         var dummyProgram = $"program dummy; const {item} begin end.";
                         var options2 = Factory.CreateOptions(environment, default);
                         var parserApi2 = Factory.CreateParserApi(environment, options2);
-                        var data2 = parserApi2.Tokenizer.Readers.CreateInputForString(path, dummyProgram);
+                        var file2 = parserApi2.Tokenizer.Readers.CreateFileRef(path);
+                        var resolver2 = CommonApi.CreateResolverForSingleString(parserApi2.Tokenizer.Readers, file2, dummyProgram);
 
-                        using (var parser2 = parserApi2.CreateParser(data2)) {
+                        using (var parser2 = parserApi2.CreateParser(resolver2, file2)) {
 
                             var result2 = parser2.Parse();
                             var project = parserApi2.CreateAbstractSyntraxTree(result2);

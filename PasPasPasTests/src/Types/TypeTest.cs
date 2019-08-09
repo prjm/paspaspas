@@ -298,9 +298,10 @@ namespace PasPasPasTests.Types {
             env = CreateEnvironment(intSize);
             var options = Factory.CreateOptions(env, default);
             var api = Factory.CreateParserApi(env, options);
-            var data = api.Tokenizer.Readers.CreateInputForString($"{file}.dpr", program);
+            var path = api.Tokenizer.Readers.CreateFileRef($"{file}.dpr");
+            var data = CommonApi.CreateResolverForSingleString(api.Tokenizer.Readers, path, program);
 
-            using (var reader = api.CreateParser(data)) {
+            using (var reader = api.CreateParser(data, path)) {
 
                 api.Options.Meta.NativeIntegerSize.Value = intSize;
 

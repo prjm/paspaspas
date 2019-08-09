@@ -35,8 +35,9 @@ namespace PasPasPasTests.Assemblies {
 
             var opts = Factory.CreateOptions(env, default);
             var api = new AssemblyBuilderApi(env, opts);
-            var data = api.Parser.Tokenizer.Readers.CreateInputForString($"{file}.dpr", program);
-            var asm = api.CreateAssembly(data);
+            var path = api.Parser.Tokenizer.Readers.CreateFileRef($"{file}.dpr");
+            var resolver = CommonApi.CreateResolverForSingleString(api.Parser.Tokenizer.Readers, path, program);
+            var asm = api.CreateAssemblyForProject(resolver, path);
 
             if (tester != default) {
                 Assert.IsNotNull(asm);

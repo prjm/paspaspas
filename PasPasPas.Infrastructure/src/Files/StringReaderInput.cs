@@ -5,14 +5,14 @@ namespace PasPasPas.Infrastructure.Files {
     /// <summary>
     ///     input based on a string
     /// </summary>
-    public class StringReaderInput : IReaderInput {
+    internal class StringReaderInput : IReaderInput {
 
         /// <summary>
         ///     create a new input object for strings
         /// </summary>
         /// <param name="path"></param>
         /// <param name="input"></param>
-        public StringReaderInput(string path, string input) {
+        public StringReaderInput(FileReference path, string input) {
             Path = path;
             Content = input;
         }
@@ -25,7 +25,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     file name
         /// </summary>
-        public string Path { get; }
+        public FileReference Path { get; }
 
         /// <summary>
         ///     fixed buffer size

@@ -23,13 +23,13 @@ namespace PasPasPas.Api {
         public IEnvironment SystemEnvironment { get; }
 
         /// <summary>
-        ///     create a new reader for input source
+        ///     create a new reader for input resolver
         /// </summary>
         /// <param name="input">input</param>
         /// <returns>file reader</returns>
-        public IStackedFileReader CreateReader(IReaderInput input) {
-            var reader = new StackedFileReader();
-            reader.AddInputToRead(input);
+        public IStackedFileReader CreateReader(IInputResolver input, FileReference file) {
+            var reader = new StackedFileReader(input);
+            reader.AddInputToRead(file);
             return reader;
         }
 
@@ -39,7 +39,7 @@ namespace PasPasPas.Api {
         /// <param name="path"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        public IReaderInput CreateInputForString(string path, string input)
+        public IReaderInput CreateInputForString(FileReference path, string input)
             => new StringReaderInput(path, input);
 
         /// <summary>
@@ -47,8 +47,23 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public IReaderInput CreateInputForPath(string path)
+        public IReaderInput CreateInputForPath(FileReference path)
             => new FileReaderInput(path);
 
+        /// <summary>
+        ///     create a new resolver
+        /// </summary>
+        /// <param name="resolver"></param>
+        /// <returns></returns>
+        public IInputResolver CreateInputResolver(Resolver resolver)
+            => new DefaultResolver(this, resolver);
+
+        /// <summary>
+        ///     create a file reference
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public FileReference CreateFileRef(string path)
+            => new FileReference(path);
     }
 }

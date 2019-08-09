@@ -19,9 +19,10 @@ namespace PasPasPasTests.Tokenizer {
         protected static IList<Token> RunTestTokenizer(string input) {
             var api = Factory.CreateTokenizerApi(CreateEnvironment(), default);
             var result = new List<Token>();
-            var data = api.Readers.CreateInputForString(TestFileName, input);
+            var path = api.Readers.CreateFileRef(TestFileName);
+            var resolver = CommonApi.CreateResolverForSingleString(api.Readers, path, input);
 
-            using (var tokenizer = api.CreateTokenizer(data)) {
+            using (var tokenizer = api.CreateTokenizer(resolver, path)) {
                 while (!tokenizer.AtEof) {
                     var token = tokenizer.CurrentToken;
                     Assert.IsNotNull(token);
@@ -104,9 +105,10 @@ namespace PasPasPasTests.Tokenizer {
             var result = new List<Token>();
             var env = CreateEnvironment();
             var api = Factory.CreateReaderApi(env);
-            var data = api.CreateInputForString(TestFileName, input);
+            var file = api.CreateFileRef(TestFileName);
+            var data = CreateResolver(api, file, input);
 
-            using (var reader = api.CreateReader(data)) {
+            using (var reader = api.CreateReader(data, file)) {
                 var log = env.Log.CreateLogSource(LogGuid);
                 var logTarget = new ListLogTarget();
                 env.Log.RegisterTarget(logTarget);

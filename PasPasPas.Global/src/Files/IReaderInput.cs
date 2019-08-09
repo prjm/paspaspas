@@ -14,7 +14,7 @@
         /// <summary>
         ///     file path
         /// </summary>
-        string Path { get; }
+        FileReference Path { get; }
 
         /// <summary>
         ///     buffer size

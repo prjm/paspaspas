@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 
@@ -25,20 +25,20 @@ namespace PasPasPas.Parsing.Parser {
         private static InputPatterns GetPatternsFromFactory(IParserEnvironment environment)
             => ((PatternFactory)environment.Patterns).CompilerDirectivePatterns;
 
-        private static Tokenizer.TokenizerBase CreateTokenizer(IParserEnvironment env, StackedFileReader reader)
+        private static Tokenizer.TokenizerBase CreateTokenizer(IParserEnvironment env, IStackedFileReader reader)
             => new Tokenizer.TokenizerBase(env, GetPatternsFromFactory(env), reader);
 
-        private static TokenizerWithLookahead CreateTokenizer(IParserEnvironment env, StackedFileReader reader, IOptionSet options)
-            => new TokenizerWithLookahead(env, options, CreateTokenizer(env, reader), TokenizerMode.CompilerDirective);
+        private static TokenizerWithLookahead CreateTokenizer(ITokenizerApi api, IStackedFileReader reader)
+            => new TokenizerWithLookahead(api, CreateTokenizer(api.Environment, reader), TokenizerMode.CompilerDirective);
 
         /// <summary>
         ///     create a new compiler directive parser
         /// </summary>
-        /// <param name="env">services</param>
+        /// <param name="api">tokenizer API</param>
         /// <param name="input">input file</param>
         /// <param name="options">options</param>
-        public CompilerDirectiveParser(IParserEnvironment env, IOptionSet options, StackedFileReader input)
-            : base(env, options, CreateTokenizer(env, input, options)) {
+        public CompilerDirectiveParser(ITokenizerApi api, IOptionSet options, IStackedFileReader input)
+            : base(api.Environment, options, CreateTokenizer(api, input)) {
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     reader to include files into
         /// </summary>
-        public StackedFileReader IncludeInput { get; set; }
+        public IStackedFileReader IncludeInput { get; set; }
 
         /// <summary>
         ///     supported switches

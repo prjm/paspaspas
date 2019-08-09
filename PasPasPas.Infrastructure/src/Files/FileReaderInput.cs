@@ -6,19 +6,19 @@ namespace PasPasPas.Infrastructure.Files {
     /// <summary>
     ///     stacked file reader input for files
     /// </summary>
-    public class FileReaderInput : IReaderInput {
+    internal class FileReaderInput : IReaderInput {
 
         /// <summary>
         ///     create a new file reader input
         /// </summary>
         /// <param name="path"></param>
-        public FileReaderInput(string path)
+        public FileReaderInput(FileReference path)
             => Path = path;
 
         /// <summary>
         ///     file path
         /// </summary>
-        public string Path { get; }
+        public FileReference Path { get; }
 
         /// <summary>
         ///     fixed buffer size
@@ -31,7 +31,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         /// <returns></returns>
         public IBufferSource CreateBufferSource() {
-            var stream = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var stream = new FileStream(Path.Path, FileMode.Open, FileAccess.Read, FileShare.Read);
             return new Utf8StreamBufferSource(stream, BufferSize, BufferSize);
         }
     }

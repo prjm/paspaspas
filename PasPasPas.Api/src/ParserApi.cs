@@ -23,18 +23,19 @@ namespace PasPasPas.Api {
         /// <param name="options">options</param>
         public ParserApi(ITypedEnvironment parserEnvironment, IOptionSet options) {
             Environment = parserEnvironment;
-            Options = options;
+            Options = options ?? Factory.CreateOptions(parserEnvironment, default);
             Tokenizer = new TokenizerApi(parserEnvironment, options);
         }
 
         /// <summary>
         ///     create a parser for a given input string
         /// </summary>
-        /// <param name="input">input</param>
+        /// <param name="resolver"></param>
+        /// <param name="path"></param>
         /// <returns></returns>
-        public IParser CreateParser(IReaderInput input) {
-            var reader = Tokenizer.Readers.CreateReader(input);
-            var parser = new StandardParser(Environment, Options, reader);
+        public IParser CreateParser(IInputResolver resolver, FileReference path) {
+            var reader = Tokenizer.Readers.CreateReader(resolver, path);
+            var parser = new StandardParser(Tokenizer, Options, reader);
             return parser;
         }
 

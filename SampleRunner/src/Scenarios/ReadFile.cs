@@ -7,12 +7,9 @@ namespace SampleRunner.Scenarios {
 
         public static void Run(TextWriter b, string file, int repeat) {
             var count = 0L;
-            var env = Factory.CreateEnvironment();
-            var api = Factory.CreateReaderApi(env);
-            var data = api.CreateInputForPath(file);
 
             for (var i = 0; i < repeat; i++) {
-                using (var reader = api.CreateReader(data)) {
+                using (var reader = CommonApi.CreateReaderForFiles(file)) {
 
                     while (!reader.AtEof) {
                         reader.NextChar();

@@ -26,23 +26,11 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create an assembly for a given project
         /// </summary>
-        /// <param name="path"></param>
-        public IAssemblyReference CreateAssemblyForProject(string path) {
-            var data = Parser.Tokenizer.Readers.CreateInputForPath(path);
-            using (var parser = Parser.CreateParser(data)) {
-                var result = parser.Parse();
-                var project = Parser.CreateAbstractSyntraxTree(result);
-                Parser.AnnotateWithTypes(project);
-                return CreateAssembly(project);
-            }
-        }
-
-        /// <summary>
-        ///     create an assembly for a given input string
-        /// </summary>
-        /// <param name="input">input</param>
-        public IAssemblyReference CreateAssembly(IReaderInput input) {
-            using (var parser = Parser.CreateParser(input)) {
+        /// <param name="file"></param>
+        /// <param name="resolver"></param>
+        public IAssemblyReference CreateAssemblyForProject(IInputResolver resolver, FileReference file) {
+            var data = Parser.Tokenizer.Readers.CreateInputForPath(file);
+            using (var parser = Parser.CreateParser(resolver, file)) {
                 var result = parser.Parse();
                 var project = Parser.CreateAbstractSyntraxTree(result);
                 Parser.AnnotateWithTypes(project);

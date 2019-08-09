@@ -21,9 +21,10 @@ namespace PasPasPasTests.Infra {
         public void TestSimpleRead() {
             var env = Factory.CreateEnvironment();
             var api = Factory.CreateReaderApi(env);
-            var data = api.CreateInputForString("test.pas", Content1);
+            var file = api.CreateFileRef("test.pas");
+            var resolver = CreateResolver(api, file, Content1);
 
-            using (var reader = api.CreateReader(data)) {
+            using (var reader = api.CreateReader(resolver, file)) {
                 var result = new StringBuilder();
 
                 while (!reader.AtEof) {
@@ -43,8 +44,9 @@ namespace PasPasPasTests.Infra {
             try {
                 var env = Factory.CreateEnvironment();
                 var api = Factory.CreateReaderApi(env);
-                var data = api.CreateInputForPath(path);
-                using (var reader = api.CreateReader(data)) {
+                var file = api.CreateFileRef(path);
+                var data = api.CreateInputForPath(file);
+                using (var reader = api.CreateReader(CreateResolver(api), file)) {
                     while (!reader.AtEof) {
                         result.Append(reader.NextChar());
                     }
@@ -61,18 +63,19 @@ namespace PasPasPasTests.Infra {
 
             var splitIndex = 5;
             var result = new StringBuilder();
-            var path1 = GenerateTempFile(Content1);
-            var path2 = GenerateTempFile(Content2);
             var env = Factory.CreateEnvironment();
             var api = Factory.CreateReaderApi(env);
+            var path1 = api.CreateFileRef(GenerateTempFile(Content1));
+            var path2 = api.CreateFileRef(GenerateTempFile(Content2));
+            var r = CreateResolver(api);
 
             try {
-                using (var reader = api.CreateReader(api.CreateInputForPath(path1))) {
+                using (var reader = api.CreateReader(r, path1)) {
                     while (!reader.AtEof && result.Length < splitIndex) {
                         result.Append(reader.NextChar());
                     }
                     var len = splitIndex;
-                    reader.AddInputToRead(api.CreateInputForPath(path2));
+                    reader.AddInputToRead(path2);
                     while (reader.CurrentFile != null && !reader.AtEof) {
                         result.Append(reader.NextChar());
                         len++;
@@ -93,8 +96,8 @@ namespace PasPasPasTests.Infra {
                 }
             }
             finally {
-                File.Delete(path1);
-                File.Delete(path2);
+                File.Delete(path1.Path);
+                File.Delete(path2.Path);
             }
         }
 
@@ -108,18 +111,17 @@ namespace PasPasPasTests.Infra {
         public void TestNestedRead() {
 
             var result = new StringBuilder();
-            var path1 = GenerateTempFile(Content1);
-            var path2 = GenerateTempFile(Content2);
             var env = Factory.CreateEnvironment();
             var api = Factory.CreateReaderApi(env);
-            var data = api.CreateInputForPath(path1);
-            using (var reader = api.CreateReader(data)) {
+            var path1 = api.CreateFileRef(GenerateTempFile(Content1));
+            var path2 = api.CreateFileRef(GenerateTempFile(Content2));
+            using (var reader = api.CreateReader(CreateResolver(api), path1)) {
 
                 while (!reader.AtEof && result.Length < 5) {
                     result.Append(reader.NextChar());
                 }
 
-                reader.AddInputToRead(api.CreateInputForPath(path2));
+                reader.AddInputToRead(path2);
                 while (reader.CurrentFile != null && !reader.AtEof) {
                     result.Append(reader.NextChar());
 

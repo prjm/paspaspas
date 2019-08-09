@@ -11,8 +11,10 @@ namespace SampleRunner.Scenarios {
             for (var i = 0; i < reapeat; i++) {
                 var options = Factory.CreateOptions(environment, default);
                 var parserApi = Factory.CreateParserApi(environment, options);
-                var data = parserApi.Tokenizer.Readers.CreateInputForPath(testPath);
-                using (var parser = parserApi.CreateParser(data)) {
+                var file = parserApi.Tokenizer.Readers.CreateFileRef(testPath);
+                var resolver = CommonApi.CreateAnyFileResolver(parserApi.Tokenizer.Readers);
+
+                using (var parser = parserApi.CreateParser(resolver, file)) {
                     var result = parser.Parse();
                     var project = parserApi.CreateAbstractSyntraxTree(result);
                     parserApi.AnnotateWithTypes(project);

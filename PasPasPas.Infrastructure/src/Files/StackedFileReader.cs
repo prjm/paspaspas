@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using PasPasPas.Globals.Files;
 
 namespace PasPasPas.Infrastructure.Files {
@@ -7,12 +6,7 @@ namespace PasPasPas.Infrastructure.Files {
     /// <summary>
     ///     read from a combination of text files
     /// </summary>
-    public sealed class StackedFileReader : IDisposable, IStackedFileReader {
-
-        /// <summary>
-        ///     mock-up files
-        /// </summary>
-        private IDictionary<FileReference, string> mockups;
+    internal class StackedFileReader : IDisposable, IStackedFileReader {
 
         /// <summary>
         ///     helper class for nested input
@@ -25,21 +19,22 @@ namespace PasPasPas.Infrastructure.Files {
 
         private NestedInput input = null;
 
+        public StackedFileReader(IInputResolver resolver)
+            => Resolver = resolver;
+
         /// <summary>
         ///     add a string to read
         /// </summary>
         /// <param name="inputToRead">input source</param>
-        public void AddInputToRead(IReaderInput inputToRead) {
+        public void AddInputToRead(FileReference inputToRead) {
             if (inputToRead.Path == null)
                 throw new ArgumentNullException(nameof(inputToRead.Path));
 
-            if (mockups != default && mockups.TryGetValue(new FileReference(inputToRead.Path), out var data)) {
-                inputToRead = new StringReaderInput(inputToRead.Path, data);
-            }
+            var data = Resolver.Resolve(inputToRead);
 
             input = new NestedInput() {
-                File = new FileReference(inputToRead.Path),
-                Input = new FileBuffer(inputToRead.CreateBufferSource(), 2 * inputToRead.BufferSize),
+                File = inputToRead,
+                Input = new FileBuffer(data.CreateBufferSource(), 2 * data.BufferSize),
                 Parent = input
             };
         }
@@ -147,6 +142,11 @@ namespace PasPasPas.Infrastructure.Files {
             => input != null ? input.Input.Position : -1;
 
         /// <summary>
+        ///     resolver
+        /// </summary>
+        public IInputResolver Resolver { get; }
+
+        /// <summary>
         ///     fetch the next char
         /// </summary>
         public char NextChar() {
@@ -184,15 +184,5 @@ namespace PasPasPas.Infrastructure.Files {
         public void Dispose() =>
             Dispose(true);
 
-        /// <summary>
-        ///     add a mock-up file
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="content"></param>
-        public void AddMockupFile(FileReference path, string content) {
-            if (mockups == null)
-                mockups = new Dictionary<FileReference, string>();
-            mockups[path] = content;
-        }
     }
 }

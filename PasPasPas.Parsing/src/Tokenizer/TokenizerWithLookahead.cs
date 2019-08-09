@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Parser;
@@ -59,16 +59,20 @@ namespace PasPasPas.Parsing.Tokenizer {
         private readonly TokenizerMode mode = TokenizerMode.Undefined;
         private readonly IParserEnvironment environment;
         private readonly IRuntimeValueFactory constValues;
+        private readonly IReaderApi readerApi;
+        private readonly ITokenizerApi tokenizerApi;
 
         /// <summary>
         ///     create a new tokenizer with lookahead
         /// </summary>
-        public TokenizerWithLookahead(IParserEnvironment env, IOptionSet optionsSet, ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
+        public TokenizerWithLookahead(ITokenizerApi api, ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
             mode = tokenizerMode;
             BaseTokenizer = baseTokenizer;
-            options = optionsSet;
-            environment = env;
-            constValues = env.Runtime;
+            options = api.Options;
+            environment = api.Environment;
+            constValues = environment.Runtime;
+            readerApi = api.Readers;
+            tokenizerApi = api;
         }
 
         /// <summary>
@@ -174,18 +178,26 @@ namespace PasPasPas.Parsing.Tokenizer {
             return false;
         }
 
+
+        private static Resolver CreateResolver(FileReference path, string data)
+            => (f, a) => {
+                if (!f.Equals(path))
+                    return default;
+                return a.CreateInputForString(path, data);
+            };
+
         /// <summary>
         ///     do nothing
         /// </summary>
         /// <param name="nextToken"></param>
         /// <param name="path">current path</param>
         private void ProcessMacroToken(FileReference path, ref Token nextToken) {
-            using (var reader = new StackedFileReader()) {
-                var macroValue = nextToken.ParsedValue as IStringValue;
-                var input = new StringReaderInput(path.Path, macroValue?.AsUnicodeString ?? string.Empty);
-                reader.AddInputToRead(input);
+            var macroValue = nextToken.ParsedValue as IStringValue;
+            var data = macroValue?.AsUnicodeString ?? string.Empty;
+            var resolver = readerApi.CreateInputResolver(CreateResolver(path, data));
 
-                using (var parser = new CompilerDirectiveParser(environment, options, reader)) {
+            using (var reader = readerApi.CreateReader(resolver, path)) {
+                using (var parser = new CompilerDirectiveParser(tokenizerApi, options, reader)) {
                     var result = parser.Parse();
                     var visitor = new CompilerDirectiveVisitor(options, path, Log);
                     result.Accept(visitor.AsVisitor());

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using PasPasPas.Api;
+using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
@@ -12,7 +13,6 @@ using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Parser.Standard;
@@ -59,11 +59,11 @@ namespace PasPasPasTests.Parser {
 
             var log = new LogTarget();
             var api = Factory.CreateParserApi(env, testOptions);
-            var data = api.Tokenizer.Readers.CreateInputForString("test.pas", input);
+            var path = api.Tokenizer.Readers.CreateFileRef("test.pas");
 
             env.Log.RegisterTarget(log);
 
-            using (var parser = api.CreateParser(data)) {
+            using (var parser = api.CreateParser(CommonApi.CreateResolverForSingleString(api.Tokenizer.Readers, path, input), path)) {
                 var hasError = false;
                 var errorText = string.Empty;
 
@@ -158,10 +158,11 @@ namespace PasPasPasTests.Parser {
 
             var testOptions = Factory.CreateOptions(env, default);
             var api = Factory.CreateParserApi(env, testOptions);
-            var data = api.Tokenizer.Readers.CreateInputForString(CstPath, tokens);
+            var path = api.Tokenizer.Readers.CreateFileRef(CstPath);
+            var data = CreateResolver(api.Tokenizer.Readers, path, tokens);
 
             ClearOptions(testOptions);
-            using (var parser = api.CreateParser(data)) {
+            using (var parser = api.CreateParser(data, path)) {
                 var standard = parser as StandardParser;
                 Assert.IsNotNull(standard);
                 var value = tester(standard);
@@ -182,11 +183,12 @@ namespace PasPasPasTests.Parser {
         protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env) {
             var testOptions = Factory.CreateOptions(env, default);
             var api = Factory.CreateParserApi(env, testOptions);
-            var data = api.Tokenizer.Readers.CreateInputForString("z.x.pas", input);
+            var path = api.Tokenizer.Readers.CreateFileRef("z.x.pas");
+            var resolver = CommonApi.CreateResolverForSingleString(api.Tokenizer.Readers, path, input);
 
             ClearOptions(testOptions);
 
-            using (var parser = api.CreateParser(data)) {
+            using (var parser = api.CreateParser(resolver, path)) {
                 return parser.Parse();
             }
         }
@@ -211,6 +213,34 @@ namespace PasPasPasTests.Parser {
             RunAstTest(statement, search, true, true);
         }
 
+        protected IInputResolver CreateResolver(IReaderApi api, FileReference path, string content) {
+            IReaderInput doResolve(FileReference file, IReaderApi a) {
+                var incFile = new FileReference(Path.GetFullPath("dummy.inc"));
+                var resFile1 = new FileReference(Path.GetFullPath("res.res"));
+                var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
+                var linkDll = new FileReference(Path.GetFullPath("link.dll"));
+
+                if (file.Equals(incFile))
+                    return a.CreateInputForString(incFile, "DEFINE DUMMY_INC");
+
+                if (file.Equals(resFile1))
+                    return a.CreateInputForString(resFile1, "RES RES RES");
+
+                if (file.Equals(resFile2))
+                    return a.CreateInputForString(resFile2, "RES RES RES");
+
+                if (file.Equals(linkDll))
+                    return a.CreateInputForString(linkDll, "MZE!");
+
+                if (file.Equals(path))
+                    return a.CreateInputForString(path, content);
+
+                return default;
+            }
+
+            return api.CreateInputResolver(doResolve);
+        }
+
         protected void RunCompilerDirective(string directive, object expected, Func<IOptionSet, object> actual, params uint[] messages) {
 
             var env = CreateEnvironment();
@@ -220,6 +250,7 @@ namespace PasPasPasTests.Parser {
             var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
             var linkDll = new FileReference(Path.GetFullPath("link.dll"));
             var testOptions = Factory.CreateOptions(env, default);
+            var api = Factory.CreateParserApi(env, testOptions);
 
             var msgs = new ListLogTarget();
             env.Log.RegisterTarget(msgs);
@@ -234,18 +265,12 @@ namespace PasPasPasTests.Parser {
                 foreach (var subPart in subParts) {
                     var hasFoundInput = false;
                     var path = new FileReference("test_" + fileCounter.ToString(CultureInfo.InvariantCulture) + ".pas");
-                    using (var reader = new StackedFileReader()) {
+                    using (var reader = api.Tokenizer.Readers.CreateReader(CreateResolver(api.Tokenizer.Readers, path, subPart), path)) {
                         var visitor = new CompilerDirectiveVisitor(testOptions, path, env.Log);
                         var terminals = new TerminalVisitor();
 
-                        reader.AddMockupFile(incFile, "DEFINE DUMMY_INC");
-                        reader.AddMockupFile(resFile1, "RES RES RES");
-                        reader.AddMockupFile(resFile2, "RES RES RES");
-                        reader.AddMockupFile(linkDll, "MZE!");
 
-                        reader.AddInputToRead(new StringReaderInput(path.Path, subPart));
-
-                        var parser = new CompilerDirectiveParser(env, testOptions, reader) {
+                        var parser = new CompilerDirectiveParser(api.Tokenizer, testOptions, reader) {
                             IncludeInput = reader
                         };
 

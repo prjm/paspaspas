@@ -7,9 +7,7 @@ using PasPasPas.Building.Definition;
 using PasPasPas.Building.Engine;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.Parser.Standard;
 
 namespace PasPasPas.Building.Tasks {
 
@@ -54,16 +52,12 @@ namespace PasPasPas.Building.Tasks {
             foreach (var file in Path.AsFileList(null)) {
                 count++;
                 var log = new LogTarget();
-                var env = Factory.CreateEnvironment();
-                var options = Factory.CreateOptions(env, default);
 
                 ISyntaxPart resultTree = null;
 
-                using (var reader = new StackedFileReader()) {
-                    var parser = new StandardParser(null, options, reader);
+                using (var parser = CommonApi.CreateParserForFiles(file.Path)) {
 
                     result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");
-                    reader.AddInputToRead(new FileReaderInput(file.Path));
                     var hasError = false;
 
                     log.ProcessMessage += (x, y) => {
@@ -74,7 +68,7 @@ namespace PasPasPas.Building.Tasks {
                     };
 
                     try {
-                        resultTree = parser.ParseFile();
+                        resultTree = parser.Parse();
                     }
                     catch (Exception exception) {
                         result.AppendLine("<<XXXX>> Exception!");

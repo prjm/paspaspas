@@ -13,8 +13,11 @@ namespace SampleRunner.Scenarios {
             for (var i = 0; i < reapeat; i++) {
                 var opts = Factory.CreateOptions(environment, default);
                 var api = new AssemblyBuilderApi(environment, opts);
-                var asm = api.CreateAssemblyForProject(testPath);
+                var file = api.Parser.Tokenizer.Readers.CreateFileRef(testPath);
+                var resolver = CommonApi.CreateAnyFileResolver(api.Parser.Tokenizer.Readers);
+                var asm = api.CreateAssemblyForProject(resolver, file);
                 var crt = new AssemblyGenerator();
+
                 crt.GenerateAssembly(asm.GeneratedAssembly, @"C:\temp\demo.dll");
                 b.WriteLine("Test assembly created.");
             }

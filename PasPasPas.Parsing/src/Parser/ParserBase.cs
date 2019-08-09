@@ -445,8 +445,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5">fifth token</param>
         /// <param name="tokenKind6">sixth token</param>
         /// <param name="tokenKind7">seventh token</param>
-        /// <param name="tokenKind8">eigth token</param>
-        /// <param name="tokenKind9">eigth token</param>
+        /// <param name="tokenKind8">eighth token</param>
+        /// <param name="tokenKind9">ninth token</param>
         /// <returns></returns>
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9) {
             var token = CurrentToken();
@@ -474,7 +474,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5">fifth token</param>
         /// <param name="tokenKind6">sixth token</param>
         /// <param name="tokenKind7">seventh token</param>
-        /// <param name="tokenKind8">eigth token</param>
+        /// <param name="tokenKind8">eighth token</param>
         /// <returns></returns>
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
             var token = CurrentToken();
