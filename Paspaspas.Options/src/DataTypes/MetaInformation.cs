@@ -93,7 +93,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     path resolver for includes
         /// </summary>
-        public IncludeFilePathResolver IncludePathResolver { get; }
+        public IPathResolver IncludePathResolver { get; }
 
         /// <summary>
         ///     path resolve for resource files

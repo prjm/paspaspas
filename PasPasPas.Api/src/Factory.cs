@@ -1,7 +1,9 @@
 ﻿using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Api {
@@ -29,18 +31,25 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create a new tokenizer API
         /// </summary>
-        /// <param name="environment"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static ITokenizerApi CreateTokenizerApi(IParserEnvironment environment, IOptionSet options)
-            => new TokenizerApi(environment, options);
+        public static ITokenizerApi CreateTokenizerApi(IOptionSet options)
+            => new TokenizerApi(options);
 
         /// <summary>
         ///     create a new option set
         /// </summary>
         /// <returns></returns>
-        public static IOptionSet CreateOptions(IEnvironment environment, IOptionSet baseOptions)
-            => new OptionSet(baseOptions, environment);
+        public static IOptionSet CreateOptions(IInputResolver resolver, IEnvironment environment)
+            => new OptionSet(resolver, environment);
+
+        /// <summary>
+        ///     create a new option set
+        /// </summary>
+        /// <returns></returns>
+        public static IOptionSet CreateOptions(IOptionSet options)
+            => new OptionSet(options);
+
 
         /// <summary>
         ///     create a new parser API
@@ -48,8 +57,18 @@ namespace PasPasPas.Api {
         /// <param name="env"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IParserApi CreateParserApi(ITypedEnvironment env, IOptionSet options)
-            => new ParserApi(env, options);
+        public static IParserApi CreateParserApi(IOptionSet options)
+            => new ParserApi(options);
+
+        /// <summary>
+        ///     create an input resolver
+        /// </summary>
+        /// <param name="resolver"></param>
+        /// <param name="checker"></param>
+        /// <returns></returns>
+        public static IInputResolver CreateInputResolver(Resolver resolver, Checker checker)
+            => new DefaultResolver(resolver, checker);
+
 
     }
 }

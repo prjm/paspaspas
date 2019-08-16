@@ -54,16 +54,17 @@ namespace PasPasPasTests.Parser {
                 output = input;
 
             var env = CreateEnvironment();
-            var testOptions = Factory.CreateOptions(env, default);
+            var path = new FileReference("test.pas");
+            var r = CommonApi.CreateResolverForSingleString(path, input);
+            var testOptions = Factory.CreateOptions(r, env);
             ClearOptions(testOptions);
 
             var log = new LogTarget();
-            var api = Factory.CreateParserApi(env, testOptions);
-            var path = api.Tokenizer.Readers.CreateFileRef("test.pas");
+            var api = Factory.CreateParserApi(testOptions);
 
             env.Log.RegisterTarget(log);
 
-            using (var parser = api.CreateParser(CommonApi.CreateResolverForSingleString(api.Tokenizer.Readers, path, input), path)) {
+            using (var parser = api.CreateParser(path)) {
                 var hasError = false;
                 var errorText = string.Empty;
 
@@ -156,13 +157,13 @@ namespace PasPasPasTests.Parser {
                 y.Message.Severity == MessageSeverity.FatalError;
             };
 
-            var testOptions = Factory.CreateOptions(env, default);
-            var api = Factory.CreateParserApi(env, testOptions);
-            var path = api.Tokenizer.Readers.CreateFileRef(CstPath);
-            var data = CreateResolver(api.Tokenizer.Readers, path, tokens);
+            var path = new FileReference(CstPath);
+            var data = CreateResolver(path, tokens);
+            var testOptions = Factory.CreateOptions(data, env);
+            var api = Factory.CreateParserApi(testOptions);
 
             ClearOptions(testOptions);
-            using (var parser = api.CreateParser(data, path)) {
+            using (var parser = api.CreateParser(path)) {
                 var standard = parser as StandardParser;
                 Assert.IsNotNull(standard);
                 var value = tester(standard);
@@ -181,14 +182,14 @@ namespace PasPasPasTests.Parser {
         }
 
         protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env) {
-            var testOptions = Factory.CreateOptions(env, default);
-            var api = Factory.CreateParserApi(env, testOptions);
-            var path = api.Tokenizer.Readers.CreateFileRef("z.x.pas");
-            var resolver = CommonApi.CreateResolverForSingleString(api.Tokenizer.Readers, path, input);
+            var path = new FileReference("z.x.pas");
+            var resolver = CommonApi.CreateResolverForSingleString(path, input);
+            var testOptions = Factory.CreateOptions(resolver, env);
+            var api = Factory.CreateParserApi(testOptions);
 
             ClearOptions(testOptions);
 
-            using (var parser = api.CreateParser(resolver, path)) {
+            using (var parser = api.CreateParser(path)) {
                 return parser.Parse();
             }
         }
@@ -213,12 +214,13 @@ namespace PasPasPasTests.Parser {
             RunAstTest(statement, search, true, true);
         }
 
-        protected IInputResolver CreateResolver(IReaderApi api, FileReference path, string content) {
+        protected IInputResolver CreateResolver(FileReference path, string content) {
+            var incFile = new FileReference(Path.GetFullPath("dummy.inc"));
+            var resFile1 = new FileReference(Path.GetFullPath("res.res"));
+            var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
+            var linkDll = new FileReference(Path.GetFullPath("link.dll"));
+
             IReaderInput doResolve(FileReference file, IReaderApi a) {
-                var incFile = new FileReference(Path.GetFullPath("dummy.inc"));
-                var resFile1 = new FileReference(Path.GetFullPath("res.res"));
-                var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
-                var linkDll = new FileReference(Path.GetFullPath("link.dll"));
 
                 if (file.Equals(incFile))
                     return a.CreateInputForString(incFile, "DEFINE DUMMY_INC");
@@ -232,13 +234,34 @@ namespace PasPasPasTests.Parser {
                 if (file.Equals(linkDll))
                     return a.CreateInputForString(linkDll, "MZE!");
 
-                if (file.Equals(path))
+                if (path != default && file.Equals(path))
                     return a.CreateInputForString(path, content);
 
                 return default;
             }
 
-            return api.CreateInputResolver(doResolve);
+            bool doCheck(FileReference file) {
+
+                if (file.Equals(incFile))
+                    return true;
+
+                if (file.Equals(resFile1))
+                    return true;
+
+                if (file.Equals(resFile2))
+                    return true;
+
+                if (file.Equals(linkDll))
+                    return true;
+
+                if (file.Equals(path))
+                    return true;
+
+                return false;
+            }
+
+
+            return Factory.CreateInputResolver(doResolve, doCheck);
         }
 
         protected void RunCompilerDirective(string directive, object expected, Func<IOptionSet, object> actual, params uint[] messages) {
@@ -249,23 +272,36 @@ namespace PasPasPasTests.Parser {
             var resFile1 = new FileReference(Path.GetFullPath("res.res"));
             var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
             var linkDll = new FileReference(Path.GetFullPath("link.dll"));
-            var testOptions = Factory.CreateOptions(env, default);
-            var api = Factory.CreateParserApi(env, testOptions);
 
             var msgs = new ListLogTarget();
             env.Log.RegisterTarget(msgs);
 
+            var directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            var f = new FilesAndPaths();
+            foreach (var directivePart in directives) {
+                var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var subPart in subParts) {
+                    var path = "test_" + fileCounter.ToString(CultureInfo.InvariantCulture) + ".pas";
+                    f.Add(path, subPart);
+                    fileCounter++;
+                }
+            }
+
+            fileCounter = 0;
+            var r = f.CreateResolver(CreateResolver(default, default));
+            var testOptions = Factory.CreateOptions(r, env);
+            var api = Factory.CreateParserApi(testOptions);
             ClearOptions(testOptions);
 
-            var directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var directivePart in directives) {
                 testOptions.ResetOnNewUnit();
                 var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var subPart in subParts) {
+
                     var hasFoundInput = false;
-                    var path = new FileReference("test_" + fileCounter.ToString(CultureInfo.InvariantCulture) + ".pas");
-                    using (var reader = api.Tokenizer.Readers.CreateReader(CreateResolver(api.Tokenizer.Readers, path, subPart), path)) {
+                    var path = f.FindUnit("test_" + fileCounter.ToString(CultureInfo.InvariantCulture) + ".pas");
+                    using (var reader = api.Tokenizer.Readers.CreateReader(r, path)) {
                         var visitor = new CompilerDirectiveVisitor(testOptions, path, env.Log);
                         var terminals = new TerminalVisitor();
 

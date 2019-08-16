@@ -15,11 +15,14 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="readerApi"></param>
         /// <returns></returns>
-        public static IInputResolver CreateAnyFileResolver(IReaderApi readerApi) {
+        public static IInputResolver CreateAnyFileResolver() {
             IReaderInput doResolve(FileReference file, IReaderApi api)
                 => api.CreateInputForPath(file);
 
-            return readerApi.CreateInputResolver(doResolve);
+            bool doCheck(FileReference file)
+                => System.IO.File.Exists(file.Path);
+
+            return Factory.CreateInputResolver(doResolve, doCheck);
         }
 
         /// <summary>
@@ -31,7 +34,7 @@ namespace PasPasPas.Api {
             var env = Factory.CreateEnvironment();
             var api = Factory.CreateReaderApi(env);
             var fileRef = api.CreateFileRef(file);
-            var data = CreateAnyFileResolver(api);
+            var data = CreateAnyFileResolver();
             return api.CreateReader(data, fileRef);
         }
 
@@ -42,9 +45,10 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public static ITokenizer CreateTokenizerForFiles(string file) {
             var env = Factory.CreateEnvironment();
-            var api = Factory.CreateTokenizerApi(env, default);
+            var data = CreateAnyFileResolver();
+            var options = Factory.CreateOptions(data, env);
+            var api = Factory.CreateTokenizerApi(options);
             var fileRef = api.Readers.CreateFileRef(file);
-            var data = CreateAnyFileResolver(api.Readers);
             return api.CreateTokenizer(data, fileRef);
         }
 
@@ -55,9 +59,10 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public static ITokenizer CreateBufferedTokenizer(string file) {
             var env = Factory.CreateEnvironment();
-            var api = Factory.CreateTokenizerApi(env, default);
+            var data = CreateAnyFileResolver();
+            var options = Factory.CreateOptions(data, env);
+            var api = Factory.CreateTokenizerApi(options);
             var fileRef = api.Readers.CreateFileRef(file);
-            var data = CreateAnyFileResolver(api.Readers);
             return api.CreateBufferedTokenizer(data, fileRef);
         }
 
@@ -70,10 +75,11 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public static IParser CreateParserForFiles(string file) {
             var env = Factory.CreateEnvironment();
-            var api = Factory.CreateParserApi(env, default);
+            var data = CreateAnyFileResolver();
+            var options = Factory.CreateOptions(data, env);
+            var api = Factory.CreateParserApi(options);
             var fileRef = api.Tokenizer.Readers.CreateFileRef(file);
-            var data = CreateAnyFileResolver(api.Tokenizer.Readers);
-            return api.CreateParser(data, fileRef);
+            return api.CreateParser(fileRef);
         }
 
         /// <summary>
@@ -83,14 +89,18 @@ namespace PasPasPas.Api {
         /// <param name="path"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static IInputResolver CreateResolverForSingleString(IReaderApi api, FileReference path, string content) {
+        public static IInputResolver CreateResolverForSingleString(FileReference path, string content) {
             IReaderInput doResolve(FileReference file, IReaderApi aapi) {
                 if (path.Equals(file))
                     return aapi.CreateInputForString(file, content);
 
                 return default;
             }
-            return api.CreateInputResolver(doResolve);
+
+            bool doCheck(FileReference file)
+                => path.Equals(file);
+
+            return Factory.CreateInputResolver(doResolve, doCheck);
         }
     }
 }

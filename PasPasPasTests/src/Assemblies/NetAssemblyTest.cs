@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using PasPasPas.Api;
 using PasPasPas.AssemblyBuilder.Builder;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Log;
 using PasPasPasTests.Common;
@@ -33,10 +34,10 @@ namespace PasPasPasTests.Assemblies {
                 y.Message.Severity == MessageSeverity.FatalError;
             };
 
-            var opts = Factory.CreateOptions(env, default);
+            var path = new FileReference($"{file}.dpr");
+            var resolver = CommonApi.CreateResolverForSingleString(path, program);
+            var opts = Factory.CreateOptions(resolver, env);
             var api = new AssemblyBuilderApi(env, opts);
-            var path = api.Parser.Tokenizer.Readers.CreateFileRef($"{file}.dpr");
-            var resolver = CommonApi.CreateResolverForSingleString(api.Parser.Tokenizer.Readers, path, program);
             var asm = api.CreateAssemblyForProject(resolver, path);
 
             if (tester != default) {

@@ -20,7 +20,7 @@ namespace PasPasPas.Api {
         public AssemblyBuilderApi(IAssemblyBuilderEnvironment assemblyBuilderEnvironment, IOptionSet options) {
             SystemEnvironment = assemblyBuilderEnvironment;
             Options = options;
-            Parser = new ParserApi(assemblyBuilderEnvironment, Options);
+            Parser = new ParserApi(Options);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace PasPasPas.Api {
         /// <param name="resolver"></param>
         public IAssemblyReference CreateAssemblyForProject(IInputResolver resolver, FileReference file) {
             var data = Parser.Tokenizer.Readers.CreateInputForPath(file);
-            using (var parser = Parser.CreateParser(resolver, file)) {
+            using (var parser = Parser.CreateParser(file)) {
                 var result = parser.Parse();
                 var project = Parser.CreateAbstractSyntraxTree(result);
                 Parser.AnnotateWithTypes(project);

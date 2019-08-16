@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Files;
 
 namespace PasPasPas.Infrastructure.Files {
@@ -19,8 +20,10 @@ namespace PasPasPas.Infrastructure.Files {
 
         private NestedInput input = null;
 
-        public StackedFileReader(IInputResolver resolver)
-            => Resolver = resolver;
+        public StackedFileReader(IReaderApi api, IInputResolver resolver) {
+            Api = api;
+            Resolver = resolver;
+        }
 
         /// <summary>
         ///     add a string to read
@@ -30,7 +33,7 @@ namespace PasPasPas.Infrastructure.Files {
             if (inputToRead.Path == null)
                 throw new ArgumentNullException(nameof(inputToRead.Path));
 
-            var data = Resolver.Resolve(inputToRead);
+            var data = Resolver.Resolve(Api, inputToRead);
 
             input = new NestedInput() {
                 File = inputToRead,
@@ -140,6 +143,8 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public long Position
             => input != null ? input.Input.Position : -1;
+
+        public IReaderApi Api { get; }
 
         /// <summary>
         ///     resolver

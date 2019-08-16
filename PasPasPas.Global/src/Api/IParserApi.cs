@@ -26,7 +26,7 @@ namespace PasPasPas.Globals.Api {
         /// <param name="path"></param>
         /// <param name="resolver"></param>
         /// <returns></returns>
-        IParser CreateParser(IInputResolver resolver, FileReference path);
+        IParser CreateParser(FileReference path);
 
         /// <summary>
         ///     create an abstract syntax tree

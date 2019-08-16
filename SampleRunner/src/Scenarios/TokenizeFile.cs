@@ -25,7 +25,6 @@ namespace SampleRunner.Scenarios {
             var registry = new Dictionary<int, TokenInfo>();
 
             for (var i = 0; i < reapeat; i++) {
-                var tokenizerApi = Factory.CreateTokenizerApi(environment, default);
                 using (var tokenizer = CommonApi.CreateTokenizerForFiles(testPath)) {
 
                     while (!tokenizer.AtEof) {

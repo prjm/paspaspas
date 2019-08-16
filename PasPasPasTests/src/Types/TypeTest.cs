@@ -1,6 +1,7 @@
 ﻿using System;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
@@ -296,12 +297,12 @@ namespace PasPasPasTests.Types {
             IExpression firstParam;
 
             env = CreateEnvironment(intSize);
-            var options = Factory.CreateOptions(env, default);
-            var api = Factory.CreateParserApi(env, options);
-            var path = api.Tokenizer.Readers.CreateFileRef($"{file}.dpr");
-            var data = CommonApi.CreateResolverForSingleString(api.Tokenizer.Readers, path, program);
+            var path = new FileReference($"{file}.dpr");
+            var data = CommonApi.CreateResolverForSingleString(path, program);
+            var options = Factory.CreateOptions(data, env);
+            var api = Factory.CreateParserApi(options);
 
-            using (var reader = api.CreateParser(data, path)) {
+            using (var reader = api.CreateParser(path)) {
 
                 api.Options.Meta.NativeIntegerSize.Value = intSize;
 

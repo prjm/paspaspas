@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
-using PasPasPas.Globals.Files;
 
-namespace PasPasPas.Infrastructure.Files {
+namespace PasPasPas.Globals.Files {
 
     internal class ResolvedPathKey {
 
@@ -52,7 +51,7 @@ namespace PasPasPas.Infrastructure.Files {
     /// <summary>
     ///     resolves paths for common scenarios
     /// </summary>
-    public abstract class PathResolver {
+    public abstract class PathResolver : IPathResolver {
 
         private readonly IDictionary<ResolvedPathKey, ResolvedFile> resolvedPaths
             = new Dictionary<ResolvedPathKey, ResolvedFile>();
@@ -63,11 +62,19 @@ namespace PasPasPas.Infrastructure.Files {
         public IStringPool StringPool { get; }
 
         /// <summary>
+        ///     input resolver
+        /// </summary>
+        public IInputResolver InputResolver { get; }
+
+        /// <summary>
         ///     create a new path resolver
         /// </summary>
         /// <param name="pool">used string pool</param>
-        protected PathResolver(IStringPool pool)
-            => StringPool = pool ?? throw new ArgumentNullException(nameof(pool));
+        /// <param name="resolver">resolver</param>
+        protected PathResolver(IStringPool pool, IInputResolver resolver) {
+            StringPool = pool ?? throw new ArgumentNullException(nameof(pool));
+            InputResolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
+        }
 
         /// <summary>
         ///     resolves a path and caches the result
@@ -102,7 +109,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="currentDirectory">current directory</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns></returns>
-        protected static ResolvedFile ResolveInDirectory(FileReference currentDirectory, FileReference pathToResolve) {
+        protected ResolvedFile ResolveInDirectory(FileReference currentDirectory, FileReference pathToResolve) {
 
             if (currentDirectory == null)
                 throw new ArgumentNullException(nameof(currentDirectory));
@@ -111,7 +118,7 @@ namespace PasPasPas.Infrastructure.Files {
                 throw new ArgumentNullException(nameof(pathToResolve));
 
             var combinedPath = currentDirectory.Append(pathToResolve);
-            var isResolved = System.IO.File.Exists(combinedPath.Path);
+            var isResolved = InputResolver.CanResolve(combinedPath);
 
             return new ResolvedFile(currentDirectory, pathToResolve, combinedPath, isResolved);
         }

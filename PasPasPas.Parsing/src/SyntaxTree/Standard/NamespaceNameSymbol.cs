@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Text;
 using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
@@ -37,6 +38,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
                         continue;
                     yield return IdentifierValue(part);
                 }
+            }
+        }
+
+        /// <summary>
+        ///     complete name
+        /// </summary>
+        public string CompleteName {
+            get {
+                StringBuilder sb = new StringBuilder();
+                for (var i = 0; i < Items.Length; i++) {
+                    var part = Items[i];
+                    if (part is IdentifierSymbol symbol)
+                        sb.Append(IdentifierValue(part));
+                    else if (part is Terminal terminal)
+                        sb.Append(terminal.Value);
+                }
+                return sb.ToString();
             }
         }
 

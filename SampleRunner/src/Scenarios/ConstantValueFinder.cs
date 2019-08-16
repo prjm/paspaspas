@@ -2,6 +2,7 @@
 using System.IO;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -80,12 +81,12 @@ namespace SampleRunner.Scenarios {
             var hasName = false;
 
             for (var i = 0; i < reapeat; i++) {
-                var options = Factory.CreateOptions(environment, default);
-                var parserApi = Factory.CreateParserApi(environment, options);
+                var resolver = CommonApi.CreateAnyFileResolver();
+                var options = Factory.CreateOptions(resolver, environment);
+                var parserApi = Factory.CreateParserApi(options);
                 var file = parserApi.Tokenizer.Readers.CreateFileRef(testPath);
-                var resolver = CommonApi.CreateAnyFileResolver(parserApi.Tokenizer.Readers);
 
-                using (var parser = parserApi.CreateParser(resolver, file)) {
+                using (var parser = parserApi.CreateParser(file)) {
                     var result = parser.Parse();
                     var visitor = new ConstantVisitor();
                     result.Accept(visitor.AsVisitor());
@@ -94,12 +95,12 @@ namespace SampleRunner.Scenarios {
                         var filePath = Path.GetFullPath(testPath);
                         var path = Path.Combine(Path.GetDirectoryName(filePath), "dummy.dpr");
                         var dummyProgram = $"program dummy; const {item} begin end.";
-                        var options2 = Factory.CreateOptions(environment, default);
-                        var parserApi2 = Factory.CreateParserApi(environment, options2);
-                        var file2 = parserApi2.Tokenizer.Readers.CreateFileRef(path);
-                        var resolver2 = CommonApi.CreateResolverForSingleString(parserApi2.Tokenizer.Readers, file2, dummyProgram);
+                        var file2 = new FileReference(path);
+                        var resolver2 = CommonApi.CreateResolverForSingleString(file2, dummyProgram);
+                        var options2 = Factory.CreateOptions(resolver2, environment);
+                        var parserApi2 = Factory.CreateParserApi(options2);
 
-                        using (var parser2 = parserApi2.CreateParser(resolver2, file2)) {
+                        using (var parser2 = parserApi2.CreateParser(file2)) {
 
                             var result2 = parser2.Parse();
                             var project = parserApi2.CreateAbstractSyntraxTree(result2);

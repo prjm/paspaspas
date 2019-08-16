@@ -28,7 +28,7 @@ namespace PasPasPas.Api {
         /// <param name="input">input</param>
         /// <returns>file reader</returns>
         public IStackedFileReader CreateReader(IInputResolver input, FileReference file) {
-            var reader = new StackedFileReader(input);
+            var reader = new StackedFileReader(this, input);
             reader.AddInputToRead(file);
             return reader;
         }
@@ -49,14 +49,6 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public IReaderInput CreateInputForPath(FileReference path)
             => new FileReaderInput(path);
-
-        /// <summary>
-        ///     create a new resolver
-        /// </summary>
-        /// <param name="resolver"></param>
-        /// <returns></returns>
-        public IInputResolver CreateInputResolver(Resolver resolver)
-            => new DefaultResolver(this, resolver);
 
         /// <summary>
         ///     create a file reference

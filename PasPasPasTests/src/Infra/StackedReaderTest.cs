@@ -22,7 +22,7 @@ namespace PasPasPasTests.Infra {
             var env = Factory.CreateEnvironment();
             var api = Factory.CreateReaderApi(env);
             var file = api.CreateFileRef("test.pas");
-            var resolver = CreateResolver(api, file, Content1);
+            var resolver = CreateResolver(file, Content1);
 
             using (var reader = api.CreateReader(resolver, file)) {
                 var result = new StringBuilder();
@@ -46,7 +46,7 @@ namespace PasPasPasTests.Infra {
                 var api = Factory.CreateReaderApi(env);
                 var file = api.CreateFileRef(path);
                 var data = api.CreateInputForPath(file);
-                using (var reader = api.CreateReader(CreateResolver(api), file)) {
+                using (var reader = api.CreateReader(CreateResolver(), file)) {
                     while (!reader.AtEof) {
                         result.Append(reader.NextChar());
                     }
@@ -67,7 +67,7 @@ namespace PasPasPasTests.Infra {
             var api = Factory.CreateReaderApi(env);
             var path1 = api.CreateFileRef(GenerateTempFile(Content1));
             var path2 = api.CreateFileRef(GenerateTempFile(Content2));
-            var r = CreateResolver(api);
+            var r = CreateResolver();
 
             try {
                 using (var reader = api.CreateReader(r, path1)) {
@@ -115,7 +115,7 @@ namespace PasPasPasTests.Infra {
             var api = Factory.CreateReaderApi(env);
             var path1 = api.CreateFileRef(GenerateTempFile(Content1));
             var path2 = api.CreateFileRef(GenerateTempFile(Content2));
-            using (var reader = api.CreateReader(CreateResolver(api), path1)) {
+            using (var reader = api.CreateReader(CreateResolver(), path1)) {
 
                 while (!reader.AtEof && result.Length < 5) {
                     result.Append(reader.NextChar());

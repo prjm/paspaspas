@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Files;
+﻿using System.IO;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
@@ -1043,7 +1044,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(element))
                 return;
 
-            var basePath = path;
+            var basePath = new FileReference( Path.GetDirectoryName( path.Path));
             var fileName = element?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))

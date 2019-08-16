@@ -12,8 +12,8 @@ namespace PasPasPas.Options.Bundles {
         /// </summary>
         /// <param name="optionRoot">default options</param>
         internal AnyCpuPlatform(IOptionSet optionRoot) : base(PlatformKey.AnyCpu) {
-            Configurations.Add(OptionSet.DebugConfigurationName, new OptionSet(optionRoot, optionRoot.Environment));
-            Configurations.Add(OptionSet.ReleaseConfigurationName, new OptionSet(optionRoot, optionRoot.Environment));
+            Configurations.Add(OptionSet.DebugConfigurationName, new OptionSet(optionRoot));
+            Configurations.Add(OptionSet.ReleaseConfigurationName, new OptionSet(optionRoot));
         }
 
     }

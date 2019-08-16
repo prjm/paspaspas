@@ -97,6 +97,11 @@ namespace PasPasPas.Globals.Options {
         IList<ObjectFileTypeName> ObjectFileTypeNames { get; }
 
         /// <summary>
+        ///     path resolver
+        /// </summary>
+        IPathResolver IncludePathResolver { get; }
+
+        /// <summary>
         ///     register an external symbol
         /// </summary>
         /// <param name="identifierName"></param>

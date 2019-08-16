@@ -19,22 +19,28 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create a new parser API
         /// </summary>
+        /// <param name="resolver"></param>
         /// <param name="parserEnvironment"></param>
+        public ParserApi(IInputResolver resolver, ITypedEnvironment parserEnvironment)
+            : this(Factory.CreateOptions(resolver, parserEnvironment)) { }
+
+        /// <summary>
+        ///     create a new parser API
+        /// </summary>
         /// <param name="options">options</param>
-        public ParserApi(ITypedEnvironment parserEnvironment, IOptionSet options) {
-            Environment = parserEnvironment;
-            Options = options ?? Factory.CreateOptions(parserEnvironment, default);
-            Tokenizer = new TokenizerApi(parserEnvironment, options);
+        public ParserApi(IOptionSet options) {
+            Environment = options.Environment as ITypedEnvironment;
+            Options = options;
+            Tokenizer = new TokenizerApi(options);
         }
 
         /// <summary>
         ///     create a parser for a given input string
         /// </summary>
-        /// <param name="resolver"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public IParser CreateParser(IInputResolver resolver, FileReference path) {
-            var reader = Tokenizer.Readers.CreateReader(resolver, path);
+        public IParser CreateParser(FileReference path) {
+            var reader = Tokenizer.Readers.CreateReader(Options.Resolver, path);
             var parser = new StandardParser(Tokenizer, Options, reader);
             return parser;
         }
@@ -46,6 +52,7 @@ namespace PasPasPas.Api {
         /// <returns>abstract syntax tree</returns>
         public ISyntaxPart CreateAbstractSyntraxTree(ISyntaxPart bst) {
             var root = new ProjectItemCollection();
+
             var visitor = new TreeTransformer(Environment, root);
             bst.Accept(visitor.AsVisitor());
             return root;

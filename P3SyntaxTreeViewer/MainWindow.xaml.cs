@@ -11,14 +11,13 @@ using System.Windows.Media;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace P3SyntaxTreeViewer {
 
@@ -205,9 +204,12 @@ namespace P3SyntaxTreeViewer {
         /// <param name="env"></param>
         /// <param name="code"></param>
         /// <returns></returns>
-        private static (ISyntaxPart bst, ProjectItemCollection ast, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code) {
-            var parserApi = new ParserApi(env);
-            using (var parser = parserApi.CreateParserForString("z.x.pas", code)) {
+        private static (ISyntaxPart bst, ISyntaxPart ast, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code) {
+            var parserApi = Factory.CreateParserApi(env, default);
+            var readerApi = parserApi.Tokenizer.Readers;
+            var path = readerApi.CreateFileRef("z.x.pas");
+            var resolver = CommonApi.CreateResolverForSingleString(readerApi, path, code);
+            using (var parser = parserApi.CreateParser(resolver, path)) {
                 var bst = parser.Parse();
                 var ast = parserApi.CreateAbstractSyntraxTree(bst);
                 parserApi.AnnotateWithTypes(ast);
@@ -218,7 +220,7 @@ namespace P3SyntaxTreeViewer {
         }
 
         private ITypedEnvironment CreateEnvironment()
-            => new DefaultEnvironment();
+            => Factory.CreateEnvironment();
 
         private void Code_TextChanged(object sender, TextChangedEventArgs e)
             => UpdateTrees();

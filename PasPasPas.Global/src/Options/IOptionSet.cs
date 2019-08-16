@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options.DataTypes;
 
 namespace PasPasPas.Globals.Options {
@@ -37,6 +38,11 @@ namespace PasPasPas.Globals.Options {
         ///     environment
         /// </summary>
         IEnvironment Environment { get; }
+
+        /// <summary>
+        ///     resolver
+        /// </summary>
+        IInputResolver Resolver { get; }
 
         /// <summary>
         ///     switch info result

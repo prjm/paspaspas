@@ -9,12 +9,12 @@ namespace SampleRunner.Scenarios {
 
         public static void Run(TextWriter b, ITypedEnvironment environment, string testPath, int reapeat) {
             for (var i = 0; i < reapeat; i++) {
-                var options = Factory.CreateOptions(environment, default);
-                var parserApi = Factory.CreateParserApi(environment, options);
+                var resolver = CommonApi.CreateAnyFileResolver();
+                var options = Factory.CreateOptions(resolver, environment);
+                var parserApi = Factory.CreateParserApi(options);
                 var file = parserApi.Tokenizer.Readers.CreateFileRef(testPath);
-                var resolver = CommonApi.CreateAnyFileResolver(parserApi.Tokenizer.Readers);
 
-                using (var parser = parserApi.CreateParser(resolver, file)) {
+                using (var parser = parserApi.CreateParser(file)) {
                     var result = parser.Parse();
                     var project = parserApi.CreateAbstractSyntraxTree(result);
                     var visitor = new TerminalVisitor();

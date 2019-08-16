@@ -10,11 +10,10 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         /// <param name="api"></param>
         /// <param name="resolver"></param>
-        public DefaultResolver(IReaderApi api, Resolver resolver) {
-            Api = api;
+        public DefaultResolver(Resolver resolver, Checker checker) {
             Resolver = resolver;
+            Checker = checker;
         }
-
 
         /// <summary>
         ///     resolver function
@@ -22,16 +21,25 @@ namespace PasPasPas.Infrastructure.Files {
         public Resolver Resolver { get; }
 
         /// <summary>
-        ///     reader API
+        ///     checker function
         /// </summary>
-        public IReaderApi Api { get; }
+        public Checker Checker { get; }
+
+        /// <summary>
+        ///     try to resolve a file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public bool CanResolve(FileReference file)
+            => Checker.Invoke(file);
 
         /// <summary>
         ///     resolve a file
         /// </summary>
         /// <param name="file"></param>
+        /// <param name="api"></param>
         /// <returns></returns>
-        public IReaderInput Resolve(FileReference file)
-            => Resolver.Invoke(file, Api);
+        public IReaderInput Resolve(IReaderApi api, FileReference file)
+            => Resolver.Invoke(file, api);
     }
 }

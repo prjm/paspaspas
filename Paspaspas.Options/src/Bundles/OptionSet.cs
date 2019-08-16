@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
@@ -24,14 +25,22 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     creates a new option set
         /// </summary>
-        /// <param name="environment">environment</param>
-        public OptionSet(IEnvironment environment) : this(null, environment) { }
+        /// <param name="baseOptions"></param>
+        public OptionSet(IOptionSet baseOptions) : this(baseOptions, baseOptions.Resolver, baseOptions.Environment) { }
+
+        /// <summary>
+        ///     creates a new option set
+        /// </summary>
+        /// <param name="environment"></param>
+        /// <param name="resolve"></param>
+        public OptionSet(IInputResolver resolve, IEnvironment environment) : this(default, resolve, environment) { }
 
         /// <summary>
         ///     create a new option set
         /// </summary>
-        public OptionSet(IOptionSet baseOptions, IEnvironment environment) {
+        private OptionSet(IOptionSet baseOptions, IInputResolver resolve, IEnvironment environment) {
             Environment = environment;
+            Resolver = resolve;
             LogSource = environment.Log.CreateLogSource(MessageGroups.OptionSet);
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
@@ -69,6 +78,11 @@ namespace PasPasPas.Options.Bundles {
         ///     used environment
         /// </summary>
         public IEnvironment Environment { get; }
+
+        /// <summary>
+        ///     resolver
+        /// </summary>
+        public IInputResolver Resolver { get; }
 
         /// <summary>
         ///     log source

@@ -6,6 +6,10 @@ namespace PasPasPasTests.Parser {
 
     public class AstVisitor<T> : IStartEndVisitor {
 
+        public AstVisitor() { }
+        public AstVisitor(Func<object, T> sf)
+            => SearchFunction = sf;
+
         public T Result { get; internal set; }
         public Func<object, T> SearchFunction { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using PasPasPas.Api;
-using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options.DataTypes;
@@ -247,12 +246,11 @@ namespace PasPasPasTests.Common {
         /// <summary>
         ///     create a resolver
         /// </summary>
-        /// <param name="api"></param>
         /// <param name="path"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        protected IInputResolver CreateResolver(IReaderApi api, FileReference path, string content)
-            => CommonApi.CreateResolverForSingleString(api, path, content);
+        protected IInputResolver CreateResolver(FileReference path, string content)
+            => CommonApi.CreateResolverForSingleString(path, content);
 
         /// <summary>
         ///     create a resolver
@@ -261,8 +259,8 @@ namespace PasPasPasTests.Common {
         /// <param name="path"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        protected IInputResolver CreateResolver(IReaderApi api)
-            => CommonApi.CreateAnyFileResolver(api);
+        protected IInputResolver CreateResolver()
+            => CommonApi.CreateAnyFileResolver();
 
     }
 }

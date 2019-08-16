@@ -19,7 +19,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     Create a new search path resolve
         /// </summary>
         /// <param name="options"></param>
-        protected SearchPathResolver(IOptionSet options) : base(options.Environment.StringPool)
+        protected SearchPathResolver(IOptionSet options) : base(options.Environment.StringPool, options.Resolver)
             => optionSet = options;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace PasPasPas.Options.DataTypes {
             string currentDirectory;
 
             if (basePath != null && !string.IsNullOrEmpty(basePath.Path)) {
-                currentDirectory = Path.GetDirectoryName(Path.GetFullPath(basePath.Path));
+                currentDirectory = Path.GetFullPath(basePath.Path);
             }
             else {
                 currentDirectory = null;

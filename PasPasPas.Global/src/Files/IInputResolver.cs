@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Files {
+﻿using PasPasPas.Globals.Api;
+
+namespace PasPasPas.Globals.Files {
 
     /// <summary>
     ///     input file resolver
@@ -10,7 +12,14 @@
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        IReaderInput Resolve(FileReference file);
+        IReaderInput Resolve(IReaderApi api, FileReference file);
+
+        /// <summary>
+        ///     test if a given file can be resolved
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        bool CanResolve(FileReference file);
 
     }
 }

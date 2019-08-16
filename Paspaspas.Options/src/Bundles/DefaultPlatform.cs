@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
 
 namespace PasPasPas.Options.Bundles {
@@ -17,8 +18,8 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     create a new platform
         /// </summary>
-        public DefaultPlatform(IEnvironment environment) : base(PlatformKey.Default) {
-            DefaultOptions = new OptionSet(environment);
+        public DefaultPlatform(IEnvironment environment, IInputResolver resolver) : base(PlatformKey.Default) {
+            DefaultOptions = new OptionSet(resolver, environment);
             Configurations.Add(DefaultConfigurationName, DefaultOptions);
         }
 

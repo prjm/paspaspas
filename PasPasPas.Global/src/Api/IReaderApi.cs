@@ -7,9 +7,16 @@ namespace PasPasPas.Globals.Api {
     ///     input resolver
     /// </summary>
     /// <param name="path"></param>
-    /// <param name="api">api</param>
+    /// <param name="api">API</param>
     /// <returns></returns>
     public delegate IReaderInput Resolver(FileReference path, IReaderApi api);
+
+    /// <summary>
+    ///     file existence checker
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public delegate bool Checker(FileReference path);
 
     /// <summary>
     ///     public interface for a file reader API
@@ -50,13 +57,6 @@ namespace PasPasPas.Globals.Api {
         /// <param name="file">file reference</param>
         /// <returns>disposable reader</returns>
         IStackedFileReader CreateReader(IInputResolver input, FileReference file);
-
-        /// <summary>
-        ///     create an input resolver
-        /// </summary>
-        /// <param name="resolver"></param>
-        /// <returns></returns>
-        IInputResolver CreateInputResolver(Resolver resolver);
 
     }
 }

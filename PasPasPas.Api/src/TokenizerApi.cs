@@ -18,11 +18,15 @@ namespace PasPasPas.Api {
         ///     create a new tokenizer
         /// </summary>
         /// <param name="parserEnvironment">environment</param>
-        /// <param name="optionsSet">options (can be <c>null</c>)</param>
-        public TokenizerApi(IParserEnvironment parserEnvironment, IOptionSet optionsSet) {
-            Environment = parserEnvironment;
-            Options = optionsSet ?? Factory.CreateOptions(parserEnvironment, default);
-            Readers = new ReaderApi(parserEnvironment);
+        /// <param name="resolver"></param>
+        public TokenizerApi(IInputResolver resolver, IParserEnvironment parserEnvironment)
+             : this(Factory.CreateOptions(resolver, parserEnvironment)) { }
+
+
+        public TokenizerApi(IOptionSet options) {
+            Environment = options.Environment as IParserEnvironment;
+            Options = options;
+            Readers = new ReaderApi(Options.Environment);
         }
 
         /// <summary>
