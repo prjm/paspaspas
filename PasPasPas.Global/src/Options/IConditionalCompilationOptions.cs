@@ -31,7 +31,7 @@ namespace PasPasPas.Globals.Options {
         /// <summary>
         ///     conditional symbols
         /// </summary>
-        IEnumerableOption<ConditionalSymbol> Conditionals { get; }
+        IEnumerableOptionCollection<ConditionalSymbol> Conditionals { get; }
 
         /// <summary>
         ///     add a <c>ifndef</c> condition

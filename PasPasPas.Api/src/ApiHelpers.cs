@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Api;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Parsing.Parser;
@@ -13,7 +14,6 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create a resolver for local files
         /// </summary>
-        /// <param name="readerApi"></param>
         /// <returns></returns>
         public static IInputResolver CreateAnyFileResolver() {
             IReaderInput doResolve(FileReference file, IReaderApi api)
@@ -85,7 +85,6 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create a resolver for a single string
         /// </summary>
-        /// <param name="api"></param>
         /// <param name="path"></param>
         /// <param name="content"></param>
         /// <returns></returns>

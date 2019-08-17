@@ -158,7 +158,7 @@ namespace PasPasPasTests.Parser {
             };
 
             var path = new FileReference(CstPath);
-            var data = CreateResolver(path, tokens);
+            var data = CreateFileResolver(path, tokens);
             var testOptions = Factory.CreateOptions(data, env);
             var api = Factory.CreateParserApi(testOptions);
 
@@ -214,7 +214,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest(statement, search, true, true);
         }
 
-        protected IInputResolver CreateResolver(FileReference path, string content) {
+        protected IInputResolver CreateFileResolver(FileReference path, string content) {
             var incFile = new FileReference(Path.GetFullPath("dummy.inc"));
             var resFile1 = new FileReference(Path.GetFullPath("res.res"));
             var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
@@ -288,7 +288,7 @@ namespace PasPasPasTests.Parser {
             }
 
             fileCounter = 0;
-            var r = f.CreateResolver(CreateResolver(default, default));
+            var r = f.CreateResolver(CreateFileResolver(default, default));
             var testOptions = Factory.CreateOptions(r, env);
             var api = Factory.CreateParserApi(testOptions);
             ClearOptions(testOptions);
@@ -306,26 +306,27 @@ namespace PasPasPasTests.Parser {
                         var terminals = new TerminalVisitor();
 
 
-                        var parser = new CompilerDirectiveParser(api.Tokenizer, testOptions, reader) {
+                        using (var parser = new CompilerDirectiveParser(api.Tokenizer, testOptions, reader) {
                             IncludeInput = reader
-                        };
+                        }) {
 
-                        while (reader.CurrentFile != null && !reader.AtEof) {
-                            var result = parser.Parse();
+                            while (reader.CurrentFile != null && !reader.AtEof) {
+                                var result = parser.Parse();
 
-                            if (!hasFoundInput) {
-                                terminals.ResultBuilder.Clear();
+                                if (!hasFoundInput) {
+                                    terminals.ResultBuilder.Clear();
+                                    if (result != null)
+                                        result.Accept(terminals.AsVisitor());
+
+                                    Assert.AreEqual(subPart, terminals.ResultBuilder.ToString());
+                                }
+                                hasFoundInput = reader.CurrentFile == null || reader.AtEof || hasFoundInput;
+
+                                visitor.IncludeInput = reader;
                                 if (result != null)
-                                    result.Accept(terminals.AsVisitor());
+                                    result.Accept(visitor.AsVisitor());
 
-                                Assert.AreEqual(subPart, terminals.ResultBuilder.ToString());
                             }
-                            hasFoundInput = reader.CurrentFile == null || reader.AtEof || hasFoundInput;
-
-                            visitor.IncludeInput = reader;
-                            if (result != null)
-                                result.Accept(visitor.AsVisitor());
-
                         }
                         fileCounter++;
                     }

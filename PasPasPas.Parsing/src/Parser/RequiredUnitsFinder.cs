@@ -58,11 +58,19 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void FindRequiredUnitsOfPackage(PackageSymbol package) {
-            throw new NotImplementedException();
+            var usesList = package?.ContainsClause?.ContainsList;
+            if (usesList == default)
+                return;
+
+            FindRequiredUnitsOfUsesClause(usesList);
         }
 
         private void FindRequiredUnitsOfLibrary(LibrarySymbol library) {
-            throw new NotImplementedException();
+            var usesList = library?.Uses?.Files;
+            if (usesList == default)
+                return;
+
+            FindRequiredUnitsOfUsesClause(usesList);
         }
 
         private void FindRequiredUnitsOfProgram(ProgramSymbol program) {
@@ -70,6 +78,10 @@ namespace PasPasPas.Parsing.Parser {
             if (usesList == default)
                 return;
 
+            FindRequiredUnitsOfUsesClause(usesList);
+        }
+
+        private void FindRequiredUnitsOfUsesClause(NamespaceFileNameListSymbol usesList) {
             foreach (var usesClause in usesList.Items) {
                 var path = //
                     (usesClause.QuotedFileName?.Symbol?.Token.ParsedValue as IStringValue)?.AsUnicodeString ??
@@ -84,5 +96,6 @@ namespace PasPasPas.Parsing.Parser {
                     requiredUnits.Add(file.TargetPath);
             }
         }
+
     }
 }

@@ -26,6 +26,7 @@ namespace PasPasPas.Options.Bundles {
         ///     creates a new set of options
         /// </summary>
         /// <param name="environment">environment</param>
+        /// <param name="resolver"></param>
         public CompilerOptions(IEnvironment environment, IInputResolver resolver) {
             var platforms = new Dictionary<PlatformKey, Platform>();
             var optionRoot = new DefaultPlatform(environment, resolver);

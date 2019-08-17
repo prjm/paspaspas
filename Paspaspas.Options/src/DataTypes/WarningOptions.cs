@@ -164,10 +164,10 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     get warning mode by warning identifier
         /// </summary>
-        /// <param name="ident"></param>
+        /// <param name="identifier"></param>
         /// <returns></returns>
-        public WarningMode GetModeByIdentifier(string ident)
-            => GetModeByKey(new WarningKey("", ident));
+        public WarningMode GetModeByIdentifier(string identifier)
+            => GetModeByKey(new WarningKey("", identifier));
 
         /// <summary>
         ///     set a mode by key

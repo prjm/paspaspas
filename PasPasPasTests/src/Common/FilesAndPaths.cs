@@ -35,7 +35,7 @@ namespace PasPasPasTests.Common {
             }
 
             bool doCheck(FileReference f) {
-                if (inputResolver.CanResolve(f))
+                if (inputResolver != default && inputResolver.CanResolve(f))
                     return true;
                 return data.ContainsKey(f.Path);
             }

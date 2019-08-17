@@ -80,23 +80,23 @@ namespace PasPasPas.Globals.Files {
         ///     resolves a path and caches the result
         /// </summary>
         /// <param name="basePath">base path</param>
-        /// <param name="pathToResolve">path to resolve</param>
+        /// <param name="fileName">path to resolve</param>
         /// <returns>resolved path</returns>
-        public ResolvedFile ResolvePath(FileReference basePath, FileReference pathToResolve) {
+        public ResolvedFile ResolvePath(FileReference basePath, FileReference fileName) {
 
             if (basePath == null)
                 throw new ArgumentNullException(nameof(basePath));
 
-            if (pathToResolve == null)
-                throw new ArgumentNullException(nameof(pathToResolve));
+            if (fileName == null)
+                throw new ArgumentNullException(nameof(fileName));
 
             var key = new ResolvedPathKey() {
                 BasePath = basePath,
-                PathToResolve = pathToResolve
+                PathToResolve = fileName
             };
 
             if (!resolvedPaths.TryGetValue(key, out var result)) {
-                result = DoResolvePath(basePath, pathToResolve);
+                result = DoResolvePath(basePath, fileName);
                 resolvedPaths.Add(key, result);
             }
 

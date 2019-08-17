@@ -107,15 +107,15 @@ namespace SampleRunner {
                         break;
 
                     case SampleMode.TokenizerFile:
-                        action = (b) => TokenizeFile.Run(b, environment, file, repeat);
+                        action = (b) => TokenizeFile.Run(b, file, repeat);
                         break;
 
                     case SampleMode.BufferedTokenizeFile:
-                        action = (b) => BufferedTokenizeFile.Run(b, environment, file, repeat);
+                        action = (b) => BufferedTokenizeFile.Run(b, file, repeat);
                         break;
 
                     case SampleMode.ParseFile:
-                        action = (b) => ParseFile.Run(b, environment, file, repeat);
+                        action = (b) => ParseFile.Run(b, file, repeat);
                         break;
 
                     case SampleMode.CreateAbstractSyntaxTree:

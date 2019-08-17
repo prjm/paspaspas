@@ -11,6 +11,7 @@ namespace PasPasPas.Globals.Files {
         ///     resolve an input file
         /// </summary>
         /// <param name="file"></param>
+        /// <param name="api"></param>
         /// <returns></returns>
         IReaderInput Resolve(IReaderApi api, FileReference file);
 

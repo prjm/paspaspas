@@ -8,7 +8,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     create a new resolver
         /// </summary>
-        /// <param name="api"></param>
+        /// <param name="checker"></param>
         /// <param name="resolver"></param>
         public DefaultResolver(Resolver resolver, Checker checker) {
             Resolver = resolver;

@@ -18,7 +18,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     search paths
         /// </summary>
-        public IEnumerableOption<FileReference> SearchPaths { get; internal set; }
+        public IEnumerableOptionCollection<FileReference> SearchPaths { get; internal set; }
 
 
         /// <summary>

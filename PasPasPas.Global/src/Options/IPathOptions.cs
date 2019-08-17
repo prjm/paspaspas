@@ -10,7 +10,7 @@ namespace PasPasPas.Globals.Options {
         /// <summary>
         ///     search paths
         /// </summary>
-        IEnumerableOption<FileReference> SearchPaths { get; }
+        IEnumerableOptionCollection<FileReference> SearchPaths { get; }
 
         /// <summary>
         ///     clear path options

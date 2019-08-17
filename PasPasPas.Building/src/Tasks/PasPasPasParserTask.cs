@@ -55,7 +55,7 @@ namespace PasPasPas.Building.Tasks {
 
                 ISyntaxPart resultTree = null;
 
-                using (var parser = CommonApi.CreateParserForFiles(file.Path)) {
+                using (var parser = CommonApi.CreateParserForFiles( file.Path)) {
 
                     result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");
                     var hasError = false;

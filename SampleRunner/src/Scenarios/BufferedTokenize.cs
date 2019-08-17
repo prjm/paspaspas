@@ -10,7 +10,7 @@ namespace SampleRunner.Scenarios {
 
     public static class BufferedTokenizeFile {
 
-        public static void Run(TextWriter b, IParserEnvironment environment, string testPath, int reapeat) {
+        public static void Run(TextWriter b, string testPath, int reapeat) {
             var registry = new Dictionary<int, Tuple<ulong, long>>();
 
             for (var i = 0; i < reapeat; i++) {

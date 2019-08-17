@@ -38,7 +38,7 @@ namespace PasPasPasTests.Assemblies {
             var resolver = CommonApi.CreateResolverForSingleString(path, program);
             var opts = Factory.CreateOptions(resolver, env);
             var api = new AssemblyBuilderApi(env, opts);
-            var asm = api.CreateAssemblyForProject(resolver, path);
+            var asm = api.CreateAssemblyForProject(path);
 
             if (tester != default) {
                 Assert.IsNotNull(asm);

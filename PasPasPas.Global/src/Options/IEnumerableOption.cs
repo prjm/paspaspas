@@ -6,7 +6,7 @@ namespace PasPasPas.Globals.Options {
     ///     enumerable option
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IEnumerableOption<T> : IEnumerable<T> {
+    public interface IEnumerableOptionCollection<T> : IEnumerable<T> {
 
         /// <summary>
         ///     own value

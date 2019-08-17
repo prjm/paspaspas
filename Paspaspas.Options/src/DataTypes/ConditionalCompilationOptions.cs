@@ -13,7 +13,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     list of conditional defines
         /// </summary>
-        public IEnumerableOption<ConditionalSymbol> Conditionals { get; }
+        public IEnumerableOptionCollection<ConditionalSymbol> Conditionals { get; }
 
         /// <summary>
         ///     active conditional
@@ -244,13 +244,13 @@ namespace PasPasPas.Options.DataTypes {
         ///     add a new condition
         /// </summary>
         /// <param name="switchKind"></param>
-        /// <param name="requiredInfo"></param>
         /// <param name="switchInfo"></param>
-        public void AddIfOptCondition(string switchKind, SwitchInfo requiredInfo, SwitchInfo switchInfo) {
+        /// <param name="switchState"></param>
+        public void AddIfOptCondition(string switchKind, SwitchInfo switchInfo, SwitchInfo switchState) {
             AddNewCondition(new IfOptCondition() {
-                Matches = requiredInfo != SwitchInfo.Undefined && requiredInfo == switchInfo,
+                Matches = switchInfo != SwitchInfo.Undefined && switchInfo == switchState,
                 SwitchName = switchKind,
-                RequiredCondition = requiredInfo
+                RequiredCondition = switchInfo
             });
             UpdateSkipState();
         }

@@ -31,7 +31,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="inputToRead">input source</param>
         public void AddInputToRead(FileReference inputToRead) {
             if (inputToRead.Path == null)
-                throw new ArgumentNullException(nameof(inputToRead.Path));
+                throw new ArgumentException("", nameof(inputToRead));
 
             var data = Resolver.Resolve(Api, inputToRead);
 

@@ -26,6 +26,7 @@ namespace PasPasPas.Api {
         ///     create a new reader for input resolver
         /// </summary>
         /// <param name="input">input</param>
+        /// <param name="file"></param>
         /// <returns>file reader</returns>
         public IStackedFileReader CreateReader(IInputResolver input, FileReference file) {
             var reader = new StackedFileReader(this, input);

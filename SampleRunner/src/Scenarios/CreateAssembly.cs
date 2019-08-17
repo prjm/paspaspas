@@ -14,7 +14,7 @@ namespace SampleRunner.Scenarios {
                 var opts = Factory.CreateOptions(resolver, environment);
                 var api = new AssemblyBuilderApi(environment, opts);
                 var file = api.Parser.Tokenizer.Readers.CreateFileRef(testPath);
-                var asm = api.CreateAssemblyForProject(resolver, file);
+                var asm = api.CreateAssemblyForProject( file);
 
 #if DESKTOP
 

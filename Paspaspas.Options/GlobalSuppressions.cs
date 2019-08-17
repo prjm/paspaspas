@@ -5,3 +5,4 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1506:Avoid excessive class coupling", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Options.Bundles.OptionSet.GetSwitchInfo(System.String)~PasPasPas.Options.DataTypes.SwitchInfo")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1506:Avoid excessive class coupling", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Options.Bundles.OptionSet.GetSwitchInfo(System.String)~PasPasPas.Globals.Options.DataTypes.SwitchInfo")]
