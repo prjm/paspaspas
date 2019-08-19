@@ -55,12 +55,6 @@ namespace PasPasPas.Parsing.Parser {
         public const uint UserGeneratedMessage
             = 0x0102;
 
-        /// <summary>
-        ///     message: missing token error message id
-        /// </summary>
-        public const uint MissingToken
-            = 0x0103;
-
         private TokenizerWithLookahead tokenizer;
         private readonly ILogSource logSource;
         private readonly IOptionSet options;
@@ -865,7 +859,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ErrorMissingToken(int tokenKind) {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind);
-            logSource.LogError(MissingToken, data);
+            logSource.LogError(MessageNumbers. MissingToken, data);
             return default;
         }
 
@@ -877,7 +871,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2) {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind1, tokenKind2);
-            logSource.LogError(MissingToken, data);
+            logSource.LogError(MessageNumbers.MissingToken, data);
             return default;
         }
 
@@ -891,7 +885,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3) {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3);
-            logSource.LogError(MissingToken, data);
+            logSource.LogError(MessageNumbers.MissingToken, data);
             return default;
         }
 
@@ -905,7 +899,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
-            logSource.LogError(MissingToken, data);
+            logSource.LogError(MessageNumbers.MissingToken, data);
             return default;
         }
 
@@ -920,7 +914,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
-            logSource.LogError(MissingToken, data);
+            logSource.LogError(MessageNumbers.MissingToken, data);
             return default;
         }
 
@@ -936,7 +930,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
-            logSource.LogError(MissingToken, data);
+            logSource.LogError(MessageNumbers.MissingToken, data);
             return default;
         }
 

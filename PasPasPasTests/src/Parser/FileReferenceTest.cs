@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using PasPasPas.Api;
 using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Parsing;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
-
-    public class Test {
-        IList<FileReferenceTest.TestBundle> List { get; }
-    }
 
     public class FileReferenceTest : ParserTestBase {
 
@@ -27,9 +26,14 @@ namespace PasPasPasTests.Parser {
             public IParserApi ParserFactory { get; }
             public FilesAndPaths Files { get; }
             public SearchPathResolver Rsvlr { get; }
+            public ListLogTarget LogTarget { get; }
+            public ILogSource Log { get; }
 
             public TestBundle() {
+                LogTarget = new ListLogTarget();
                 SysEnv = CreateEnvironment();
+                Log = new LogSource(SysEnv.Log, 0x9999);
+                SysEnv.Log.RegisterTarget(LogTarget);
                 Files = new FilesAndPaths();
                 Resolver = Files.CreateResolver();
                 Options = Factory.CreateOptions(Resolver, SysEnv);
@@ -50,6 +54,12 @@ namespace PasPasPasTests.Parser {
 
             internal FileReference GetCurrentDir()
                 => Ref(Directory.GetCurrentDirectory());
+
+            public bool HasMessage(uint messageNumber)
+                => LogTarget.Messages.FirstOrDefault(t => t.MessageID == messageNumber) != default;
+
+            public RequiredUnitsFinder CreateRequiredUnitsFinder() 
+                => new RequiredUnitsFinder(GetCurrentDir(), Options.Meta.IncludePathResolver, Log);
         }
 
         [TestMethod]
@@ -58,9 +68,10 @@ namespace PasPasPasTests.Parser {
             t.Files.Add("a.dpr", "program a; uses b; begin end.");
             t.Files.Add("b.pas", "unit b; interface implementation end.");
             var p = t.Parse("a.dpr");
-            var f = new RequiredUnitsFinder(t.GetCurrentDir(), t.Options.Meta.IncludePathResolver);
+            var f = t.CreateRequiredUnitsFinder();
             f.FindRequiredUnits(p);
             Assert.AreEqual(1, f.RequiredUnits.Count);
+            Assert.IsFalse(t.HasMessage(MessageNumbers.MissingFile));
         }
 
         [TestMethod]
@@ -69,9 +80,10 @@ namespace PasPasPasTests.Parser {
             t.Files.Add("a.dpr", "library a; uses b; begin end.");
             t.Files.Add("b.pas", "unit b; interface implementation end.");
             var p = t.Parse("a.dpr");
-            var f = new RequiredUnitsFinder(t.GetCurrentDir(), t.Options.Meta.IncludePathResolver);
+            var f = t.CreateRequiredUnitsFinder();
             f.FindRequiredUnits(p);
             Assert.AreEqual(1, f.RequiredUnits.Count);
+            Assert.IsFalse(t.HasMessage(MessageNumbers.MissingFile));
         }
 
         [TestMethod]
@@ -80,9 +92,10 @@ namespace PasPasPasTests.Parser {
             t.Files.Add("a.pas", "unit a; interface uses b; implementation end.");
             t.Files.Add("b.pas", "unit b; interface implementation end.");
             var p = t.Parse("a.pas");
-            var f = new RequiredUnitsFinder(t.GetCurrentDir(), t.Options.Meta.IncludePathResolver);
+            var f = t.CreateRequiredUnitsFinder();
             f.FindRequiredUnits(p);
             Assert.AreEqual(1, f.RequiredUnits.Count);
+            Assert.IsFalse(t.HasMessage(MessageNumbers.MissingFile));
         }
 
         [TestMethod]
@@ -91,9 +104,21 @@ namespace PasPasPasTests.Parser {
             t.Files.Add("a.dpk", "package a; contains b in 'b.pas'; end.");
             t.Files.Add("b.pas", "unit b; interface implementation end.");
             var p = t.Parse("a.dpk");
-            var f = new RequiredUnitsFinder(t.GetCurrentDir(), t.Options.Meta.IncludePathResolver);
+            var f = t.CreateRequiredUnitsFinder();
             f.FindRequiredUnits(p);
             Assert.AreEqual(1, f.RequiredUnits.Count);
+            Assert.IsFalse(t.HasMessage(MessageNumbers.MissingFile));
+        }
+
+        [TestMethod]
+        public void TestUnitNotFoundInProgram() {
+            var t = new TestBundle();
+            t.Files.Add("a.dpr", "program a; uses b; begin end.");
+            var p = t.Parse("a.dpr");
+            var f = t.CreateRequiredUnitsFinder();
+            f.FindRequiredUnits(p);
+            Assert.AreEqual(0, f.RequiredUnits.Count);
+            Assert.IsTrue(t.HasMessage(MessageNumbers.MissingFile));
         }
 
         //[TestMethod]

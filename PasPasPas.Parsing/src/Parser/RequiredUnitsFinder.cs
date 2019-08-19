@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Files;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Standard;
@@ -14,6 +15,7 @@ namespace PasPasPas.Parsing.Parser {
 
         private List<FileReference> requiredUnits
             = new List<FileReference>();
+
         private readonly IPathResolver fileResolver;
         readonly FileReference basePath;
 
@@ -23,13 +25,17 @@ namespace PasPasPas.Parsing.Parser {
         public IList<FileReference> RequiredUnits
             => requiredUnits;
 
+        public ILogSource Log { get; }
+
         /// <summary>
         ///     create a new required units finder
         /// </summary>
         /// <param name="resolver"></param>
+        /// <param name="log"></param>
         /// <param name="currentPath"></param>
-        public RequiredUnitsFinder(FileReference currentPath, IPathResolver resolver) {
+        public RequiredUnitsFinder(FileReference currentPath, IPathResolver resolver, ILogSource log) {
             fileResolver = resolver;
+            Log = log;
             basePath = currentPath;
         }
 
@@ -99,6 +105,8 @@ namespace PasPasPas.Parsing.Parser {
                 var file = fileResolver.ResolvePath(basePath, fileRef);
                 if (file.IsResolved)
                     requiredUnits.Add(file.TargetPath);
+                else
+                    Log.LogError(MessageNumbers.MissingFile);
             }
         }
 
@@ -113,6 +121,8 @@ namespace PasPasPas.Parsing.Parser {
                 var file = fileResolver.ResolvePath(basePath, fileRef);
                 if (file.IsResolved)
                     requiredUnits.Add(file.TargetPath);
+                else
+                    Log.LogError(MessageNumbers.MissingFile);
             }
         }
     }

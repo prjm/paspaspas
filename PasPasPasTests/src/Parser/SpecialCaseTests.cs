@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Files;
+using PasPasPas.Globals.Log;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Parser.Standard;
 using PasPasPas.Parsing.SyntaxTree.Standard;
@@ -13,7 +14,7 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestInvalidAttribute()
-            => RunCstTest(p => p.ParseUnit(new FileReference(CstPath)), "unit z.x; interface [a] implementation end.", ParserBase.MissingToken);
+            => RunCstTest(p => p.ParseUnit(new FileReference(CstPath)), "unit z.x; interface [a] implementation end.", MessageNumbers.MissingToken);
 
         [TestMethod]
         public void TestForwardDeclaration() {
