@@ -117,14 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="m_0103" xml:space="preserve">
+    <value>Missing token</value>
+  </data>
   <data name="m_05d3bbe032e243eb850bebdb2b7ef272" xml:space="preserve">
     <value>Unexpected token</value>
   </data>
   <data name="m_8165f2988eb84cd28547752d9d2ed624" xml:space="preserve">
     <value>Redeclared Field</value>
-  </data>
-  <data name="m_9fb11f842fe3489cb715dd29458e434e" xml:space="preserve">
-    <value>Missing token</value>
   </data>
   <data name="m_bd36c92cbacf492c8bf817e890cbaafa" xml:space="preserve">
     <value>Redeclared Symbol</value>

@@ -54,9 +54,14 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void FindRequiredUnitsOfUnit(UnitSymbol unit) {
-            throw new NotImplementedException();
-        }
+            var usesList = unit?.UnitInterface?.UsesClause?.UsesList;
+                if (usesList == default)
+                    return;
 
+                FindRequiredUnitsOfUsesClause(usesList);
+            }
+
+   
         private void FindRequiredUnitsOfPackage(PackageSymbol package) {
             var usesList = package?.ContainsClause?.ContainsList;
             if (usesList == default)
@@ -97,5 +102,18 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
+        private void FindRequiredUnitsOfUsesClause(NamespaceNameListSymbol usesList) {
+            foreach (var usesClause in usesList.Items) {
+                var path = usesClause?.CompleteName + ".pas";
+
+                if (string.IsNullOrWhiteSpace(path))
+                    continue;
+
+                var fileRef = new FileReference(path);
+                var file = fileResolver.ResolvePath(basePath, fileRef);
+                if (file.IsResolved)
+                    requiredUnits.Add(file.TargetPath);
+            }
+        }
     }
 }

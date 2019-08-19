@@ -1162,7 +1162,11 @@ namespace PasPasPas.Parsing.Parser.Standard {
         [Rule("Package", "PackageHead RequiresClause [ ContainsClause ] 'end' '.' ")]
         public PackageSymbol ParsePackage(FileReference path) {
             var packageHead = ParsePackageHead();
-            var requiresClause = ParseRequiresClause();
+            var requiresClause = default(PackageRequiresSymbol);
+
+            if (Match(TokenKind.Requires))
+                requiresClause = ParseRequiresClause();
+
             var containsClause = default(PackageContainsSymbol);
 
             if (Match(TokenKind.Contains))

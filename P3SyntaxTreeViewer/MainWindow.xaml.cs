@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
@@ -121,12 +122,12 @@ namespace P3SyntaxTreeViewer {
 
             WindowState = WindowState.Maximized;
 
-            if (File.Exists(@"c:\temp\editor.pas"))
-                Code.Text = File.ReadAllText(@"c:\temp\editor.pas", Encoding.UTF8);
+            if (File.Exists(@"d:\temp\editor.pas"))
+                Code.Text = File.ReadAllText(@"d:\temp\editor.pas", Encoding.UTF8);
         }
 
         protected override void OnClosing(CancelEventArgs e) {
-            File.WriteAllText(@"c:\temp\editor.pas", Code.Text, Encoding.UTF8);
+            File.WriteAllText(@"d:\temp\editor.pas", Code.Text, Encoding.UTF8);
             base.OnClosing(e);
         }
 
@@ -205,11 +206,12 @@ namespace P3SyntaxTreeViewer {
         /// <param name="code"></param>
         /// <returns></returns>
         private static (ISyntaxPart bst, ISyntaxPart ast, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code) {
-            var parserApi = Factory.CreateParserApi(env, default);
-            var readerApi = parserApi.Tokenizer.Readers;
-            var path = readerApi.CreateFileRef("z.x.pas");
-            var resolver = CommonApi.CreateResolverForSingleString(readerApi, path, code);
-            using (var parser = parserApi.CreateParser(resolver, path)) {
+            var path = new FileReference("z.x.pas");
+            var resolver = CommonApi.CreateResolverForSingleString(path, code);
+            var options = Factory.CreateOptions(resolver, env);
+            var parserApi = Factory.CreateParserApi(options);
+            
+            using (var parser = parserApi.CreateParser(path)) {
                 var bst = parser.Parse();
                 var ast = parserApi.CreateAbstractSyntraxTree(bst);
                 parserApi.AnnotateWithTypes(ast);

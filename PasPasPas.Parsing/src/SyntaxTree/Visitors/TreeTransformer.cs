@@ -796,7 +796,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
 
-                if (name.QuotedFileName != null && name.QuotedFileName.Symbol.Token.ParsedValue is IStringValue fileName)
+                if (name?.QuotedFileName?.Symbol?.Token.ParsedValue is IStringValue fileName)
                     unitName.FileName = fileName.AsUnicodeString;
 
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
@@ -3115,10 +3115,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Extractors
 
         private static SymbolName ExtractSymbolName(NamespaceNameSymbol name) {
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
             var result = new NamespacedSymbolName();
+
+            if (name == null)
+                return result;
 
             foreach (var nspace in name.Namespace)
                 if (!string.IsNullOrWhiteSpace(nspace))

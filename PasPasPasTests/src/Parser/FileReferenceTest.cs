@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using PasPasPas.Api;
 using PasPasPas.Globals.Api;
@@ -12,6 +13,10 @@ using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
+
+    public class Test {
+        IList<FileReferenceTest.TestBundle> List { get; }
+    }
 
     public class FileReferenceTest : ParserTestBase {
 
@@ -50,9 +55,42 @@ namespace PasPasPasTests.Parser {
         [TestMethod]
         public void TestProgramUnitResolver() {
             var t = new TestBundle();
-            t.Files.Add("a.dpr", "program x; uses b; begin end.");
+            t.Files.Add("a.dpr", "program a; uses b; begin end.");
             t.Files.Add("b.pas", "unit b; interface implementation end.");
             var p = t.Parse("a.dpr");
+            var f = new RequiredUnitsFinder(t.GetCurrentDir(), t.Options.Meta.IncludePathResolver);
+            f.FindRequiredUnits(p);
+            Assert.AreEqual(1, f.RequiredUnits.Count);
+        }
+
+        [TestMethod]
+        public void TestLibraryUnitResolver() {
+            var t = new TestBundle();
+            t.Files.Add("a.dpr", "library a; uses b; begin end.");
+            t.Files.Add("b.pas", "unit b; interface implementation end.");
+            var p = t.Parse("a.dpr");
+            var f = new RequiredUnitsFinder(t.GetCurrentDir(), t.Options.Meta.IncludePathResolver);
+            f.FindRequiredUnits(p);
+            Assert.AreEqual(1, f.RequiredUnits.Count);
+        }
+
+        [TestMethod]
+        public void TestUnitUnitResolver() {
+            var t = new TestBundle();
+            t.Files.Add("a.pas", "unit a; interface uses b; implementation end.");
+            t.Files.Add("b.pas", "unit b; interface implementation end.");
+            var p = t.Parse("a.pas");
+            var f = new RequiredUnitsFinder(t.GetCurrentDir(), t.Options.Meta.IncludePathResolver);
+            f.FindRequiredUnits(p);
+            Assert.AreEqual(1, f.RequiredUnits.Count);
+        }
+
+        [TestMethod]
+        public void TestPackageUnitResolver() {
+            var t = new TestBundle();
+            t.Files.Add("a.dpk", "package a; contains b in 'b.pas'; end.");
+            t.Files.Add("b.pas", "unit b; interface implementation end.");
+            var p = t.Parse("a.dpk");
             var f = new RequiredUnitsFinder(t.GetCurrentDir(), t.Options.Meta.IncludePathResolver);
             f.FindRequiredUnits(p);
             Assert.AreEqual(1, f.RequiredUnits.Count);
