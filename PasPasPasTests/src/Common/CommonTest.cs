@@ -249,7 +249,7 @@ namespace PasPasPasTests.Common {
         /// <param name="path"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        protected IInputResolver CreateResolver(FileReference path, string content)
+        protected IInputResolver CreateResolver(IFileReference path, string content)
             => CommonApi.CreateResolverForSingleString(path, content);
 
         /// <summary>

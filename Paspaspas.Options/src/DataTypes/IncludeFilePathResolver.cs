@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
-using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -23,7 +22,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="basePath"></param>
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
-        protected override ResolvedFile DoResolvePath(FileReference basePath, FileReference pathToResolve)
+        protected override ResolvedFile DoResolvePath(IFileReference basePath, IFileReference pathToResolve)
             => ResolveFromSearchPath(basePath, pathToResolve);
 
     }

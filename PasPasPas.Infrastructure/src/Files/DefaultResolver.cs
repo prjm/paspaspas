@@ -30,7 +30,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public bool CanResolve(FileReference file)
+        public bool CanResolve(IFileReference file)
             => Checker.Invoke(file);
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="file"></param>
         /// <param name="api"></param>
         /// <returns></returns>
-        public IReaderInput Resolve(IReaderApi api, FileReference file)
+        public IReaderInput Resolve(IReaderApi api, IFileReference file)
             => Resolver.Invoke(file, api);
     }
 }

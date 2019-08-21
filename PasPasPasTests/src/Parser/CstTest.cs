@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Files;
-using PasPasPas.Globals.Parsing;
+﻿using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPasTests.Common;
@@ -92,7 +91,7 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestProgram() {
-            var s = RunCstTest(p => p.ParseProgram(new FileReference(CstPath)), "program z.x; uses a in 'a'; begin x; end.");
+            var s = RunCstTest(p => p.ParseProgram(p.Environment.CreateFileReference(CstPath)), "program z.x; uses a in 'a'; begin x; end.");
             Assert.IsNotNull(s.ProgramHead);
             Assert.IsNotNull(s.Uses);
             Assert.IsNotNull(s.MainBlock);
@@ -102,7 +101,7 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestLibrary() {
-            var s = RunCstTest(p => p.ParseLibrary(new FileReference(CstPath)), "library a; uses x in 'x'; begin end.");
+            var s = RunCstTest(p => p.ParseLibrary(p.Environment.CreateFileReference(CstPath)), "library a; uses x in 'x'; begin end.");
             Assert.IsNotNull(s.LibraryHead);
             Assert.IsNotNull(s.Uses);
             Assert.IsNotNull(s.MainBlock);
@@ -501,7 +500,7 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestUnit() {
-            var s = RunCstTest(p => p.ParseUnit(new FileReference(CstPath)), "unit z.x; interface implementation initialization finalization end.");
+            var s = RunCstTest(p => p.ParseUnit(p.Environment.CreateFileReference(CstPath)), "unit z.x; interface implementation initialization finalization end.");
             Assert.IsNotNull(s.UnitHead);
             Assert.IsNotNull(s.UnitInterface);
             Assert.IsNotNull(s.UnitImplementation);
@@ -1834,7 +1833,7 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestPackage() {
-            var s = RunCstTest(p => p.ParsePackage(new FileReference(CstPath)), "package z.x; requires a; contains b in 'b'; end. ");
+            var s = RunCstTest(p => p.ParsePackage(p.Environment.CreateFileReference(CstPath)), "package z.x; requires a; contains b in 'b'; end. ");
             Assert.IsNotNull(s.PackageHead);
             Assert.IsNotNull(s.RequiresClause);
             Assert.IsNotNull(s.ContainsClause);

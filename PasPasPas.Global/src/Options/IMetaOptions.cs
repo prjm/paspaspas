@@ -156,7 +156,7 @@ namespace PasPasPas.Globals.Options {
         /// </summary>
         /// <param name="basePath"></param>
         /// <param name="fileReference"></param>
-        void AddLinkedFile(FileReference basePath, FileReference fileReference);
+        void AddLinkedFile(IFileReference basePath, IFileReference fileReference);
 
         /// <summary>
         ///     start a region definition
@@ -167,13 +167,13 @@ namespace PasPasPas.Globals.Options {
         /// <summary>
         ///     add a resource reference
         /// </summary>
-        void AddResourceReference(FileReference basePath, FileReference fileReference, string rcFile);
+        void AddResourceReference(IFileReference basePath, IFileReference fileReference, string rcFile);
 
         /// <summary>
         ///     add a include file
         /// </summary>
         /// <param name="basePath"></param>
         /// <param name="fileName"></param>
-        FileReference AddInclude(FileReference basePath, FileReference fileName);
+        IFileReference AddInclude(IFileReference basePath, IFileReference fileName);
     }
 }

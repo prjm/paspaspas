@@ -2,7 +2,6 @@
 using System.IO;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
-using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -23,14 +22,14 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="basePath"></param>
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
-        protected override ResolvedFile DoResolvePath(FileReference basePath, FileReference pathToResolve) {
+        protected override ResolvedFile DoResolvePath(IFileReference basePath, IFileReference pathToResolve) {
 
             if (pathToResolve.Path.StartsWith("*", StringComparison.Ordinal)) {
 
 #if DESKTOP
                 pathToResolve = new FileReference(pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path)));
 #else
-                pathToResolve = new FileReference(pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path), StringComparison.OrdinalIgnoreCase));
+                pathToResolve = pathToResolve.CreateNewFileReference(pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path), StringComparison.OrdinalIgnoreCase));
 #endif
 
 
@@ -39,7 +38,7 @@ namespace PasPasPas.Options.DataTypes {
             }
 
             if (string.IsNullOrWhiteSpace(Path.GetExtension(pathToResolve.Path))) {
-                pathToResolve = new FileReference(Path.ChangeExtension(pathToResolve.Path, ".res"));
+                pathToResolve = pathToResolve.CreateNewFileReference(Path.ChangeExtension(pathToResolve.Path, ".res"));
             }
 
             return ResolveFromSearchPath(basePath, pathToResolve);

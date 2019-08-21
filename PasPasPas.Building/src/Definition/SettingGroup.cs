@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
-using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Building.Definition {
 
@@ -37,8 +37,8 @@ namespace PasPasPas.Building.Definition {
         ///     get file references from this setting
         /// </summary>
         /// <returns>file references</returns>
-        public IList<FileReference> AsFileList(StringPool pool) {
-            var result = new List<FileReference>();
+        public IList<IFileReference> AsFileList(IEnvironment env) {
+            var result = new List<IFileReference>();
 
             foreach (var item in Items) {
                 Setting setting;
@@ -50,7 +50,7 @@ namespace PasPasPas.Building.Definition {
 
 
                 var fileBasedSettings = setting as IFileReferenceSetting;
-                foreach (var path in fileBasedSettings.GetReferencedFiles(pool))
+                foreach (var path in fileBasedSettings.GetReferencedFiles(env))
                     result.Add(path);
 
             }

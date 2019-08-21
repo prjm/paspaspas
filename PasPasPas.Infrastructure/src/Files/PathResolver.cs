@@ -9,12 +9,12 @@ namespace PasPasPas.Globals.Files {
         /// <summary>
         ///     base path
         /// </summary>
-        public FileReference BasePath { get; set; }
+        public IFileReference BasePath { get; set; }
 
         /// <summary>
         ///     path to resolve
         /// </summary>
-        public FileReference PathToResolve { get; set; }
+        public IFileReference PathToResolve { get; set; }
 
         /// <summary>
         ///     compare to keys for equality
@@ -82,7 +82,7 @@ namespace PasPasPas.Globals.Files {
         /// <param name="basePath">base path</param>
         /// <param name="fileName">path to resolve</param>
         /// <returns>resolved path</returns>
-        public ResolvedFile ResolvePath(FileReference basePath, FileReference fileName) {
+        public ResolvedFile ResolvePath(IFileReference basePath, IFileReference fileName) {
 
             if (basePath == null)
                 throw new ArgumentNullException(nameof(basePath));
@@ -109,7 +109,7 @@ namespace PasPasPas.Globals.Files {
         /// <param name="currentDirectory">current directory</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns></returns>
-        protected ResolvedFile ResolveInDirectory(FileReference currentDirectory, FileReference pathToResolve) {
+        protected ResolvedFile ResolveInDirectory(IFileReference currentDirectory, IFileReference pathToResolve) {
 
             if (currentDirectory == null)
                 throw new ArgumentNullException(nameof(currentDirectory));
@@ -129,6 +129,6 @@ namespace PasPasPas.Globals.Files {
         /// <param name="basePath"></param>
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
-        protected abstract ResolvedFile DoResolvePath(FileReference basePath, FileReference pathToResolve);
+        protected abstract ResolvedFile DoResolvePath(IFileReference basePath, IFileReference pathToResolve);
     }
 }

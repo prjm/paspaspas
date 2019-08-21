@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns>parsed unit</returns>
 
         [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
-        public UnitSymbol ParseUnit(FileReference path) => new UnitSymbol() {
+        public UnitSymbol ParseUnit(IFileReference path) => new UnitSymbol() {
             UnitHead = ParseUnitHead(),
             UnitInterface = ParseUnitInterface(),
             UnitImplementation = ParseUnitImplementation(),

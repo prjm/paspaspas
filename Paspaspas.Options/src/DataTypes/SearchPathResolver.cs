@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
-using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -28,7 +27,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="basePath">base path</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns>resolved file</returns>
-        protected ResolvedFile ResolveFromSearchPath(FileReference basePath, FileReference pathToResolve) {
+        protected ResolvedFile ResolveFromSearchPath(IFileReference basePath, IFileReference pathToResolve) {
             string currentDirectory;
 
             if (basePath != null && !string.IsNullOrEmpty(basePath.Path)) {
@@ -38,7 +37,8 @@ namespace PasPasPas.Options.DataTypes {
                 currentDirectory = null;
             }
 
-            var result = ResolveInDirectory(new FileReference(currentDirectory), pathToResolve);
+            var currentDirectoryRef = optionSet.Environment.CreateFileReference(currentDirectory);
+            var result = ResolveInDirectory(currentDirectoryRef, pathToResolve);
             if (result.IsResolved) {
                 return result;
             }

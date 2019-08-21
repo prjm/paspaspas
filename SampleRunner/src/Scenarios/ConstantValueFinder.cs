@@ -2,7 +2,6 @@
 using System.IO;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
-using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -84,7 +83,7 @@ namespace SampleRunner.Scenarios {
                 var resolver = CommonApi.CreateAnyFileResolver();
                 var options = Factory.CreateOptions(resolver, environment);
                 var parserApi = Factory.CreateParserApi(options);
-                var file = parserApi.Tokenizer.Readers.CreateFileRef(testPath);
+                var file = environment.CreateFileReference(testPath);
 
                 using (var parser = parserApi.CreateParser(file)) {
                     var result = parser.Parse();
@@ -95,7 +94,7 @@ namespace SampleRunner.Scenarios {
                         var filePath = Path.GetFullPath(testPath);
                         var path = Path.Combine(Path.GetDirectoryName(filePath), "dummy.dpr");
                         var dummyProgram = $"program dummy; const {item} begin end.";
-                        var file2 = new FileReference(path);
+                        var file2 = environment.CreateFileReference(path);
                         var resolver2 = CommonApi.CreateResolverForSingleString(file2, dummyProgram);
                         var options2 = Factory.CreateOptions(resolver2, environment);
                         var parserApi2 = Factory.CreateParserApi(options2);

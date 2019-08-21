@@ -60,10 +60,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         public Resolver Resolver { get; }
         public Checker Checker { get; }
 
-        public bool CanResolve(FileReference file)
+        public bool CanResolve(IFileReference file)
             => Checker.Invoke(file);
 
-        public IReaderInput Resolve(IReaderApi api, FileReference file)
+        public IReaderInput Resolve(IReaderApi api, IFileReference file)
             => Resolver.Invoke(file, api);
     }
 
@@ -196,14 +196,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         }
 
 
-        private static Resolver CreateResolver(FileReference path, string data)
+        private static Resolver CreateResolver(IFileReference path, string data)
             => (f, a) => {
                 if (!f.Equals(path))
                     return default;
                 return a.CreateInputForString(path, data);
             };
 
-        private static Checker CreateChecker(FileReference path)
+        private static Checker CreateChecker(IFileReference path)
             => (f) => f.Equals(path);
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="nextToken"></param>
         /// <param name="path">current path</param>
-        private void ProcessMacroToken(FileReference path, ref Token nextToken) {
+        private void ProcessMacroToken(IFileReference path, ref Token nextToken) {
             var macroValue = nextToken.ParsedValue as IStringValue;
             var data = macroValue?.AsUnicodeString ?? string.Empty;
             var resolver = new HelperResolver(CreateResolver(path, data), CreateChecker(path));

@@ -12,13 +12,13 @@ namespace PasPasPas.Infrastructure.Files {
         ///     create a new file reader input
         /// </summary>
         /// <param name="path"></param>
-        public FileReaderInput(FileReference path)
+        public FileReaderInput(IFileReference path)
             => Path = path;
 
         /// <summary>
         ///     file path
         /// </summary>
-        public FileReference Path { get; }
+        public IFileReference Path { get; }
 
         /// <summary>
         ///     fixed buffer size

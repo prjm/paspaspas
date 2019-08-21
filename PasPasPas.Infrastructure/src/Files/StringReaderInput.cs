@@ -12,7 +12,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         /// <param name="path"></param>
         /// <param name="input"></param>
-        public StringReaderInput(FileReference path, string input) {
+        public StringReaderInput(IFileReference path, string input) {
             Path = path;
             Content = input;
         }
@@ -25,7 +25,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     file name
         /// </summary>
-        public FileReference Path { get; }
+        public IFileReference Path { get; }
 
         /// <summary>
         ///     fixed buffer size

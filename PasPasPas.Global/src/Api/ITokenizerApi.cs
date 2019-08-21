@@ -21,7 +21,7 @@ namespace PasPasPas.Globals.Api {
         /// <param name="path"></param>
         /// <param name="resolver"></param>
         /// <returns></returns>
-        ITokenizer CreateTokenizer(IInputResolver resolver, FileReference path);
+        ITokenizer CreateTokenizer(IInputResolver resolver, IFileReference path);
 
         /// <summary>
         ///     access the global environment
@@ -39,6 +39,6 @@ namespace PasPasPas.Globals.Api {
         /// <param name="resolver"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        ITokenizer CreateBufferedTokenizer(IInputResolver resolver, FileReference path);
+        ITokenizer CreateBufferedTokenizer(IInputResolver resolver, IFileReference path);
     }
 }

@@ -10,7 +10,7 @@ namespace PasPasPas.Globals.Files {
         /// <summary>
         ///     current file
         /// </summary>
-        FileReference CurrentFile { get; }
+        IFileReference CurrentFile { get; }
 
         /// <summary>
         ///     test if the reader is at the end of file
@@ -43,7 +43,7 @@ namespace PasPasPas.Globals.Files {
         ///     finish current file
         /// </summary>
         /// <returns></returns>
-        FileReference FinishCurrentFile();
+        IFileReference FinishCurrentFile();
 
         /// <summary>
         ///     look ahead some chars
@@ -56,7 +56,7 @@ namespace PasPasPas.Globals.Files {
         ///     add input to read
         /// </summary>
         /// <param name="inputToRead"></param>
-        void AddInputToRead(FileReference inputToRead);
+        void AddInputToRead(IFileReference inputToRead);
 
     }
 }

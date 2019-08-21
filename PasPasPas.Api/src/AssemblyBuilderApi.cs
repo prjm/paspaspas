@@ -27,7 +27,7 @@ namespace PasPasPas.Api {
         ///     create an assembly for a given project
         /// </summary>
         /// <param name="file"></param>
-        public IAssemblyReference CreateAssemblyForProject(FileReference file) {
+        public IAssemblyReference CreateAssemblyForProject(IFileReference file) {
             var data = Parser.Tokenizer.Readers.CreateInputForPath(file);
             using (var parser = Parser.CreateParser(file)) {
                 var result = parser.Parse();

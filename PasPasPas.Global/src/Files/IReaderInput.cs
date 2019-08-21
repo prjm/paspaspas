@@ -14,7 +14,7 @@
         /// <summary>
         ///     file path
         /// </summary>
-        FileReference Path { get; }
+        IFileReference Path { get; }
 
         /// <summary>
         ///     buffer size

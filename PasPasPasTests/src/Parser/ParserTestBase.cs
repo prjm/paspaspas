@@ -54,7 +54,7 @@ namespace PasPasPasTests.Parser {
                 output = input;
 
             var env = CreateEnvironment();
-            var path = new FileReference("test.pas");
+            var path = env.CreateFileReference("test.pas");
             var r = CommonApi.CreateResolverForSingleString(path, input);
             var testOptions = Factory.CreateOptions(r, env);
             ClearOptions(testOptions);
@@ -157,7 +157,7 @@ namespace PasPasPasTests.Parser {
                 y.Message.Severity == MessageSeverity.FatalError;
             };
 
-            var path = new FileReference(CstPath);
+            var path = env.CreateFileReference(CstPath);
             var data = CreateFileResolver(path, tokens);
             var testOptions = Factory.CreateOptions(data, env);
             var api = Factory.CreateParserApi(testOptions);
@@ -182,7 +182,7 @@ namespace PasPasPasTests.Parser {
         }
 
         protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env) {
-            var path = new FileReference("z.x.pas");
+            var path = env.CreateFileReference("z.x.pas");
             var resolver = CommonApi.CreateResolverForSingleString(path, input);
             var testOptions = Factory.CreateOptions(resolver, env);
             var api = Factory.CreateParserApi(testOptions);
@@ -214,13 +214,12 @@ namespace PasPasPasTests.Parser {
             RunAstTest(statement, search, true, true);
         }
 
-        protected IInputResolver CreateFileResolver(FileReference path, string content) {
-            var incFile = new FileReference(Path.GetFullPath("dummy.inc"));
-            var resFile1 = new FileReference(Path.GetFullPath("res.res"));
-            var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
-            var linkDll = new FileReference(Path.GetFullPath("link.dll"));
-
-            IReaderInput doResolve(FileReference file, IReaderApi a) {
+        protected IInputResolver CreateFileResolver(IFileReference path, string content) {
+            IReaderInput doResolve(IFileReference file, IReaderApi a) {
+                var incFile = file.CreateNewFileReference(Path.GetFullPath("dummy.inc"));
+                var resFile1 = file.CreateNewFileReference(Path.GetFullPath("res.res"));
+                var resFile2 = file.CreateNewFileReference(Path.GetFullPath("test_0.res"));
+                var linkDll = file.CreateNewFileReference(Path.GetFullPath("link.dll"));
 
                 if (file.Equals(incFile))
                     return a.CreateInputForString(incFile, "DEFINE DUMMY_INC");
@@ -240,7 +239,11 @@ namespace PasPasPasTests.Parser {
                 return default;
             }
 
-            bool doCheck(FileReference file) {
+            bool doCheck(IFileReference file) {
+                var incFile = file.CreateNewFileReference(Path.GetFullPath("dummy.inc"));
+                var resFile1 = file.CreateNewFileReference(Path.GetFullPath("res.res"));
+                var resFile2 = file.CreateNewFileReference(Path.GetFullPath("test_0.res"));
+                var linkDll = file.CreateNewFileReference(Path.GetFullPath("link.dll"));
 
                 if (file.Equals(incFile))
                     return true;
@@ -268,10 +271,10 @@ namespace PasPasPasTests.Parser {
 
             var env = CreateEnvironment();
             var fileCounter = 0;
-            var incFile = new FileReference(Path.GetFullPath("dummy.inc"));
-            var resFile1 = new FileReference(Path.GetFullPath("res.res"));
-            var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
-            var linkDll = new FileReference(Path.GetFullPath("link.dll"));
+            var incFile = env.CreateFileReference(Path.GetFullPath("dummy.inc"));
+            var resFile1 = env.CreateFileReference(Path.GetFullPath("res.res"));
+            var resFile2 = env.CreateFileReference(Path.GetFullPath("test_0.res"));
+            var linkDll = env.CreateFileReference(Path.GetFullPath("link.dll"));
 
             var msgs = new ListLogTarget();
             env.Log.RegisterTarget(msgs);
@@ -300,7 +303,7 @@ namespace PasPasPasTests.Parser {
                 foreach (var subPart in subParts) {
 
                     var hasFoundInput = false;
-                    var path = f.FindUnit("test_" + fileCounter.ToString(CultureInfo.InvariantCulture) + ".pas");
+                    var path = f.FindUnit(env, "test_" + fileCounter.ToString(CultureInfo.InvariantCulture) + ".pas");
                     using (var reader = api.Tokenizer.Readers.CreateReader(r, path)) {
                         var visitor = new CompilerDirectiveVisitor(testOptions, path, env.Log);
                         var terminals = new TerminalVisitor();

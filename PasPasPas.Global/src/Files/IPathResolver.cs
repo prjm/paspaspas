@@ -11,6 +11,6 @@
         /// <param name="basePath"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        ResolvedFile ResolvePath(FileReference basePath, FileReference fileName);
+        ResolvedFile ResolvePath(IFileReference basePath, IFileReference fileName);
     }
 }

@@ -89,12 +89,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private readonly ILogManager log;
         private IOptionSet Options { get; }
         private readonly ILogSource logSource;
-        private readonly FileReference path;
+        private readonly IFileReference path;
 
         /// <summary>
         ///     creates a new visitor
         /// </summary>
-        public CompilerDirectiveVisitor(IOptionSet options, FileReference filePath, ILogManager logMgr) {
+        public CompilerDirectiveVisitor(IOptionSet options, IFileReference filePath, ILogManager logMgr) {
             Options = options;
             visitor = new Visitor(this);
             log = logMgr;
@@ -1011,7 +1011,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
                 return;
 
-            Meta.AddLinkedFile(basePath, new FileReference(fileName));
+            var linkedRef = basePath.CreateNewFileReference(fileName);
+            Meta.AddLinkedFile(basePath, linkedRef);
         }
 
 
@@ -1032,8 +1033,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
                 return;
 
-
-            Meta.AddResourceReference(basePath, new FileReference(fileName), element.RcFile);
+            var resourceReference = Options.Environment.CreateFileReference(fileName);
+            Meta.AddResourceReference(basePath, resourceReference, element.RcFile);
         }
 
         /// <summary>
@@ -1044,7 +1045,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(element))
                 return;
 
-            var basePath = new FileReference( Path.GetDirectoryName( path.Path));
+            var basePath = Options.Environment.CreateFileReference(Path.GetDirectoryName(path.Path));
             var fileName = element?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -1053,7 +1054,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
                 return;
 
-            var includeFile = Meta.AddInclude(basePath, new FileReference(fileName));
+            var includeFile = Meta.AddInclude(basePath, Options.Environment.CreateFileReference(fileName));
 
             if (IncludeInput != null) {
                 IncludeInput.AddInputToRead(includeFile);

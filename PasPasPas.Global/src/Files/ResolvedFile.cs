@@ -14,7 +14,7 @@ namespace PasPasPas.Globals.Files {
         /// <param name="pathToResolve">path to resolve</param>
         /// <param name="target">target directory</param>
         /// <param name="isResolved"><c>true</c> if the file is resolved</param>
-        public ResolvedFile(FileReference currentDirectory, FileReference pathToResolve, FileReference target, bool isResolved) {
+        public ResolvedFile(IFileReference currentDirectory, IFileReference pathToResolve, IFileReference target, bool isResolved) {
             CurrentDirectory = currentDirectory ?? throw new ArgumentNullException(nameof(currentDirectory));
             PathToResolve = pathToResolve ?? throw new ArgumentNullException(nameof(pathToResolve));
             TargetPath = target ?? throw new ArgumentNullException(nameof(target));
@@ -24,7 +24,7 @@ namespace PasPasPas.Globals.Files {
         /// <summary>
         ///     current directory
         /// </summary>
-        public FileReference CurrentDirectory { get; }
+        public IFileReference CurrentDirectory { get; }
 
         /// <summary>
         ///     flag, <c>true</c> if the file exists
@@ -34,11 +34,11 @@ namespace PasPasPas.Globals.Files {
         /// <summary>
         ///     path to resolve
         /// </summary>
-        public FileReference PathToResolve { get; }
+        public IFileReference PathToResolve { get; }
 
         /// <summary>
         ///     target path
         /// </summary>
-        public FileReference TargetPath { get; }
+        public IFileReference TargetPath { get; }
     }
 }

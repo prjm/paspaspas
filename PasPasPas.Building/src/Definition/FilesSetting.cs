@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
-using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Building.Definition {
 
@@ -18,9 +18,9 @@ namespace PasPasPas.Building.Definition {
         ///     get a list of referenced files
         /// </summary>
         /// <returns></returns>
-        public IList<FileReference> GetReferencedFiles(StringPool pool)
-            => new List<FileReference> {
-                new FileReference(Path)
+        public IList<IFileReference> GetReferencedFiles(IEnvironment env)
+            => new List<IFileReference> {
+                env.CreateFileReference(Path)
             };
     }
 }

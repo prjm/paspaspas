@@ -13,14 +13,14 @@ namespace PasPasPas.Globals.Files {
         /// <param name="file"></param>
         /// <param name="api"></param>
         /// <returns></returns>
-        IReaderInput Resolve(IReaderApi api, FileReference file);
+        IReaderInput Resolve(IReaderApi api, IFileReference file);
 
         /// <summary>
         ///     test if a given file can be resolved
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        bool CanResolve(FileReference file);
+        bool CanResolve(IFileReference file);
 
     }
 }

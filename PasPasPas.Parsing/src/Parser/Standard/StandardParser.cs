@@ -40,7 +40,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (string.IsNullOrWhiteSpace(basePath))
                 basePath = Directory.GetCurrentDirectory();
 
-            unitFinder = new RequiredUnitsFinder(new FileReference(basePath), options.Meta.IncludePathResolver, LogSource);
+            var basePathReference = options.Environment.CreateFileReference(basePath);
+            unitFinder = new RequiredUnitsFinder(basePathReference, options.Meta.IncludePathResolver, LogSource);
         }
 
         #region Reserved Words
@@ -283,7 +284,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 do {
                     item = AddToList(list, ParseNamespaceFileName(true));
 
-                    if (item != default && unitFinder.TryToResolveUnit(item, out var unitRef)) { 
+                    if (item != default && unitFinder.TryToResolveUnit(item, out var unitRef)) {
                     }
 
                 } while (item != default && item.Comma != default);
@@ -1176,7 +1177,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("Package", "PackageHead RequiresClause [ ContainsClause ] 'end' '.' ")]
-        public PackageSymbol ParsePackage(FileReference path) {
+        public PackageSymbol ParsePackage(IFileReference path) {
             var packageHead = ParsePackageHead();
             var requiresClause = default(PackageRequiresSymbol);
 
@@ -1270,7 +1271,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
-        public LibrarySymbol ParseLibrary(FileReference path)
+        public LibrarySymbol ParseLibrary(IFileReference path)
             => new LibrarySymbol(
                 libraryHead: ParseLibraryHead(),
                 uses: Match(TokenKind.Uses) ? ParseUsesFileClause() : null,
@@ -1304,7 +1305,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("Program", "[ProgramHead] [UsesFileClause] Block '.'")]
-        public ProgramSymbol ParseProgram(FileReference path)
+        public ProgramSymbol ParseProgram(IFileReference path)
             => new ProgramSymbol(
                 programHead: Match(TokenKind.Program) ? ParseProgramHead() : null,
                 uses: Match(TokenKind.Uses) ? ParseUsesFileClause() : null,

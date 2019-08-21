@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
@@ -141,5 +143,7 @@ namespace PasPasPas.Api {
         public IEnvironmentItem TokenArrays { get; }
             = new TokenArrays();
 
+        public IFileReference CreateFileReference(string path)
+            => new FileReference(path);
     }
 }

@@ -39,7 +39,7 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public IParser CreateParser(FileReference path) {
+        public IParser CreateParser(IFileReference path) {
             var reader = Tokenizer.Readers.CreateReader(Options.Resolver, path);
             var parser = new StandardParser(Tokenizer, Options, reader);
             return parser;

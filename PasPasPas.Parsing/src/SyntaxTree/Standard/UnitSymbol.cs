@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     path of the unit
         /// </summary>
-        public FileReference FilePath { get; set; }
+        public IFileReference FilePath { get; set; }
 
         /// <summary>
         ///     dot syntax element

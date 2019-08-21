@@ -20,7 +20,7 @@ namespace PasPasPas.Globals.Options.DataTypes {
         /// <summary>
         ///     target path
         /// </summary>
-        public FileReference TargetPath { get; set; }
+        public IFileReference TargetPath { get; set; }
 
 
         /// <summary>

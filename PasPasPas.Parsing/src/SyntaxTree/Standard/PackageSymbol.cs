@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="containsClause"></param>
         /// <param name="endSymbol"></param>
         /// <param name="dotSymbol"></param>
-        public PackageSymbol(PackageHeadSymbol packageHead, FileReference path, PackageRequiresSymbol requiresClause, PackageContainsSymbol containsClause, Terminal endSymbol, Terminal dotSymbol) {
+        public PackageSymbol(PackageHeadSymbol packageHead, IFileReference path, PackageRequiresSymbol requiresClause, PackageContainsSymbol containsClause, Terminal endSymbol, Terminal dotSymbol) {
             PackageHead = packageHead;
             FilePath = path;
             RequiresClause = requiresClause;
@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     path
         /// </summary>
-        public FileReference FilePath { get; }
+        public IFileReference FilePath { get; }
 
         /// <summary>
         ///     dot symbol

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 
 namespace PasPasPas.Globals.Environment {
@@ -34,5 +35,11 @@ namespace PasPasPas.Globals.Environment {
         /// </summary>
         IEnumerable<IEnvironmentItem> Entries { get; }
 
+        /// <summary>
+        ///     create a new file reference
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        IFileReference CreateFileReference(string path);
     }
 }

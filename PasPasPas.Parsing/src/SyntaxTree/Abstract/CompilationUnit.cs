@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     file reference of the unit
         /// </summary>
-        public FileReference FilePath { get; set; }
+        public IFileReference FilePath { get; set; }
 
         /// <summary>
         ///     symbol hints

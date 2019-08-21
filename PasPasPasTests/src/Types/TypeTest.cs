@@ -1,7 +1,6 @@
 ﻿using System;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
-using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
@@ -297,7 +296,7 @@ namespace PasPasPasTests.Types {
             IExpression firstParam;
 
             env = CreateEnvironment(intSize);
-            var path = new FileReference($"{file}.dpr");
+            var path = env.CreateFileReference($"{file}.dpr");
             var data = CommonApi.CreateResolverForSingleString(path, program);
             var options = Factory.CreateOptions(data, env);
             var api = Factory.CreateParserApi(options);

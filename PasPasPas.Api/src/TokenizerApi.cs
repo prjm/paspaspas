@@ -35,7 +35,7 @@ namespace PasPasPas.Api {
         /// <param name="resolver"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public ITokenizer CreateBufferedTokenizer(IInputResolver resolver, FileReference path) {
+        public ITokenizer CreateBufferedTokenizer(IInputResolver resolver, IFileReference path) {
             var tokenizer = CreateTokenizer(resolver, path);
             return new TokenizerWithLookahead(this, tokenizer, TokenizerMode.Standard);
         }
@@ -57,7 +57,7 @@ namespace PasPasPas.Api {
         /// <param name="path"></param>
         /// <param name="resolver"></param>
         /// <returns></returns>
-        public ITokenizer CreateTokenizer(IInputResolver resolver, FileReference path) {
+        public ITokenizer CreateTokenizer(IInputResolver resolver, IFileReference path) {
             var fileReader = Readers.CreateReader(resolver, path);
             return CreateTokenizer(fileReader);
         }

@@ -21,7 +21,7 @@ namespace PasPasPasTests.Infra {
         public void TestSimpleRead() {
             var env = Factory.CreateEnvironment();
             var api = Factory.CreateReaderApi(env);
-            var file = api.CreateFileRef("test.pas");
+            var file = env.CreateFileReference("test.pas");
             var resolver = CreateResolver(file, Content1);
 
             using (var reader = api.CreateReader(resolver, file)) {
@@ -44,7 +44,7 @@ namespace PasPasPasTests.Infra {
             try {
                 var env = Factory.CreateEnvironment();
                 var api = Factory.CreateReaderApi(env);
-                var file = api.CreateFileRef(path);
+                var file = env.CreateFileReference(path);
                 var data = api.CreateInputForPath(file);
                 using (var reader = api.CreateReader(CreateResolver(), file)) {
                     while (!reader.AtEof) {
@@ -65,8 +65,8 @@ namespace PasPasPasTests.Infra {
             var result = new StringBuilder();
             var env = Factory.CreateEnvironment();
             var api = Factory.CreateReaderApi(env);
-            var path1 = api.CreateFileRef(GenerateTempFile(Content1));
-            var path2 = api.CreateFileRef(GenerateTempFile(Content2));
+            var path1 = env.CreateFileReference(GenerateTempFile(Content1));
+            var path2 = env.CreateFileReference(GenerateTempFile(Content2));
             var r = CreateResolver();
 
             try {
@@ -113,8 +113,8 @@ namespace PasPasPasTests.Infra {
             var result = new StringBuilder();
             var env = Factory.CreateEnvironment();
             var api = Factory.CreateReaderApi(env);
-            var path1 = api.CreateFileRef(GenerateTempFile(Content1));
-            var path2 = api.CreateFileRef(GenerateTempFile(Content2));
+            var path1 = env.CreateFileReference(GenerateTempFile(Content1));
+            var path2 = env.CreateFileReference(GenerateTempFile(Content2));
             using (var reader = api.CreateReader(CreateResolver(), path1)) {
 
                 while (!reader.AtEof && result.Length < 5) {

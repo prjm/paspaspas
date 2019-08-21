@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Api;
-using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Infrastructure.Log;
@@ -33,9 +32,10 @@ namespace PasPasPasTests.Tokenizer {
         public static IList<Token> RunTokenizer(string input, IList<ILogMessage> messages = null) {
             var result = new List<Token>();
             var messageHandler = new ListLogTarget();
-            var path = new FileReference("test.pas");
+            var env = CreateEnvironment();
+            var path = env.CreateFileReference("test.pas");
             var data = CommonApi.CreateResolverForSingleString(path, input);
-            var options = Factory.CreateOptions(data, CreateEnvironment());
+            var options = Factory.CreateOptions(data, env);
             var api = Factory.CreateTokenizerApi(options);
 
             using (var tokenizer = api.CreateTokenizer(data, path)) {

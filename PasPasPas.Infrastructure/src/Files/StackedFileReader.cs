@@ -13,7 +13,7 @@ namespace PasPasPas.Infrastructure.Files {
         ///     helper class for nested input
         /// </summary>
         private class NestedInput {
-            internal FileReference File;
+            internal IFileReference File;
             internal FileBuffer Input;
             internal NestedInput Parent;
         }
@@ -29,7 +29,7 @@ namespace PasPasPas.Infrastructure.Files {
         ///     add a string to read
         /// </summary>
         /// <param name="inputToRead">input source</param>
-        public void AddInputToRead(FileReference inputToRead) {
+        public void AddInputToRead(IFileReference inputToRead) {
             if (inputToRead.Path == null)
                 throw new ArgumentException("", nameof(inputToRead));
 
@@ -45,7 +45,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     finish current file
         /// </summary>
-        public FileReference FinishCurrentFile() {
+        public IFileReference FinishCurrentFile() {
             var source = input?.Input;
 
             if (source == null)
@@ -61,7 +61,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     access the current file
         /// </summary>
-        public FileReference CurrentFile
+        public IFileReference CurrentFile
             => input?.File;
 
         /// <summary>

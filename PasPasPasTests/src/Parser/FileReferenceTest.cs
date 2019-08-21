@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using PasPasPas.Api;
@@ -44,21 +43,21 @@ namespace PasPasPasTests.Parser {
             public ISyntaxPart Parse(string file) {
                 var f = ParserFactory.Tokenizer.Readers;
                 var c = Path.Combine(Directory.GetCurrentDirectory(), file);
-                var q = f.CreateFileRef(c);
+                var q = f.SystemEnvironment.CreateFileReference(c);
                 var p = ParserFactory.CreateParser(q);
                 return p.Parse();
             }
 
-            internal FileReference Ref(string v)
-                => ParserFactory.Tokenizer.Readers.CreateFileRef(v);
+            internal IFileReference Ref(string v)
+                => ParserFactory.Tokenizer.Environment.CreateFileReference(v);
 
-            internal FileReference GetCurrentDir()
+            internal IFileReference GetCurrentDir()
                 => Ref(Directory.GetCurrentDirectory());
 
             public bool HasMessage(uint messageNumber)
                 => LogTarget.Messages.FirstOrDefault(t => t.MessageID == messageNumber) != default;
 
-            public RequiredUnitsFinder CreateRequiredUnitsFinder() 
+            public RequiredUnitsFinder CreateRequiredUnitsFinder()
                 => new RequiredUnitsFinder(GetCurrentDir(), Options.Meta.IncludePathResolver, Log);
         }
 
@@ -135,7 +134,7 @@ namespace PasPasPasTests.Parser {
             var i = t.CreateResolver();
             var o = Factory.CreateOptions(i, e);
             var x = Factory.CreateParserApi(o);
-            var q = x.Tokenizer.Readers.CreateFileRef("b.pas");
+            var q = e.CreateFileReference("b.pas");
             var p = x.CreateParser(q);
             var s = p.Parse();
             var l = x.CreateAbstractSyntraxTree(s);

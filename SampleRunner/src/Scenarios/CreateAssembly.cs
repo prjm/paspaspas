@@ -13,8 +13,8 @@ namespace SampleRunner.Scenarios {
                 var resolver = CommonApi.CreateAnyFileResolver();
                 var opts = Factory.CreateOptions(resolver, environment);
                 var api = new AssemblyBuilderApi(environment, opts);
-                var file = api.Parser.Tokenizer.Readers.CreateFileRef(testPath);
-                var asm = api.CreateAssemblyForProject( file);
+                var file = environment.CreateFileReference(testPath);
+                var asm = api.CreateAssemblyForProject(file);
 
 #if DESKTOP
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
@@ -13,16 +12,16 @@ namespace PasPasPas.Parsing.Parser {
     /// </summary>
     internal class RequiredUnitsFinder {
 
-        private List<FileReference> requiredUnits
-            = new List<FileReference>();
+        private List<IFileReference> requiredUnits
+            = new List<IFileReference>();
 
         private readonly IPathResolver fileResolver;
-        readonly FileReference basePath;
+        readonly IFileReference basePath;
 
         /// <summary>
-        ///
+        ///     required units
         /// </summary>
-        public IList<FileReference> RequiredUnits
+        public IList<IFileReference> RequiredUnits
             => requiredUnits;
 
         public ILogSource Log { get; }
@@ -34,7 +33,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="resolver"></param>
         /// <param name="log"></param>
         /// <param name="currentPath"></param>
-        public RequiredUnitsFinder(FileReference currentPath, IPathResolver resolver, ILogSource log) {
+        public RequiredUnitsFinder(IFileReference currentPath, IPathResolver resolver, ILogSource log) {
             fileResolver = resolver;
             Log = log;
             basePath = currentPath;
@@ -115,7 +114,7 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        public bool TryToResolveUnit(NamespaceFileNameSymbol usesClause, out FileReference file) {
+        public bool TryToResolveUnit(NamespaceFileNameSymbol usesClause, out IFileReference file) {
             var path = //
                 (usesClause.QuotedFileName?.Symbol?.Token.ParsedValue as IStringValue)?.AsUnicodeString ??
                 usesClause?.NamespaceName?.CompleteName + ".pas";
@@ -125,7 +124,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var fileRef = new FileReference(path);
+            var fileRef = basePath.CreateNewFileReference(path);
             var resolvedFile = fileResolver.ResolvePath(basePath, fileRef);
             if (resolvedFile.IsResolved) {
                 file = resolvedFile.TargetPath;
@@ -136,21 +135,21 @@ namespace PasPasPas.Parsing.Parser {
             return false;
         }
 
-        public bool TryToResolveUnit(NamespaceNameSymbol usesClause, out FileReference file) {
+        public bool TryToResolveUnit(NamespaceNameSymbol usesClause, out IFileReference file) {
             var path = usesClause?.CompleteName + ".pas";
 
             if (string.IsNullOrWhiteSpace(path)) {
                 file = default;
-                return false ;
+                return false;
             }
 
-            var fileRef = new FileReference(path);
+            var fileRef = basePath.CreateNewFileReference(path);
             var resolvedFile = fileResolver.ResolvePath(basePath, fileRef);
             if (resolvedFile.IsResolved) {
                 file = resolvedFile.TargetPath;
                 return true;
             }
-    
+
 
             Log.LogError(MessageNumbers.MissingFile);
             HasMissingFiles = true;

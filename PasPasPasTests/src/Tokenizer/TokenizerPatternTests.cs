@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Api;
-using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Tokenizer.CharClass;
@@ -18,9 +17,10 @@ namespace PasPasPasTests.Tokenizer {
         private const string TestFileName = "test_file_name.pas";
 
         protected static IList<Token> RunTestTokenizer(string input) {
-            var path = new FileReference(TestFileName);
+            var env = CreateEnvironment();
+            var path = env.CreateFileReference(TestFileName);
             var resolver = CommonApi.CreateResolverForSingleString(path, input);
-            var options = Factory.CreateOptions(resolver, CreateEnvironment());
+            var options = Factory.CreateOptions(resolver, env);
             var api = Factory.CreateTokenizerApi(options);
             var result = new List<Token>();
 
@@ -107,7 +107,7 @@ namespace PasPasPasTests.Tokenizer {
             var result = new List<Token>();
             var env = CreateEnvironment();
             var api = Factory.CreateReaderApi(env);
-            var file = api.CreateFileRef(TestFileName);
+            var file = env.CreateFileReference(TestFileName);
             var data = CreateResolver(file, input);
 
             using (var reader = api.CreateReader(data, file)) {

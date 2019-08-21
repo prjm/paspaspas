@@ -12,7 +12,7 @@ namespace SampleRunner.Scenarios {
                 var resolver = CommonApi.CreateAnyFileResolver();
                 var options = Factory.CreateOptions(resolver, environment);
                 var parserApi = Factory.CreateParserApi(options);
-                var file = parserApi.Tokenizer.Readers.CreateFileRef(testPath);
+                var file = environment.CreateFileReference(testPath);
 
                 using (var parser = parserApi.CreateParser(file)) {
                     var result = parser.Parse();

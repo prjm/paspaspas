@@ -265,7 +265,7 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="basePath"></param>
         /// <param name="fileReference"></param>
-        public void AddLinkedFile(FileReference basePath, FileReference fileReference) {
+        public void AddLinkedFile(IFileReference basePath, IFileReference fileReference) {
             var resolvedFile = LinkedFileResolver.ResolvePath(basePath, fileReference);
 
             var linkedFile = new LinkedFile() {
@@ -282,7 +282,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="basePath"></param>
         /// <param name="fileReference"></param>
         /// <param name="rcFile"></param>
-        public void AddResourceReference(FileReference basePath, FileReference fileReference, string rcFile) {
+        public void AddResourceReference(IFileReference basePath, IFileReference fileReference, string rcFile) {
             var resolvedFile = ResourceFilePathResolver.ResolvePath(basePath, fileReference);
 
             var resourceReference = new ResourceReference() {
@@ -298,7 +298,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     add a include
         /// </summary>
-        public FileReference AddInclude(FileReference basePath, FileReference fileName)
+        public IFileReference AddInclude(IFileReference basePath, IFileReference fileName)
             => IncludePathResolver.ResolvePath(basePath, fileName).TargetPath;
     }
 }

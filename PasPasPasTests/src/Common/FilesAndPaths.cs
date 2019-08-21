@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using PasPasPas.Api;
 using PasPasPas.Globals.Api;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 
 namespace PasPasPasTests.Common {
@@ -22,7 +23,7 @@ namespace PasPasPasTests.Common {
         }
 
         public IInputResolver CreateResolver(IInputResolver inputResolver = default) {
-            IReaderInput doResolve(FileReference f, IReaderApi a) {
+            IReaderInput doResolve(IFileReference f, IReaderApi a) {
                 if (inputResolver != default) {
                     var value = inputResolver.Resolve(a, f);
                     if (value != default)
@@ -34,7 +35,7 @@ namespace PasPasPasTests.Common {
                 return default;
             }
 
-            bool doCheck(FileReference f) {
+            bool doCheck(IFileReference f) {
                 if (inputResolver != default && inputResolver.CanResolve(f))
                     return true;
                 return data.ContainsKey(f.Path);
@@ -48,14 +49,14 @@ namespace PasPasPasTests.Common {
             data.Add(currentDirAndFile, content);
         }
 
-        internal FileReference FindUnit(string v) {
+        internal IFileReference FindUnit(IEnvironment env, string v) {
             foreach (var f in data.Keys) {
                 var fn = Path.GetFileName(f);
                 if (string.Equals(v, fn, StringComparison.OrdinalIgnoreCase))
-                    return new FileReference(f);
+                    return env.CreateFileReference(f);
             }
 
-            return new FileReference(v);
+            return env.CreateFileReference(v);
         }
     }
 }

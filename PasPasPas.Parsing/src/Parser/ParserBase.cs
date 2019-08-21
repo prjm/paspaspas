@@ -96,6 +96,9 @@ namespace PasPasPas.Parsing.Parser {
         public TokenizerWithLookahead Tokenizer
             => tokenizer;
 
+        /// <summary>
+        ///     log source
+        /// </summary>
         public ILogSource LogSource { get; }
 
         /// <summary>
@@ -860,7 +863,7 @@ namespace PasPasPas.Parsing.Parser {
         protected Terminal ErrorMissingToken(int tokenKind) {
             var position = tokenizer.CurrentTokenSequence.Position;
             var data = new MissingTokenInfo(position, tokenKind);
-            LogSource.LogError(MessageNumbers. MissingToken, data);
+            LogSource.LogError(MessageNumbers.MissingToken, data);
             return default;
         }
 

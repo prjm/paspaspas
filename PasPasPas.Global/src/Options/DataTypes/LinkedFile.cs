@@ -15,7 +15,7 @@ namespace PasPasPas.Globals.Options.DataTypes {
         /// <summary>
         ///     file to link
         /// </summary>
-        public FileReference TargetPath { get; set; }
+        public IFileReference TargetPath { get; set; }
 
         /// <summary>
         ///     <c>true</c> if the reference is resolved
