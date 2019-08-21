@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
@@ -31,7 +32,16 @@ namespace PasPasPas.Parsing.Parser.Standard {
         ///     creates a new standard parser
         /// </summary>
         public StandardParser(ITokenizerApi api, IOptionSet options, IStackedFileReader input) :
-            base(api.Environment, options, CreateTokenizer(api, input)) { }
+            base(api.Environment, options, CreateTokenizer(api, input)) {
+
+            var currentPath = Tokenizer.BaseTokenizer.Input.CurrentFile.Path;
+            var basePath = Path.GetDirectoryName(currentPath);
+
+            if (string.IsNullOrWhiteSpace(basePath))
+                basePath = Directory.GetCurrentDirectory();
+
+            unitFinder = new RequiredUnitsFinder(new FileReference(basePath), options.Meta.IncludePathResolver, LogSource);
+        }
 
         #region Reserved Words
 
@@ -153,6 +163,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
             new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "byte", "word", "dword", "qword", "tbyte" };
 
+        private readonly RequiredUnitsFinder unitFinder;
+
         #endregion
         #region Parse
 
@@ -270,6 +282,10 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
                 do {
                     item = AddToList(list, ParseNamespaceFileName(true));
+
+                    if (item != default && unitFinder.TryToResolveUnit(item, out var unitRef)) { 
+                    }
+
                 } while (item != default && item.Comma != default);
 
                 return new NamespaceFileNameListSymbol(GetFixedArray(list));

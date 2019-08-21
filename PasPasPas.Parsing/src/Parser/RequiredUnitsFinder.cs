@@ -26,6 +26,7 @@ namespace PasPasPas.Parsing.Parser {
             => requiredUnits;
 
         public ILogSource Log { get; }
+        public bool HasMissingFiles { get; private set; }
 
         /// <summary>
         ///     create a new required units finder
@@ -61,13 +62,13 @@ namespace PasPasPas.Parsing.Parser {
 
         private void FindRequiredUnitsOfUnit(UnitSymbol unit) {
             var usesList = unit?.UnitInterface?.UsesClause?.UsesList;
-                if (usesList == default)
-                    return;
+            if (usesList == default)
+                return;
 
-                FindRequiredUnitsOfUsesClause(usesList);
-            }
+            FindRequiredUnitsOfUsesClause(usesList);
+        }
 
-   
+
         private void FindRequiredUnitsOfPackage(PackageSymbol package) {
             var usesList = package?.ContainsClause?.ContainsList;
             if (usesList == default)
@@ -94,36 +95,69 @@ namespace PasPasPas.Parsing.Parser {
 
         private void FindRequiredUnitsOfUsesClause(NamespaceFileNameListSymbol usesList) {
             foreach (var usesClause in usesList.Items) {
-                var path = //
-                    (usesClause.QuotedFileName?.Symbol?.Token.ParsedValue as IStringValue)?.AsUnicodeString ??
-                    usesClause?.NamespaceName?.CompleteName + ".pas";
-
-                if (string.IsNullOrWhiteSpace(path))
-                    continue;
-
-                var fileRef = new FileReference(path);
-                var file = fileResolver.ResolvePath(basePath, fileRef);
-                if (file.IsResolved)
-                    requiredUnits.Add(file.TargetPath);
-                else
+                if (TryToResolveUnit(usesClause, out var file))
+                    requiredUnits.Add(file);
+                else {
                     Log.LogError(MessageNumbers.MissingFile);
+                    HasMissingFiles = true;
+                }
             }
         }
 
         private void FindRequiredUnitsOfUsesClause(NamespaceNameListSymbol usesList) {
             foreach (var usesClause in usesList.Items) {
-                var path = usesClause?.CompleteName + ".pas";
-
-                if (string.IsNullOrWhiteSpace(path))
-                    continue;
-
-                var fileRef = new FileReference(path);
-                var file = fileResolver.ResolvePath(basePath, fileRef);
-                if (file.IsResolved)
-                    requiredUnits.Add(file.TargetPath);
-                else
+                if (TryToResolveUnit(usesClause, out var file))
+                    requiredUnits.Add(file);
+                else {
                     Log.LogError(MessageNumbers.MissingFile);
+                    HasMissingFiles = true;
+                }
             }
         }
+
+        public bool TryToResolveUnit(NamespaceFileNameSymbol usesClause, out FileReference file) {
+            var path = //
+                (usesClause.QuotedFileName?.Symbol?.Token.ParsedValue as IStringValue)?.AsUnicodeString ??
+                usesClause?.NamespaceName?.CompleteName + ".pas";
+
+            if (string.IsNullOrWhiteSpace(path)) {
+                file = default;
+                return false;
+            }
+
+            var fileRef = new FileReference(path);
+            var resolvedFile = fileResolver.ResolvePath(basePath, fileRef);
+            if (resolvedFile.IsResolved) {
+                file = resolvedFile.TargetPath;
+                return true;
+            }
+
+            file = default;
+            return false;
+        }
+
+        public bool TryToResolveUnit(NamespaceNameSymbol usesClause, out FileReference file) {
+            var path = usesClause?.CompleteName + ".pas";
+
+            if (string.IsNullOrWhiteSpace(path)) {
+                file = default;
+                return false ;
+            }
+
+            var fileRef = new FileReference(path);
+            var resolvedFile = fileResolver.ResolvePath(basePath, fileRef);
+            if (resolvedFile.IsResolved) {
+                file = resolvedFile.TargetPath;
+                return true;
+            }
+    
+
+            Log.LogError(MessageNumbers.MissingFile);
+            HasMissingFiles = true;
+            file = default;
+            return false;
+
+        }
+
     }
 }

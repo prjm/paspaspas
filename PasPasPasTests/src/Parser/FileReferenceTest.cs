@@ -72,6 +72,7 @@ namespace PasPasPasTests.Parser {
             f.FindRequiredUnits(p);
             Assert.AreEqual(1, f.RequiredUnits.Count);
             Assert.IsFalse(t.HasMessage(MessageNumbers.MissingFile));
+            Assert.IsFalse(f.HasMissingFiles);
         }
 
         [TestMethod]
@@ -84,6 +85,7 @@ namespace PasPasPasTests.Parser {
             f.FindRequiredUnits(p);
             Assert.AreEqual(1, f.RequiredUnits.Count);
             Assert.IsFalse(t.HasMessage(MessageNumbers.MissingFile));
+            Assert.IsFalse(f.HasMissingFiles);
         }
 
         [TestMethod]
@@ -96,6 +98,7 @@ namespace PasPasPasTests.Parser {
             f.FindRequiredUnits(p);
             Assert.AreEqual(1, f.RequiredUnits.Count);
             Assert.IsFalse(t.HasMessage(MessageNumbers.MissingFile));
+            Assert.IsFalse(f.HasMissingFiles);
         }
 
         [TestMethod]
@@ -108,6 +111,7 @@ namespace PasPasPasTests.Parser {
             f.FindRequiredUnits(p);
             Assert.AreEqual(1, f.RequiredUnits.Count);
             Assert.IsFalse(t.HasMessage(MessageNumbers.MissingFile));
+            Assert.IsFalse(f.HasMissingFiles);
         }
 
         [TestMethod]
@@ -119,6 +123,7 @@ namespace PasPasPasTests.Parser {
             f.FindRequiredUnits(p);
             Assert.AreEqual(0, f.RequiredUnits.Count);
             Assert.IsTrue(t.HasMessage(MessageNumbers.MissingFile));
+            Assert.IsTrue(f.HasMissingFiles);
         }
 
         //[TestMethod]
