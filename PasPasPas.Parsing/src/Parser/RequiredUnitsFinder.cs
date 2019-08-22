@@ -114,10 +114,16 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        public bool TryToResolveUnit(NamespaceFileNameSymbol usesClause, out IFileReference file) {
-            var path = //
+        public static string GetPathForUnit(NamespaceFileNameSymbol usesClause)
+            => //
                 (usesClause.QuotedFileName?.Symbol?.Token.ParsedValue as IStringValue)?.AsUnicodeString ??
                 usesClause?.NamespaceName?.CompleteName + ".pas";
+
+        public static string GetPathForUnit(NamespaceNameSymbol usesClause)
+            => usesClause?.CompleteName + ".pas";
+
+        public bool TryToResolveUnit(NamespaceFileNameSymbol usesClause, out IFileReference file) {
+            var path = GetPathForUnit(usesClause);
 
             if (string.IsNullOrWhiteSpace(path)) {
                 file = default;
@@ -136,7 +142,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         public bool TryToResolveUnit(NamespaceNameSymbol usesClause, out IFileReference file) {
-            var path = usesClause?.CompleteName + ".pas";
+            var path = GetPathForUnit(usesClause);
 
             if (string.IsNullOrWhiteSpace(path)) {
                 file = default;

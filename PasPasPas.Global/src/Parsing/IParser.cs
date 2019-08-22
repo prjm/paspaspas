@@ -13,6 +13,11 @@ namespace PasPasPas.Globals.Parsing.Parser {
         ITokenizer BaseTokenizer { get; }
 
         /// <summary>
+        ///     flag, <c>true</c> to enable unit resolving
+        /// </summary>
+        bool ResolveIncludedFiles { get; set; }
+
+        /// <summary>
         ///     parse input
         /// </summary>
         ISyntaxPart Parse();

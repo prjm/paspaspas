@@ -54,7 +54,9 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<FileTypeDeclaration>,
         IEndVisitor<FormattedExpression>,
         IEndVisitor<GenericConstraint>,
-        IEndVisitor<GenericTypeNameCollection> {
+        IEndVisitor<GenericTypeNameCollection>,
+        IEndVisitor<DeclaredSymbolCollection>,
+        IEndVisitor<RequiredUnitName> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -412,7 +414,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(CompilationUnit element) {
-            var unitType = TypeRegistry.TypeCreator.CreateUnitType();
+            var unitType = TypeRegistry.TypeCreator.CreateUnitType(element.SymbolName);
             CurrentUnit = element;
             CurrentUnit.TypeInfo = GetTypeReferenceById(unitType.TypeId);
             resolver.OpenScope();
@@ -1354,6 +1356,41 @@ namespace PasPasPas.Typings.Common {
 
         private int GetSmallestTextTypeOrNext(int leftId, int rightId)
             => environment.TypeRegistry.GetSmallestTextTypeOrNext(leftId, rightId);
+
+        /// <summary>
+        ///     visit a symbol declaration
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(DeclaredSymbolCollection element) {
+            if (element == CurrentUnit?.InterfaceSymbols) {
+                foreach (var symbol in CurrentUnit.InterfaceSymbols) {
+
+                    var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
+                    var kind = ReferenceKind.Unknown;
+                    var refSymbol = default(IRefSymbol);
+
+                    switch (symbol) {
+                        case ConstantDeclaration constDecl:
+                            refSymbol = constDecl;
+                            kind = ReferenceKind.RefToConstant;
+                            break;
+                    }
+
+                    if (kind != ReferenceKind.Unknown)
+                        unitType.RegisterSymbol(symbol.SymbolName, new Reference(kind, refSymbol), 0);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     use a required unit
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(RequiredUnitName element) {
+            var unitType = resolver.ResolveUnit(element.Name.CompleteName);
+            if (unitType != default)
+                resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToUnit, unitType);
+        }
 
         private ITypeCreator TypeCreator
             => TypeRegistry.TypeCreator;

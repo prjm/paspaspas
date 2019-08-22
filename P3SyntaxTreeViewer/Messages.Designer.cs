@@ -70,6 +70,15 @@ namespace P3SyntaxTreeViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing file.
+        /// </summary>
+        internal static string m_0104 {
+            get {
+                return ResourceManager.GetString("m_0104", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unexpected token.
         /// </summary>
         internal static string m_05d3bbe032e243eb850bebdb2b7ef272 {

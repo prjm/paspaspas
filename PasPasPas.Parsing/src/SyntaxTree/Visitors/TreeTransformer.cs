@@ -8,7 +8,6 @@ using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -375,7 +374,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ConstDeclaration
 
         /// <summary>
-        ///     start visiting a const declaration
+        ///     start visiting a constant declaration
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(ConstDeclarationSymbol element) {

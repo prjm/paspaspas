@@ -191,8 +191,9 @@ namespace PasPasPas.Typings.Common {
         ///     create a new unit type
         /// </summary>
         /// <returns></returns>
-        public IUnitType CreateUnitType() {
-            var result = new UnitType(RegisteredTypes.UnitTypeId);
+        public IUnitType CreateUnitType(string name) {
+            var typeId = RegisteredTypes.RequireUserTypeId();
+            var result = new UnitType(typeId, name);
             RegisteredTypes.RegisterType(result);
             return result;
         }

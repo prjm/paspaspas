@@ -41,7 +41,7 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public IParser CreateParser(IFileReference path) {
             var reader = Tokenizer.Readers.CreateReader(Options.Resolver, path);
-            var parser = new StandardParser(Tokenizer, Options, reader);
+            var parser = new StandardParser(this, reader);
             return parser;
         }
 

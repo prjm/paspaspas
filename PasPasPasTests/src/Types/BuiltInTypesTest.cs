@@ -200,8 +200,8 @@ namespace PasPasPasTests.Types {
 
         [TestMethod]
         public void TestArrayTypes() {
-            AssertDeclType("TArray<Integer>", RegisteredTypes.SmallestUserTypeId, typeKind: CommonTypeKind.DynamicArrayType);
-            AssertDeclType("TArray<String>", RegisteredTypes.SmallestUserTypeId, typeKind: CommonTypeKind.DynamicArrayType);
+            AssertDeclType("TArray<Integer>", 1 + RegisteredTypes.SmallestUserTypeId, typeKind: CommonTypeKind.DynamicArrayType);
+            AssertDeclType("TArray<String>", 1 + RegisteredTypes.SmallestUserTypeId, typeKind: CommonTypeKind.DynamicArrayType);
         }
 
     }

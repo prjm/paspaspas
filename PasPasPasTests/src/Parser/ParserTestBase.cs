@@ -65,6 +65,7 @@ namespace PasPasPasTests.Parser {
             env.Log.RegisterTarget(log);
 
             using (var parser = api.CreateParser(path)) {
+                parser.ResolveIncludedFiles = false;
                 var hasError = false;
                 var errorText = string.Empty;
 
@@ -164,6 +165,7 @@ namespace PasPasPasTests.Parser {
 
             ClearOptions(testOptions);
             using (var parser = api.CreateParser(path)) {
+                parser.ResolveIncludedFiles = false;
                 var standard = parser as StandardParser;
                 Assert.IsNotNull(standard);
                 var value = tester(standard);
@@ -190,6 +192,7 @@ namespace PasPasPasTests.Parser {
             ClearOptions(testOptions);
 
             using (var parser = api.CreateParser(path)) {
+                parser.ResolveIncludedFiles = false;
                 return parser.Parse();
             }
         }

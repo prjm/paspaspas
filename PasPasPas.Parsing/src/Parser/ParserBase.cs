@@ -55,6 +55,12 @@ namespace PasPasPas.Parsing.Parser {
         public const uint UserGeneratedMessage
             = 0x0102;
 
+
+        /// <summary>
+        ///     flag, if <c>true</c> units are resolved
+        /// </summary>
+        public bool ResolveIncludedFiles { get; set; } = true;
+
         private TokenizerWithLookahead tokenizer;
         private readonly IOptionSet options;
         private readonly IParserEnvironment environment;

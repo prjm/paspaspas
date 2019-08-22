@@ -30,7 +30,6 @@ namespace PasPasPas.Typings.Common {
             parent = null;
         }
 
-
         /// <summary>
         ///     create a new scope
         /// </summary>

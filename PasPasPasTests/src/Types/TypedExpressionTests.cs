@@ -376,8 +376,8 @@ namespace PasPasPasTests.Types {
             };
 
             // subrange types
-            AssertExprTypeByVar("-1..1", "+ a", RegisteredTypes.SmallestUserTypeId);
-            AssertExprTypeByVar("-1..1", "- a", RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeByVar("-1..1", "+ a", 1 + RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeByVar("-1..1", "- a", 1 + RegisteredTypes.SmallestUserTypeId);
 
             AssertExprTypeByVar("Byte", "+ a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "+ a", KnownTypeIds.WordType);
@@ -431,8 +431,8 @@ namespace PasPasPasTests.Types {
             };
 
             // subrange types
-            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SmallestUserTypeId);
-            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeByVar("-1..1", "not a", 1 + RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeByVar("-1..1", "not a", 1 + RegisteredTypes.SmallestUserTypeId);
 
             AssertExprTypeByVar("Byte", "not a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "not a", KnownTypeIds.WordType);
@@ -464,8 +464,8 @@ namespace PasPasPasTests.Types {
             };
 
             // subrange types
-            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SmallestUserTypeId);
-            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeByVar("-1..1", "not a", 1 + RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeByVar("-1..1", "not a", 1 + RegisteredTypes.SmallestUserTypeId);
 
             AssertExprTypeByVar("Boolean", "not a", KnownTypeIds.BooleanType);
             AssertExprTypeByVar("ByteBool", "not a", KnownTypeIds.ByteBoolType);
@@ -630,20 +630,20 @@ namespace PasPasPasTests.Types {
             var b1 = GetBooleanValue(true);
             var b2 = GetBooleanValue(false);
 
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [1,2];");
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [1,2];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [1,2];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [1,2];");
 
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['1','2'];");
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['1','2'];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['1','2'];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['1','2'];");
 
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true]; b: Ta = [false];");
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [false];");
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true]; b: Ta = [true,false];");
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [true,false];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true]; b: Ta = [false];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [false];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true]; b: Ta = [true,false];");
+            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [true,false];");
 
         }
 
@@ -656,20 +656,20 @@ namespace PasPasPasTests.Types {
             var b1 = GetBooleanValue(true);
             var b2 = GetBooleanValue(false);
 
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i1), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i1), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId), "type Ta = set of integer; const a: Ta = [2]; b: Ta = [2];");
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i2), "type Ta = set of integer; const a: Ta = [2]; b: Ta = [1];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of integer; const a: Ta = [2]; b: Ta = [2];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i2), "type Ta = set of integer; const a: Ta = [2]; b: Ta = [1];");
 
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId, c1), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId, c1), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['2'];");
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId, c2), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['1'];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['2'];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c2), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['1'];");
 
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId, b1), "type Ta = set of Boolean; const a: Ta = [true,false]; b: Ta = [false];");
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId, b1), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [false];");
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [true];");
-            AssertExprValue("a - b", GetSetValue(RegisteredTypes.SmallestUserTypeId, b2), "type Ta = set of Boolean; const a: Ta = [false]; b: Ta = [true];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1), "type Ta = set of Boolean; const a: Ta = [true,false]; b: Ta = [false];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [false];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [true];");
+            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b2), "type Ta = set of Boolean; const a: Ta = [false]; b: Ta = [true];");
         }
 
         [TestMethod]
@@ -681,20 +681,20 @@ namespace PasPasPasTests.Types {
             var b1 = GetBooleanValue(true);
             var b2 = GetBooleanValue(false);
 
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i1), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [1..5];");
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2,1];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [1..5];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2,1];");
 
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId, c2), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['1'..'5'];");
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['2','1']; b: Ta = ['1','2'];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c2), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['1'..'5'];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['2','1']; b: Ta = ['1','2'];");
 
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId, b2), "type Ta = set of Boolean; const a: Ta = [true,false]; b: Ta = [false];");
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [false];");
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId, b2), "type Ta = set of Boolean; const a: Ta = [false]; b: Ta = [true,false];");
-            AssertExprValue("a * b", GetSetValue(RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of Boolean; const a: Ta = [false,true]; b: Ta = [true,false];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b2), "type Ta = set of Boolean; const a: Ta = [true,false]; b: Ta = [false];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [false];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b2), "type Ta = set of Boolean; const a: Ta = [false]; b: Ta = [true,false];");
+            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of Boolean; const a: Ta = [false,true]; b: Ta = [true,false];");
         }
 
         [TestMethod]
@@ -779,17 +779,17 @@ namespace PasPasPasTests.Types {
 
         [TestMethod]
         public void TestSetOperatorsIndirect() {
-            AssertExprValue("a + b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a + b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a + b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a + b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a + b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a + b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
 
-            AssertExprValue("a - b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a - b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a - b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a - b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a - b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a - b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
 
-            AssertExprValue("a * b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a * b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a * b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a * b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a * b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a * b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
 
             AssertExprValue("a = b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
             AssertExprValue("a = b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
@@ -823,14 +823,14 @@ namespace PasPasPasTests.Types {
             AssertExprType("a as System.TObject", KnownTypeIds.TObject, "var a: TObject;");
             AssertExprType("a as TObject", KnownTypeIds.TObject, "type ta = class end; var a: ta;");
             AssertExprType("a as tb", KnownTypeIds.ErrorType, "type ta = class end; tb = class end; var a: ta;");
-            AssertExprType("a as tb", 2 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tb = class(ta) end; var a: ta;");
-            AssertExprType("a as ta", RegisteredTypes.SmallestUserTypeId, "type ta = class end; tb = class(ta) end; var a: tb;");
-            AssertExprType("a as tb", 2 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tc = ta; tb = class(tc) end; var a: ta;");
-            AssertExprType("a as ta", RegisteredTypes.SmallestUserTypeId, "type ta = class end; tc = ta; tb = class(tc) end; var a: tb;");
+            AssertExprType("a as tb", 3 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tb = class(ta) end; var a: ta;");
+            AssertExprType("a as ta", 1 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tb = class(ta) end; var a: tb;");
+            AssertExprType("a as tb", 3 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tc = ta; tb = class(tc) end; var a: ta;");
+            AssertExprType("a as ta", 1 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tc = ta; tb = class(tc) end; var a: tb;");
 
             AssertExprType("a is TObject", KnownTypeIds.BooleanType, "type ia = interface end; var a: ia;");
-            AssertExprType("a as ia", RegisteredTypes.SmallestUserTypeId, "type ia = interface end; ta = class(ia) end; var a: ta;");
-            AssertExprType("a as ia", RegisteredTypes.SmallestUserTypeId, "type ia = interface end; ta = class(tobject, ia) end; var a: ta;");
+            AssertExprType("a as ia", 1 + RegisteredTypes.SmallestUserTypeId, "type ia = interface end; ta = class(ia) end; var a: ta;");
+            AssertExprType("a as ia", 1 + RegisteredTypes.SmallestUserTypeId, "type ia = interface end; ta = class(tobject, ia) end; var a: ta;");
             AssertExprType("a as ia", KnownTypeIds.ErrorType, "type ia = interface end; ta = class end; var a: ta;");
         }
 

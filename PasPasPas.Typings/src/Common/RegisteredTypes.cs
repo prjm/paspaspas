@@ -33,11 +33,6 @@ namespace PasPasPas.Typings.Common {
         private readonly object idLock = new object();
 
         /// <summary>
-        ///     unit type id
-        /// </summary>
-        public const int UnitTypeId = 999;
-
-        /// <summary>
         ///     first used type id
         /// </summary>
         public const int SmallestUserTypeId = 1000;
@@ -102,7 +97,7 @@ namespace PasPasPas.Typings.Common {
             Runtime = runtime;
             ListPools = listPools;
             TypeCreator = new CommonTypeCreator(this);
-            systemUnit = new UnitType(KnownTypeIds.SystemUnit);
+            systemUnit = new UnitType(KnownTypeIds.SystemUnit, "System");
             RegisterType(systemUnit);
 
             RegisterCommonTypes(runtime, intSize);

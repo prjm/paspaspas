@@ -35,8 +35,9 @@ namespace PasPasPas.Typings.Structured {
         ///     unit type
         /// </summary>
         /// <param name="withId"></param>
-        public UnitType(int withId) : base(withId) {
-        }
+        /// <param name="unitName">unit name</param>
+        public UnitType(int withId, string unitName) : base(withId)
+            => Name = unitName;
 
         /// <summary>
         ///     type kind
@@ -49,6 +50,11 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public override uint TypeSizeInBytes
             => 0;
+
+        /// <summary>
+        ///     unit name
+        /// </summary>
+        public string Name { get; }
 
         /// <summary>
         ///     register a symbol

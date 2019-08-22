@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Log {
+﻿using System.Collections.Generic;
+
+namespace PasPasPas.Globals.Log {
 
     /// <summary>
     ///     interface for log messages (immutable)
@@ -21,5 +23,9 @@
         /// </summary>
         uint GroupID { get; }
 
+        /// <summary>
+        ///     data
+        /// </summary>
+        IList<object> Data { get; }
     }
 }

@@ -5,7 +5,7 @@ using System.IO;
 using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
-using PasPasPas.Globals.Options;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
@@ -28,11 +28,17 @@ namespace PasPasPas.Parsing.Parser.Standard {
         private static TokenizerWithLookahead CreateTokenizer(ITokenizerApi api, IStackedFileReader reader)
             => new TokenizerWithLookahead(api, new Tokenizer.TokenizerBase(api.Environment, GetPatternsFromFactory(api.Environment), reader), TokenizerMode.Standard);
 
+        private readonly IParserApi parserApi;
+
         /// <summary>
         ///     creates a new standard parser
         /// </summary>
-        public StandardParser(ITokenizerApi api, IOptionSet options, IStackedFileReader input) :
-            base(api.Environment, options, CreateTokenizer(api, input)) {
+        public StandardParser(IParserApi api, IStackedFileReader input) :
+            base(api.Tokenizer.Environment,
+                    api.Options,
+                    CreateTokenizer(api.Tokenizer, input)) {
+
+            parserApi = api;
 
             var currentPath = Tokenizer.BaseTokenizer.Input.CurrentFile.Path;
             var basePath = Path.GetDirectoryName(currentPath);
@@ -40,8 +46,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (string.IsNullOrWhiteSpace(basePath))
                 basePath = Directory.GetCurrentDirectory();
 
-            var basePathReference = options.Environment.CreateFileReference(basePath);
-            unitFinder = new RequiredUnitsFinder(basePathReference, options.Meta.IncludePathResolver, LogSource);
+            var basePathReference = api.Tokenizer.Environment.CreateFileReference(basePath);
+            unitFinder = new RequiredUnitsFinder(basePathReference, api.Options.Meta.IncludePathResolver, LogSource);
         }
 
         #region Reserved Words
@@ -248,7 +254,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         [Rule("UsesClause", "'uses' NamespaceNameList")]
         public UsesClauseSymbol ParseUsesClause() {
             var usesSymbol = ContinueWithOrMissing(TokenKind.Uses);
-            var usesList = ParseNamespaceNameList();
+            var usesList = ParseNamespaceNameList(true);
             var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
             return new UsesClauseSymbol(usesSymbol, usesList, semicolon);
         }
@@ -284,12 +290,24 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 do {
                     item = AddToList(list, ParseNamespaceFileName(true));
 
-                    if (item != default && unitFinder.TryToResolveUnit(item, out var unitRef)) {
+                    if (item != default && ResolveIncludedFiles) {
+                        if (unitFinder.TryToResolveUnit(item, out var unitRef))
+                            ParseIncludedUnit(unitRef);
+                        else
+                            LogSource.LogError(MessageNumbers.MissingFile, RequiredUnitsFinder.GetPathForUnit(item));
                     }
 
                 } while (item != default && item.Comma != default);
 
                 return new NamespaceFileNameListSymbol(GetFixedArray(list));
+            }
+        }
+
+        private void ParseIncludedUnit(IFileReference unitRef) {
+            using (var nestedParser = parserApi.CreateParser(unitRef)) {
+                var parsedUnit = nestedParser.Parse();
+                var ast = parserApi.CreateAbstractSyntraxTree(parsedUnit);
+                parserApi.AnnotateWithTypes(ast);
             }
         }
 
@@ -1234,12 +1252,20 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("NamespaceNameList", "NamespaceName { ',' NamespaceName }")]
-        public NamespaceNameListSymbol ParseNamespaceNameList() {
+        public NamespaceNameListSymbol ParseNamespaceNameList(bool asUnits = false) {
             using (var list = GetList<NamespaceNameSymbol>()) {
                 var item = default(NamespaceNameSymbol);
 
                 do {
                     item = AddToList(list, ParseNamespaceName(false, false, true));
+
+                    if (asUnits && item != default && ResolveIncludedFiles) {
+                        if (unitFinder.TryToResolveUnit(item, out var unitRef))
+                            ParseIncludedUnit(unitRef);
+                        else
+                            LogSource.LogError(MessageNumbers.MissingFile, RequiredUnitsFinder.GetPathForUnit(item));
+                    }
+
                 } while (item != default && item.Comma != default);
 
                 return new NamespaceNameListSymbol(GetFixedArray(list));

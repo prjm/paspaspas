@@ -201,5 +201,21 @@ namespace PasPasPas.Typings.Common {
                 scope.AddEntry(string.Concat(symbolName, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters), new Reference(kind, symbol));
         }
 
+        /// <summary>
+        ///     find a unit by name
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <returns></returns>
+        public UnitType ResolveUnit(string completeName) {
+            foreach (var type in TypeRegistry.RegisteredTypeDefinitios) {
+                if (!(type is UnitType unit))
+                    continue;
+
+                if (string.Equals(unit.Name, completeName, StringComparison.OrdinalIgnoreCase))
+                    return unit;
+            }
+
+            return default;
+        }
     }
 }

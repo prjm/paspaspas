@@ -82,7 +82,7 @@ namespace PasPasPasTests.Types {
 
         [TestMethod]
         public void TestSelfPointer() {
-            AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self", typeId: RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self", typeId: 1 + RegisteredTypes.SmallestUserTypeId);
             AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self.z", typeId: KnownTypeIds.StringType);
             AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "z", typeId: KnownTypeIds.StringType);
             AssertExprTypeInProc("type x = class class var z: string; procedure b; end; procedure x.b;", "Self.z", typeId: KnownTypeIds.StringType);
@@ -141,7 +141,7 @@ namespace PasPasPasTests.Types {
         public void TestGlobalMethod() {
             var f = "SimpleExpr";
             var p = $"unit {f}; interface procedure a; implementation procedure a; begin WriteLn(x); end; end.";
-            bool v(ErrorType e) => (e.TypeRegistry.GetTypeByIdOrUndefinedType(RegisteredTypes.UnitTypeId) as UnitType)?.GlobalRoutines.Any(t => t.Name == "a") ?? false;
+            bool v(ErrorType e) => (e.TypeRegistry.GetTypeByIdOrUndefinedType(RegisteredTypes.SmallestUserTypeId) as UnitType)?.GlobalRoutines.Any(t => t.Name == "a") ?? false;
 
             AssertDeclTypeDef<ErrorType>(program: p, f, NativeIntSize.Undefined, v);
         }

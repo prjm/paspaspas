@@ -25,6 +25,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
+            foreach (var unit in this)
+                AcceptPart(this, unit, visitor);
             visitor.EndVisit(this);
         }
     }

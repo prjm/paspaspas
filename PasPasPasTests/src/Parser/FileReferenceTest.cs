@@ -125,22 +125,19 @@ namespace PasPasPasTests.Parser {
             Assert.IsTrue(f.HasMissingFiles);
         }
 
-        //[TestMethod]
+        [TestMethod]
         public void TestSimpleReferencedConstant() {
-            var e = CreateEnvironment();
+            var t = new TestBundle();
             var a = "unit a; interface const x = 5; implementation end.";
             var b = "unit b; interface uses a; const b = a.x; implementation end.";
-            var t = new FilesAndPaths(("a.pas", a), ("b.pas", b));
-            var i = t.CreateResolver();
-            var o = Factory.CreateOptions(i, e);
-            var x = Factory.CreateParserApi(o);
-            var q = e.CreateFileReference("b.pas");
-            var p = x.CreateParser(q);
-            var s = p.Parse();
-            var l = x.CreateAbstractSyntraxTree(s);
+            t.Files.Add("a.pas", a);
+            t.Files.Add("b.pas", b);
+            var s = t.Parse("b.pas");
+            var l = t.ParserFactory.CreateAbstractSyntraxTree(s);
+            t.ParserFactory.AnnotateWithTypes(l);
             var v = new AstVisitor<ConstantDeclaration>(z => (z is ConstantDeclaration u && string.Equals(u.Name.Name, "b", StringComparison.Ordinal)) ? u : default);
             l.Accept(v);
-            Assert.AreEqual(v.Result.Value.TypeInfo, GetIntegerValue(5));
+            Assert.AreEqual(GetIntegerValue(5), v.Result.Value.TypeInfo);
         }
 
     }

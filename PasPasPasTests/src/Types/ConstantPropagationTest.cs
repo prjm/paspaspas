@@ -40,20 +40,20 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Abs(5)", GetIntegerValue(5));
             AssertExprValue("Abs(0)", GetIntegerValue(0));
             AssertExprValue("Abs(-3)", GetIntegerValue(3));
-            AssertExprValue("Abs(a)", GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(5)), "type Ta=-4..8; const a: Ta = 5;");
-            AssertExprValue("Abs(a)", GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(0)), "type Ta=-4..8; const a: Ta = 0;");
-            AssertExprValue("Abs(a)", GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3)), "type Ta=-4..8; const a: Ta = -3;");
+            AssertExprValue("Abs(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(5)), "type Ta=-4..8; const a: Ta = 5;");
+            AssertExprValue("Abs(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(0)), "type Ta=-4..8; const a: Ta = 0;");
+            AssertExprValue("Abs(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3)), "type Ta=-4..8; const a: Ta = -3;");
             AssertExprValue("Abs(a)", GetUnkownValue(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType), "var a: integer;", isConstant: false);
-            AssertExprValue("Abs(-a)", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
-            AssertExprValue("Abs(a)", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
-            AssertExprValue("Abs(-a)", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(-a)", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(a)", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(-a)", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
 
 
             AssertExprValue("Abs(5.4)", GetExtendedValue("5.4"));
             AssertExprValue("Abs(0.0)", GetExtendedValue(0));
             AssertExprValue("Abs(-3.3)", GetExtendedValue("3.3"));
 
-            AssertExprValue("Abs(a)", GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3)), "type Ta = 1..9; const a: Ta = 3;");
+            AssertExprValue("Abs(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3)), "type Ta = 1..9; const a: Ta = 3;");
         }
 
         [TestMethod]
@@ -242,7 +242,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Pred(b)", GetIntegerValue(0), "type Te = (a,b);");
 
             // subrange types
-            AssertExprValue("Pred(a)", GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(-3)), "type Te = -3..3; const a: Te = -2;");
+            AssertExprValue("Pred(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(-3)), "type Te = -3..3; const a: Te = -2;");
         }
 
         [TestMethod]
@@ -290,7 +290,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Succ(a)", GetIntegerValue(1), "type Te = (a,b);");
 
             // subrange types
-            AssertExprValue("Succ(a)", GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(-1)), "type Te = -3..3; const a: Te = -2;");
+            AssertExprValue("Succ(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(-1)), "type Te = -3..3; const a: Te = -2;");
         }
 
         [TestMethod]
@@ -401,17 +401,17 @@ namespace PasPasPasTests.Types {
 
         [TestMethod]
         public void TestRecordConstants() {
-            AssertExprValue("a", GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(1), GetWideCharValue('2')), "const a = (a: 1; b: '2');");
-            AssertExprValue("a", GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetExtendedValue(1.0), GetUnicodeStringValue("22")), "const a = (a: 1.0; b: '22');");
+            AssertExprValue("a", GetRecordValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(1), GetWideCharValue('2')), "const a = (a: 1; b: '2');");
+            AssertExprValue("a", GetRecordValue(1 + RegisteredTypes.SmallestUserTypeId, GetExtendedValue(1.0), GetUnicodeStringValue("22")), "const a = (a: 1.0; b: '22');");
         }
 
         [TestMethod]
         public void TestSetConstants() {
-            var v1 = GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(1));
-            var v2 = GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(2));
-            var v3 = GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3));
-            AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 1, v1, v3), "type Ta = 1..5; Tb = set of Ta; const b : Tb = [1,3];");
-            AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 1, v1, v2, v3), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];");
+            var v1 = GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(1));
+            var v2 = GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(2));
+            var v3 = GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3));
+            AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 2, v1, v3), "type Ta = 1..5; Tb = set of Ta; const b : Tb = [1,3];");
+            AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 2, v1, v2, v3), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];");
             AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "type Ta = 1..3333; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];", isConstant: false);
             AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [High(Ta)..Low(Ta)];", isConstant: false);
             AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "type Tb = set of string; const b : Tb = [High(Ta)..Low(Ta)];", isConstant: false);
@@ -422,11 +422,11 @@ namespace PasPasPasTests.Types {
         public void TestArrayConstants() {
 
 
-            var r1 = GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetUnicodeStringValue("a"), GetIntegerValue(2));
-            var r2 = GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetUnicodeStringValue("b"), GetIntegerValue(4));
-            var v = GetArrayValue(RegisteredTypes.SmallestUserTypeId, RegisteredTypes.SmallestUserTypeId, r1, r2);
+            var r1 = GetRecordValue(1 + RegisteredTypes.SmallestUserTypeId, GetUnicodeStringValue("a"), GetIntegerValue(2));
+            var r2 = GetRecordValue(1 + RegisteredTypes.SmallestUserTypeId, GetUnicodeStringValue("b"), GetIntegerValue(4));
+            var v = GetArrayValue(1 + RegisteredTypes.SmallestUserTypeId, RegisteredTypes.SmallestUserTypeId + 1, r1, r2);
             var e = GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType);
-            var a = GetArrayValue(RegisteredTypes.SmallestUserTypeId, KnownTypeIds.StringType, GetUnicodeStringValue("aa"), GetUnicodeStringValue("b"), GetUnicodeStringValue("cc"));
+            var a = GetArrayValue(1 + RegisteredTypes.SmallestUserTypeId, KnownTypeIds.StringType, GetUnicodeStringValue("aa"), GetUnicodeStringValue("b"), GetUnicodeStringValue("cc"));
 
             AssertExprValue("c", a, "const c: array of string = ['aa','b','cc']");
             AssertExprValue("c", a, "const c: array of string = ['aa','b']+['cc']");

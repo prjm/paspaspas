@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
-using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
@@ -179,6 +178,10 @@ namespace P3SyntaxTreeViewer {
                 else
                     block.Text = key;
 
+                if (logentry.Data != default)
+                    foreach (var data in logentry.Data)
+                        block.Text += " " + (data ?? string.Empty).ToString();
+
                 var item = new ListBoxItem() {
                     Content = block,
                     Tag = logentry
@@ -206,11 +209,11 @@ namespace P3SyntaxTreeViewer {
         /// <param name="code"></param>
         /// <returns></returns>
         private static (ISyntaxPart bst, ISyntaxPart ast, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code) {
-            var path = new FileReference("z.x.pas");
+            var path = env.CreateFileReference("z.x.pas");
             var resolver = CommonApi.CreateResolverForSingleString(path, code);
             var options = Factory.CreateOptions(resolver, env);
             var parserApi = Factory.CreateParserApi(options);
-            
+
             using (var parser = parserApi.CreateParser(path)) {
                 var bst = parser.Parse();
                 var ast = parserApi.CreateAbstractSyntraxTree(bst);

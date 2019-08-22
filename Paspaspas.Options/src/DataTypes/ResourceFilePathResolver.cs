@@ -27,7 +27,7 @@ namespace PasPasPas.Options.DataTypes {
             if (pathToResolve.Path.StartsWith("*", StringComparison.Ordinal)) {
 
 #if DESKTOP
-                pathToResolve = new FileReference(pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path)));
+                pathToResolve = pathToResolve.CreateNewFileReference(pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path)));
 #else
                 pathToResolve = pathToResolve.CreateNewFileReference(pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path), StringComparison.OrdinalIgnoreCase));
 #endif
