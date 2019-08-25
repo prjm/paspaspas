@@ -114,6 +114,9 @@ namespace PasPasPas.Typings.Common {
 
                 while (cls != default && cls.BaseClass != default) {
                     var metaBaseClass = TypeRegistry.GetTypeByIdOrUndefinedType(cls.BaseClass.TypeId) as MetaStructuredTypeDeclaration;
+                    if (metaBaseClass == default)
+                        return default;
+
                     var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(metaBaseClass.BaseType) as StructuredTypeDeclaration;
 
                     if (baseClass != default && baseClass.TryToResolve(name, out var reference1, ResolverFlags.SkipPrivate))

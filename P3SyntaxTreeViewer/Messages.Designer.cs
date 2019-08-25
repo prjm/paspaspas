@@ -61,6 +61,24 @@ namespace P3SyntaxTreeViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unexpected token.
+        /// </summary>
+        internal static string m_0101 {
+            get {
+                return ResourceManager.GetString("m_0101", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User message.
+        /// </summary>
+        internal static string m_0102 {
+            get {
+                return ResourceManager.GetString("m_0102", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing token.
         /// </summary>
         internal static string m_0103 {
@@ -79,11 +97,47 @@ namespace P3SyntaxTreeViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unexpected token.
+        ///   Looks up a localized string similar to Unexpected character.
         /// </summary>
-        internal static string m_05d3bbe032e243eb850bebdb2b7ef272 {
+        internal static string m_0390 {
             get {
-                return ResourceManager.GetString("m_05d3bbe032e243eb850bebdb2b7ef272", resourceCulture);
+                return ResourceManager.GetString("m_0390", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected end of token.
+        /// </summary>
+        internal static string m_0391 {
+            get {
+                return ResourceManager.GetString("m_0391", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incomplete hex number.
+        /// </summary>
+        internal static string m_0392 {
+            get {
+                return ResourceManager.GetString("m_0392", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incomplete identifier.
+        /// </summary>
+        internal static string m_0393 {
+            get {
+                return ResourceManager.GetString("m_0393", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incomplete string.
+        /// </summary>
+        internal static string m_0394 {
+            get {
+                return ResourceManager.GetString("m_0394", resourceCulture);
             }
         }
         

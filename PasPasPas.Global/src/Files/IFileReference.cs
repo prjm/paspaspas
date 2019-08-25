@@ -28,5 +28,17 @@
         /// <param name="path"></param>
         /// <returns></returns>
         IFileReference CreateNewFileReference(string path);
+
+        /// <summary>
+        ///     get a reference to the current directory
+        /// </summary>
+        /// <returns></returns>
+        IFileReference GetCurrentDirectory();
+
+        /// <summary>
+        ///     get the current directory
+        /// </summary>
+        /// <returns></returns>
+        string GetDirectory();
     }
 }

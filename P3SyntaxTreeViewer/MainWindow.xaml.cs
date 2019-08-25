@@ -157,8 +157,8 @@ namespace P3SyntaxTreeViewer {
                 (var bst, var ast, var typeNames) = Parse(env, code);
 
                 Dispatcher.Invoke(() => {
-                    DisplayTree(StandardTreeView, env, bst, null);
-                    DisplayTree(AbstractTreeView, env, ast, typeNames);
+                    DisplayTree(StandardTreeView, env, bst);
+                    DisplayTree(AbstractTreeView, env, ast);
                     DisplayLog(listLog.Messages);
                 });
             });
@@ -190,7 +190,7 @@ namespace P3SyntaxTreeViewer {
             }
         }
 
-        private void DisplayTree(TreeView tv, ITypedEnvironment env, ISyntaxPart cst, Dictionary<int, string> typeNames) {
+        private void DisplayTree(TreeView tv, ITypedEnvironment env, ISyntaxPart cst) {
             tv.FontFamily = Code.FontFamily;
             tv.FontSize = Code.FontSize;
             tv.Items.Clear();
@@ -224,7 +224,7 @@ namespace P3SyntaxTreeViewer {
             }
         }
 
-        private ITypedEnvironment CreateEnvironment()
+        private static ITypedEnvironment CreateEnvironment()
             => Factory.CreateEnvironment();
 
         private void Code_TextChanged(object sender, TextChangedEventArgs e)
@@ -243,7 +243,7 @@ namespace P3SyntaxTreeViewer {
 
             var info1 = info.Data[0] as MissingTokenInfo;
 
-            if (info == default)
+            if (info == default || info1 == default)
                 return;
 
             if (info1.Position >= 0 && info1.Position < Code.Text.Length) {

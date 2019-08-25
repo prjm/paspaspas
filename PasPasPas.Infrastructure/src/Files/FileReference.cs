@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using PasPasPas.Globals.Files;
 
 namespace PasPasPas.Infrastructure.Files {
@@ -81,5 +82,11 @@ namespace PasPasPas.Infrastructure.Files {
 
         public bool Equals(IFileReference other)
             => string.Equals(Path, other.Path, StringComparison.OrdinalIgnoreCase);
+
+        public IFileReference GetCurrentDirectory()
+            => CreateNewFileReference(Directory.GetCurrentDirectory());
+
+        public string GetDirectory()
+            => System.IO.Path.GetDirectoryName(Path);
     }
 }

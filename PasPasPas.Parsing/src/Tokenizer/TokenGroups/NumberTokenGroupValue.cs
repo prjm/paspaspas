@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
@@ -62,7 +63,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             if (nextChar == 'E' || nextChar == 'e') {
                 state.NextChar(true);
                 if (state.AtEof) {
-                    state.Error(TokenizerBase.UnexpectedEndOfToken);
+                    state.Error(MessageNumbers.UnexpectedEndOfToken);
                 }
                 else {
                     nextChar = state.LookAhead();
@@ -75,11 +76,11 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                             exp = digitTokenizer.Tokenize(state).ParsedValue.ToString();
                         }
                         else {
-                            state.Error(TokenizerBase.UnexpectedEndOfToken);
+                            state.Error(MessageNumbers.UnexpectedEndOfToken);
                         }
                     }
                     else {
-                        state.Error(TokenizerBase.UnexpectedEndOfToken);
+                        state.Error(MessageNumbers.UnexpectedEndOfToken);
                     }
                 }
 

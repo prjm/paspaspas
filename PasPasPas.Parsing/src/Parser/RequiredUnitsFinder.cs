@@ -156,12 +156,8 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
-
-            Log.LogError(MessageNumbers.MissingFile);
-            HasMissingFiles = true;
             file = default;
             return false;
-
         }
 
     }

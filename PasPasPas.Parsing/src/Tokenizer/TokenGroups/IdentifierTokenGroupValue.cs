@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 
@@ -36,7 +37,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             var ignoreKeywords = allowAmpersands && hasAmpersand;
 
             if (!allowAmpersands && hasAmpersand) {
-                state.Error(TokenizerBase.UnexpectedCharacter);
+                state.Error(MessageNumbers.UnexpectedCharacter);
                 return new Token(TokenKind.Invalid, state.GetBufferContent());
             }
 
@@ -47,7 +48,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             }
 
             if (hasAmpersand && state.Length < 2)
-                state.Error(TokenizerBase.IncompleteIdentifier);
+                state.Error(MessageNumbers.IncompleteIdentifier);
 
             var value = state.GetBufferContent();
 

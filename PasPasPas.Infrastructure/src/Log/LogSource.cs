@@ -45,7 +45,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
         public void LogError(uint id, params object[] data)
-            => MessageForGuid(MessageSeverity.Error, id, data);
+            => MessageForId(MessageSeverity.Error, id, data);
 
         /// <summary>
         ///     generate a warning message
@@ -53,7 +53,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
         public void LogWarning(uint id, params object[] data)
-            => MessageForGuid(MessageSeverity.Warning, id, data);
+            => MessageForId(MessageSeverity.Warning, id, data);
 
         /// <summary>
         ///     generate a fatal error message
@@ -61,7 +61,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
         public void LogFatalError(uint id, params object[] data)
-            => MessageForGuid(MessageSeverity.FatalError, id, data);
+            => MessageForId(MessageSeverity.FatalError, id, data);
 
         /// <summary>
         ///     generate a hint message
@@ -69,7 +69,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
         public void LogHint(uint id, params object[] data)
-            => MessageForGuid(MessageSeverity.Hint, id, data);
+            => MessageForId(MessageSeverity.Hint, id, data);
 
 
         /// <summary>
@@ -78,10 +78,19 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
         public void Information(uint id, params object[] data)
-            => MessageForGuid(MessageSeverity.Information, id, data);
+            => MessageForId(MessageSeverity.Information, id, data);
 
-        private void MessageForGuid(MessageSeverity severity, uint id, object[] data)
+        /// <summary>
+        ///        log a debug message
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="data"></param>
+        public void LogDebug(uint id, params object[] data)
+            => MessageForId(MessageSeverity.Debug, id, data);
+
+        private void MessageForId(MessageSeverity severity, uint id, object[] data)
             => ProcessMessage(new LogMessage(severity, group, id, data));
+
 
     }
 }

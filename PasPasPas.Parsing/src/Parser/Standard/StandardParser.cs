@@ -304,6 +304,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         }
 
         private void ParseIncludedUnit(IFileReference unitRef) {
+            LogSource.LogDebug(MessageNumbers.OpenFileFromUses, unitRef.Path);
             using (var nestedParser = parserApi.CreateParser(unitRef)) {
                 var parsedUnit = nestedParser.Parse();
                 var ast = parserApi.CreateAbstractSyntraxTree(parsedUnit);

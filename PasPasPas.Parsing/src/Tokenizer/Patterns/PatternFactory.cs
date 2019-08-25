@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
@@ -196,7 +197,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             result.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
             result.AddPattern(new IdentifierCharacterClass(dots: true), new IdentifierTokenGroupValue(keywords, allowDots: true));
             result.AddPattern(new DigitCharClass(false), new NumberTokenGroupValue() { AllowIdents = true });
-            result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, TokenizerBase.IncompleteHexNumber));
+            result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, MessageNumbers.IncompleteHexNumber));
             result.AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));
             result.AddPattern('"', new QuotedStringTokenValue(TokenKind.QuotedString, '"'));
             result.AddPattern('\'', new QuotedStringTokenValue(TokenKind.QuotedString, '\''));
@@ -374,7 +375,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             lt.Add('>', TokenKind.NotEquals);
 
             result.AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}", true));
-            result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, TokenizerBase.IncompleteHexNumber));
+            result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, MessageNumbers.IncompleteHexNumber));
             result.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
             result.AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(keywords, allowAmpersand: true));
 

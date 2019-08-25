@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Parsing;
+﻿using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -57,7 +58,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 found = state.BufferEndsWith(QuoteChar) && state.Length > 1;
 
                 if (!found)
-                    state.Error(TokenizerBase.IncompleteString);
+                    state.Error(MessageNumbers.IncompleteString);
 
                 ITypeReference value;
                 if (resultBuilder.Item.Length == 1)

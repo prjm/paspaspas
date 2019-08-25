@@ -43,6 +43,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             if (numberOfTypeParameters > 0)
                 name = string.Concat(name, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters);
 
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
             if (symbols == null)
                 symbols = CreateSymbols();
 

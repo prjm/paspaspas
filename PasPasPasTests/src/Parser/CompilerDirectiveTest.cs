@@ -51,11 +51,11 @@ namespace PasPasPasTests.Parser {
         public void TestMessage() {
             object f(IOptionSet o) => true;
             RunCompilerDirective("", true, f);
-            RunCompilerDirective("MESSAGE 'X'", true, f, ParserBase.UserGeneratedMessage);
-            RunCompilerDirective("MESSAGE Hint 'X' ", true, f, ParserBase.UserGeneratedMessage);
-            RunCompilerDirective("MESSAGE Warn 'X' ", true, f, ParserBase.UserGeneratedMessage);
-            RunCompilerDirective("MESSAGE Error 'X'", true, f, ParserBase.UserGeneratedMessage);
-            RunCompilerDirective("MESSAGE Fatal 'x'", true, f, ParserBase.UserGeneratedMessage);
+            RunCompilerDirective("MESSAGE 'X'", true, f, MessageNumbers.UserGeneratedMessage);
+            RunCompilerDirective("MESSAGE Hint 'X' ", true, f, MessageNumbers.UserGeneratedMessage);
+            RunCompilerDirective("MESSAGE Warn 'X' ", true, f, MessageNumbers.UserGeneratedMessage);
+            RunCompilerDirective("MESSAGE Error 'X'", true, f, MessageNumbers.UserGeneratedMessage);
+            RunCompilerDirective("MESSAGE Fatal 'x'", true, f, MessageNumbers.UserGeneratedMessage);
             RunCompilerDirective("MESSAGE hint KAPUTT ", true, f, CompilerDirectiveParserErrors.InvalidMessageDirective);
             RunCompilerDirective("MESSAGE KAPUTT ", true, f, CompilerDirectiveParserErrors.InvalidMessageDirective);
             RunCompilerDirective("MESSAGE ", true, f, CompilerDirectiveParserErrors.InvalidMessageDirective);

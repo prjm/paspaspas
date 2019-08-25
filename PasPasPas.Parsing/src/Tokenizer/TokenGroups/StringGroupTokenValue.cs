@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Parsing;
+﻿using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.Tokenizer.CharClass;
@@ -18,7 +19,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             = new CharacterClassTokenGroupValue(TokenKind.IntegralNumber, new DigitCharClass(false), 0, LiteralParserKind.IntegerNumbers, 0);
 
         private readonly CharacterClassTokenGroupValue hexDigits
-            = new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, TokenizerBase.IncompleteHexNumber);
+            = new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, MessageNumbers.IncompleteHexNumber);
 
         /// <summary>
         ///     parse a string literal
@@ -35,7 +36,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     if (state.LookAhead() == '#') {
                         state.NextChar(true);
                         if (state.AtEof)
-                            state.Error(TokenizerBase.IncompleteString);
+                            state.Error(MessageNumbers.IncompleteString);
                         else {
                             if (state.LookAhead() == '$') {
                                 state.NextChar(true);
@@ -46,7 +47,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                                     resultBuilder.Item.Append(charValue.AsWideChar);
                                 }
                                 else
-                                    state.Error(TokenizerBase.IncompleteString);
+                                    state.Error(MessageNumbers.IncompleteString);
                             }
                             else {
                                 var controlChar = digitTokenizer.Tokenize(state);
@@ -56,7 +57,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                                     resultBuilder.Item.Append(charValue.AsWideChar);
                                 }
                                 else
-                                    state.Error(TokenizerBase.UnexpectedCharacter);
+                                    state.Error(MessageNumbers.UnexpectedCharacter);
                             }
                         }
                     }

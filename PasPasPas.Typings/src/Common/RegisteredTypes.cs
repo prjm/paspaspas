@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Runtime;
@@ -195,6 +196,7 @@ namespace PasPasPas.Typings.Common {
         private void RegisterHiddenTypes() {
             RegisterSystemType(new UnspecifiedType(KnownTypeIds.UnspecifiedType), null);
             RegisterSystemType(new VoidType(KnownTypeIds.NoType), null);
+            RegisterSystemType(new GenericTypeParameter(KnownTypeIds.UnconstrainedGenericTypeParameter, ImmutableArray<int>.Empty), null);
         }
 
         /// <summary>

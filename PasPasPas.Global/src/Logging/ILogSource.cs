@@ -37,5 +37,12 @@
         /// <param name="id"></param>
         /// <param name="data"></param>
         void LogHint(uint id, params object[] data);
+
+        /// <summary>
+        ///     log a debug message
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="data"></param>
+        void LogDebug(uint id, params object[] data);
     }
 }

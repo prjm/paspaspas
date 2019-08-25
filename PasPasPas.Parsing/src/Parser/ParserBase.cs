@@ -36,25 +36,20 @@ namespace PasPasPas.Parsing.Parser {
         ///     token kinds
         /// </summary>
         public ImmutableArray<int> TokenKinds { get; }
+
+        /// <summary>
+        ///     convert this info to a string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => $"{Position}: " + string.Join(", ", TokenKinds);
+
     }
 
     /// <summary>
     ///     base class for parsers
     /// </summary>
     public abstract class ParserBase : IParser {
-
-        /// <summary>
-        ///     message: unexpected token message id
-        /// </summary>
-        public const uint UnexpectedToken
-            = 0x0101;
-
-        /// <summary>
-        ///     message: user generated message id
-        /// </summary>
-        public const uint UserGeneratedMessage
-            = 0x0102;
-
 
         /// <summary>
         ///     flag, if <c>true</c> units are resolved
@@ -113,7 +108,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected void Unexpected() {
             var token = CurrentToken();
-            LogSource.LogError(UnexpectedToken, token.Kind, token.Value);
+            LogSource.LogError(MessageNumbers.UnexpectedToken, token.Kind, token.Value);
             FetchNextToken();
         }
 

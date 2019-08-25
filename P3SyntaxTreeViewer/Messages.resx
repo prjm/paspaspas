@@ -117,14 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="m_0101" xml:space="preserve">
+    <value>Unexpected token</value>
+  </data>
+  <data name="m_0102" xml:space="preserve">
+    <value>User message</value>
+  </data>
   <data name="m_0103" xml:space="preserve">
     <value>Missing token</value>
   </data>
   <data name="m_0104" xml:space="preserve">
     <value>Missing file</value>
   </data>
-  <data name="m_05d3bbe032e243eb850bebdb2b7ef272" xml:space="preserve">
-    <value>Unexpected token</value>
+  <data name="m_0390" xml:space="preserve">
+    <value>Unexpected character</value>
+  </data>
+  <data name="m_0391" xml:space="preserve">
+    <value>Unexpected end of token</value>
+  </data>
+  <data name="m_0392" xml:space="preserve">
+    <value>Incomplete hex number</value>
+  </data>
+  <data name="m_0393" xml:space="preserve">
+    <value>Incomplete identifier</value>
+  </data>
+  <data name="m_0394" xml:space="preserve">
+    <value>Incomplete string</value>
   </data>
   <data name="m_8165f2988eb84cd28547752d9d2ed624" xml:space="preserve">
     <value>Redeclared Field</value>

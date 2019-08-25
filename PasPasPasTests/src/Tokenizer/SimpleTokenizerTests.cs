@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Runtime.Values.BooleanValues;
 using PasPasPas.Runtime.Values.IntValues;
@@ -150,16 +151,16 @@ namespace PasPasPasTests.Tokenizer {
 
         [TestMethod]
         public void TestMessages() {
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteHexNumber, "$");
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteIdentifier, "&");
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "´");
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "'");
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "\"");
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "  '");
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "  '   ");
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "#");
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "#D");
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "#$R");
+            TokenizerMessageIsGenerated(MessageNumbers.IncompleteHexNumber, "$");
+            TokenizerMessageIsGenerated(MessageNumbers.IncompleteIdentifier, "&");
+            TokenizerMessageIsGenerated(MessageNumbers.UnexpectedCharacter, "´");
+            TokenizerMessageIsGenerated(MessageNumbers.IncompleteString, "'");
+            TokenizerMessageIsGenerated(MessageNumbers.IncompleteString, "\"");
+            TokenizerMessageIsGenerated(MessageNumbers.IncompleteString, "  '");
+            TokenizerMessageIsGenerated(MessageNumbers.IncompleteString, "  '   ");
+            TokenizerMessageIsGenerated(MessageNumbers.IncompleteString, "#");
+            TokenizerMessageIsGenerated(MessageNumbers.UnexpectedCharacter, "#D");
+            TokenizerMessageIsGenerated(MessageNumbers.IncompleteString, "#$R");
         }
 
     }

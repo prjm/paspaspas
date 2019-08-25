@@ -95,8 +95,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 methodGroup = new MethodGroup();
                 methodGroup.Add(oldEntry);
 
+
                 var anchor = oldEntry.Anchor;
-                anchor.Symbol = methodGroup;
+                if (anchor != default)
+                    anchor.Symbol = methodGroup;
+
                 oldEntry.Anchor = default;
                 newEntry.Anchor = default;
 

@@ -20,15 +20,17 @@ namespace SampleRunner {
 
         private static void Main() {
 
-            var testPath = @"C:\temp\Demo.pas";
+            var testPath = @"D:\temp\testfiles\q\q.dpr";
             //var testPath = @"C:\temp\Testfiles\all";
-            var mode = SampleMode.CreateAssembly;
+            var mode = SampleMode.TypeAnnotateFile;
             var repeat = 1;
             var result = System.Console.Out;
             var environment = Factory.CreateEnvironment();
             var useHistograms = false;
+            var logListener = new ConsoleLogListener(result);
             var action = PrepareSample(environment, testPath, mode, repeat, useHistograms);
 
+            environment.Log.RegisterTarget(logListener);
             RunSample(environment, result, action, useHistograms);
 
             Console.ReadLine();

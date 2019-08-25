@@ -46,5 +46,11 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef("TB", "TA<TB>.A()", (Func<IMetaStructuredType, bool>)t, "TA = class procedure A<T>; end; ");
         }
 
+        [TestMethod]
+        public void TestUnconstrainedGenericParameter() {
+            bool t(IStructuredType s) => s.GenericParameters[0] == s.TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.UnconstrainedGenericTypeParameter).TypeId;
+            AssertDeclTypeDef("T<A>", "Self", (Func<IStructuredType, bool>)t);
+        }
+
     }
 }

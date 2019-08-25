@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Parsing;
+﻿using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// <summary>
@@ -55,7 +56,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     found = state.BufferEndsWith(EndSequence);
 
                 if (!found)
-                    state.Error(TokenizerBase.UnexpectedEndOfToken);
+                    state.Error(MessageNumbers.UnexpectedEndOfToken);
 
                 if (StoreValue) {
                     builder.Item.Remove(0, 1);

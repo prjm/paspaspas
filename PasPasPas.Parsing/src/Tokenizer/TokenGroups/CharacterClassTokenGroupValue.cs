@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Parsing;
+﻿using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
@@ -55,7 +56,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         ///     error message
         /// </summary>
         private uint MinLengthMessage { get; }
-            = TokenizerBase.UnexpectedEndOfToken;
+            = MessageNumbers.UnexpectedEndOfToken;
 
         private LiteralParserKind ValueParser { get; }
             = LiteralParserKind.Undefined;

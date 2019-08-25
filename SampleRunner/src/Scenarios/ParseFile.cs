@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using PasPasPas.Api;
-using PasPasPas.Globals.Environment;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace SampleRunner.Scenarios {

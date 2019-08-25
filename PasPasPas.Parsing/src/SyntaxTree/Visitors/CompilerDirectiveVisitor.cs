@@ -1,5 +1,4 @@
-﻿using System.IO;
-using PasPasPas.Globals.Files;
+﻿using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
@@ -961,23 +960,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             switch (element.MessageType) {
 
                 case MessageSeverity.Hint:
-                    logSource.LogHint(ParserBase.UserGeneratedMessage, element.MessageText);
+                    logSource.LogHint(MessageNumbers.UserGeneratedMessage, element.MessageText);
                     break;
 
                 case MessageSeverity.Warning:
-                    logSource.LogError(ParserBase.UserGeneratedMessage, element.MessageText);
+                    logSource.LogError(MessageNumbers.UserGeneratedMessage, element.MessageText);
                     break;
 
                 case MessageSeverity.Error:
-                    logSource.LogError(ParserBase.UserGeneratedMessage, element.MessageText);
+                    logSource.LogError(MessageNumbers.UserGeneratedMessage, element.MessageText);
                     break;
 
                 case MessageSeverity.FatalError:
-                    logSource.LogFatalError(ParserBase.UserGeneratedMessage, element.MessageText);
+                    logSource.LogFatalError(MessageNumbers.UserGeneratedMessage, element.MessageText);
                     break;
 
                 default:
-                    LogSource.LogError(ParserBase.UserGeneratedMessage, element.MessageText);
+                    LogSource.LogError(MessageNumbers.UserGeneratedMessage, element.MessageText);
                     break;
             }
         }
@@ -1045,7 +1044,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(element))
                 return;
 
-            var basePath = Options.Environment.CreateFileReference(Path.GetDirectoryName(path.Path));
+            IFileReference basePath;
+            var dir = path.GetDirectory();
+            if (string.IsNullOrWhiteSpace(dir))
+                basePath = path.GetCurrentDirectory();
+            else
+                basePath = Options.Environment.CreateFileReference(dir);
+
             var fileName = element?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))

@@ -14,39 +14,6 @@ namespace PasPasPas.Parsing.Tokenizer {
     public sealed class TokenizerBase : ITokenizer, IDisposable {
 
         /// <summary>
-        ///     message: unexpected token
-        /// </summary>
-        public const uint UnexpectedCharacter
-            = 0x0390;
-
-        /// <summary>
-        ///     message: unexpected end of token
-        /// </summary>
-        /// <remarks>
-        ///     data: expected-token-end sequence
-        /// </remarks>
-        public const uint UnexpectedEndOfToken
-            = 0x0391;
-
-        /// <summary>
-        ///     message id: incomplete hex number
-        /// </summary>
-        public const uint IncompleteHexNumber
-            = 0x0392;
-
-        /// <summary>
-        ///     message id: incomplete identifier
-        /// </summary>
-        public const uint IncompleteIdentifier
-            = 0x0393;
-
-        /// <summary>
-        ///     message id: incomplete string
-        /// </summary>
-        public const uint IncompleteString
-            = 0x0394;
-
-        /// <summary>
         ///     registered input patterns
         /// </summary>
         private readonly InputPatterns characterClasses;
