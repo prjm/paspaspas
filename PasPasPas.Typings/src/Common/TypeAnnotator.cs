@@ -837,7 +837,14 @@ namespace PasPasPas.Typings.Common {
                 var m = element as StructureMethod;
                 var classMethod = m?.ClassItem ?? false;
                 var genericTypeId = KnownTypeIds.ErrorType;
-                var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
+                var d = environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId);
+                /*
+                if (d is RoutineType rt) {
+                    d =
+                }
+                */
+
+                var typeDef = v != null ? d as StructuredTypeDeclaration : null;
 
                 if (m != default && m.Generics != default && m.Generics.Count > 0) {
                     var functionType = TypeCreator.CreateRoutineType();
@@ -863,6 +870,9 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(MethodDeclaration element) {
+            if (element.Name == default)
+                return;
+
             var method = currentTypeDefinition.Pop() as Routine;
 
             if (element.Kind == ProcedureKind.Function) {
@@ -1327,6 +1337,9 @@ namespace PasPasPas.Typings.Common {
             var hasError = false;
             var genericTypeRef = currentTypeDefinition.Peek();
             var genericType = GetTypeByIdOrUndefinedType(genericTypeRef.TypeId) as IExtensibleGenericType;
+
+            if (genericType == default)
+                return;
 
             using (var list = environment.ListPools.GetList<int>()) {
                 foreach (var constraint in element) {

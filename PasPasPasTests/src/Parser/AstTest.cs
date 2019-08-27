@@ -590,7 +590,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = class procedure m(q: integer); platform; end; implementation end.", t => m(t)?.Hints?.SymbolIsPlatformSpecific, true);
 
             // method overloading
-            RunAstTest("unit z.x; interface type x = class procedure m(q: integer); overload; procedure m(q: string); overload; end; implementation end.", t => m(t)?.Overloads[0]?.Name.CompleteName, "m");
+            RunAstTest("unit z.x; interface type x = class procedure m(q: integer); overload; procedure m(q: string); overload; end; implementation end.", t => (m(t) as OverloadedStructureMethod)?.Overloads[0]?.Name.CompleteName, "m");
 
             // method resolutions
 

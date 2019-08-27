@@ -19,13 +19,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public bool ClassItem { get; set; }
 
         /// <summary>
-        ///     add an overloaded methods
-        /// </summary>
-        /// <param name="entry"></param>
-        public void AddOverload(MethodDeclaration entry)
-            => Overloads.Add(entry);
-
-        /// <summary>
         ///     visibility mode
         /// </summary>
         public MemberVisibility Visibility { get; set; }

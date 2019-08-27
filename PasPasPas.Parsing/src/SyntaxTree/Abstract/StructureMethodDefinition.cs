@@ -36,8 +36,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 // todo: warning here
             }
 
-            result.AddOverload(entry);
-            return result;
+            var overload = existingEntry as OverloadedStructureMethod;
+            if (overload == default) {
+                overload = new OverloadedStructureMethod();
+                overload.AddOverload(existingEntry);
+            }
+            overload.AddOverload(entry);
+            return overload;
         }
 
     }

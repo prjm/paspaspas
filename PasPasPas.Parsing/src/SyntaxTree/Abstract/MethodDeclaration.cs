@@ -39,12 +39,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             = new List<SymbolAttributeItem>();
 
         /// <summary>
-        ///     overloaded methods
-        /// </summary>
-        public ISyntaxPartCollection<MethodDeclaration> Overloads { get; }
-            = new SyntaxPartCollection<MethodDeclaration>();
-
-        /// <summary>
         ///     creates a new method declaration
         /// </summary>
         protected MethodDeclaration() {
@@ -91,8 +85,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         protected virtual void AcceptBaseParts(IStartEndVisitor visitor) {
             AcceptPart(this, Parameters.Items, visitor);
             AcceptPart(this, TypeValue, visitor);
-            if (Overloads != null)
-                AcceptPart(this, Overloads, visitor);
         }
 
         /// <summary>
