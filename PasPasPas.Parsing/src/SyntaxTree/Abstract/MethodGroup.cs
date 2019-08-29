@@ -32,16 +32,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             if (newEntry.IsForwardDeclaration)
                 return true;
 
-            if (newEntry.IsExportedMethod)
-                return true;
-
             for (var i = 0; i < methods.Count; i++) {
                 var method = methods[i];
 
                 if (method.IsForwardDeclaration)
                     continue;
 
-                if (method.IsExportedMethod)
+                if (method.IsExportedMethod && newEntry.IsExportedMethod)
+                    return true;
+
+                if (method.IsGlobalMethod && newEntry.IsGlobalMethod)
                     return true;
 
                 return false;

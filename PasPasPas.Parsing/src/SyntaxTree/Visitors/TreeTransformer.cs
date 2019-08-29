@@ -964,7 +964,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             value.IsNewType = element.NewType != default;
 
             if (element.TypeOf != default)
-                LogSource.LogWarning(StructuralErrors.UnsupportedTypeOfConstruct, element);
+                LogSource.LogWarning(MessageNumbers.UnsupportedTypeOfConstruct, element);
 
             typeTarget.TypeValue = value;
         }
@@ -1804,13 +1804,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(ExportedProcedureHeadingSymbol element) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var result = new GlobalMethod();
+            var anchor = new SingleDeclaredSymbol(result);
             InitNode(result, element);
             result.Name = ExtractSymbolName(element.Name);
             result.Kind = TokenKindMapper.MapMethodKind(element.Kind);
+            result.Anchor = anchor;
+
             ExtractAttributes(element.Attributes, CurrentUnit, result.Attributes);
             ExtractAttributes(element.ResultAttributes as UserAttributesSymbol, CurrentUnit, result.ReturnAttributes);
-            symbols.Symbols.Items.Add(new SingleDeclaredSymbol(result));
+
             symbols.Symbols.Add(result, LogSource);
+            if (result.Anchor != default) {
+                symbols.Symbols.Items.Add(result.Anchor);
+            }
+            else {
+                anchor.Symbol = default;
+            }
         }
 
         #endregion

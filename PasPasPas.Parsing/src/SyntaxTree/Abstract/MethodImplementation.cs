@@ -102,6 +102,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => false;
 
         /// <summary>
+        ///     global method
+        /// </summary>
+        public virtual bool IsGlobalMethod
+            => false;
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>

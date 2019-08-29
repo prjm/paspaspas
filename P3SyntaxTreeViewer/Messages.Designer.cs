@@ -97,6 +97,78 @@ namespace P3SyntaxTreeViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicate Unit.
+        /// </summary>
+        internal static string m_0350 {
+            get {
+                return ResourceManager.GetString("m_0350", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unit name does not match file name.
+        /// </summary>
+        internal static string m_0351 {
+            get {
+                return ResourceManager.GetString("m_0351", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redeclared unit name in uses list.
+        /// </summary>
+        internal static string m_0352 {
+            get {
+                return ResourceManager.GetString("m_0352", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redeclared Symbol.
+        /// </summary>
+        internal static string m_0353 {
+            get {
+                return ResourceManager.GetString("m_0353", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redeclared enum name.
+        /// </summary>
+        internal static string m_0354 {
+            get {
+                return ResourceManager.GetString("m_0354", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported type of.
+        /// </summary>
+        internal static string m_0355 {
+            get {
+                return ResourceManager.GetString("m_0355", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redeclared Parameter.
+        /// </summary>
+        internal static string m_0356 {
+            get {
+                return ResourceManager.GetString("m_0356", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redeclared Field.
+        /// </summary>
+        internal static string m_0357 {
+            get {
+                return ResourceManager.GetString("m_0357", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unexpected character.
         /// </summary>
         internal static string m_0390 {
@@ -138,33 +210,6 @@ namespace P3SyntaxTreeViewer {
         internal static string m_0394 {
             get {
                 return ResourceManager.GetString("m_0394", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Redeclared Field.
-        /// </summary>
-        internal static string m_8165f2988eb84cd28547752d9d2ed624 {
-            get {
-                return ResourceManager.GetString("m_8165f2988eb84cd28547752d9d2ed624", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Redeclared Symbol.
-        /// </summary>
-        internal static string m_bd36c92cbacf492c8bf817e890cbaafa {
-            get {
-                return ResourceManager.GetString("m_bd36c92cbacf492c8bf817e890cbaafa", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Redeclared Parameter.
-        /// </summary>
-        internal static string m_c795d660c7a44bce8af426235295bf3d {
-            get {
-                return ResourceManager.GetString("m_c795d660c7a44bce8af426235295bf3d", resourceCulture);
             }
         }
     }

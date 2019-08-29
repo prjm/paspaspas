@@ -129,6 +129,30 @@
   <data name="m_0104" xml:space="preserve">
     <value>Missing file</value>
   </data>
+  <data name="m_0350" xml:space="preserve">
+    <value>Duplicate Unit</value>
+  </data>
+  <data name="m_0351" xml:space="preserve">
+    <value>Unit name does not match file name</value>
+  </data>
+  <data name="m_0352" xml:space="preserve">
+    <value>Redeclared unit name in uses list</value>
+  </data>
+  <data name="m_0353" xml:space="preserve">
+    <value>Redeclared Symbol</value>
+  </data>
+  <data name="m_0354" xml:space="preserve">
+    <value>Redeclared enum name</value>
+  </data>
+  <data name="m_0355" xml:space="preserve">
+    <value>Unsupported type of</value>
+  </data>
+  <data name="m_0356" xml:space="preserve">
+    <value>Redeclared Parameter</value>
+  </data>
+  <data name="m_0357" xml:space="preserve">
+    <value>Redeclared Field</value>
+  </data>
   <data name="m_0390" xml:space="preserve">
     <value>Unexpected character</value>
   </data>
@@ -143,14 +167,5 @@
   </data>
   <data name="m_0394" xml:space="preserve">
     <value>Incomplete string</value>
-  </data>
-  <data name="m_8165f2988eb84cd28547752d9d2ed624" xml:space="preserve">
-    <value>Redeclared Field</value>
-  </data>
-  <data name="m_bd36c92cbacf492c8bf817e890cbaafa" xml:space="preserve">
-    <value>Redeclared Symbol</value>
-  </data>
-  <data name="m_c795d660c7a44bce8af426235295bf3d" xml:space="preserve">
-    <value>Redeclared Parameter</value>
   </data>
 </root>

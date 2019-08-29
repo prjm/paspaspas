@@ -21,5 +21,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     <c>true</c> if this is a exported method
         /// </summary>
         bool IsExportedMethod { get; }
+
+        /// <summary>
+        ///     <c>true</c> if this is a global method
+        /// </summary>
+        bool IsGlobalMethod { get; }
     }
 }

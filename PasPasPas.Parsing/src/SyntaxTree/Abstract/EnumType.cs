@@ -2,7 +2,6 @@
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -23,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="logSource"></param>
         protected override void LogDuplicateSymbolError(EnumTypeValue newDuplicate, ILogSource logSource) {
             base.LogDuplicateSymbolError(newDuplicate, logSource);
-            logSource.LogError(StructuralErrors.RedeclaredEnumName, newDuplicate);
+            logSource.LogError(MessageNumbers.RedeclaredEnumName, newDuplicate);
         }
 
         /// <summary>

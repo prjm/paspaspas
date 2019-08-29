@@ -14,6 +14,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public bool IsResident { get; set; }
 
+        /// <summary>
+        ///     global method
+        /// </summary>
+        public bool IsGlobalMethod
+            => false;
+
         private IExpression nameExpression;
         private IExpression indexExpression;
 

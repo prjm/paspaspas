@@ -94,7 +94,13 @@ namespace PasPasPas.Typings.Structured {
                 r.TypeRegistry = TypeRegistry;
 
             globalRoutines.Add(routine);
-            symbols.Add(routine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, routine));
+            if (symbols.TryGetValue(routine.Name, out var reference))
+                if (reference.Kind == ReferenceKind.RefToGlobalRoutine)
+                    symbols[routine.Name] = new Reference(ReferenceKind.RefToGlobalRoutine, routine);
+                else
+                    symbols[routine.Name] = new Reference(ReferenceKind.RefToGlobalRoutine, routine);
+            else
+                symbols.Add(routine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, routine));
         }
 
         /// <summary>

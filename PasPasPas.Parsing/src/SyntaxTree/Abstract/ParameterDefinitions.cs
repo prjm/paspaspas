@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -15,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="newDuplicate">duplicate parameter</param>
         /// <param name="logSource">log source</param>
         protected override void LogDuplicateSymbolError(ParameterDefinition newDuplicate, ILogSource logSource)
-            => logSource.LogError(StructuralErrors.DuplicateParameterName, newDuplicate);
+            => logSource.LogError(MessageNumbers.DuplicateParameterName, newDuplicate);
 
 
         /// <summary>

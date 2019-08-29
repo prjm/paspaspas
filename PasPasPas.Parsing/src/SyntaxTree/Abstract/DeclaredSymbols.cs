@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -17,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="logSource"></param>
         protected override void LogDuplicateSymbolError(DeclaredSymbol newDuplicate, ILogSource logSource) {
             base.LogDuplicateSymbolError(newDuplicate, logSource);
-            logSource.LogError(StructuralErrors.RedeclaredSymbol, newDuplicate);
+            logSource.LogError(MessageNumbers.RedeclaredSymbol, newDuplicate);
         }
 
         /// <summary>
@@ -94,7 +93,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             else if (oldEntry != default && newEntry != default) {
                 methodGroup = new MethodGroup();
                 methodGroup.Add(oldEntry);
-
 
                 var anchor = oldEntry.Anchor;
                 if (anchor != default)
