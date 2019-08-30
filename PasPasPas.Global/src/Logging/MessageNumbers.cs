@@ -134,5 +134,10 @@
             = 0x0394;
 
 
+        /// <summary>
+        ///     invalid file format
+        /// </summary>
+        public const uint InvalidFileFormat
+            = 0x0700;
     }
 }

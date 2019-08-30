@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
@@ -18,6 +19,7 @@ using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Typings.Common;
+using PasPasPas.Typings.Serialization;
 
 namespace PasPasPas.Api {
 
@@ -145,5 +147,11 @@ namespace PasPasPas.Api {
 
         public IFileReference CreateFileReference(string path)
             => new FileReference(path);
+
+        public ITypeWriter CreateTypeWriter(Stream writableStream)
+            => new TypeWriter(writableStream);
+
+        public ITypeReader CreateTypeReader(Stream readableStream)
+            => new TypeReader(readableStream, Log);
     }
 }

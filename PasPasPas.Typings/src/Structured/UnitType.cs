@@ -32,6 +32,12 @@ namespace PasPasPas.Typings.Structured {
             => globalRoutines;
 
         /// <summary>
+        ///     symbols
+        /// </summary>
+        public IDictionary<string, Reference> Symbols
+            => symbols;
+
+        /// <summary>
         ///     unit type
         /// </summary>
         /// <param name="withId"></param>
