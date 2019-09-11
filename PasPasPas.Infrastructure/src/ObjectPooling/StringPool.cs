@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.Text;
 using PasPasPas.Globals.Environment;
@@ -12,13 +12,10 @@ namespace PasPasPas.Infrastructure.Environment {
     /// </summary>
     public class StringPool : IStringPool {
 
-        private readonly HashSet<StringPoolEntry> pool
-            = new HashSet<StringPoolEntry>();
+        private readonly HashedStrings pool
+            = new HashedStrings();
 
         private readonly object lockObject = new object();
-
-        private const int MaxStringLength
-            = 300;
 
         /// <summary>
         ///     number of pooled strings
@@ -37,18 +34,9 @@ namespace PasPasPas.Infrastructure.Environment {
         /// </summary>
         /// <param name="value">string to add</param>
         public void AddString(string value) {
-            var newEntry = new StringPoolEntry();
-            newEntry.Initialize(value);
-
             lock (lockObject)
-                pool.Add(newEntry);
+                pool.Add(value);
         }
-
-        /// <summary>
-        ///     string pool entries
-        /// </summary>
-        public StringPoolEntries Entries { get; }
-            = new StringPoolEntries();
 
         /// <summary>
         ///     pool a string by a char array
@@ -56,33 +44,49 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <param name="item"></param>
         /// <returns></returns>
         public string PoolString(StringBuilder item) {
-
-            if (item.Length > MaxStringLength)
-                return item.ToString();
-
-            using (var poolItem = Entries.Borrow(out var searchEntry)) {
-                searchEntry.Initialize(item);
-
-                lock (lockObject) {
-                    if (pool.TryGetValue(searchEntry, out var data)) {
-                        LogHistogram(data);
-                        return data.PoolItem;
-                    }
+            lock (lockObject) {
+                if (pool.TryGetValue(item, out var data)) {
+                    LogHistogram(data);
+                    return data;
                 }
 
-                var newEntry = new StringPoolEntry(searchEntry);
-
-                lock (lockObject)
-                    pool.Add(newEntry);
-
-                return newEntry.PoolItem;
+                var newEntry = pool.Add(item);
+                return newEntry;
             }
         }
 
         [Conditional("DEBUG")]
-        private static void LogHistogram(StringPoolEntry data) {
+        private static void LogHistogram(string data) {
             if (Histograms.Enable)
-                Histograms.Value(HistogramKeys.StringPoolValues, data.PoolItem);
+                Histograms.Value(HistogramKeys.StringPoolValues, data);
         }
+
+        /// <summary>
+        ///     test if a string is already included
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool ContainsString(string value) {
+            lock (lockObject)
+                return pool.Contains(value);
+        }
+
+        /// <summary>
+        ///     pool an utf16 encoded string
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public string PoolString(Span<byte> item) {
+            lock (lockObject) {
+                if (pool.TryGetValue(item, out var data)) {
+                    LogHistogram(data);
+                    return data;
+                }
+
+                var newEntry = pool.Add(item);
+                return newEntry;
+            }
+        }
+
     }
 }

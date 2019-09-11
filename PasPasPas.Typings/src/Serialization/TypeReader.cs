@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Log;
@@ -16,9 +17,11 @@ namespace PasPasPas.Typings.Serialization {
         /// </summary>
         /// <param name="readableStream"></param>
         /// <param name="log">log</param>
-        public TypeReader(Stream readableStream, ILogManager log) {
+        /// <param name="pool"></param>
+        public TypeReader(Stream readableStream, ILogManager log, IStringPool pool) {
             ReadableStream = readableStream;
             Log = new LogSource(log, MessageGroups.TypeSerialization);
+            StringPool = pool;
         }
 
         private bool disposedValue = false; // To detect redundant calls
@@ -27,6 +30,11 @@ namespace PasPasPas.Typings.Serialization {
         ///     input
         /// </summary>
         public Stream ReadableStream { get; }
+
+        /// <summary>
+        ///     string pool
+        /// </summary>
+        public IStringPool StringPool { get; }
 
         /// <summary>
         ///     log source

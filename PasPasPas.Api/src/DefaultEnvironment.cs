@@ -152,6 +152,6 @@ namespace PasPasPas.Api {
             => new TypeWriter(writableStream);
 
         public ITypeReader CreateTypeReader(Stream readableStream)
-            => new TypeReader(readableStream, Log);
+            => new TypeReader(readableStream, Log, StringPool);
     }
 }

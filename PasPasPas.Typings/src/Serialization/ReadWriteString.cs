@@ -23,7 +23,7 @@ namespace PasPasPas.Typings.Serialization {
         private string ReadSmallString(int len) {
             Span<byte> buffer = stackalloc byte[len * 2];
             ReadableStream.Read(buffer);
-            return Encoding.Unicode.GetString(buffer);
+            return StringPool.PoolString(buffer);
         }
     }
 

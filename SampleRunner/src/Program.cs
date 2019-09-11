@@ -20,9 +20,9 @@ namespace SampleRunner {
 
         private static void Main() {
 
-            var testPath = @"D:\temp\testfiles\q\q.dpr";
-            //var testPath = @"C:\temp\Testfiles\all";
-            var mode = SampleMode.TypeAnnotateFile;
+            var testPath = @"D:\temp\testfiles\s.pas";
+            //var testPath = @"C:\temp\Testfiles\   all";
+            var mode = SampleMode.TokenizerFile;
             var repeat = 1;
             var result = System.Console.Out;
             var environment = Factory.CreateEnvironment();

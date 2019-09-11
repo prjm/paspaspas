@@ -80,6 +80,23 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestWriteReadUnPooledString() {
+            var env = CreateEnvironment();
+            var pool = env.StringPool;
+            var i = "_A_";
+            Assert.IsFalse(pool.ContainsString(i));
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                w.WriteString(i);
+                stream.Seek(0, SeekOrigin.Begin);
+                var o = r.ReadString();
+                Assert.AreEqual(i, o);
+                Assert.IsTrue(pool.ContainsString(i));
+            }
+        }
+
+        [TestMethod]
         public void TestWriteReadLongString() {
             var env = CreateEnvironment();
             using (var stream = new MemoryStream())
