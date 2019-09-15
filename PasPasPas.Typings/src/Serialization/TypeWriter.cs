@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Serialization {
@@ -7,14 +8,17 @@ namespace PasPasPas.Typings.Serialization {
     /// <summary>
     ///     write types
     /// </summary>
-    internal partial class TypeWriter : ITypeWriter {
+    internal partial class TypeWriter : TypeIoBase, ITypeWriter {
 
         /// <summary>
         ///     create a new type write
         /// </summary>
         /// <param name="writableStream"></param>
-        public TypeWriter(Stream writableStream)
-            => WritableStream = writableStream;
+        /// <param name="stringPool"></param>
+        public TypeWriter(Stream writableStream, IStringPool stringPool) {
+            WritableStream = writableStream;
+            StringPool = stringPool;
+        }
 
         /// <summary>
         ///     write a unit
@@ -30,6 +34,7 @@ namespace PasPasPas.Typings.Serialization {
         ///     stream
         /// </summary>
         public Stream WritableStream { get; }
+        public IStringPool StringPool { get; }
 
 
         /// <summary>

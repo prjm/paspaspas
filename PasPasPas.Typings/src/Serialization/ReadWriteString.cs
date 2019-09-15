@@ -8,7 +8,10 @@ namespace PasPasPas.Typings.Serialization {
         public string ReadString() {
             var len = ReadUint();
 
-            if (len < 0xFF)
+            if (len == 0)
+                return string.Empty;
+
+            if (len <= StringPool.MaximalStringLength)
                 return ReadSmallString((int)len);
             else
                 return ReadLongString(len);
@@ -16,13 +19,21 @@ namespace PasPasPas.Typings.Serialization {
 
         private string ReadLongString(uint len) {
             var buffer = new byte[len * 2];
-            ReadableStream.Read(buffer);
+            var readLen = ReadableStream.Read(buffer);
+
+            if (readLen != buffer.Length)
+                throw new UnexpectedEndOfFileException();
+
             return Encoding.Unicode.GetString(buffer);
         }
 
         private string ReadSmallString(int len) {
             Span<byte> buffer = stackalloc byte[len * 2];
-            ReadableStream.Read(buffer);
+            var readLen = ReadableStream.Read(buffer);
+
+            if (readLen != buffer.Length)
+                throw new UnexpectedEndOfFileException();
+
             return StringPool.PoolString(buffer);
         }
     }
@@ -33,7 +44,7 @@ namespace PasPasPas.Typings.Serialization {
             var len = (uint)text.Length;
             WriteUint(ref len);
 
-            if (len < 0xFF)
+            if (len <= StringPool.MaximalStringLength)
                 WriteSmallString(text);
             else
                 WriteLongString(text);

@@ -10,7 +10,7 @@ namespace PasPasPas.Typings.Serialization {
     /// <summary>
     ///     read types
     /// </summary>
-    internal partial class TypeReader : ITypeReader {
+    internal partial class TypeReader : TypeIoBase, ITypeReader {
 
         /// <summary>
         ///     create a new type reader

@@ -32,8 +32,6 @@ namespace SampleRunner {
 
             environment.Log.RegisterTarget(logListener);
             RunSample(environment, result, action, useHistograms);
-
-            Console.ReadLine();
         }
 
         private static string GetCacheName(object data)

@@ -13,7 +13,12 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
 
         private const int FnvOffsetBias = unchecked((int)2166136261);
         private const int FnvPrime = 16777619;
-        private const int MaxStringLength = 300;
+
+        /// <summary>
+        ///     maximal string length
+        /// </summary>
+        public const int MaxStringLength = 300;
+
         private readonly CheckEquality<StringBuilder> checkEquality
             = new CheckEquality<StringBuilder>(EqualsStringBuilder);
         private readonly CheckSpanEquality<byte> checkSpan
@@ -35,7 +40,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         }
 
         /// <summary>
-        ///     add an string manuelly
+        ///     add an string manually
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -88,7 +93,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        protected override bool Equals(string left, string right)
+        protected override bool Equals(in string left, in string right)
             => StringComparer.Ordinal.Equals(left, right);
 
 
@@ -98,7 +103,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <param name="l"></param>
         /// <param name="r"></param>
         /// <returns></returns>
-        protected static bool EqualsStringBuilder(string l, StringBuilder r) {
+        protected static bool EqualsStringBuilder(in string l, in StringBuilder r) {
             if (l.Length != r.Length)
                 return false;
 
@@ -115,7 +120,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <param name="l"></param>
         /// <param name="r"></param>
         /// <returns></returns>
-        protected static bool EqualsByteSpan(string l, Span<byte> r) {
+        protected static bool EqualsByteSpan(in string l, in Span<byte> r) {
             if (l.Length != r.Length * 2)
                 return false;
 
@@ -134,7 +139,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        protected override int GetHashCode(string item) {
+        protected override int GetHashCode(in string item) {
             var hashCode = FnvOffsetBias;
             var start = 0;
             var end = item.Length;

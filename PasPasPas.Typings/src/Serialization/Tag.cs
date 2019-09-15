@@ -11,19 +11,13 @@
         ///     read data from a stream
         /// </summary>
         /// <param name="kind"></param>
-        /// <param name="length"></param>
         /// <param name="typeReader"></param>
-        internal abstract void ReadData(uint kind, uint length, TypeReader typeReader);
-
-        /// <summary>
-        ///     tag length
-        /// </summary>
-        public abstract uint Length { get; }
+        internal abstract void ReadData(uint kind, TypeReader typeReader);
 
         /// <summary>
         ///     write tag data
         /// </summary>
         /// <param name="typeWriter"></param>
-        public abstract void WriteData(TypeWriter typeWriter);
+        internal abstract void WriteData(TypeWriter typeWriter);
     }
 }

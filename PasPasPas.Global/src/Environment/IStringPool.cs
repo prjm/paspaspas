@@ -9,6 +9,11 @@ namespace PasPasPas.Globals.Environment {
     public interface IStringPool : IEnvironmentItem {
 
         /// <summary>
+        ///     maximal length of pooled strings
+        /// </summary>
+        int MaximalStringLength { get; }
+
+        /// <summary>
         ///     add a string manually to the string pool
         /// </summary>
         /// <param name="value">string to add</param>

@@ -39,7 +39,7 @@ namespace PasPasPas.Infrastructure.Environment {
     ///     base class
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class HashedInstanceSet<T> where T : class {
+    public abstract class HashedInstanceSet<T> {
 
         /// <summary>
         ///     helper delegate to check equality
@@ -48,7 +48,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public delegate bool CheckEquality<TToCompare>(T left, TToCompare right);
+        public delegate bool CheckEquality<TToCompare>(in T left, in TToCompare right);
 
         /// <summary>
         ///     check equality to span
@@ -57,7 +57,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public delegate bool CheckSpanEquality<TToCompare>(T left, Span<TToCompare> right);
+        public delegate bool CheckSpanEquality<TToCompare>(in T left, in Span<TToCompare> right);
 
         private struct Entry {
             internal int hashCode;
@@ -135,7 +135,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        protected abstract int GetHashCode(T item);
+        protected abstract int GetHashCode(in T item);
 
         /// <summary>
         ///     check for equality
@@ -143,14 +143,14 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        protected abstract bool Equals(T left, T right);
+        protected abstract bool Equals(in T left, in T right);
 
         /// <summary>
         ///     check if an item is contained in this  set
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Contains(T item) {
+        public bool Contains(in T item) {
             var hashCode = GetHashCode(item);
             return TryGetValue(hashCode, item, out _, checkEquality);
         }
@@ -164,7 +164,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <param name="output"></param>
         /// <param name="equality"></param>
         /// <returns></returns>
-        protected bool TryGetValue<TLookup>(int hashCode, TLookup input, out T output, CheckEquality<TLookup> equality) {
+        protected bool TryGetValue<TLookup>(int hashCode, in TLookup input, out T output, CheckEquality<TLookup> equality) {
             hashCode &= Lower31BitMask;
             for (var i = buckets[hashCode % buckets.Length] - 1; i >= 0; i = slots[i].next) {
                 if (slots[i].hashCode == hashCode && equality(slots[i].data, input)) {
@@ -186,7 +186,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <param name="output"></param>
         /// <param name="equality"></param>
         /// <returns></returns>
-        protected bool TryToGetSpanValue<TLookupSpan>(int hashCode, Span<TLookupSpan> input, out T output, CheckSpanEquality<TLookupSpan> equality) {
+        protected bool TryToGetSpanValue<TLookupSpan>(int hashCode, in Span<TLookupSpan> input, out T output, CheckSpanEquality<TLookupSpan> equality) {
             hashCode &= Lower31BitMask;
             for (var i = buckets[hashCode % buckets.Length] - 1; i >= 0; i = slots[i].next) {
                 if (slots[i].hashCode == hashCode && equality(slots[i].data, input)) {

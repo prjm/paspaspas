@@ -24,6 +24,12 @@ namespace PasPasPas.Infrastructure.Environment {
             => pool.Count;
 
         /// <summary>
+        ///     maximal string length
+        /// </summary>
+        public int MaximalStringLength
+            => HashedStrings.MaxStringLength;
+
+        /// <summary>
         ///     clear the buffer pool
         /// </summary>
         public void Clear()

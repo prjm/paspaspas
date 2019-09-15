@@ -5,5 +5,7 @@
     /// </summary>
     internal static class Constants {
         internal const uint MagicNumber = 0xA0C1BB01;
+
+        internal const uint StringTag = 100;
     }
 }

@@ -22,26 +22,21 @@ namespace PasPasPasTests.Types {
         public override uint Kind
             => TagKind;
 
-        public override uint Length
-            => 8;
-
         public uint Point1 { get; set; }
             = 0;
 
         public uint Point2 { get; set; }
             = 0;
 
-        public override void WriteData(TypeWriter typeWriter) {
+        internal override void WriteData(TypeWriter typeWriter) {
             var v = Point1;
             typeWriter.WriteUint(ref v);
             v = Point2;
             typeWriter.WriteUint(ref v);
         }
 
-        internal override void ReadData(uint kind, uint length, TypeReader typeReader) {
+        internal override void ReadData(uint kind, TypeReader typeReader) {
             if (Kind != kind)
-                throw new InvalidDataException();
-            if (Length != 8)
                 throw new InvalidDataException();
 
             Point1 = typeReader.ReadUint();
@@ -62,6 +57,43 @@ namespace PasPasPasTests.Types {
                 stream.Seek(0, SeekOrigin.Begin);
                 var o = r.ReadUint();
                 Assert.AreEqual(i, o);
+            }
+        }
+
+        [TestMethod]
+        public void TestReadInvalidInteger() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                w.WriteByte(0xA0);
+                w.WriteByte(0x0A);
+                stream.Seek(0, SeekOrigin.Begin);
+                Assert.Throws<UnexpectedEndOfFileException>(() => r.ReadUint());
+            }
+        }
+
+
+        [TestMethod]
+        public void TestReadWriteByte() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                byte i = 0xAF;
+                w.WriteByte(i);
+                stream.Seek(0, SeekOrigin.Begin);
+                var o = r.ReadByte();
+                Assert.AreEqual(i, o);
+            }
+        }
+
+        [TestMethod]
+        public void TestReadInvalidByte() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var r = CreateReader(env, stream)) {
+                Assert.Throws<UnexpectedEndOfFileException>(() => r.ReadByte());
             }
         }
 
@@ -97,20 +129,48 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestReadInvalidLongString() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var z = new string('x', 2 * r.StringPool.MaximalStringLength);
+                w.WriteString(z);
+                stream.Seek(0, SeekOrigin.Begin);
+                var invalidLen = (uint)(99 * z.Length);
+                w.WriteUint(ref invalidLen);
+                stream.Seek(0, SeekOrigin.Begin);
+                Assert.Throws<UnexpectedEndOfFileException>(() => r.ReadString());
+            }
+        }
+
+        [TestMethod]
+        public void TestReadInvalidShortString() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var z = new string('x', r.StringPool.MaximalStringLength / 2);
+                w.WriteString(z);
+                stream.Seek(0, SeekOrigin.Begin);
+                var invalidLen = (uint)(99 * z.Length);
+                w.WriteUint(ref invalidLen);
+                stream.Seek(0, SeekOrigin.Begin);
+                Assert.Throws<UnexpectedEndOfFileException>(() => r.ReadString());
+            }
+        }
+
+        [TestMethod]
         public void TestWriteReadLongString() {
             var env = CreateEnvironment();
             using (var stream = new MemoryStream())
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
-                var z = "AABBCCDDEEFFGGHHIIJJLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ";
-                var i = string.Empty;
-                for (var j = 0; j < 10; j++)
-                    i += z;
-
-                w.WriteString(i);
+                var z = new string('x', 2 * r.StringPool.MaximalStringLength);
+                w.WriteString(z);
                 stream.Seek(0, SeekOrigin.Begin);
                 var o = r.ReadString();
-                Assert.AreEqual(i, o);
+                Assert.AreEqual(z, o);
             }
         }
 
@@ -134,7 +194,7 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
-        public void ReadWriteTag() {
+        public void TestReadWriteTag() {
             var env = CreateEnvironment();
             using (var stream = new MemoryStream())
             using (var w = CreateWriter(env, stream))
@@ -145,6 +205,21 @@ namespace PasPasPasTests.Types {
                 var o = r.ReadTag<SampleTag>();
                 Assert.AreEqual(i.Point1, o.Point1);
                 Assert.AreEqual(i.Point2, o.Point2);
+            }
+        }
+
+        [TestMethod]
+        public void TestReadWriteStringTag() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var i = new StringTag { Id = 0xAFFE, Value = "_x_" };
+                w.WriteTag(i);
+                stream.Seek(0, SeekOrigin.Begin);
+                var o = r.ReadTag<StringTag>();
+                Assert.AreEqual(i.Id, o.Id);
+                Assert.AreEqual(i.Value, o.Value);
             }
         }
 
