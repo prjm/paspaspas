@@ -11,6 +11,6 @@ namespace PasPasPas.Globals.Types {
         ///     write a unit
         /// </summary>
         /// <param name="unitType"></param>
-        void WriteUnit(ITypeDefinition unitType);
+        void WriteUnit(IUnitType unitType);
     }
 }

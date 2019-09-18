@@ -7,5 +7,8 @@
         internal const uint MagicNumber = 0xA0C1BB01;
 
         internal const uint StringTag = 100;
+        internal const uint TocTag = 101;
+        internal const uint UnitMetaDataTag = 102;
+        internal const uint StringRegistryTag = 103;
     }
 }

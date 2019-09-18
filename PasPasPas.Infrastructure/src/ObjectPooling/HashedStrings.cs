@@ -44,7 +44,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public string Add(Span<byte> input) {
+        public string Add(in Span<byte> input) {
             var result = Encoding.Unicode.GetString(input);
 
             if (result.Length > MaxStringLength)
@@ -77,7 +77,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <param name="input"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public bool TryGetValue(Span<byte> input, out string target) {
+        public bool TryGetValue(in Span<byte> input, out string target) {
             if (2 * input.Length > MaxStringLength) {
                 target = default;
                 return false;
@@ -162,7 +162,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
             return hashCode;
         }
 
-        private static int GetHashCode(Span<byte> text) {
+        private static int GetHashCode(in Span<byte> text) {
             var hashCode = FnvOffsetBias;
             var start = 0;
             var end = text.Length;

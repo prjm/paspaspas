@@ -202,7 +202,7 @@ namespace PasPasPasTests.Types {
                 var i = new SampleTag(SampleTag.Data1, SampleTag.Data2);
                 w.WriteTag(i);
                 stream.Seek(0, SeekOrigin.Begin);
-                var o = r.ReadTag<SampleTag>();
+                var o = r.ReadTag(new SampleTag());
                 Assert.AreEqual(i.Point1, o.Point1);
                 Assert.AreEqual(i.Point2, o.Point2);
             }
@@ -213,11 +213,12 @@ namespace PasPasPasTests.Types {
             var env = CreateEnvironment();
             using (var stream = new MemoryStream())
             using (var w = CreateWriter(env, stream))
-            using (var r = CreateReader(env, stream)) {
+            using (var r = CreateReader(
+                env, stream)) {
                 var i = new StringTag { Id = 0xAFFE, Value = "_x_" };
                 w.WriteTag(i);
                 stream.Seek(0, SeekOrigin.Begin);
-                var o = r.ReadTag<StringTag>();
+                var o = r.ReadTag(new StringTag());
                 Assert.AreEqual(i.Id, o.Id);
                 Assert.AreEqual(i.Value, o.Value);
             }

@@ -20,14 +20,6 @@ namespace PasPasPas.Typings.Serialization {
             StringPool = stringPool;
         }
 
-        /// <summary>
-        ///     write a unit
-        /// </summary>
-        /// <param name="unitType"></param>
-        public void WriteUnit(ITypeDefinition unitType)
-            => throw new System.NotImplementedException();
-
-
         private bool disposedValue = false; // To detect redundant calls
 
         /// <summary>

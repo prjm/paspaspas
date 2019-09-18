@@ -18,10 +18,12 @@ namespace PasPasPas.Typings.Serialization {
         /// <param name="readableStream"></param>
         /// <param name="log">log</param>
         /// <param name="pool"></param>
-        public TypeReader(Stream readableStream, ILogManager log, IStringPool pool) {
+        /// <param name="types"></param>
+        public TypeReader(Stream readableStream, ILogManager log, IStringPool pool, ITypeRegistry types) {
             ReadableStream = readableStream;
             Log = new LogSource(log, MessageGroups.TypeSerialization);
             StringPool = pool;
+            Types = types;
         }
 
         private bool disposedValue = false; // To detect redundant calls
@@ -35,6 +37,7 @@ namespace PasPasPas.Typings.Serialization {
         ///     string pool
         /// </summary>
         public IStringPool StringPool { get; }
+        public ITypeRegistry Types { get; }
 
         /// <summary>
         ///     log source

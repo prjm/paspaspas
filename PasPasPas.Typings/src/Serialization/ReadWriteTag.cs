@@ -4,9 +4,8 @@ namespace PasPasPas.Typings.Serialization {
 
     internal partial class TypeReader {
 
-        public T ReadTag<T>() where T : Tag, new() {
+        public T ReadTag<T>(T tag) where T : Tag {
             var kind = ReadUint();
-            var tag = new T();
             tag.ReadData(kind, this);
 
             if (tag.Kind != kind)
