@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Runtime", "PasPas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Globals", "PasPasPas.Global\PasPasPas.Globals.csproj", "{7A2FF93E-975A-4F2B-87B7-49C97FDA316F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.AssemblyBuilder", "PasPasPas.AssemblyBuilder\PasPasPas.AssemblyBuilder.csproj", "{B9F02A14-1BBB-4A29-84BE-5B8155D92000}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.AssemblyBuilder", "PasPasPas.AssemblyBuilder\PasPasPas.AssemblyBuilder.csproj", "{B9F02A14-1BBB-4A29-84BE-5B8155D92000}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

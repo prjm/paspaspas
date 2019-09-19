@@ -3,24 +3,9 @@
     <Import Project="../Common.targets" />
 
     <PropertyGroup>
-        <TargetFramework>$(PasPasPasTargetFramework)</TargetFramework>
         <Description>Build utilities for the pas³ project.</Description>
-        <VersionPrefix>1.0.0</VersionPrefix>
-        <VersionSuffix>0</VersionSuffix>
-        <Company>$(PasPasPasCompany)</Company>
-        <Copyright>$(PasPasPasCopyright)</Copyright>
         <Product>PasPasPas.Building</Product>
         <CodeAnalysisRuleSet>../PasPasPas.Ruleset</CodeAnalysisRuleSet>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-        <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\api.xml</DocumentationFile>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-        <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\api.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,19 +13,6 @@
         <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
         <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj" />
         <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="ErrorProne.NET.CoreAnalyzers" Version="0.1.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="ErrorProne.NET.Structs" Version="0.1.2">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.4">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
     </ItemGroup>
 
 </Project>

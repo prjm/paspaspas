@@ -1,8 +1,27 @@
 ﻿<Project>
+
     <PropertyGroup>
-        <PasPasPasTargetFramework>netcoreapp2.2</PasPasPasTargetFramework>
-        <PasPasPasCsLanguageVersion>7.3</PasPasPasCsLanguageVersion>
-        <PasPasPasCopyright>© 2016 - 2019</PasPasPasCopyright>
-        <PasPasPasCompany>the pas³ project</PasPasPasCompany>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <DocumentationFile>bin\$(Platform)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
+        <VersionPrefix>1.0.0</VersionPrefix>
+        <VersionSuffix>0</VersionSuffix>
+        <Company>the pas³ project</Company>
+        <Copyright>© 2016 - 2019</Copyright>
+        <LangVersion>7.3</LangVersion>
     </PropertyGroup>
+
+    <ItemGroup>
+        <!--
+        <PackageReference Include="ErrorProne.NET.CoreAnalyzers" Version="0.1.2">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="ErrorProne.NET.Structs" Version="0.1.2">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        -->
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.4">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
 </Project>
