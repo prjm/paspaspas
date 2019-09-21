@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Buffers;
 using System.Text;
+#if DESKTOP
+using PasPasPas.Globals.Environment;
+#endif
 
 namespace PasPasPas.Typings.Serialization {
 
@@ -14,22 +18,27 @@ namespace PasPasPas.Typings.Serialization {
             if (len <= StringPool.MaximalStringLength)
                 return ReadSmallString((int)len);
             else
-                return ReadLongString(len);
+                return ReadLongString((int)len);
         }
 
-        private string ReadLongString(uint len) {
-            var buffer = new byte[len * 2];
-            var readLen = ReadableStream.Read(buffer);
+        private string ReadLongString(int len) {
+            var buffer = ArrayPool<byte>.Shared.Rent(len * 2);
+            try {
+                var readLen = ReadableStream.Read(buffer, 0, len * 2);
 
-            if (readLen != buffer.Length)
-                throw new UnexpectedEndOfFileException();
+                if (readLen != 2 * len)
+                    throw new UnexpectedEndOfFileException();
 
-            return Encoding.Unicode.GetString(buffer);
+                return Encoding.Unicode.GetString(buffer, 0, len * 2);
+            }
+            finally {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
         }
 
         private string ReadSmallString(int len) {
             Span<byte> buffer = stackalloc byte[len * 2];
-            var readLen = ReadableStream.Read(buffer);
+            var readLen = ReadSpan(buffer, 2 * len);
 
             if (readLen != buffer.Length)
                 throw new UnexpectedEndOfFileException();
@@ -39,6 +48,21 @@ namespace PasPasPas.Typings.Serialization {
     }
 
     internal partial class TypeWriter {
+
+
+        private static void GetBytes(string text, in Span<byte> buffer)
+#if DESKTOP
+            => Encoding.Unicode.Encode(text, buffer);
+#else
+            => Encoding.Unicode.GetBytes(text, buffer);
+#endif
+
+        private static void GetBytes(string text, byte[] buffer)
+#if DESKTOP
+            => Encoding.Unicode.Encode(text, buffer);
+#else
+            => Encoding.Unicode.GetBytes(text, buffer);
+#endif
 
         public void WriteString(string text) {
             var len = (uint)text.Length;
@@ -52,14 +76,19 @@ namespace PasPasPas.Typings.Serialization {
 
         private void WriteSmallString(string text) {
             Span<byte> buffer = stackalloc byte[text.Length * 2];
-            Encoding.Unicode.GetBytes(text, buffer);
-            WritableStream.Write(buffer);
+            GetBytes(text, buffer);
+            WriteSpan(buffer);
         }
 
         private void WriteLongString(string text) {
-            var buffer = new byte[2 * text.Length];
-            Encoding.Unicode.GetBytes(text, buffer);
-            WritableStream.Write(buffer);
+            var buffer = ArrayPool<byte>.Shared.Rent(2 * text.Length);
+            try {
+                GetBytes(text, buffer);
+                WritableStream.Write(buffer, 0, 2 * text.Length);
+            }
+            finally {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
         }
 
     }
