@@ -18,8 +18,8 @@ namespace PasPasPas.Typings.Serialization {
             }
 
             var toc = ReadTag(new TableOfContents());
-            toc.Strings = ReadTag(new StringRegistry());
-            toc.Meta = ReadTag(new Metadata());
+            ReadTag(toc.Strings);
+            ReadTag(toc.Meta);
 
             var result = Types.TypeCreator.CreateUnitType(toc.Strings[toc.Meta.UnitName]);
 
@@ -34,19 +34,15 @@ namespace PasPasPas.Typings.Serialization {
             var number = Constants.MagicNumber;
             WriteUint(ref number);
 
-            var toc = new TableOfContents() {
-                Strings = new StringRegistry(),
-                Meta = new Metadata()
-            };
-
+            var toc = new TableOfContents();
             toc.Meta.PrepareStrings(unit, toc.Strings);
 
             WriteTag(toc);
-            WriteReferenceValue(toc.StringValues);
-            WriteTag(toc.Strings);
 
-            WriteReferenceValue(toc.Metadata);
-            WriteTag(toc.Meta);
+            WriteTag(toc.Strings, toc.StringValues);
+            WriteTag(toc.Meta, toc.Metadata);
+
+            WriteOpenReferences();
         }
 
     }

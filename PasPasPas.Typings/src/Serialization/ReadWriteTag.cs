@@ -22,8 +22,13 @@ namespace PasPasPas.Typings.Serialization {
         ///     write a tag
         /// </summary>
         /// <param name="tag"></param>
-        public void WriteTag(Tag tag) {
+        /// <param name="reference"></param>
+        public void WriteTag(Tag tag, Reference reference = default) {
             var v = tag.Kind;
+
+            if (reference != default)
+                WriteReferenceValue(reference);
+
             WriteUint(ref v);
             tag.WriteData(this);
         }

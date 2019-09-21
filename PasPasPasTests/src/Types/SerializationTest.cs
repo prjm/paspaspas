@@ -11,8 +11,16 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
 
+    /// <summary>
+    ///     test unit serialization
+    /// </summary>
     public class SerializationTest : CommonTest {
 
+        /// <summary>
+        ///     test a simple unit
+        /// </summary>
+        /// <param name="prg"></param>
+        /// <param name="tester"></param>
         protected void TestUnitSerialization(string prg, Action<IUnitType> tester) {
             var env = CreateEnvironment();
             var fle = env.CreateFileReference("a.pas");
@@ -40,6 +48,11 @@ namespace PasPasPasTests.Types {
 
         }
 
+        /// <summary>
+        ///     test a serialized constant
+        /// </summary>
+        /// <param name="constant"></param>
+        /// <param name="value"></param>
         protected void AssertSerializedConstant(string constant, ITypeReference value) {
             var prg = $"unit a; interface const  B = {constant}; implementation end.";
             void tester(IUnitType t) {

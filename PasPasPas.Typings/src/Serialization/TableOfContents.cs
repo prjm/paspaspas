@@ -5,14 +5,21 @@
         public override uint Kind
             => Constants.TocTag;
 
-        public Metadata Meta { get; set; }
-        public StringRegistry Strings { get; set; }
+        internal StringRegistry Strings { get; }
 
         internal Reference StringValues { get; }
-            = new Reference();
 
         internal Reference Metadata { get; }
-            = new Reference();
+
+        internal Metadata Meta { get; }
+
+        public TableOfContents() {
+            StringValues = new Reference();
+            Metadata = new Reference();
+            Strings = new StringRegistry(StringValues);
+            Meta = new Metadata(Metadata);
+        }
+
 
         internal override void ReadData(uint kind, TypeReader typeReader) {
             typeReader.ReadReference(StringValues);

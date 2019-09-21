@@ -13,6 +13,9 @@ namespace PasPasPas.Typings.Serialization {
             = new Dictionary<uint, string>();
 
         private uint count = 0;
+        private Reference stringValues;
+
+        public StringRegistry(Reference stringValues) => this.stringValues = stringValues;
 
         internal override void ReadData(uint kind, TypeReader typeReader) {
             var size = typeReader.ReadUint();

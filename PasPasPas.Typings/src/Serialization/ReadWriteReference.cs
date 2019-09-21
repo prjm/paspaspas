@@ -50,6 +50,7 @@ namespace PasPasPas.Typings.Serialization {
             if (value.HasAddress)
                 throw new TypeReaderWriteException();
             value.Address = WritableStream.Position;
+            value.HasAddress = true;
         }
 
         public void WriteOpenReferences() {

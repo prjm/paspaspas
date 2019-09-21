@@ -7,11 +7,15 @@ namespace PasPasPas.Typings.Serialization {
     /// </summary>
     internal class Metadata : Tag {
 
-
-        public uint UnitName { get; set; }
+        internal uint UnitName { get; set; }
 
         public override uint Kind
             => Constants.UnitMetaDataTag;
+
+        internal Reference MetadataReference { get; }
+
+        internal Metadata(Reference metadata)
+            => MetadataReference = metadata;
 
         internal override void ReadData(uint kind, TypeReader typeReader)
             => UnitName = typeReader.ReadUint();
