@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+
 #if DESKTOP
-using PasPasPas.Globals.Environment;
+using PasPasPas.Desktop.BackwardCompatibility;
 #endif
 
 namespace PasPasPas.Typings.Serialization {
     internal partial class TypeReader {
 
-        private int ReadSpan(in Span<byte> data, int len)
-#if DESKTOP
-            => ReadableStream.ReadSpan(data, len);
-#else
+        private int ReadSpan(in Span<byte> data)
             => ReadableStream.Read(data);
-#endif
 
         /// <summary>
         ///     read an unsigned integer
@@ -20,7 +17,7 @@ namespace PasPasPas.Typings.Serialization {
         /// <returns></returns>
         public long ReadLong() {
             Span<byte> data = stackalloc byte[sizeof(long)];
-            var count = ReadSpan(data, sizeof(long));
+            var count = ReadSpan(data);
 
             if (count != data.Length)
                 throw new UnexpectedEndOfFileException();
@@ -31,13 +28,8 @@ namespace PasPasPas.Typings.Serialization {
 
     internal partial class TypeWriter {
 
-
         private void WriteSpan(Span<byte> data)
-#if DESKTOP
-            => WritableStream.WriteSpan(data);
-#else
-            => WritableStream.Write(data);
-#endif
+           => WritableStream.Write(data);
 
         /// <summary>
         ///     write an unsigned integer

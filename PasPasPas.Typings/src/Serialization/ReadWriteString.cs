@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Buffers;
 using System.Text;
+
 #if DESKTOP
-using PasPasPas.Globals.Environment;
+using PasPasPas.Desktop.BackwardCompatibility;
 #endif
 
 namespace PasPasPas.Typings.Serialization {
@@ -38,7 +39,7 @@ namespace PasPasPas.Typings.Serialization {
 
         private string ReadSmallString(int len) {
             Span<byte> buffer = stackalloc byte[len * 2];
-            var readLen = ReadSpan(buffer, 2 * len);
+            var readLen = ReadSpan(buffer);
 
             if (readLen != buffer.Length)
                 throw new UnexpectedEndOfFileException();
@@ -51,18 +52,10 @@ namespace PasPasPas.Typings.Serialization {
 
 
         private static void GetBytes(string text, in Span<byte> buffer)
-#if DESKTOP
-            => Encoding.Unicode.Encode(text, buffer);
-#else
             => Encoding.Unicode.GetBytes(text, buffer);
-#endif
 
         private static void GetBytes(string text, byte[] buffer)
-#if DESKTOP
-            => Encoding.Unicode.Encode(text, buffer);
-#else
             => Encoding.Unicode.GetBytes(text, buffer);
-#endif
 
         public void WriteString(string text) {
             var len = (uint)text.Length;

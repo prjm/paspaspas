@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Text;
 using PasPasPas.Infrastructure.Environment;
+#if DESKTOP
+using PasPasPas.Desktop.BackwardCompatibility;
+#endif
 
 namespace PasPasPas.Infrastructure.ObjectPooling {
 
@@ -25,18 +28,10 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
             = new CheckSpanEquality<byte>(EqualsByteSpan);
 
         private static string Decode(in Span<byte> data)
-#if DESKTOP
-            => Encoding.Unicode.Decode(data);
-#else
             => Encoding.Unicode.GetString(data);
-#endif
 
         private static void Decode(in Span<byte> input, in Span<char> output)
-#if DESKTOP
-            => Encoding.Unicode.GetCharsBySpan(input, output);
-#else
             => Encoding.Unicode.GetChars(input, output);
-#endif
 
         /// <summary>
         ///     add an item

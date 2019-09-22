@@ -2,6 +2,10 @@
 using System.Globalization;
 using PasPasPas.Globals.Runtime;
 
+#if DESKTOP
+using PasPasPas.Desktop.BackwardCompatibility;
+#endif
+
 namespace PasPasPas.Globals.Parsing {
 
     /// <summary>
@@ -80,11 +84,7 @@ namespace PasPasPas.Globals.Parsing {
         /// <returns></returns>
         public override int GetHashCode() {
             unchecked {
-#if DESKTOP
-                return 17 + 23 * Kind + 11 * Value.GetHashCode();
-#else
                 return 17 + 23 * Kind + 11 * Value.GetHashCode(StringComparison.Ordinal);
-#endif
             }
         }
 

@@ -10,7 +10,7 @@ namespace PasPasPas.Typings.Serialization {
         /// <returns></returns>
         public uint ReadUint() {
             Span<byte> data = stackalloc byte[sizeof(uint)];
-            var count = ReadSpan(data, sizeof(uint));
+            var count = ReadSpan(data);
 
             if (count != data.Length)
                 throw new UnexpectedEndOfFileException();

@@ -2,6 +2,10 @@
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
+#if DESKTOP
+using PasPasPas.Desktop.BackwardCompatibility;
+#endif
+
 namespace PasPasPas.Runtime.Values.StringValues {
 
     /// <summary>
@@ -82,11 +86,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-#if DESKTOP
-            => AsUnicodeString.GetHashCode();
-#else
             => AsUnicodeString.GetHashCode(StringComparison.Ordinal);
-#endif
 
     }
 }

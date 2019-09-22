@@ -2,6 +2,10 @@
 using System.IO;
 using PasPasPas.Globals.Files;
 
+#if DESKTOP
+using PasPasPas.Desktop.BackwardCompatibility;
+#endif
+
 namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
@@ -23,11 +27,7 @@ namespace PasPasPas.Infrastructure.Files {
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentNullException(nameof(filePath), "Invalid path.");
 
-#if DESKTOP
-            hashcode = filePath.ToUpperInvariant().GetHashCode();
-#else
             hashcode = filePath.GetHashCode(StringComparison.InvariantCultureIgnoreCase);
-#endif
         }
 
         /// <summary>
@@ -69,9 +69,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            var other = obj as IFileReference;
-
-            if (other is null)
+            if (!(obj is IFileReference other))
                 return false;
 
             return string.Equals(Path, other.Path, StringComparison.OrdinalIgnoreCase);
