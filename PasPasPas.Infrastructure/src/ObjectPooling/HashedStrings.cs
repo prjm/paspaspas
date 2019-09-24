@@ -27,12 +27,6 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         private readonly CheckSpanEquality<byte> checkSpan
             = new CheckSpanEquality<byte>(EqualsByteSpan);
 
-        private static string Decode(in Span<byte> data)
-            => Encoding.Unicode.GetString(data);
-
-        private static void Decode(in Span<byte> input, in Span<char> output)
-            => Encoding.Unicode.GetChars(input, output);
-
         /// <summary>
         ///     add an item
         /// </summary>
@@ -53,8 +47,8 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public string Add(in Span<byte> input) {
-            var result = Decode(input);
+        public string Add(in ReadOnlySpan<byte> input) {
+            var result = Encoding.Unicode.GetString(input);
 
             if (result.Length > MaxStringLength)
                 return result;
@@ -86,7 +80,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <param name="input"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public bool TryGetValue(in Span<byte> input, out string target) {
+        public bool TryGetValue(in ReadOnlySpan<byte> input, out string target) {
             if (2 * input.Length > MaxStringLength) {
                 target = default;
                 return false;
@@ -129,13 +123,13 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <param name="l"></param>
         /// <param name="r"></param>
         /// <returns></returns>
-        protected static bool EqualsByteSpan(in string l, in Span<byte> r) {
+        protected static bool EqualsByteSpan(in string l, in ReadOnlySpan<byte> r) {
             if (l.Length != r.Length * 2)
                 return false;
 
             Span<char> b = stackalloc char[1];
             for (var i = 0; i < r.Length; i += 2) {
-                Decode(r.Slice(i, 2), b);
+                Encoding.Unicode.GetChars(r.Slice(i, 2), b);
                 if (b[0] != l[i / 2])
                     return false;
             }
@@ -171,14 +165,14 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
             return hashCode;
         }
 
-        private static int GetHashCode(in Span<byte> text) {
+        private static int GetHashCode(in ReadOnlySpan<byte> text) {
             var hashCode = FnvOffsetBias;
             var start = 0;
             var end = text.Length;
             Span<char> b = stackalloc char[1];
 
             for (var i = start; i < end; i += 2) {
-                Decode(text.Slice(i, 2), b);
+                Encoding.Unicode.GetChars(text.Slice(i, 2), b);
                 hashCode = unchecked((hashCode ^ b[0]) * FnvPrime);
             }
 

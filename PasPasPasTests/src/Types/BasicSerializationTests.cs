@@ -241,7 +241,24 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
-        ///     test to read the magic number constant
+        ///     test to read / write an empty string
+        /// </summary>
+        [TestMethod]
+        public void TestWriteReadWriteEmptyString() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var z = string.Empty;
+                w.WriteString(z);
+                stream.Seek(0, SeekOrigin.Begin);
+                var o = r.ReadString();
+                Assert.AreEqual(z, o);
+            }
+        }
+
+        /// <summary>
+        ///     test to read and write the empty string
         /// </summary>
         [TestMethod]
         public void TestReadInvalidMagicNumber() {

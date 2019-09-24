@@ -57,7 +57,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public delegate bool CheckSpanEquality<TToCompare>(in T left, in Span<TToCompare> right);
+        public delegate bool CheckSpanEquality<TToCompare>(in T left, in ReadOnlySpan<TToCompare> right);
 
         private struct Entry {
             internal int hashCode;
@@ -186,7 +186,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <param name="output"></param>
         /// <param name="equality"></param>
         /// <returns></returns>
-        protected bool TryToGetSpanValue<TLookupSpan>(int hashCode, in Span<TLookupSpan> input, out T output, CheckSpanEquality<TLookupSpan> equality) {
+        protected bool TryToGetSpanValue<TLookupSpan>(int hashCode, in ReadOnlySpan<TLookupSpan> input, out T output, CheckSpanEquality<TLookupSpan> equality) {
             hashCode &= Lower31BitMask;
             for (var i = buckets[hashCode % buckets.Length] - 1; i >= 0; i = slots[i].next) {
                 if (slots[i].hashCode == hashCode && equality(slots[i].data, input)) {

@@ -22,18 +22,36 @@ namespace PasPasPasTests.Types {
         /// <param name="commonType">common type</param>
         /// <param name="expression">expression</param>
         /// <param name="typeId">type id to find</param>
+        /// <param name="resolveSubrange"></param>
+        /// <param name="decls">declarations</param>
         protected void AssertExprTypeByVar(string commonType, string expression, int typeId, bool resolveSubrange = false, string decls = "") {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} var a,b: {commonType}; begin WriteLn({expression}); end. ";
             AssertExprType(file, program, typeId, resolveSubrange, null);
         }
 
+        /// <summary>
+        ///     assert const expression type
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="typeId"></param>
+        /// <param name="resolveSubrange"></param>
+        /// <param name="typeName"></param>
+        /// <param name="decls"></param>
         protected void AssertExprTypeByConst(string expression, int typeId, bool resolveSubrange = false, string typeName = "", string decls = "") {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} const a = {expression}; begin WriteLn(a); end. ";
             AssertExprType(file, program, typeId, resolveSubrange, typeName);
         }
 
+        /// <summary>
+        ///     assert expression type
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="program"></param>
+        /// <param name="typeId"></param>
+        /// <param name="resolveSubrange"></param>
+        /// <param name="typeName"></param>
         protected void AssertExprType(string file, string program, int typeId, bool resolveSubrange, string typeName) {
             SymbolReferencePart searchfunction(object x)
                 => x is SymbolReferencePart srp && srp.Kind == SymbolReferencePartKind.CallParameters ? x as SymbolReferencePart : null;
@@ -71,6 +89,7 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="expression">expression</param>
         /// <param name="typeId">type id to find</param>
+        /// <param name="decls">declarations</param>
         protected void AssertExprType(string expression, int typeId, string decls = "") {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} begin Writeln({expression}); end. ";
@@ -85,6 +104,15 @@ namespace PasPasPasTests.Types {
 
         }
 
+        /// <summary>
+        ///     assert statement type
+        /// </summary>
+        /// <param name="statemnt"></param>
+        /// <param name="value"></param>
+        /// <param name="decls"></param>
+        /// <param name="typeId"></param>
+        /// <param name="completeSource"></param>
+        /// <param name="kind"></param>
         protected void AssertStatementType(string statemnt, ITypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType, string completeSource = null, TypeReferenceKind kind = TypeReferenceKind.Undefined) {
             var file = "SimpleExpr";
             var program = completeSource ?? $"program {file};{decls} begin {statemnt}; end. ";
@@ -122,7 +150,10 @@ namespace PasPasPasTests.Types {
         ///     test the value of a given expression
         /// </summary>
         /// <param name="expression">expression</param>
+        /// <param name="value"></param>
         /// <param name="typeId">type id to find</param>
+        /// <param name="isConstant"></param>
+        /// <param name="completeSource"></param>
         /// <param name="decls">addition declarations</param>
         protected void AssertExprValue(string expression, ITypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType, bool isConstant = true, string completeSource = null) {
             var file = "SimpleExpr";
@@ -154,6 +185,9 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="declaration">declaration</param>
         /// <param name="typeId">type id to find</param>
+        /// <param name="intSize"></param>
+        /// <param name="typeSize"></param>
+        /// <param name="typeKind"></param>
         protected void AssertDeclType(string declaration, int typeId = KnownTypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
 
             void tester(ITypeDefinition def) {
@@ -180,11 +214,16 @@ namespace PasPasPasTests.Types {
 
             AssertDeclType(declaration, tester, intSize);
         }
+
         /// <summary>
         ///     test the type of a declared variable expression
         /// </summary>
         /// <param name="declaration">declaration</param>
+        /// <param name="expression"></param>
         /// <param name="typeId">type id to find</param>
+        /// <param name="intSize"></param>
+        /// <param name="typeSize"></param>
+        /// <param name="typeKind"></param>
         protected void AssertDeclTypeDef(string declaration, string expression = "x", int typeId = KnownTypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
 
             bool tester(ITypeDefinition def) {
@@ -217,12 +256,24 @@ namespace PasPasPasTests.Types {
         ///     test the type of a declared variable expression
         /// </summary>
         /// <param name="declaration">declaration</param>
+        /// <param name="test"></param>
+        /// <param name="intSize"></param>
+        /// <param name="expression"></param>
+        /// <param name="typeName"></param>
         protected void AssertDeclTypeDef<T>(string declaration, Func<T, bool> test, NativeIntSize intSize = NativeIntSize.Undefined, string expression = "x", string typeName = "t") where T : class, ITypeDefinition {
             var file = "SimpleExpr";
             var program = $"program {file}; type {typeName} = {declaration}; var x : {typeName}; begin Writeln({expression}); end. ";
             AssertDeclTypeDef<T>(program, file, intSize, test);
         }
 
+        /// <summary>
+        ///     assert declaration type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="program"></param>
+        /// <param name="file"></param>
+        /// <param name="intSize"></param>
+        /// <param name="test"></param>
         protected void AssertDeclTypeDef<T>(string program, string file, NativeIntSize intSize, Func<T, bool> test) where T : class, ITypeDefinition {
             SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
             IExpression firstParam = null;
@@ -236,6 +287,13 @@ namespace PasPasPasTests.Types {
             Assert.IsTrue(test(t));
         }
 
+        /// <summary>
+        ///     assert assignment compatibility
+        /// </summary>
+        /// <param name="assignTo"></param>
+        /// <param name="assignFrom"></param>
+        /// <param name="compat"></param>
+        /// <param name="predeclaration"></param>
         protected void AssertAssignmentCompat(string assignTo, string assignFrom, bool compat = true, string predeclaration = "") {
             bool test(ITypeDefinition l, ITypeDefinition r) {
                 Assert.IsNotNull(l);
@@ -247,6 +305,13 @@ namespace PasPasPasTests.Types {
             AssertTestForAssignment(assignTo, assignFrom, test, predeclaration);
         }
 
+        /// <summary>
+        ///     assert test
+        /// </summary>
+        /// <param name="assignTo"></param>
+        /// <param name="assignFrom"></param>
+        /// <param name="test"></param>
+        /// <param name="predeclaration"></param>
         protected void AssertTestForAssignment(string assignTo, string assignFrom, Func<ITypeDefinition, ITypeDefinition, bool> test, string predeclaration = "") {
             var typdef = $"{predeclaration} ta = {assignTo}; tb = {assignFrom}";
             var declaration = "a: ta; b: tb";
@@ -254,6 +319,14 @@ namespace PasPasPasTests.Types {
             AssertTestForGenericStatement(typdef, declaration, statement, test);
         }
 
+
+        /// <summary>
+        ///     assert generic type
+        /// </summary>
+        /// <param name="typedef"></param>
+        /// <param name="declaration"></param>
+        /// <param name="statement"></param>
+        /// <param name="test"></param>
         protected void AssertTestForGenericStatement(string typedef, string declaration, string statement, Func<ITypeDefinition, ITypeDefinition, bool> test) {
             var file = "SimpleExpr";
             var program = $"program {file}; type {typedef}; var {declaration}; begin {statement}; end. ";
@@ -278,6 +351,8 @@ namespace PasPasPasTests.Types {
         ///     test the type of a declared types
         /// </summary>
         /// <param name="declaration">declaration</param>
+        /// <param name="test"></param>
+        /// <param name="intSize">integer size</param>
         protected void AssertDeclType(string declaration, Action<ITypeDefinition> test, NativeIntSize intSize = NativeIntSize.Undefined) {
             var file = "SimpleExpr";
             var program = $"program {file}; var x : {declaration}; begin Writeln(x); end. ";
@@ -291,8 +366,17 @@ namespace PasPasPasTests.Types {
             test(ti);
         }
 
-
-        private ISyntaxPart EvaluateExpressionType<T>(string file, string program, Func<object, T> searchfunction, NativeIntSize intSize, out ITypedEnvironment env) where T : ISyntaxPart {
+        /// <summary>
+        ///     evaluate an expression type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="file"></param>
+        /// <param name="program"></param>
+        /// <param name="searchfunction"></param>
+        /// <param name="intSize"></param>
+        /// <param name="env"></param>
+        /// <returns></returns>
+        protected ISyntaxPart EvaluateExpressionType<T>(string file, string program, Func<object, T> searchfunction, NativeIntSize intSize, out ITypedEnvironment env) where T : ISyntaxPart {
             IExpression firstParam;
 
             env = CreateEnvironment(intSize);
