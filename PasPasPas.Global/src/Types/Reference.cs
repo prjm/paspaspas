@@ -4,8 +4,6 @@
     ///     reference to symbol
     /// </summary>
     public class Reference {
-        private readonly ReferenceKind refKind;
-        private readonly IRefSymbol refSymbol;
 
         /// <summary>
         ///     create a new reference
@@ -13,21 +11,19 @@
         /// <param name="kind">reference kind</param>
         /// <param name="symbol">referenced symbol</param>
         public Reference(ReferenceKind kind, IRefSymbol symbol) {
-            refKind = kind;
-            refSymbol = symbol;
+            Kind = kind;
+            Symbol = symbol;
         }
 
         /// <summary>
         ///     reference kind
         /// </summary>
-        public ReferenceKind Kind
-            => refKind;
+        public ReferenceKind Kind { get; }
 
         /// <summary>
         ///     referenced symbol
         /// </summary>
-        public IRefSymbol Symbol
-            => refSymbol;
+        public IRefSymbol Symbol { get; }
 
     }
 }

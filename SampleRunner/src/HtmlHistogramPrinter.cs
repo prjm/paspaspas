@@ -8,12 +8,24 @@ using PasPasPas.Infrastructure.Utils;
 
 namespace SampleRunner {
 
+    /// <summary>
+    ///     html histogram value
+    /// </summary>
     public class HtmlHistogramValue {
 
+        /// <summary>
+        ///     value
+        /// </summary>
         public long Value { get; internal set; }
 
+        /// <summary>
+        ///     key
+        /// </summary>
         public string Key { get; internal set; }
 
+        /// <summary>
+        ///     formatted key
+        /// </summary>
         public object FormattedKey
             => System.Security.SecurityElement.Escape(Key);
     }

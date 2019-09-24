@@ -151,7 +151,7 @@ namespace PasPasPas.Typings.Common {
 
             if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
                 if (reference.Symbol is IRoutine routine) {
-                    var callableRoutines = new List<ParameterGroup>();
+                    var callableRoutines = new List<IParameterGroup>();
                     routine.ResolveCall(callableRoutines, new Signature());
                     if (callableRoutines.Count == 1)
                         return callableRoutines[0].ResultType;

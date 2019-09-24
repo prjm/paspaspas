@@ -8,55 +8,51 @@
         Title="P3SyntaxTreeViewer" Height="450" Width="700" WindowStartupLocation="CenterScreen">
     <DockPanel LastChildFill="True">
 
-        <ListBox DockPanel.Dock="Bottom" Name="Messages" Height="100" MouseDoubleClick="Messages_MouseDoubleClick">
-
-        </ListBox>
-
-
-        <StackPanel DockPanel.Dock="Top" FlowDirection="LeftToRight" HorizontalAlignment="Left">
-            <Button Width="100" Click="Button_Click" Visibility="Hidden">
-                Parse!
-            </Button>
-        </StackPanel>
         <Grid>
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"  />
-                <ColumnDefinition Width="*"  />
-                <ColumnDefinition Width="*"  />
+                <ColumnDefinition/>
+                <ColumnDefinition Width="450"/>
             </Grid.ColumnDefinitions>
+
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition/>
+                <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
 
-            <DockPanel LastChildFill="True" Grid.Column="0" Grid.Row="0">
-                <Label DockPanel.Dock="Top">Standard Tree</Label>
-                <TreeView Name="StandardTreeView"></TreeView>
-            </DockPanel>
-
-            <DockPanel LastChildFill="True" Grid.Column="2" Grid.Row="0">
-                <Label DockPanel.Dock="Top"  HorizontalAlignment="Right">Abstract Tree</Label>
-                <TreeView Name="AbstractTreeView"></TreeView>
-            </DockPanel>
+            <TextBox TextWrapping="NoWrap" AcceptsReturn="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Foreground="GreenYellow" Background="Black" xml:space="preserve" Name="Code" AcceptsTab="True"
+                         TextChanged="Code_TextChanged" Grid.Column="0" Grid.Row="0" >unit Demo;
 
 
-            <DockPanel LastChildFill="True" Grid.Column="1" Grid.Row="0">
-                <Label DockPanel.Dock="Top" HorizontalContentAlignment="Center">Input</Label>
-                <TextBox TextWrapping="NoWrap" AcceptsReturn="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Foreground="GreenYellow" Background="Black" xml:space="preserve" Name="Code" AcceptsTab="True"
-                         TextChanged="Code_TextChanged">unit Demo;
-
-                
 interface
-                
-                
+
+
 implementation
-                
-                
+
+
 end;
             </TextBox>
-            </DockPanel>
+
+            <GridSplitter Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeBehavior="CurrentAndNext"/>
+
+            <TabControl Grid.Column="1" Grid.Row="0">
+                <TabItem Header="CST">
+                    <TreeView Name="StandardTreeView"></TreeView>
+                </TabItem>
+                <TabItem Header="AST">
+                    <TreeView Name="AbstractTreeView"></TreeView>
+                </TabItem>
+                <TabItem Header="Types">
+                    <TreeView Name="SymbolView"></TreeView>
+                </TabItem>
+            </TabControl>
+
+            <GridSplitter Height="5" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" ResizeBehavior="CurrentAndNext"/>
+
+            <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Name="Messages" MouseDoubleClick="Messages_MouseDoubleClick">
+            </ListBox>
 
         </Grid>
-
     </DockPanel>
 
 </Window>

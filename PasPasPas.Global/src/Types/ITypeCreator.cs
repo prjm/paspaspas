@@ -108,5 +108,12 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <returns></returns>
         IRoutineType CreateRoutineType();
+
+        /// <summary>
+        ///     create a global routine
+        /// </summary>
+        /// <param name="kind">procedure kind</param>
+        /// <returns></returns>
+        IRoutine CreateGlobalRoutine(string name, ProcedureKind kind);
     }
 }

@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     class for a parameter group
     /// </summary>
-    public class ParameterGroup {
+    public class ParameterGroup : IParameterGroup {
 
         /// <summary>
         ///     result type
@@ -37,7 +37,7 @@ namespace PasPasPas.Typings.Structured {
         }
 
         /// <summary>
-        ///     get a paramter by index
+        ///     get a parameter by index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>

@@ -179,7 +179,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="symbolName"></param>
         /// <param name="callables"></param>
         /// <param name="signature"></param>
-        public override void ResolveCall(string symbolName, IList<ParameterGroup> callables, Signature signature) {
+        public override void ResolveCall(string symbolName, IList<IParameterGroup> callables, Signature signature) {
             base.ResolveCall(symbolName, callables, signature);
 
             if (BaseClass != null && BaseClass is StructuredTypeDeclaration baseType)

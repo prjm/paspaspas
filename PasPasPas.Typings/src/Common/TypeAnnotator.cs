@@ -418,7 +418,12 @@ namespace PasPasPas.Typings.Common {
             CurrentUnit = element;
             CurrentUnit.TypeInfo = GetTypeReferenceById(unitType.TypeId);
             resolver.OpenScope();
-            resolver.AddToScope("System", ReferenceKind.RefToUnit, environment.TypeRegistry.SystemUnit);
+            resolver.AddToScope(KnownTypeNames.System, ReferenceKind.RefToUnit, environment.TypeRegistry.SystemUnit);
+
+            if (element.FileType == CompilationUnitType.Program) {
+                var mainRoutine = TypeCreator.CreateGlobalRoutine(KnownTypeNames.MainMethod, ProcedureKind.Procedure);
+                unitType.Symbols.Add(mainRoutine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, mainRoutine));
+            }
         }
 
         /// <summary>
@@ -460,7 +465,7 @@ namespace PasPasPas.Typings.Common {
 
                     var classMethod = impl.Declaration.ClassItem;
                     var signature = impl.Declaration.CreateSignature(TypeRegistry.Runtime);
-                    var callableRoutines = new List<ParameterGroup>();
+                    var callableRoutines = new List<IParameterGroup>();
 
                     var tdef = GetTypeByIdOrUndefinedType(impl.Declaration.DefiningType.TypeId) as MetaStructuredTypeDeclaration;
                     var bdef = GetTypeByIdOrUndefinedType(tdef.BaseType) as StructuredTypeDeclaration;
@@ -529,7 +534,7 @@ namespace PasPasPas.Typings.Common {
                         baseTypeValue = symRef.Value.TypeInfo;
                     }
                     else if ((symRef.Kind == SymbolReferencePartKind.CallParameters || symRef.Kind == SymbolReferencePartKind.StringCast) && symRef.Name != null) {
-                        var callableRoutines = new List<ParameterGroup>();
+                        var callableRoutines = new List<IParameterGroup>();
                         var signature = CreateSignatureFromSymbolPart(symRef);
 
                         if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
@@ -1197,7 +1202,7 @@ namespace PasPasPas.Typings.Common {
                     unitType.AddGlobal(routine);
                     resolver.AddToScope(element.SymbolName, ReferenceKind.RefToGlobalRoutine, routine);
                 }
-                currentMethodParameters.Push(routine.AddParameterGroup());
+                currentMethodParameters.Push((routine as Routine).AddParameterGroup());
             }
 
             resolver.OpenScope();

@@ -23,9 +23,9 @@ namespace P3SyntaxTreeViewer {
 
     internal class NodeVisitor : IStartEndVisitor {
 
-        private Stack<TreeViewItem> items = new Stack<TreeViewItem>();
-        private ITypedEnvironment env;
-        private TreeView tv;
+        private readonly Stack<TreeViewItem> items = new Stack<TreeViewItem>();
+        private readonly ITypedEnvironment env;
+        private readonly TreeView tv;
 
         public NodeVisitor(TreeView tv, ITypedEnvironment env) {
             this.tv = tv;
@@ -149,20 +149,35 @@ namespace P3SyntaxTreeViewer {
                     Dispatcher.Invoke(() => {
                         StandardTreeView.Items.Clear();
                         AbstractTreeView.Items.Clear();
+                        SymbolView.Items.Clear();
                         Messages.Items.Clear();
                     });
                     return;
                 }
 
-                (var bst, var ast, var typeNames) = Parse(env, code);
-
+                (var bst, var ast, var unit, var typeNames) = Parse(env, code);
                 Dispatcher.Invoke(() => {
                     DisplayTree(StandardTreeView, env, bst);
                     DisplayTree(AbstractTreeView, env, ast);
+                    DisplayUnit(SymbolView, env, unit);
                     DisplayLog(listLog.Messages);
                 });
             });
             task.Start();
+        }
+
+        private void DisplayUnit(TreeView tv, ITypedEnvironment env, IUnitType unit) {
+            tv.Items.Clear();
+            tv.FontFamily = Code.FontFamily;
+            tv.FontSize = Code.FontSize;
+
+            var root = new TreeViewItem() { Header = unit.Name };
+            tv.Items.Add(root);
+
+            foreach (var symbol in unit.Symbols) {
+                var s = new TreeViewItem() { Header = symbol.Key + ": " + symbol.Value };
+                root.Items.Add(s);
+            }
         }
 
         private void DisplayLog(IList<ILogMessage> messages) {
@@ -208,7 +223,7 @@ namespace P3SyntaxTreeViewer {
         /// <param name="env"></param>
         /// <param name="code"></param>
         /// <returns></returns>
-        private static (ISyntaxPart bst, ISyntaxPart ast, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code) {
+        private static (ISyntaxPart bst, ISyntaxPart ast, IUnitType unit, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code) {
             var path = env.CreateFileReference("z.x.pas");
             var resolver = CommonApi.CreateResolverForSingleString(path, code);
             var options = Factory.CreateOptions(resolver, env);
@@ -219,8 +234,11 @@ namespace P3SyntaxTreeViewer {
                 var ast = parserApi.CreateAbstractSyntraxTree(bst);
                 parserApi.AnnotateWithTypes(ast);
 
+                var unit = (ast as ProjectItemCollection)[0] as CompilationUnit;
+                var unitType = env.TypeRegistry.GetTypeByIdOrUndefinedType(unit?.TypeInfo?.TypeId ?? KnownTypeIds.ErrorType) as IUnitType;
+
                 var tn = new Dictionary<int, string>();
-                return (bst, ast, tn);
+                return (bst, ast, unitType, tn);
             }
         }
 

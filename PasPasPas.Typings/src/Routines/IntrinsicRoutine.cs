@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Structured;
@@ -155,7 +154,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="callableRoutines"></param>
         /// <param name="signature"></param>
-        public virtual void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature) {
+        public virtual void ResolveCall(IList<IParameterGroup> callableRoutines, Signature signature) {
             if (this is IUnaryRoutine unaryRoutine)
                 ResolveCall(unaryRoutine, callableRoutines, signature);
 
@@ -163,7 +162,7 @@ namespace PasPasPas.Typings.Routines {
                 ResolveCall(variadicRoutine, callableRoutines, signature);
         }
 
-        private static void ResolveCall(IUnaryRoutine unaryRoutine, IList<ParameterGroup> callableRoutines, Signature signature) {
+        private static void ResolveCall(IUnaryRoutine unaryRoutine, IList<IParameterGroup> callableRoutines, Signature signature) {
             if (signature.Length != 1)
                 return;
 
@@ -183,7 +182,7 @@ namespace PasPasPas.Typings.Routines {
         }
 
 
-        private static void ResolveCall(IVariadicRoutine variadicRoutine, IList<ParameterGroup> callableRoutines, Signature signature) {
+        private static void ResolveCall(IVariadicRoutine variadicRoutine, IList<IParameterGroup> callableRoutines, Signature signature) {
 
             if (!variadicRoutine.CheckParameter(signature))
                 return;
@@ -208,11 +207,5 @@ namespace PasPasPas.Typings.Routines {
         protected ITypeReference RuntimeException()
             => Runtime.Types.MakeErrorTypeReference(); // ... to be changed
 
-        /// <summary>
-        ///     add parameters
-        /// </summary>
-        /// <returns></returns>
-        public ParameterGroup AddParameterGroup()
-            => throw new InvalidOperationException();
     }
 }
