@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace PasPasPas.Typings.Serialization {
+﻿namespace PasPasPas.Typings.Serialization {
 
     internal partial class TypeReader {
 
@@ -9,7 +7,7 @@ namespace PasPasPas.Typings.Serialization {
             tag.ReadData(kind, this);
 
             if (tag.Kind != kind)
-                throw new InvalidDataException();
+                throw new TypeReaderWriteException();
 
             return tag;
         }

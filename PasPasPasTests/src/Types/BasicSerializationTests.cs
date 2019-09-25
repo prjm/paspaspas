@@ -39,9 +39,6 @@ namespace PasPasPasTests.Types {
         }
 
         internal override void ReadData(uint kind, TypeReader typeReader) {
-            if (Kind != kind)
-                throw new InvalidDataException();
-
             Point1 = typeReader.ReadUint();
             Point2 = typeReader.ReadUint();
         }
@@ -213,10 +210,10 @@ namespace PasPasPasTests.Types {
             using (var stream = new MemoryStream())
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
-                var z = new string('x', r.StringPool.MaximalStringLength / 2);
+                var z = new string('x', 3);
                 w.WriteString(z);
                 stream.Seek(0, SeekOrigin.Begin);
-                var invalidLen = (uint)(99 * z.Length);
+                var invalidLen = 60u;
                 w.WriteUint(ref invalidLen);
                 stream.Seek(0, SeekOrigin.Begin);
                 Assert.Throws<UnexpectedEndOfFileException>(() => r.ReadString());
@@ -298,6 +295,31 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
+        ///     test to read / write a tag
+        /// </summary>
+        [TestMethod]
+        public void TestReadWriteInvalidTag() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var i = new StringTag {
+                    Id = 923,
+                    Value = "ddd"
+                };
+
+                w.WriteTag(i);
+                w.WriteTag(i);
+                w.WriteTag(i);
+                w.WriteTag(i);
+                stream.Seek(0, SeekOrigin.Begin);
+                Assert.Throws<TypeReaderWriteException>(() => r.ReadTag(new SampleTag()));
+            }
+        }
+
+
+
+        /// <summary>
         /// test to read / write a string tag
         /// </summary>
         [TestMethod]
@@ -348,6 +370,47 @@ namespace PasPasPasTests.Types {
                 Assert.AreEqual(offset, rf2.Address);
             }
         }
+
+        /// <summary>
+        ///     test writing / reading of references
+        /// </summary>
+        [TestMethod]
+        public void TestWritReferenceTwice() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var rf = new Reference();
+                var n = 3u;
+
+                Assert.IsFalse(rf.HasAddress);
+                w.WriteReferenceAddress(rf);
+                Assert.IsFalse(rf.HasAddress);
+                w.WriteUint(ref n);
+                w.WriteUint(ref n);
+                w.WriteReferenceValue(rf);
+                Assert.Throws<TypeReaderWriteException>(() => w.WriteReferenceValue(rf));
+            }
+        }
+
+        /// <summary>
+        ///     test writing / reading of references
+        /// </summary>
+        [TestMethod]
+        public void TestWritOpenReferenceWithoutAddress() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var rf = new Reference();
+                Assert.IsFalse(rf.HasAddress);
+                w.WriteReferenceAddress(rf);
+                Assert.IsFalse(rf.HasAddress);
+                Assert.Throws<TypeReaderWriteException>(() => w.WriteOpenReferences());
+            }
+        }
+
+
 
     }
 }

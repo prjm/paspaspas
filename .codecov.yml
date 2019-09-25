@@ -1,0 +1,2 @@
+﻿ignore:
+  - "PasPasPas.Typings/src/Serialization/TypeReaderException.cs"
