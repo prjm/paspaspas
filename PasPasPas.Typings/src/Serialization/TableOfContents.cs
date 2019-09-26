@@ -6,29 +6,34 @@
             => Constants.TocTag;
 
         internal StringRegistry Strings { get; }
-
-        internal Reference StringValues { get; }
-
-        internal Reference Metadata { get; }
-
         internal Metadata Meta { get; }
+        internal CodeBlock Routines { get; }
+
+        internal Reference ReferenceToStrings { get; }
+        internal Reference ReferenceToMetadata { get; }
+        internal Reference ReferenceToRoutines { get; }
 
         public TableOfContents() {
-            StringValues = new Reference();
-            Metadata = new Reference();
-            Strings = new StringRegistry(StringValues);
-            Meta = new Metadata(Metadata);
+            ReferenceToStrings = new Reference();
+            ReferenceToMetadata = new Reference();
+            ReferenceToRoutines = new Reference();
+
+            Strings = new StringRegistry(ReferenceToStrings);
+            Meta = new Metadata(ReferenceToMetadata);
+            Routines = new CodeBlock(ReferenceToRoutines, Strings);
         }
 
 
         internal override void ReadData(uint kind, TypeReader typeReader) {
-            typeReader.ReadReference(StringValues);
-            typeReader.ReadReference(Metadata);
+            typeReader.ReadReference(ReferenceToStrings);
+            typeReader.ReadReference(ReferenceToMetadata);
+            typeReader.ReadReference(ReferenceToRoutines);
         }
 
         internal override void WriteData(TypeWriter typeWriter) {
-            typeWriter.WriteReferenceAddress(StringValues);
-            typeWriter.WriteReferenceAddress(Metadata);
+            typeWriter.WriteReferenceAddress(ReferenceToStrings);
+            typeWriter.WriteReferenceAddress(ReferenceToMetadata);
+            typeWriter.WriteReferenceAddress(ReferenceToRoutines);
         }
     }
 }

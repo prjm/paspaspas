@@ -10,5 +10,6 @@
         internal const uint TocTag = 101;
         internal const uint UnitMetaDataTag = 102;
         internal const uint StringRegistryTag = 103;
+        internal const uint CodeBlockTag = 103;
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     ///     procedure kind
     /// </summary>
-    public enum ProcedureKind {
+    public enum ProcedureKind : byte {
 
         /// <summary>
         ///     unknown procedure kind

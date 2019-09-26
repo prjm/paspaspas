@@ -20,8 +20,10 @@ namespace PasPasPas.Typings.Serialization {
             var toc = ReadTag(new TableOfContents());
             ReadTag(toc.Strings);
             ReadTag(toc.Meta);
+            ReadTag(toc.Routines);
 
             var result = Types.TypeCreator.CreateUnitType(toc.Strings[toc.Meta.UnitName]);
+            toc.Routines.AddToUnit(result);
 
             return result;
         }
@@ -36,11 +38,13 @@ namespace PasPasPas.Typings.Serialization {
 
             var toc = new TableOfContents();
             toc.Meta.PrepareStrings(unit, toc.Strings);
+            toc.Routines.PrepareRoutines(unit, toc.Strings);
 
             WriteTag(toc);
 
-            WriteTag(toc.Strings, toc.StringValues);
-            WriteTag(toc.Meta, toc.Metadata);
+            WriteTag(toc.Strings, toc.ReferenceToStrings);
+            WriteTag(toc.Meta, toc.ReferenceToMetadata);
+            WriteTag(toc.Routines, toc.ReferenceToRoutines);
 
             WriteOpenReferences();
         }

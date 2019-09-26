@@ -20,6 +20,20 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
+        ///     test unit meta data
+        /// </summary>
+        [TestMethod]
+        public void TestUnitMainMethod() {
+            void tester(IUnitType u) {
+                var m = u.Symbols[KnownTypeNames.MainMethod];
+                Assert.IsNotNull(m);
+            }
+
+            var prg = "program a; begin end.";
+            TestUnitSerialization(prg, tester);
+        }
+
+        /// <summary>
         ///     test integer types
         /// </summary>
         [TestMethod]

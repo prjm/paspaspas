@@ -13,6 +13,7 @@ namespace PasPasPas.Globals.Runtime {
         ///     routine name
         /// </summary>
         string Name { get; }
+        ProcedureKind Kind { get; }
 
         /// <summary>
         ///     resolve callable routines for a given signature

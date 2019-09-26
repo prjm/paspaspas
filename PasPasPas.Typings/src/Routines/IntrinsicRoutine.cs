@@ -69,6 +69,12 @@ namespace PasPasPas.Typings.Routines {
             => TypeRegistry.Runtime.RealNumbers;
 
         /// <summary>
+        ///     unknown unit kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Unknown;
+
+        /// <summary>
         ///     make a subrange value
         /// </summary>
         /// <param name="typeId"></param>
