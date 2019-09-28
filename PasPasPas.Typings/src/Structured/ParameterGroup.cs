@@ -17,7 +17,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     routine parameters
         /// </summary>
-        public IList<Variable> Parameters { get; private set; }
+        public IList<IVariable> Parameters { get; private set; }
 
         /// <summary>
         ///     add a parameter definition
@@ -26,7 +26,7 @@ namespace PasPasPas.Typings.Structured {
         /// <returns></returns>
         public Variable AddParameter(string completeName) {
             if (Parameters == null)
-                Parameters = new List<Variable>();
+                Parameters = new List<IVariable>();
 
             var result = new Variable {
                 Name = completeName
@@ -41,7 +41,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Variable this[int index]
+        public IVariable this[int index]
             => Parameters[index];
 
         /// <summary>

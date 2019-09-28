@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -37,16 +36,17 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     list of routines
         /// </summary>
-        public IList<Routine> Methods { get; }
-            = new List<Routine>();
+        public List<IRoutine> Methods { get; }
+            = new List<IRoutine>();
 
         /// <summary>
         ///     add a method definition
         /// </summary>
         /// <param name="completeName">method name</param>
+        /// <param name="flags">method flags</param>
         /// <param name="kind">method kind</param>
         /// <param name="genericTypeId">generic type id</param>
-        public Routine AddOrExtendMethod(string completeName, ProcedureKind kind, int genericTypeId = KnownTypeIds.ErrorType) {
+        public IRoutine AddOrExtendMethod(string completeName, ProcedureKind kind, int genericTypeId, RoutineFlags flags) {
             foreach (var method in Methods)
                 if (string.Equals(method.Name, completeName, StringComparison.OrdinalIgnoreCase))
                     return method;
@@ -54,7 +54,7 @@ namespace PasPasPas.Typings.Structured {
             if (TypeRegistry == null)
                 throw new InvalidOperationException();
 
-            var newMethod = new Routine(TypeRegistry, completeName, kind, genericTypeId);
+            var newMethod = new Routine(TypeRegistry, completeName, kind, genericTypeId, TypeId, flags);
             Methods.Add(newMethod);
             return newMethod;
         }

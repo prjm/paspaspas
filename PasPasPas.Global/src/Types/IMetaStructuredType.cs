@@ -1,4 +1,7 @@
-﻿namespace PasPasPas.Globals.Types {
+﻿using System.Collections.Generic;
+using PasPasPas.Globals.Runtime;
+
+namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     create a meta structured type
@@ -9,6 +12,11 @@
         ///     base type id
         /// </summary>
         int BaseType { get; }
+
+        /// <summary>
+        ///     methods
+        /// </summary>
+        List<IRoutine> Methods { get; }
 
     }
 }

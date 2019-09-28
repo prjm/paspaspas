@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
@@ -62,7 +63,7 @@ namespace PasPasPas.Typings.Common {
         private readonly ITypedEnvironment environment;
         private readonly Stack<ITypeReference> currentTypeDefinition;
         private readonly Stack<ParameterGroup> currentMethodParameters;
-        private readonly Stack<MethodImplementation> currentMethodImplementation;
+        private readonly Stack<IRoutine> currentMethodImplementation;
         private readonly Resolver resolver;
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace PasPasPas.Typings.Common {
             resolver = new Resolver(new Scope(env.TypeRegistry));
             currentTypeDefinition = new Stack<ITypeReference>();
             currentMethodParameters = new Stack<ParameterGroup>();
-            currentMethodImplementation = new Stack<MethodImplementation>();
+            currentMethodImplementation = new Stack<IRoutine>();
         }
 
         private ITypeReference GetTypeRefence(ITypedSyntaxNode syntaxNode) {
@@ -460,26 +461,25 @@ namespace PasPasPas.Typings.Common {
             if (element.Inherited) {
 
                 foreach (var impl in currentMethodImplementation) {
-                    if (impl.Declaration == default)
+                    if (impl.DefiningType == KnownTypeIds.ErrorType)
                         continue;
 
-                    var classMethod = impl.Declaration.ClassItem;
-                    var signature = impl.Declaration.CreateSignature(TypeRegistry.Runtime);
+                    var classMethod = impl.IsClassItem;
+                    var signature = impl.CreateSignature();
                     var callableRoutines = new List<IParameterGroup>();
 
-                    var tdef = GetTypeByIdOrUndefinedType(impl.Declaration.DefiningType.TypeId) as MetaStructuredTypeDeclaration;
-                    var bdef = GetTypeByIdOrUndefinedType(tdef.BaseType) as StructuredTypeDeclaration;
+                    var bdef = GetTypeByIdOrUndefinedType(impl.DefiningType) as StructuredTypeDeclaration;
                     var idef = GetTypeByIdOrUndefinedType(bdef.BaseClass.TypeId) as MetaStructuredTypeDeclaration;
 
                     if (idef == default)
                         continue;
 
                     if (classMethod) {
-                        idef.ResolveCall(impl.Name.Name, callableRoutines, signature);
+                        idef.ResolveCall(impl.Name, callableRoutines, signature);
                     }
                     else {
                         var s = GetTypeByIdOrUndefinedType(idef.BaseType) as StructuredTypeDeclaration;
-                        s.ResolveCall(impl.Name.Name, callableRoutines, signature);
+                        s.ResolveCall(impl.Name, callableRoutines, signature);
                     }
 
                     if (callableRoutines.Count == 1)
@@ -828,7 +828,7 @@ namespace PasPasPas.Typings.Common {
         public void StartVisit(MethodDeclaration element) {
             if (element.Name == null)
                 return;
-            var method = default(Routine);
+            var method = default(IRoutine);
 
             if (element is GlobalMethod gm) {
                 if (CurrentUnit.InterfaceSymbols != default) {
@@ -843,6 +843,7 @@ namespace PasPasPas.Typings.Common {
                 var classMethod = m?.ClassItem ?? false;
                 var genericTypeId = KnownTypeIds.ErrorType;
                 var d = environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId);
+                var f = new RoutineFlags();
                 /*
                 if (d is RoutineType rt) {
                     d =
@@ -858,16 +859,17 @@ namespace PasPasPas.Typings.Common {
 
                 if (classMethod) {
                     var mm = GetTypeByIdOrUndefinedType(typeDef.MetaType.TypeId) as MetaStructuredTypeDeclaration;
-                    method = mm.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId);
+                    f.IsClassItem = true;
+                    method = mm.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId, f);
                 }
 
                 else {
-                    method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId);
+                    method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId, f);
                 }
             }
 
-            currentTypeDefinition.Push(method);
-            currentMethodParameters.Push(method.AddParameterGroup());
+            currentTypeDefinition.Push((Routine)method);
+            currentMethodParameters.Push(((Routine)method).AddParameterGroup());
         }
 
         /// <summary>
@@ -1187,11 +1189,13 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void StartVisit(MethodImplementation element) {
             var isClassMethod = element.Declaration?.DefiningType != default;
+            var definingType = isClassMethod ? element.Declaration.DefiningType.TypeId : KnownTypeIds.ErrorType;
             var isForward = element.Flags.HasFlag(MethodImplementationFlags.ForwardDeclaration);
+            var routine = default(IRoutine);
 
             if (!isClassMethod && !isForward) {
                 var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
-                var routine = default(IRoutine);
+
                 if (unitType.HasGlobalRoutine(element.SymbolName)) {
                     if (!unitType.AddGlobalImplementation(element.SymbolName, out routine)) {
                         routine = new Routine(TypeRegistry, element.SymbolName, element.Kind);
@@ -1204,9 +1208,26 @@ namespace PasPasPas.Typings.Common {
                 }
                 currentMethodParameters.Push((routine as Routine).AddParameterGroup());
             }
+            else if (isClassMethod) {
+                var metaType = TypeRegistry.GetTypeByIdOrUndefinedType(definingType) as IMetaStructuredType;
+                var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(metaType?.BaseType ?? KnownTypeIds.ErrorType) as IStructuredType;
 
-            resolver.OpenScope();
-            currentMethodImplementation.Push(element);
+                if (metaType != default && element.Declaration.ClassItem)
+                    routine = metaType?.Methods?.Find(t => string.Equals(t.Name, element.Name.Name, StringComparison.OrdinalIgnoreCase));
+
+                if (baseType != default && !element.Declaration.ClassItem)
+                    routine = baseType?.Methods?.Find(t => string.Equals(t.Name, element.Name.Name, StringComparison.OrdinalIgnoreCase));
+
+
+            }
+            else if (isForward) {
+
+            }
+
+            if (routine != default) {
+                resolver.OpenScope();
+                currentMethodImplementation.Push(routine);
+            }
 
             if (element.Parameters != default && !element.DefaultParameters) {
                 foreach (var parameter in element.Parameters) {
@@ -1241,12 +1262,13 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(MethodImplementation element) {
-            resolver.CloseScope();
-
             var isForward = element.Flags.HasFlag(MethodImplementationFlags.ForwardDeclaration);
             var isClassMethod = element.Declaration?.DefiningType != default;
 
-            if (!isClassMethod && !isForward) {
+            if (!isForward)
+                resolver.CloseScope();
+
+            if (!isClassMethod) {
                 var parameters = currentMethodParameters.Pop();
                 if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
                     parameters.ResultType = element.TypeValue.TypeInfo;
@@ -1255,7 +1277,8 @@ namespace PasPasPas.Typings.Common {
 
             }
 
-            currentMethodImplementation.Pop();
+            if (!isForward)
+                currentMethodImplementation.Pop();
         }
 
         /// <summary>

@@ -4,7 +4,6 @@ using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Hidden;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Routines;
@@ -372,10 +371,10 @@ namespace PasPasPas.Typings.Common {
             RegisterSystemType(meta, "TObject");
             RegisterSystemType(alias, "TClass");
             def.MetaType = Runtime.Types.MakeTypeInstanceReference(meta.TypeId, CommonTypeKind.MetaClassType);
-            def.AddOrExtendMethod("Create", ProcedureKind.Constructor).AddParameterGroup();
-            def.AddOrExtendMethod("Free", ProcedureKind.Procedure).AddParameterGroup();
-            def.AddOrExtendMethod("DisposeOf", ProcedureKind.Procedure).AddParameterGroup();
-            def.AddOrExtendMethod("CleanupInstance", ProcedureKind.Procedure).AddParameterGroup();
+            //def.AddOrExtendMethod("Create", ProcedureKind.Constructor).AddParameterGroup();
+            //def.AddOrExtendMethod("Free", ProcedureKind.Procedure).AddParameterGroup();
+            //def.AddOrExtendMethod("DisposeOf", ProcedureKind.Procedure).AddParameterGroup();
+            //def.AddOrExtendMethod("CleanupInstance", ProcedureKind.Procedure).AddParameterGroup();
             //def.AddOrExtendMethod("ClassType", ProcedureKind.Function).AddParameterGroup(KnownTypeIds.TClass);
             //def.AddOrExtendMethod("FieldAddress", ProcedureKind.Function).AddParameterGroup(//
             //   "Name",

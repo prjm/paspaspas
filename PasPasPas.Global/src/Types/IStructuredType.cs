@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Collections.Generic;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
 
@@ -21,5 +22,11 @@ namespace PasPasPas.Globals.Types {
         ///     structured type kind
         /// </summary>
         StructuredTypeKind StructTypeKind { get; }
+
+        /// <summary>
+        ///     methods
+        /// </summary>
+        List<IRoutine> Methods { get; }
+
     }
 }

@@ -75,6 +75,20 @@ namespace PasPasPas.Typings.Routines {
             => ProcedureKind.Unknown;
 
         /// <summary>
+        ///     defining type
+        /// </summary>
+        public int DefiningType
+            => KnownTypeIds.ErrorType;
+
+        /// <summary>
+        ///     check if this is a class item
+        /// </summary>
+        public bool IsClassItem
+            => false;
+
+        public IList<IParameterGroup> Parameters => throw new System.NotImplementedException();
+
+        /// <summary>
         ///     make a subrange value
         /// </summary>
         /// <param name="typeId"></param>
@@ -213,5 +227,11 @@ namespace PasPasPas.Typings.Routines {
         protected ITypeReference RuntimeException()
             => Runtime.Types.MakeErrorTypeReference(); // ... to be changed
 
+        /// <summary>
+        ///     create a signature
+        /// </summary>
+        /// <returns></returns>
+        public Signature CreateSignature()
+            => throw new System.NotImplementedException();
     }
 }

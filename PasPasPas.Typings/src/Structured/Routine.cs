@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -16,19 +15,23 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="name">routine name</param>
         /// <param name="kind">routine kind</param>
         /// <param name="types">type registry</param>
+        /// <param name="definingType">defining type</param>
+        /// <param name="flags"></param>
         /// <param name="genericTypeId">generic type id</param>
-        public Routine(ITypeRegistry types, string name, ProcedureKind kind, int genericTypeId = KnownTypeIds.ErrorType) {
+        public Routine(ITypeRegistry types, string name, ProcedureKind kind, int genericTypeId = KnownTypeIds.ErrorType, int definingType = KnownTypeIds.ErrorType, RoutineFlags flags = default) {
             Name = name;
             Kind = kind;
             TypeRegistry = types;
             TypeId = genericTypeId;
+            DefiningType = definingType;
+            Flags = flags;
         }
 
         /// <summary>
         ///     routine parameters
         /// </summary>
-        public IList<ParameterGroup> Parameters { get; }
-            = new List<ParameterGroup>();
+        public IList<IParameterGroup> Parameters { get; }
+            = new List<IParameterGroup>();
 
         /// <summary>
         ///     routine name
@@ -51,6 +54,12 @@ namespace PasPasPas.Typings.Structured {
         public int TypeId { get; }
 
         /// <summary>
+        ///     defining type
+        /// </summary>
+        public int DefiningType { get; }
+        public RoutineFlags Flags { get; }
+
+        /// <summary>
         ///     internal type format
         /// </summary>
         public string InternalTypeFormat
@@ -67,6 +76,9 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public CommonTypeKind TypeKind
             => CommonTypeKind.ProcedureType;
+
+        public bool IsClassItem
+            => Flags?.IsClassItem ?? false;
 
         /// <summary>
         ///     add a parameter group
@@ -122,6 +134,24 @@ namespace PasPasPas.Typings.Structured {
 
                 callableRoutines.Add(paramGroup);
             }
+        }
+
+        /// <summary>
+        ///     create a signature for the given parameters
+        /// </summary>
+        /// <returns></returns>
+        public Signature CreateSignature() {
+            var runtime = TypeRegistry.Runtime;
+            var param = Parameters[0].Parameters;
+
+            if (param != default) {
+                var values = new ITypeReference[param.Count];
+                for (var i = 0; param != default && i < param.Count; i++)
+                    values[i] = param[i].SymbolType ?? runtime.Types.MakeErrorTypeReference();
+                return new Signature(values);
+            }
+
+            return new Signature();
         }
     }
 }

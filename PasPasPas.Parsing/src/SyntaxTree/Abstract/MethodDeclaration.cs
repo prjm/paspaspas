@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
@@ -85,18 +84,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         protected virtual void AcceptBaseParts(IStartEndVisitor visitor) {
             AcceptPart(this, Parameters.Items, visitor);
             AcceptPart(this, TypeValue, visitor);
-        }
-
-        /// <summary>
-        ///     create a signature for the given parameters
-        /// </summary>
-        /// <returns></returns>
-        /// <param name="runtime"></param>
-        public Signature CreateSignature(IRuntimeValueFactory runtime) {
-            var values = new ITypeReference[Parameters.Count];
-            for (var i = 0; i < Parameters.Count; i++)
-                values[i] = Parameters[i].ParameterType?.TypeValue?.TypeInfo ?? runtime.Types.MakeErrorTypeReference();
-            return new Signature(values);
         }
 
     }

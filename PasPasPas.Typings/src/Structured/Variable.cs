@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     routine parameters
     /// </summary>
-    public class Variable : IRefSymbol {
+    public class Variable : IVariable {
 
         /// <summary>
         ///     parameter type
