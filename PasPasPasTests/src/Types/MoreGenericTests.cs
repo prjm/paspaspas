@@ -1,13 +1,12 @@
 ﻿using System;
 using PasPasPas.Globals.Options.DataTypes;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Structured;
-using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
 
-
+    /// <summary>
+    ///     generic tests
+    /// </summary>
     public class MoreGenericTests : TypeTest {
 
         private void AssertDeclTypeDef<T>(string typeDecl, string expression, Func<T, bool> tester, string otherDecl = "") where T : class, ITypeDefinition {
@@ -16,6 +15,10 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef<T>(program, file, NativeIntSize.Undefined, tester);
         }
 
+        /*
+        /// <summary>
+        ///     test generic constraints
+        /// </summary>
         [TestMethod]
         public void TestGenericConstraints() {
             bool t(IStructuredType s) => s.GenericParameters[0] == KnownTypeIds.UnconstrainedGenericTypeParameter;
@@ -34,23 +37,30 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef("T<A : constructor>", "Self", (Func<IStructuredType, bool>)t3);
             AssertDeclTypeDef("T<A : TA>", "Self", (Func<IStructuredType, bool>)t4, "TA = class end; ");
         }
-
+        */
+        /*
+        /// <summary>
+        ///     test generic constraints
+        /// </summary>
         [TestMethod]
         public void TestGenericConstraints2() {
-            T r<T>(IMetaStructuredType s, int? i) where T : class
+            T r<T>(IStructuredType s, int? i) where T : class
                 => s.TypeRegistry.GetTypeByIdOrUndefinedType(i ?? KnownTypeIds.ErrorType) as T;
 
-            bool t(IMetaStructuredType s)
-                => r<IExtensibleGenericType>(s, r<StructuredTypeDeclaration>(s, s.BaseType)?.Methods[0]?.TypeId) != default;
+            bool t(IStructuredType s)
+                => r<IExtensibleGenericType>(s, r<StructuredTypeDeclaration>(s, s.BaseClassId)?.Methods[0]?.TypeId) != default;
 
-            AssertDeclTypeDef("TB", "TA<TB>.A()", (Func<IMetaStructuredType, bool>)t, "TA = class procedure A<T>; end; ");
+            AssertDeclTypeDef("TB", "TA<TB>.A()", (Func<IStructuredType, bool>)t, "TA = class procedure A<T>; end; ");
         }
 
+        /// <summary>
+        ///     test generic parameter
+        /// </summary>
         [TestMethod]
         public void TestUnconstrainedGenericParameter() {
             bool t(IStructuredType s) => s.GenericParameters[0] == s.TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.UnconstrainedGenericTypeParameter).TypeId;
             AssertDeclTypeDef("T<A>", "Self", (Func<IStructuredType, bool>)t);
         }
-
+        */
     }
 }

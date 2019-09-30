@@ -71,13 +71,6 @@ namespace PasPasPas.Globals.Types {
         IShortStringType CreateShortStringType(ITypeReference length);
 
         /// <summary>
-        ///     create a meta structured type
-        /// </summary>
-        /// <param name="baseType"></param>
-        /// <returns></returns>
-        IMetaStructuredType CreateMetaType(int baseType);
-
-        /// <summary>
         ///     create a new unit type
         /// </summary>
         /// <returns></returns>
@@ -113,7 +106,15 @@ namespace PasPasPas.Globals.Types {
         ///     create a global routine
         /// </summary>
         /// <param name="kind">procedure kind</param>
+        /// <param name="name">procedure name</param>
         /// <returns></returns>
         IRoutine CreateGlobalRoutine(string name, ProcedureKind kind);
+
+        /// <summary>
+        ///     meta class type
+        /// </summary>
+        /// <param name="baseTypeId"></param>
+        /// <returns></returns>
+        IMetaClassType CreateMetaClassType(int baseTypeId);
     }
 }

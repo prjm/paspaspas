@@ -130,12 +130,14 @@ namespace PasPasPasTests.Types {
             AssertTypeForAccessModifier("strict protected", "f: integer", "f", u, KnownTypeIds.ErrorType);
         }
 
+        /*
         [TestMethod]
         public void TestForwardDeclarations() {
             AssertExprTypeInProc("function a: Integer; begin Result := 5; end; procedure b; ", "a", typeId: KnownTypeIds.IntegerType);
             AssertExprTypeInProc("function a: integer; forward; function a: Integer; begin Result := 5; end; procedure b; ", "a", typeId: KnownTypeIds.IntegerType);
             AssertExprTypeInProc("function a: integer; forward; function a: integer; forward; function a: Integer; begin Result := 5; end; procedure b; ", "a", typeId: KnownTypeIds.IntegerType);
         }
+        */
 
         [TestMethod]
         public void TestGlobalMethod() {
@@ -145,6 +147,7 @@ namespace PasPasPasTests.Types {
 
             AssertDeclTypeDef<ErrorType>(program: p, f, NativeIntSize.Undefined, v);
         }
+
 
         [TestMethod]
         public void TestGlobalMethodInvocation() {

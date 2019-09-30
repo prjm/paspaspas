@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
@@ -261,10 +260,6 @@ namespace PasPasPas.Typings.Common {
                 element.TypeInfo = GetErrorTypeReference(element);
 
             var t = environment.TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeInfo.TypeId);
-
-            if (t is MetaStructuredTypeDeclaration metaType)
-                element.TypeInfo = GetInstanceTypeById(metaType.BaseType);
-
             var fromResult = true;
 
             foreach (var vardef in element.Names) {
@@ -469,18 +464,12 @@ namespace PasPasPas.Typings.Common {
                     var callableRoutines = new List<IParameterGroup>();
 
                     var bdef = GetTypeByIdOrUndefinedType(impl.DefiningType) as StructuredTypeDeclaration;
-                    var idef = GetTypeByIdOrUndefinedType(bdef.BaseClass.TypeId) as MetaStructuredTypeDeclaration;
+                    var idef = GetTypeByIdOrUndefinedType(bdef.BaseClassId) as StructuredTypeDeclaration;
 
                     if (idef == default)
                         continue;
 
-                    if (classMethod) {
-                        idef.ResolveCall(impl.Name, callableRoutines, signature);
-                    }
-                    else {
-                        var s = GetTypeByIdOrUndefinedType(idef.BaseType) as StructuredTypeDeclaration;
-                        s.ResolveCall(impl.Name, callableRoutines, signature);
-                    }
+                    idef.ResolveCall(impl.Name, callableRoutines, signature);
 
                     if (callableRoutines.Count == 1)
                         baseTypeValue = callableRoutines[0].ResultType;
@@ -519,14 +508,17 @@ namespace PasPasPas.Typings.Common {
                     if (symRef.Kind == SymbolReferencePartKind.SubItem) {
                         var flags = ResolverFlags.None;
                         var classType = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as StructuredTypeDeclaration;
-                        var self = resolver.ResolveTypeByName(default, "Self");
-                        var selfType = TypeRegistry.GetTypeByIdOrUndefinedType(self.TypeId) as StructuredTypeDeclaration;
+                        var self = resolver.ResolveReferenceByName(default, "Self");
+                        var selfType = TypeRegistry.GetTypeByIdOrUndefinedType(self?.Symbol?.TypeId ?? KnownTypeIds.ErrorType) as StructuredTypeDeclaration;
 
                         if (classType != default && (selfType == default || selfType.TypeId != classType.TypeId))
                             flags |= ResolverFlags.SkipPrivate;
 
                         if (classType != default && (selfType == default || selfType != default && !selfType.InheritsFrom(classType.TypeId)))
                             flags |= ResolverFlags.SkipProtected;
+
+                        if (self != default && self.Kind == ReferenceKind.RefToSelfClass)
+                            flags |= ResolverFlags.RequireClassSymbols;
 
                         baseTypeValue = resolver.ResolveTypeByName(baseTypeValue, symRef.Name, 0, flags);
                     }
@@ -751,10 +743,6 @@ namespace PasPasPas.Typings.Common {
 
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null) {
                 baseTypeId = element.TypeValue.TypeInfo.TypeId;
-
-                var baseTypeDef = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId);
-                if (baseTypeDef is MetaStructuredTypeDeclaration metaType)
-                    baseTypeId = metaType.BaseType;
             }
 
             using (var list = environment.ListPools.GetList<int>()) {
@@ -798,11 +786,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void StartVisit(StructuredType element) {
             var typeDef = TypeCreator.CreateStructuredType(element.Kind);
-            var metaType = TypeCreator.CreateMetaType(typeDef.TypeId);
-            typeDef.BaseClass = GetInstanceTypeById(KnownTypeIds.TClass);
-            typeDef.MetaType = GetInstanceTypeById(metaType.TypeId);
-            element.AssignTypeId(metaType.TypeId);
-
+            typeDef.BaseClassId = KnownTypeIds.TObject;
             currentTypeDefinition.Push(GetInstanceTypeById(typeDef.TypeId));
         }
 
@@ -815,10 +799,10 @@ namespace PasPasPas.Typings.Common {
             var typeDef = value != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(value.TypeId) as StructuredTypeDeclaration : null;
 
             foreach (var baseType in element.BaseTypes) {
-                typeDef.BaseClass = GetTypeReferenceById(baseType.TypeInfo.TypeId);
+                typeDef.BaseClassId = baseType.TypeInfo.TypeId;
             }
 
-            element.TypeInfo = GetTypeReferenceById(typeDef.MetaType.TypeId);
+            element.TypeInfo = GetTypeReferenceById(typeDef.TypeId);
         }
 
         /// <summary>
@@ -858,9 +842,8 @@ namespace PasPasPas.Typings.Common {
                 }
 
                 if (classMethod) {
-                    var mm = GetTypeByIdOrUndefinedType(typeDef.MetaType.TypeId) as MetaStructuredTypeDeclaration;
                     f.IsClassItem = true;
-                    method = mm.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId, f);
+                    method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId, f);
                 }
 
                 else {
@@ -938,12 +921,12 @@ namespace PasPasPas.Typings.Common {
                 var fieldDef = new Variable() {
                     Name = field.Name.CompleteName,
                     SymbolType = typeInfo,
-                    Visibility = element.Visibility
+                    Visibility = element.Visibility,
+                    ClassItem = element.ClassItem
                 };
 
                 if (element.ClassItem) {
-                    var metaType = TypeRegistry.GetTypeByIdOrUndefinedType(typeDef.MetaType.TypeId) as MetaStructuredTypeDeclaration;
-                    metaType.AddField(fieldDef);
+                    typeDef.AddField(fieldDef);
                 }
                 else
                     typeDef.AddField(fieldDef);
@@ -1174,12 +1157,12 @@ namespace PasPasPas.Typings.Common {
 
             var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeValue.TypeInfo.TypeId);
 
-            if (!(baseType is MetaStructuredTypeDeclaration)) {
+            if (!(baseType is IStructuredType)) {
                 element.TypeInfo = GetErrorTypeReference(element);
                 return;
             }
 
-            var alias = TypeCreator.CreateTypeAlias(element.TypeValue.TypeInfo.TypeId, false);
+            var alias = TypeCreator.CreateMetaClassType(baseType.TypeId);
             element.TypeInfo = GetInstanceTypeById(alias.TypeId);
         }
 
@@ -1193,7 +1176,7 @@ namespace PasPasPas.Typings.Common {
             var isForward = element.Flags.HasFlag(MethodImplementationFlags.ForwardDeclaration);
             var routine = default(IRoutine);
 
-            if (!isClassMethod && !isForward) {
+            if (!isClassMethod) {
                 var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
 
                 if (unitType.HasGlobalRoutine(element.SymbolName)) {
@@ -1209,50 +1192,40 @@ namespace PasPasPas.Typings.Common {
                 currentMethodParameters.Push((routine as Routine).AddParameterGroup());
             }
             else if (isClassMethod) {
-                var metaType = TypeRegistry.GetTypeByIdOrUndefinedType(definingType) as IMetaStructuredType;
-                var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(metaType?.BaseType ?? KnownTypeIds.ErrorType) as IStructuredType;
+                var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(definingType) as IStructuredType;
 
-                if (metaType != default && element.Declaration.ClassItem)
-                    routine = metaType?.Methods?.Find(t => string.Equals(t.Name, element.Name.Name, StringComparison.OrdinalIgnoreCase));
-
-                if (baseType != default && !element.Declaration.ClassItem)
-                    routine = baseType?.Methods?.Find(t => string.Equals(t.Name, element.Name.Name, StringComparison.OrdinalIgnoreCase));
-
-
-            }
-            else if (isForward) {
+                if (baseType != default)
+                    routine = baseType.FindMethod(element.Name.Name, element.Declaration.ClassItem);
 
             }
 
             if (routine != default) {
                 resolver.OpenScope();
                 currentMethodImplementation.Push(routine);
-            }
 
-            if (element.Parameters != default && !element.DefaultParameters) {
-                foreach (var parameter in element.Parameters) {
-                    resolver.AddToScope(parameter.Name.Name, ReferenceKind.RefToParameter, parameter);
+
+                if (element.Parameters != default && !element.DefaultParameters) {
+                    foreach (var parameter in element.Parameters) {
+                        resolver.AddToScope(parameter.Name.Name, ReferenceKind.RefToParameter, parameter);
+                    }
                 }
-            }
 
-            if (element.DefaultParameters && element.Declaration?.Parameters != default) {
-                foreach (var parameter in element.Declaration.Parameters) {
-                    resolver.AddToScope(parameter.Name.Name, ReferenceKind.RefToParameter, parameter);
+                if (element.DefaultParameters && element.Declaration?.Parameters != default) {
+                    foreach (var parameter in element.Declaration.Parameters) {
+                        resolver.AddToScope(parameter.Name.Name, ReferenceKind.RefToParameter, parameter);
+                    }
                 }
             }
 
             if (isClassMethod) {
-                var metaTypeDef = GetTypeByIdOrUndefinedType(element.Declaration.DefiningType.TypeId) as IMetaStructuredType;
-                var baseTypeDef = default(IStructuredType);
+                var baseTypeDef = GetTypeByIdOrUndefinedType(element.Declaration.DefiningType.TypeId) as IStructuredType;
 
-                if (metaTypeDef != default)
-                    baseTypeDef = GetTypeByIdOrUndefinedType(metaTypeDef.BaseType) as IStructuredType;
-
-                if (baseTypeDef != default && !element.Declaration.ClassItem)
+                if (baseTypeDef != default && !routine.IsClassItem)
                     resolver.AddToScope("Self", ReferenceKind.RefToSelf, baseTypeDef);
 
-                if (metaTypeDef != default && element.Declaration.ClassItem)
-                    resolver.AddToScope("Self", ReferenceKind.RefToSelf, metaTypeDef);
+                if (baseTypeDef != default && routine.IsClassItem) {
+                    resolver.AddToScope("Self", ReferenceKind.RefToSelfClass, baseTypeDef);
+                }
             }
 
         }
@@ -1265,8 +1238,7 @@ namespace PasPasPas.Typings.Common {
             var isForward = element.Flags.HasFlag(MethodImplementationFlags.ForwardDeclaration);
             var isClassMethod = element.Declaration?.DefiningType != default;
 
-            if (!isForward)
-                resolver.CloseScope();
+            resolver.CloseScope();
 
             if (!isClassMethod) {
                 var parameters = currentMethodParameters.Pop();
@@ -1277,8 +1249,7 @@ namespace PasPasPas.Typings.Common {
 
             }
 
-            if (!isForward)
-                currentMethodImplementation.Pop();
+            currentMethodImplementation.Pop();
         }
 
         /// <summary>

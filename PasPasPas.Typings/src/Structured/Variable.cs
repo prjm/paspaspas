@@ -29,5 +29,10 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public MemberVisibility Visibility { get; set; }
             = MemberVisibility.Public;
+
+        /// <summary>
+        ///     class item
+        /// </summary>
+        public bool ClassItem { get; set; }
     }
 }

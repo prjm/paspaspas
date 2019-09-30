@@ -71,13 +71,13 @@
         RefToSelf = 12,
 
         /// <summary>
-        ///     reference to meta class field
-        /// </summary>
-        RefToMetaClassField = 13,
-
-        /// <summary>
         ///     reference to inherited
         /// </summary>
         RefToInherited = 14,
+
+        /// <summary>
+        ///     reference to own class
+        /// </summary>
+        RefToSelfClass = 15,
     }
 }

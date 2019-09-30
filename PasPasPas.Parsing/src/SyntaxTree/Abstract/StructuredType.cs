@@ -90,14 +90,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public SymbolName GuidName { get; set; }
 
-
-        private int metaTypeId = KnownTypeIds.ErrorType;
-
         /// <summary>
-        ///     type id for references
+        ///     type id#
         /// </summary>
         public int TypeId
-            => metaTypeId;
+            => TypeInfo?.TypeId ?? KnownTypeIds.ErrorType;
+
 
         /// <summary>
         ///     accept visitor
@@ -115,11 +113,5 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             visitor.EndVisit(this);
         }
 
-        /// <summary>
-        ///     assign a type id
-        /// </summary>
-        /// <param name="typeId"></param>
-        public void AssignTypeId(int typeId)
-            => metaTypeId = typeId;
     }
 }

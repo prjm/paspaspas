@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Simple;
@@ -85,6 +84,12 @@ namespace PasPasPas.Typings.Common {
                             return importedEntry;
                     }
 
+                    if (scopeEntry.Value.Kind == ReferenceKind.RefToSelfClass) {
+                        var importedEntry = ResolveByName(TypeRegistry.MakeTypeInstanceReference(scopeEntry.Value.Symbol.TypeId), name, 0, flags & ResolverFlags.RequireClassSymbols);
+                        if (importedEntry != default)
+                            return importedEntry;
+                    }
+
                     if (scopeEntry.Value.Kind == ReferenceKind.RefToUnit) {
                         var importedEntry = ResolveByName(TypeRegistry.MakeTypeInstanceReference(scopeEntry.Value.Symbol.TypeId), name, 0, flags | ResolverFlags.FromAnotherUnit);
                         if (importedEntry != default)
@@ -106,30 +111,19 @@ namespace PasPasPas.Typings.Common {
                 }
             }
 
-            else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType) {
+            else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType || baseTypeValue.TypeKind == CommonTypeKind.MetaClassType) {
                 var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as StructuredTypeDeclaration;
 
                 if (cls != default && cls.TryToResolve(name, out var reference, flags))
                     return reference;
 
-                while (cls != default && cls.BaseClass != default) {
-                    var metaBaseClass = TypeRegistry.GetTypeByIdOrUndefinedType(cls.BaseClass.TypeId) as MetaStructuredTypeDeclaration;
-                    if (metaBaseClass == default)
-                        return default;
-
-                    var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(metaBaseClass.BaseType) as StructuredTypeDeclaration;
+                while (cls != default) {
+                    var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(cls.BaseClassId) as StructuredTypeDeclaration;
 
                     if (baseClass != default && baseClass.TryToResolve(name, out var reference1, ResolverFlags.SkipPrivate))
                         return reference1;
 
                     cls = baseClass;
-                }
-            }
-
-            else if (baseTypeValue.TypeKind == CommonTypeKind.MetaClassType) {
-                var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as MetaStructuredTypeDeclaration;
-                if (cls != default && cls.TryToResolve(name, out var reference)) {
-                    return reference;
                 }
             }
 
@@ -164,18 +158,6 @@ namespace PasPasPas.Typings.Common {
 
             return TypeRegistry.MakeTypeInstanceReference(reference.Symbol.TypeId);
         }
-
-        private Reference ResolveNameInMetaType(MetaStructuredTypeDeclaration metaType, ScopedName scopedName) {
-
-            if (metaType.TryToResolve(scopedName.FirstPart, out var entry)) {
-                if (scopedName.Length == 1)
-                    return entry;
-            }
-
-            return null;
-        }
-
-
 
         /// <summary>
         ///     open a scope

@@ -28,6 +28,10 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         SkipProtected = 4,
 
+        /// <summary>
+        ///     require class symbols
+        /// </summary>
+        RequireClassSymbols = 8,
     }
 
     /// <summary>

@@ -11,12 +11,7 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     base class
         /// </summary>
-        ITypeReference BaseClass { get; set; }
-
-        /// <summary>
-        ///     meta class
-        /// </summary>
-        ITypeReference MetaType { get; set; }
+        int BaseClassId { get; set; }
 
         /// <summary>
         ///     structured type kind
@@ -28,5 +23,12 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         List<IRoutine> Methods { get; }
 
+        /// <summary>
+        ///     find a method
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="classItem"></param>
+        /// <returns></returns>
+        IRoutine FindMethod(string name, bool classItem);
     }
 }

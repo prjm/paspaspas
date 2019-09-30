@@ -83,13 +83,13 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     create a new meta type
+        ///     create a new meta class type
         /// </summary>
-        /// <param name="baseType"></param>
+        /// <param name="baseTypeId"></param>
         /// <returns></returns>
-        public IMetaStructuredType CreateMetaType(int baseType) {
+        public IMetaClassType CreateMetaClassType(int baseTypeId) {
             var typeId = RegisteredTypes.RequireUserTypeId();
-            var result = new MetaStructuredTypeDeclaration(typeId, baseType);
+            var result = new MetaClassType(RegisteredTypes, typeId, baseTypeId);
             RegisteredTypes.RegisterType(result);
             return result;
         }

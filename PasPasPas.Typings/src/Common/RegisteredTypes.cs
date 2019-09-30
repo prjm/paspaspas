@@ -365,12 +365,12 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         private void RegisterTObject() {
             var def = new StructuredTypeDeclaration(KnownTypeIds.TObject, StructuredTypeKind.Class);
-            var meta = new MetaStructuredTypeDeclaration(KnownTypeIds.TClass, KnownTypeIds.TObject);
+            //var meta = new MetaStructuredTypeDeclaration(KnownTypeIds.TClass, KnownTypeIds.TObject);
             var alias = TypeCreator.CreateTypeAlias(KnownTypeIds.TClass, false, KnownTypeIds.TClassAlias);
-            RegisterSystemType(def, default);
-            RegisterSystemType(meta, "TObject");
-            RegisterSystemType(alias, "TClass");
-            def.MetaType = Runtime.Types.MakeTypeInstanceReference(meta.TypeId, CommonTypeKind.MetaClassType);
+            RegisterSystemType(def, "TObject");
+            //RegisterSystemType(meta, "TObject");
+            //RegisterSystemType(alias, "TClass");
+            //def.MetaType = Runtime.Types.MakeTypeInstanceReference(meta.TypeId, CommonTypeKind.MetaClassType);
             //def.AddOrExtendMethod("Create", ProcedureKind.Constructor).AddParameterGroup();
             //def.AddOrExtendMethod("Free", ProcedureKind.Procedure).AddParameterGroup();
             //def.AddOrExtendMethod("DisposeOf", ProcedureKind.Procedure).AddParameterGroup();

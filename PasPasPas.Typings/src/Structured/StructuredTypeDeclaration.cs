@@ -63,18 +63,13 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     base class
         /// </summary>
-        public ITypeReference BaseClass { get; set; }
+        public int BaseClassId { get; set; }
 
         /// <summary>
         ///     list of fields
         /// </summary>
-        public IList<Variable> Fields { get; }
-            = new List<Variable>();
-
-        /// <summary>
-        ///     meta type
-        /// </summary>
-        public ITypeReference MetaType { get; set; }
+        public List<IVariable> Fields { get; }
+            = new List<IVariable>();
 
         /// <summary>
         ///
@@ -144,6 +139,8 @@ namespace PasPasPas.Typings.Structured {
                 if (field.Visibility == MemberVisibility.Protected && flags.MustSkipProtected() && flags.IsResolvingFromAnotherUnit())
                     continue;
 
+                if (!field.ClassItem && (flags & ResolverFlags.RequireClassSymbols) == ResolverFlags.RequireClassSymbols)
+                    continue;
 
                 if (string.Equals(field.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
                     entry = new Reference(ReferenceKind.RefToField, field);
@@ -157,16 +154,8 @@ namespace PasPasPas.Typings.Structured {
                     return true;
                 }
 
-            var metaType = TypeRegistry.GetTypeByIdOrUndefinedType(MetaType.TypeId) as MetaStructuredTypeDeclaration;
-            if (metaType != default) {
-                foreach (var classVar in metaType.Fields)
-                    if (string.Equals(classVar.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
-                        entry = new Reference(ReferenceKind.RefToMetaClassField, classVar);
-                        return true;
-                    }
-            }
-
-            if (BaseClass != null && BaseClass is StructuredTypeDeclaration baseType)
+            var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(BaseClassId);
+            if (baseClass is StructuredTypeDeclaration baseType)
                 return baseType.TryToResolve(symbolName, out entry, flags | ResolverFlags.SkipPrivate);
 
             entry = null;
@@ -182,7 +171,8 @@ namespace PasPasPas.Typings.Structured {
         public override void ResolveCall(string symbolName, IList<IParameterGroup> callables, Signature signature) {
             base.ResolveCall(symbolName, callables, signature);
 
-            if (BaseClass != null && BaseClass is StructuredTypeDeclaration baseType)
+            var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(BaseClassId);
+            if (baseClass is StructuredTypeDeclaration baseType)
                 baseType.ResolveCall(symbolName, callables, signature);
         }
 
@@ -210,7 +200,7 @@ namespace PasPasPas.Typings.Structured {
             using (var list = GetList<ITypeReference>()) {
                 foreach (var value in Fields) {
                     list.Add(value.SymbolType);
-                    value.SymbolType = TypeRegistry.Runtime.Types.MakeTypeInstanceReference(value.SymbolType.TypeId, value.SymbolType.TypeKind);
+                    ((Variable)value).SymbolType = TypeRegistry.Runtime.Types.MakeTypeInstanceReference(value.SymbolType.TypeId, value.SymbolType.TypeKind);
                 }
 
                 return TypeRegistry.Runtime.Structured.CreateRecordValue(TypeId, TypeRegistry.ListPools.GetFixedArray(list));
@@ -254,11 +244,28 @@ namespace PasPasPas.Typings.Structured {
                 if (baseClass.TypeId == typeId)
                     return true;
 
-                baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(BaseClass.TypeId) as StructuredTypeDeclaration;
+                baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(BaseClassId) as StructuredTypeDeclaration;
             }
 
             return false;
         }
 
+        /// <summary>
+        ///     find a given method
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="classItem"></param>
+        /// <returns></returns>
+        public IRoutine FindMethod(string name, bool classItem) {
+            foreach (var method in Methods) {
+                if (method.IsClassItem != classItem)
+                    continue;
+
+                if (string.Equals(name, method.Name, StringComparison.OrdinalIgnoreCase))
+                    return method;
+            }
+
+            return default;
+        }
     }
 }

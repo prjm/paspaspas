@@ -6,6 +6,25 @@ namespace PasPasPas.Globals.Runtime {
     ///     interface for variables
     /// </summary>
     public interface IVariable : IRefSymbol {
-        ITypeReference SymbolType { get; set; }
+
+        /// <summary>
+        ///     symbol type
+        /// </summary>
+        ITypeReference SymbolType { get; }
+
+        /// <summary>
+        ///     visibility
+        /// </summary>
+        MemberVisibility Visibility { get; }
+
+        /// <summary>
+        ///     variable name
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        ///     class fields
+        /// </summary>
+        bool ClassItem { get; }
     }
 }

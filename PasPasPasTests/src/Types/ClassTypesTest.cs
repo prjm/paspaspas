@@ -5,14 +5,23 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
 
+    /// <summary>
+    ///     test properties of class types
+    /// </summary>
     public class ClassTypesTest : TypeTest {
 
+        /// <summary>
+        ///     test basics
+        /// </summary>
         [TestMethod]
         public void TestBasics() {
             AssertDeclTypeDef("class end", typeKind: CommonTypeKind.ClassType);
-            AssertDeclTypeDef<StructuredTypeDeclaration>("class end", (d) => d.BaseClass?.TypeId == KnownTypeIds.TClass);
+            AssertDeclTypeDef<StructuredTypeDeclaration>("class end", (d) => d.BaseClassId == KnownTypeIds.TObject);
         }
 
+        /// <summary>
+        ///     test method declarations
+        /// </summary>
         [TestMethod]
         public void TestMethodDeclaration() {
             AssertDeclTypeDef<StructuredTypeDeclaration>("class procedure x(); end", (d) => d.Methods[0].Parameters[0].Parameters == null);
@@ -22,6 +31,9 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef("class function x(): integer; end", "x.x()", typeKind: CommonTypeKind.IntegerType);
         }
 
+        /// <summary>
+        ///     test field declarations
+        /// </summary>
         [TestMethod]
         public void TestFieldDeclaration() {
             AssertDeclTypeDef("class x: integer; end", "x.x", typeKind: CommonTypeKind.IntegerType);
@@ -29,6 +41,9 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef("class class var x: integer; end", "t.x", typeKind: CommonTypeKind.IntegerType);
         }
 
+        /// <summary>
+        ///     test class of operator
+        /// </summary>
         [TestMethod]
         public void TestClassOf() {
             AssertDeclTypeDef("class end; y = class of t", "y", typeKind: CommonTypeKind.MetaClassType);

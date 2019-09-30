@@ -94,8 +94,14 @@ namespace PasPasPas.Typings.Common {
         /// <param name="name"></param>
         /// <param name="reference"></param>
         /// <returns></returns>
-        public bool TryToResolve(string name, out Reference reference)
-            => entries.TryGetValue(name, out reference);
+        public bool TryToResolve(string name, out Reference reference) {
+            var result = entries.TryGetValue(name, out reference);
+
+            if (!result && Parent != default)
+                return Parent.TryToResolve(name, out reference);
+
+            return result;
+        }
 
 
         /// <summary>

@@ -574,20 +574,18 @@ namespace PasPasPas.Typings.Common {
             if (leftClass.TypeId == rightClass.TypeId)
                 return true;
 
-            var metaBaseClass = typeRegistry.GetTypeByIdOrUndefinedType(leftClass.BaseClass?.TypeId ?? KnownTypeIds.ErrorType) as IMetaStructuredType;
-            while (metaBaseClass != default) {
-                var baseClass = typeRegistry.GetTypeByIdOrUndefinedType(metaBaseClass.BaseType) as IStructuredType;
+            var baseClass = typeRegistry.GetTypeByIdOrUndefinedType(leftClass.BaseClassId) as IStructuredType;
+            while (baseClass != default) {
                 if (baseClass.TypeId == rightClass.TypeId)
                     return true;
-                metaBaseClass = typeRegistry.GetTypeByIdOrUndefinedType(baseClass.BaseClass?.TypeId ?? KnownTypeIds.ErrorType) as IMetaStructuredType;
+                baseClass = typeRegistry.GetTypeByIdOrUndefinedType(baseClass.BaseClassId) as IStructuredType;
             }
 
-            metaBaseClass = typeRegistry.GetTypeByIdOrUndefinedType(rightClass.BaseClass?.TypeId ?? KnownTypeIds.ErrorType) as IMetaStructuredType;
-            while (metaBaseClass != default) {
-                var baseClass = typeRegistry.GetTypeByIdOrUndefinedType(metaBaseClass.BaseType) as IStructuredType;
+            baseClass = typeRegistry.GetTypeByIdOrUndefinedType(rightClass.BaseClassId) as IStructuredType;
+            while (baseClass != default) {
                 if (baseClass.TypeId == leftClass.TypeId)
                     return true;
-                metaBaseClass = typeRegistry.GetTypeByIdOrUndefinedType(baseClass.BaseClass?.TypeId ?? KnownTypeIds.ErrorType) as IMetaStructuredType;
+                baseClass = typeRegistry.GetTypeByIdOrUndefinedType(baseClass.BaseClassId) as IStructuredType;
             }
 
 
