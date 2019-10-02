@@ -1585,7 +1585,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region InlineDirective
 
         /// <summary>
-        ///     start visitng a directive
+        ///     start visiting a directive
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(InlineSymbol element) {

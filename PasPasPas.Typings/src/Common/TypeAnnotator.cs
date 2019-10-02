@@ -6,7 +6,6 @@ using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Routines;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
@@ -20,7 +19,7 @@ namespace PasPasPas.Typings.Common {
     ///     also performs constant propagation, because types
     ///     can be inferred at compile time from literal constant values
     /// </remarks>
-    public class TypeAnnotator :
+    public partial class TypeAnnotator :
 
         IEndVisitor<ConstantValue>,
         IEndVisitor<UnaryOperator>,
@@ -49,6 +48,7 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<ArrayConstant>,
         IStartVisitor<RecordConstant>, IEndVisitor<RecordConstant>,
         IStartVisitor<MethodImplementation>, IEndVisitor<MethodImplementation>,
+        IStartVisitor<ProcedureHeadingMarker>,
         IEndVisitor<RecordConstantItem>,
         IEndVisitor<ClassOfTypeDeclaration>,
         IEndVisitor<FileTypeDeclaration>,
@@ -62,7 +62,6 @@ namespace PasPasPas.Typings.Common {
         private readonly ITypedEnvironment environment;
         private readonly Stack<ITypeReference> currentTypeDefinition;
         private readonly Stack<ParameterGroup> currentMethodParameters;
-        private readonly Stack<IRoutine> currentMethodImplementation;
         private readonly Resolver resolver;
 
         /// <summary>
@@ -87,7 +86,6 @@ namespace PasPasPas.Typings.Common {
             resolver = new Resolver(new Scope(env.TypeRegistry));
             currentTypeDefinition = new Stack<ITypeReference>();
             currentMethodParameters = new Stack<ParameterGroup>();
-            currentMethodImplementation = new Stack<IRoutine>();
         }
 
         private ITypeReference GetTypeRefence(ITypedSyntaxNode syntaxNode) {
@@ -127,127 +125,6 @@ namespace PasPasPas.Typings.Common {
 
         private IRuntimeValueFactory Runtime
             => environment.Runtime;
-
-        /// <summary>
-        ///     determine the type of a constant value
-        /// </summary>
-        /// <param name="element">constant value</param>
-        public void EndVisit(ConstantValue element) {
-
-            // some constant literals have already assigned type information
-            // nothing has to be done
-            if (element.TypeInfo != default)
-                return;
-
-            if (element.Kind == ConstantValueKind.True) {
-                element.TypeInfo = Runtime.Booleans.TrueValue;
-                return;
-            }
-
-            if (element.Kind == ConstantValueKind.False) {
-                element.TypeInfo = Runtime.Booleans.FalseValue;
-                return;
-            }
-
-            if (element.Kind == ConstantValueKind.Nil) {
-                element.TypeInfo = Runtime.Types.Nil;
-                return;
-            }
-
-            element.TypeInfo = GetErrorTypeReference(element);
-        }
-
-        /// <summary>
-        ///     annotate types for binary operators
-        /// </summary>
-        /// <param name="element">operator to annotate</param>
-        public void StartVisit(BinaryOperator element) {
-            if (element.LeftOperand is IRequiresArrayExpression e1)
-                e1.RequiresArray = element.RequiresArray;
-
-            if (element.RightOperand is IRequiresArrayExpression e2)
-                e2.RequiresArray = element.RequiresArray;
-        }
-
-        /// <summary>
-        ///     annotate types for binary operators
-        /// </summary>
-        /// <param name="element">operator to annotate</param>
-        public void EndVisit(BinaryOperator element) {
-            var left = GetTypeRefence(element.LeftOperand);
-            var right = GetTypeRefence(element.RightOperand);
-
-            // special case range operator: the range operator is
-            // part of a type definition and references types, not values
-            if (element.Kind == ExpressionKind.RangeOperator) {
-                var resultType = TypeRegistry.GetTypeForSubrangeType(left, right);
-                element.TypeInfo = TypeRegistry.MakeTypeReference(resultType);
-                return;
-            }
-
-            var operatorId = TypeRegistry.GetOperatorId(element.Kind, left, right);
-            var binaryOperator = TypeRegistry.GetOperator(operatorId);
-            if (operatorId == DefinedOperators.Undefined || binaryOperator == null) {
-                element.TypeInfo = GetErrorTypeReference(element);
-                return;
-            }
-
-            element.TypeInfo = binaryOperator.EvaluateOperator(new Signature(left, right));
-        }
-
-        /// <summary>
-        ///     determine the type of an unary operator
-        /// </summary>
-        /// <param name="element">operator to determine the type of</param>
-        public void EndVisit(UnaryOperator element) {
-
-            var operand = element.Value;
-
-            if (operand == null || operand.TypeInfo == null) {
-                element.TypeInfo = GetErrorTypeReference(element);
-                return;
-            }
-
-            if (element.Kind == ExpressionKind.Not) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperator, GetTypeRefence(operand));
-                return;
-            }
-
-            if (element.Kind == ExpressionKind.UnaryMinus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, GetTypeRefence(operand));
-                return;
-            }
-
-            if (element.Kind == ExpressionKind.UnaryPlus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, GetTypeRefence(operand));
-                return;
-            }
-
-            if (element.Kind == ExpressionKind.AddressOf) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.AtOperator, GetTypeRefence(operand));
-                return;
-            }
-
-            element.TypeInfo = GetErrorTypeReference(element);
-        }
-
-        /// <summary>
-        ///     gets the type of a given unary operator
-        /// </summary>
-        /// <param name="operatorKind"></param>
-        /// <param name="operand"></param>
-        /// <returns></returns>
-        private ITypeReference GetTypeOfOperator(int operatorKind, ITypeReference operand) {
-            if (operand == null)
-                return GetErrorTypeReference(null);
-
-            var unaryOperator = TypeRegistry.GetOperator(operatorKind);
-
-            if (unaryOperator == null)
-                return GetErrorTypeReference(null);
-
-            return unaryOperator.EvaluateOperator(new Signature(operand));
-        }
 
         /// <summary>
         ///     visit a variable declaration
@@ -405,32 +282,6 @@ namespace PasPasPas.Typings.Common {
 
         }
 
-        /// <summary>
-        ///     begin visit a unit
-        /// </summary>
-        /// <param name="element"></param>
-        public void StartVisit(CompilationUnit element) {
-            var unitType = TypeRegistry.TypeCreator.CreateUnitType(element.SymbolName);
-            CurrentUnit = element;
-            CurrentUnit.TypeInfo = GetTypeReferenceById(unitType.TypeId);
-            resolver.OpenScope();
-            resolver.AddToScope(KnownTypeNames.System, ReferenceKind.RefToUnit, environment.TypeRegistry.SystemUnit);
-
-            if (element.FileType == CompilationUnitType.Program) {
-                var mainRoutine = TypeCreator.CreateGlobalRoutine(KnownTypeNames.MainMethod, ProcedureKind.Procedure);
-                unitType.Symbols.Add(mainRoutine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, mainRoutine));
-            }
-        }
-
-        /// <summary>
-        ///     end visiting a unit
-        /// </summary>
-        /// <param name="element"></param>
-        public void EndVisit(CompilationUnit element) {
-            resolver.CloseScope();
-            CurrentUnit = null;
-        }
-
         private Signature CreateSignatureFromSymbolPart(SymbolReferencePart part) {
             var signature = new ITypeReference[part.Expressions.Count];
 
@@ -460,7 +311,7 @@ namespace PasPasPas.Typings.Common {
                         continue;
 
                     var classMethod = impl.IsClassItem;
-                    var signature = impl.CreateSignature();
+                    var signature = impl.CreateSignature(TypeRegistry.Runtime);
                     var callableRoutines = new List<IParameterGroup>();
 
                     var bdef = GetTypeByIdOrUndefinedType(impl.DefiningType) as StructuredTypeDeclaration;
@@ -1201,7 +1052,7 @@ namespace PasPasPas.Typings.Common {
 
             if (routine != default) {
                 resolver.OpenScope();
-                currentMethodImplementation.Push(routine);
+                currentMethodImplementation.Push(new RoutineIndex(routine, -1));
 
 
                 if (element.Parameters != default && !element.DefaultParameters) {
@@ -1227,7 +1078,15 @@ namespace PasPasPas.Typings.Common {
                     resolver.AddToScope("Self", ReferenceKind.RefToSelfClass, baseTypeDef);
                 }
             }
+        }
 
+        /// <summary>
+        ///     start visiting the procedure heading marker
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(ProcedureHeadingMarker element) {
+            var routine = currentMethodImplementation.Peek();
+            routine.Index = 0;
         }
 
         /// <summary>

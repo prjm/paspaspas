@@ -145,10 +145,7 @@ namespace PasPasPas.Typings.Structured {
             var param = Parameters[0].Parameters;
 
             if (param != default) {
-                var values = new ITypeReference[param.Count];
-                for (var i = 0; param != default && i < param.Count; i++)
-                    values[i] = param[i].SymbolType ?? runtime.Types.MakeErrorTypeReference();
-                return new Signature(values);
+
             }
 
             return new Signature();

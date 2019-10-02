@@ -109,6 +109,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => false;
 
         /// <summary>
+        ///     marker
+        /// </summary>
+        public ProcedureHeadingMarker Marker { get; }
+            = new ProcedureHeadingMarker();
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>
@@ -118,6 +124,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             AcceptPart(this, TypeValue, visitor);
             AcceptPart(this, Directives, visitor);
             AcceptPart(this, Symbols, visitor);
+            AcceptPart(this, Marker, visitor);
             AcceptPart(this, Block, visitor);
             visitor.EndVisit(this);
         }

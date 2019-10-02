@@ -20,6 +20,11 @@ namespace PasPasPas.Typings.Structured {
         public IList<IVariable> Parameters { get; private set; }
 
         /// <summary>
+        ///     class item
+        /// </summary>
+        public bool IsClassItem { get; set; }
+
+        /// <summary>
         ///     add a parameter definition
         /// </summary>
         /// <param name="completeName"></param>
@@ -48,9 +53,9 @@ namespace PasPasPas.Typings.Structured {
         ///     check if this parameter group matches a signature
         /// </summary>
         /// <param name="signature"></param>
-        /// <param name="types">type registry</param>
+        /// <param name="typeRegistry">type registry</param>
         /// <returns></returns>
-        public bool Matches(ITypeRegistry types, Signature signature) {
+        public bool Matches(ITypeRegistry typeRegistry, Signature signature) {
             var paramCount = Parameters == null ? 0 : Parameters.Count;
 
             if (paramCount != signature.Length)
@@ -60,14 +65,29 @@ namespace PasPasPas.Typings.Structured {
 
             for (var i = 0; Parameters != null && i < Parameters.Count; i++) {
                 var parameter = Parameters[i];
-                var sourceType = types.GetTypeByIdOrUndefinedType(signature[i].TypeId);
-                match = match && types.GetTypeByIdOrUndefinedType(parameter.SymbolType.TypeId).CanBeAssignedFrom(sourceType);
+                var sourceType = typeRegistry.GetTypeByIdOrUndefinedType(signature[i].TypeId);
+                match = match && typeRegistry.GetTypeByIdOrUndefinedType(parameter.SymbolType.TypeId).CanBeAssignedFrom(sourceType);
 
                 if (!match)
                     return false;
             }
 
             return true;
+        }
+
+        /// <summary>
+        ///     create the signature for this parameters
+        /// </summary>
+        /// <returns></returns>
+        public Signature CreateSignature(IRuntimeValueFactory runtime) {
+            if (Parameters == default || Parameters.Count < 1)
+                return new Signature();
+
+            var values = new ITypeReference[Parameters.Count];
+            for (var i = 0; i < Parameters.Count; i++)
+                values[i] = Parameters[i].SymbolType ?? runtime.Types.MakeErrorTypeReference();
+
+            return new Signature(values);
         }
     }
 }
