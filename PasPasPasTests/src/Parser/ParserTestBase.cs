@@ -85,6 +85,16 @@ namespace PasPasPasTests.Parser {
             }
         }
 
+        /// <summary>
+        ///     run abstract syntax test
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="completeInput"></param>
+        /// <param name="searchFunction"></param>
+        /// <param name="expectedResult"></param>
+        /// <param name="withTypes"></param>
+        /// <param name="errorMessages"></param>
+        /// <returns></returns>
         protected ISyntaxPart RunAstTest<T>(string completeInput, Func<object, T> searchFunction, T expectedResult, bool withTypes = false, params uint[] errorMessages) {
             var env = CreateEnvironment();
             var msgs = new List<ILogMessage>();

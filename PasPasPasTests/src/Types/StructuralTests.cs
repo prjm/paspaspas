@@ -80,6 +80,9 @@ namespace PasPasPasTests.Types {
             AssertExprTypeInProc("type x = class function a(b: Integer): string; end; function x.a;", "b", typeId: KnownTypeIds.IntegerType);
         }
 
+        /// <summary>
+        ///     test self pointer
+        /// </summary>
         [TestMethod]
         public void TestSelfPointer() {
             AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self", typeId: 1 + RegisteredTypes.SmallestUserTypeId);

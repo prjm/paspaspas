@@ -26,6 +26,9 @@ namespace PasPasPasTests.Types {
             AssertDeclType("'a'..'z'", typeKind: CommonTypeKind.SubrangeType);
         }
 
+        /// <summary>
+        ///     test set types
+        /// </summary>
         [TestMethod]
         public void TestSetTypes() {
             AssertDeclType("set of (false, true)", typeKind: CommonTypeKind.SetType);

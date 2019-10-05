@@ -3,7 +3,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using PasPasPas.Api;
-using PasPasPas.Globals.Environment;
 
 namespace SampleRunner.Scenarios {
 
@@ -19,8 +18,17 @@ namespace SampleRunner.Scenarios {
 
     }
 
+    /// <summary>
+    ///     run the tokenizer on a file
+    /// </summary>
     public static class TokenizeFile {
 
+        /// <summary>
+        ///     run the tokenizer
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="testPath"></param>
+        /// <param name="reapeat"></param>
         public static void Run(TextWriter b, string testPath, int reapeat) {
             var registry = new Dictionary<int, TokenInfo>();
 

@@ -3,8 +3,17 @@ using PasPasPas.Api;
 
 namespace SampleRunner.Scenarios {
 
+    /// <summary>
+    ///     read file demo
+    /// </summary>
     public static class ReadFile {
 
+        /// <summary>
+        ///     read a simple file
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="file"></param>
+        /// <param name="repeat"></param>
         public static void Run(TextWriter b, string file, int repeat) {
             var count = 0L;
 

@@ -4,6 +4,10 @@ using PasPasPas.Globals.Parsing;
 
 namespace PasPasPasTests.Parser {
 
+    /// <summary>
+    ///     abstract syntax tree visitor
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class AstVisitor<T> : IStartEndVisitor {
 
         public AstVisitor() { }

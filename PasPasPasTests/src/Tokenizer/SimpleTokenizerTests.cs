@@ -34,6 +34,9 @@ namespace PasPasPasTests.Tokenizer {
             IsInteger("108446744073709551615", new IntegerOperations(new BooleanOperations(), null).Overflow);
         }
 
+        /// <summary>
+        ///     test whitespace
+        /// </summary>
         [TestMethod]
         public void TestWhitespace() {
             IsWhitespace(" ");

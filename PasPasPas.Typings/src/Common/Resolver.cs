@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -146,7 +147,8 @@ namespace PasPasPas.Typings.Common {
             if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
                 if (reference.Symbol is IRoutine routine) {
                     var callableRoutines = new List<IParameterGroup>();
-                    routine.ResolveCall(callableRoutines, new Signature());
+                    var signature = new Signature(TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnspecifiedType), ImmutableArray<ITypeReference>.Empty);
+                    routine.ResolveCall(callableRoutines, signature);
                     if (callableRoutines.Count == 1)
                         return callableRoutines[0].ResultType;
                 }

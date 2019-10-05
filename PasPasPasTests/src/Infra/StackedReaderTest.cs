@@ -35,6 +35,9 @@ namespace PasPasPasTests.Infra {
             }
         }
 
+        /// <summary>
+        ///     test simple read
+        /// </summary>
         [TestMethod]
         public void TestSimpleFileRead() {
 
@@ -58,6 +61,9 @@ namespace PasPasPasTests.Infra {
             }
         }
 
+        /// <summary>
+        ///     test stacked read
+        /// </summary>
         [TestMethod]
         public void TestStackedRead() {
 

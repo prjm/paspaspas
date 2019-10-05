@@ -53,6 +53,9 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsFalse(cc.Matches('\0'));
         }
 
+        /// <summary>
+        ///     test control characters
+        /// </summary>
         [TestMethod]
         public void TestControlCharClass() {
             var cc = new ControlCharacterClass();

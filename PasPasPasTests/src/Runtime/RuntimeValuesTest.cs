@@ -60,6 +60,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual(KnownTypeIds.Uint64Type, GetIntegerValue(18446744073709551615).TypeId);
         }
 
+        /// <summary>
+        ///     test integer negation
+        /// </summary>
         [TestMethod]
         public void TestIntegerNegation() {
             string n(ITypeReference v, int typeKind) {

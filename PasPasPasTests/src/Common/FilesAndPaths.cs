@@ -7,6 +7,10 @@ using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 
 namespace PasPasPasTests.Common {
+
+    /// <summary>
+    ///     files and paths helper
+    /// </summary>
     public class FilesAndPaths {
 
         private readonly Dictionary<string, string> data

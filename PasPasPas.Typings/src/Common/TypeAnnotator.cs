@@ -283,15 +283,17 @@ namespace PasPasPas.Typings.Common {
         }
 
         private Signature CreateSignatureFromSymbolPart(SymbolReferencePart part) {
-            var signature = new ITypeReference[part.Expressions.Count];
+            using (var list = environment.ListPools.GetList<ITypeReference>()) {
 
-            for (var i = 0; i < signature.Length; i++)
-                if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)
-                    signature[i] = part.Expressions[i].TypeInfo;
-                else
-                    signature[i] = GetErrorTypeReference(part.Expressions[i]);
+                for (var i = 0; i < part.Expressions.Count; i++)
+                    if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)
+                        list.Add(part.Expressions[i].TypeInfo);
+                    else
+                        list.Add(GetErrorTypeReference(part.Expressions[i]));
 
-            return new Signature(signature);
+
+                return new Signature(GetInstanceTypeById(KnownTypeIds.UnspecifiedType), environment.ListPools.GetFixedArray(list));
+            }
         }
 
         /// <summary>
@@ -311,7 +313,7 @@ namespace PasPasPas.Typings.Common {
                         continue;
 
                     var classMethod = impl.IsClassItem;
-                    var signature = impl.CreateSignature(TypeRegistry.Runtime);
+                    var signature = impl.CreateSignature(TypeRegistry);
                     var callableRoutines = new List<IParameterGroup>();
 
                     var bdef = GetTypeByIdOrUndefinedType(impl.DefiningType) as StructuredTypeDeclaration;

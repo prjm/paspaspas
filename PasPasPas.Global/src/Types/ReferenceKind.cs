@@ -73,11 +73,11 @@
         /// <summary>
         ///     reference to inherited
         /// </summary>
-        RefToInherited = 14,
+        RefToInherited = 13,
 
         /// <summary>
         ///     reference to own class
         /// </summary>
-        RefToSelfClass = 15,
+        RefToSelfClass = 14,
     }
 }

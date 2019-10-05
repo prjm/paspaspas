@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -79,15 +80,17 @@ namespace PasPasPas.Typings.Structured {
         ///     create the signature for this parameters
         /// </summary>
         /// <returns></returns>
-        public Signature CreateSignature(IRuntimeValueFactory runtime) {
+        public Signature CreateSignature(ITypeRegistry runtime) {
             if (Parameters == default || Parameters.Count < 1)
-                return new Signature();
+                return new Signature(ResultType, ImmutableArray<ITypeReference>.Empty);
 
-            var values = new ITypeReference[Parameters.Count];
-            for (var i = 0; i < Parameters.Count; i++)
-                values[i] = Parameters[i].SymbolType ?? runtime.Types.MakeErrorTypeReference();
+            using (var list = runtime.ListPools.GetList<ITypeReference>()) {
+                var values = new ITypeReference[Parameters.Count];
+                for (var i = 0; i < Parameters.Count; i++)
+                    values[i] = Parameters[i].SymbolType ?? runtime.Runtime.Types.MakeErrorTypeReference();
 
-            return new Signature(values);
+                return new Signature(ResultType, runtime.ListPools.GetFixedArray(list));
+            }
         }
     }
 }

@@ -61,6 +61,9 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Integer", "e(a)", 1 + RegisteredTypes.SmallestUserTypeId, false, "type e = -2..2;");
         }
 
+        /// <summary>
+        ///     test casting direct
+        /// </summary>
         [TestMethod]
         public void TestStringCastingDirect() {
             AssertExprValue("ShortString('a')", GetShortStringValue("a"), "", KnownTypeIds.ShortStringType);

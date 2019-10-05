@@ -24,6 +24,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("-129", GetIntegerValue((short)-129));
         }
 
+        /// <summary>
+        ///     test integer operations
+        /// </summary>
         [TestMethod]
         public void TestIntegerOperations() {
             AssertExprValue("4 + 5", GetIntegerValue(9));

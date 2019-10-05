@@ -43,9 +43,10 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     create a signature
         /// </summary>
+        /// <param name="registeredTypes"></param>
         /// <returns></returns>
-        public Signature CreateSignature(IRuntimeValueFactory runtime)
-            => Routine.Parameters[Index].CreateSignature(runtime);
+        public Signature CreateSignature(ITypeRegistry registeredTypes)
+            => Routine.Parameters[Index].CreateSignature(registeredTypes);
 
         /// <summary>
         ///     routine name

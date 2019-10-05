@@ -5,6 +5,9 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Infra {
 
+    /// <summary>
+    ///     buffer tests
+    /// </summary>
     public class BufferTest {
 
         private readonly string[] utf8Samples = new string[] {
@@ -12,6 +15,9 @@ namespace PasPasPasTests.Infra {
             "κόσμε",
         };
 
+        /// <summary>
+        ///     test buffer forward reading
+        /// </summary>
         [TestMethod]
         public void TestUTf8BufferForwardRead() {
             for (var bufferSize = 4; bufferSize < 20; bufferSize++) {
@@ -38,6 +44,9 @@ namespace PasPasPasTests.Infra {
             }
         }
 
+        /// <summary>
+        ///     test buffer backward reading
+        /// </summary>
         [TestMethod]
         public void TestUtf8ForwardAndBackwardRead() {
             for (var bufferSize = 4; bufferSize < 20; bufferSize++) {
@@ -69,6 +78,9 @@ namespace PasPasPasTests.Infra {
             }
         }
 
+        /// <summary>
+        ///     test buffer forward read
+        /// </summary>
         [TestMethod]
         public void TestSimpleBufferForwardRead() {
             for (var bufferSize = 1; bufferSize < 20; bufferSize++) {
@@ -93,6 +105,9 @@ namespace PasPasPasTests.Infra {
             }
         }
 
+        /// <summary>
+        ///     test forward and backward read
+        /// </summary>
         [TestMethod]
         public void TestSimpleBufferForwardAndBackwardRead() {
             for (var bufferSize = 1; bufferSize < 20; bufferSize++) {
@@ -122,6 +137,9 @@ namespace PasPasPasTests.Infra {
             }
         }
 
+        /// <summary>
+        ///     test an utf8 stream
+        /// </summary>
         [TestMethod]
         public void TestUtf8StreamSource() {
             for (var inputBufferSize = 4; inputBufferSize < 20; inputBufferSize++) {
@@ -156,6 +174,9 @@ namespace PasPasPasTests.Infra {
             }
         }
 
+        /// <summary>
+        ///     test utf8 samples
+        /// </summary>
         [TestMethod]
         public void TestUtf8Samples() {
             for (var bufferSize = 4; bufferSize < 20; bufferSize++) {

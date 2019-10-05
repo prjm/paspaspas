@@ -74,6 +74,9 @@ namespace PasPasPasTests.Parser {
             Assert.IsFalse(f.HasMissingFiles);
         }
 
+        /// <summary>
+        ///     test unit resolver
+        /// </summary>
         [TestMethod]
         public void TestLibraryUnitResolver() {
             var t = new TestBundle();
@@ -87,6 +90,9 @@ namespace PasPasPasTests.Parser {
             Assert.IsFalse(f.HasMissingFiles);
         }
 
+        /// <summary>
+        ///     test unit resolver
+        /// </summary>
         [TestMethod]
         public void TestUnitUnitResolver() {
             var t = new TestBundle();

@@ -2,8 +2,14 @@
 
 namespace PasPasPasTests.Parser {
 
+    /// <summary>
+    ///     test statements
+    /// </summary>
     public class StatementTest : ParserTestBase {
 
+        /// <summary>
+        ///     test misc statements
+        /// </summary>
         [TestMethod]
         public void TestMiscStatements() {
             ParseString("program test; const x: array[x] of Integer = (a, {$IFNDEF X} b {$ELSE} 0 {$ENDIF}, c); begin end.");

@@ -60,8 +60,8 @@ namespace PasPasPas.Typings.Common {
             // special case range operator: the range operator is
             // part of a type definition and references types, not values
             if (element.Kind == ExpressionKind.RangeOperator) {
-                var resultType = TypeRegistry.GetTypeForSubrangeType(left, right);
-                element.TypeInfo = TypeRegistry.MakeTypeReference(resultType);
+                var rangeResult = TypeRegistry.GetTypeForSubrangeType(left, right);
+                element.TypeInfo = TypeRegistry.MakeTypeReference(rangeResult);
                 return;
             }
 
@@ -72,7 +72,10 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            element.TypeInfo = binaryOperator.EvaluateOperator(new Signature(left, right));
+            var resultType = GetInstanceTypeById(KnownTypeIds.UnspecifiedType);
+            var args = TypeRegistry.ListPools.GetFixedArray(left, right);
+            var signature = new Signature(resultType, args);
+            element.TypeInfo = binaryOperator.EvaluateOperator(signature);
         }
 
         /// <summary>
@@ -126,7 +129,9 @@ namespace PasPasPas.Typings.Common {
             if (unaryOperator == null)
                 return GetErrorTypeReference(null);
 
-            return unaryOperator.EvaluateOperator(new Signature(operand));
+            var arg = TypeRegistry.ListPools.GetFixedArray(operand);
+            var signature = new Signature(GetInstanceTypeById(KnownTypeIds.UnspecifiedType), arg);
+            return unaryOperator.EvaluateOperator(signature);
         }
 
     }

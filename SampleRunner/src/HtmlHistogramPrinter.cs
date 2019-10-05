@@ -47,6 +47,9 @@ namespace SampleRunner {
             Id = id;
         }
 
+        /// <summary>
+        ///     histogram key
+        /// </summary>
         public string Key { get; }
         public object FormattedKey
             => System.Security.SecurityElement.Escape(Key);

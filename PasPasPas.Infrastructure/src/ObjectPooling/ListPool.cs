@@ -156,6 +156,24 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
                 Histograms.Value(HistogramKeys.SyntaxLists, string.Concat(typeof(T).Name, builder.Count));
         }
 
-    }
+        /// <summary>
+        ///     get a fixed array
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public ImmutableArray<T> GetFixedArray<T>(T item)
+            => ImmutableArray.Create(item);
 
+
+        /// <summary>
+        ///     get a fixed array
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item1"></param>
+        /// <param name="item2"></param>
+        /// <returns></returns>
+        public ImmutableArray<T> GetFixedArray<T>(T item1, T item2)
+            => ImmutableArray.Create(item1, item2);
+    }
 }

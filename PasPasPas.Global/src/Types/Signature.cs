@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
@@ -8,48 +9,39 @@ namespace PasPasPas.Globals.Types {
     /// </summary>
     public class Signature : IEquatable<Signature> {
 
-        private readonly ITypeReference[] data;
+        private readonly ImmutableArray<ITypeReference> InputTypes;
 
         /// <summary>
         ///     get the number of parameters in this signature
         /// </summary>
         public int Length
-            => data.Length;
+            => InputTypes.Length;
 
         /// <summary>
         ///     test if all input parameters are constant values
         /// </summary>
         public bool IsConstant {
             get {
-                for (var i = 0; i < data.Length; i++)
-                    if (data[i] == null || !data[i].IsConstant())
+                for (var i = 0; i < InputTypes.Length; i++)
+                    if (InputTypes[i] == null || !InputTypes[i].IsConstant())
                         return false;
                 return true;
             }
         }
 
         /// <summary>
-        ///     create a new unary signature
+        ///     return type
         /// </summary>
-        /// <param name="value"></param>
-        public Signature(ITypeReference value)
-            => data = new ITypeReference[] { value };
-
-        /// <summary>
-        ///     create a new signature
-        /// </summary>
-        /// <param name="value1">first type</param>
-        /// <param name="value2">second type</param>
-        public Signature(ITypeReference value1, ITypeReference value2)
-            => data = new ITypeReference[] { value1, value2 };
+        public ITypeReference ReturnType { get; }
 
         /// <summary>
         ///     create a new type signature
         /// </summary>
-        /// <param name="values">values</param>
-        public Signature(params ITypeReference[] values) {
-            data = new ITypeReference[values.Length];
-            Array.Copy(values, data, values.Length);
+        /// <param name="returnType"></param>
+        /// <param name="inputTypes">values</param>
+        public Signature(ITypeReference returnType, ImmutableArray<ITypeReference> inputTypes) {
+            ReturnType = returnType;
+            InputTypes = inputTypes;
         }
 
         /// <summary>
@@ -58,11 +50,11 @@ namespace PasPasPas.Globals.Types {
         /// <param name="other">signature to compare</param>
         /// <returns></returns>
         public bool Equals(Signature other) {
-            if (other.data.Length != data.Length)
+            if (other.InputTypes.Length != InputTypes.Length)
                 return false;
 
-            for (var i = 0; i < other.data.Length; i++) {
-                if (data[i] != other.data[i])
+            for (var i = 0; i < other.InputTypes.Length; i++) {
+                if (InputTypes[i] != other.InputTypes[i])
                     return false;
             }
 
@@ -88,8 +80,8 @@ namespace PasPasPas.Globals.Types {
         public override int GetHashCode() {
             var result = 17;
             unchecked {
-                for (var i = 0; i < data.Length; i++)
-                    result = result * 31 + data[i].GetHashCode();
+                for (var i = 0; i < InputTypes.Length; i++)
+                    result = result * 31 + InputTypes[i].GetHashCode();
                 return result;
             }
         }
@@ -100,7 +92,7 @@ namespace PasPasPas.Globals.Types {
         /// <param name="index"></param>
         /// <returns></returns>
         public ITypeReference this[int index]
-            => data[index];
+            => InputTypes[index];
 
     }
 }

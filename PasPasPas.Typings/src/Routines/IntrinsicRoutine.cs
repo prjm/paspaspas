@@ -86,7 +86,11 @@ namespace PasPasPas.Typings.Routines {
         public bool IsClassItem
             => false;
 
-        public IList<IParameterGroup> Parameters => throw new System.NotImplementedException();
+        /// <summary>
+        ///     parameters
+        /// </summary>
+        public IList<IParameterGroup> Parameters
+            => throw new System.NotImplementedException();
 
         /// <summary>
         ///     make a subrange value
@@ -227,11 +231,5 @@ namespace PasPasPas.Typings.Routines {
         protected ITypeReference RuntimeException()
             => Runtime.Types.MakeErrorTypeReference(); // ... to be changed
 
-        /// <summary>
-        ///     create a signature
-        /// </summary>
-        /// <returns></returns>
-        public Signature CreateSignature()
-            => throw new System.NotImplementedException();
     }
 }

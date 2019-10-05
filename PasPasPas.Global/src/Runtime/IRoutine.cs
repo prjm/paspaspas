@@ -30,12 +30,6 @@ namespace PasPasPas.Globals.Runtime {
         bool IsClassItem { get; }
 
         /// <summary>
-        ///     create a signature for this routine
-        /// </summary>
-        /// <returns></returns>
-        Signature CreateSignature();
-
-        /// <summary>
         ///     resolve callable routines for a given signature
         /// </summary>
         /// <param name="callableRoutines">list to collect callable routines</param>

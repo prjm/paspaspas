@@ -79,6 +79,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("M 1 KAPUTT ", 0UL, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
         }
 
+        /// <summary>
+        ///     test boolean switch
+        /// </summary>
         [TestMethod]
         public void TestBoolEvalSwitch() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.BoolEval.Value;

@@ -2,6 +2,10 @@
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Infra {
+
+    /// <summary>
+    ///     test scoped names
+    /// </summary>
     public class ScopedNames {
 
         [TestMethod]
@@ -20,6 +24,9 @@ namespace PasPasPasTests.Infra {
             Assert.AreEqual("test1", name3.ToString());
         }
 
+        /// <summary>
+        ///     test prefix name
+        /// </summary>
         [TestMethod]
         public void TestPrefixedNames() {
             var name1 = new ScopedName("a", "teSt");

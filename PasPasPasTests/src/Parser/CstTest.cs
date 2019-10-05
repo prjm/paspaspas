@@ -58,6 +58,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(16, s.Length);
         }
 
+        /// <summary>
+        ///     test call convention
+        /// </summary>
         [TestMethod]
         public void TestCallConvention() {
             var s = RunCstTest(p => p.ParseCallConvention(), "cdecl;");
@@ -66,6 +69,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(6, s.Length);
         }
 
+        /// <summary>
+        ///     test hint direcitve
+        /// </summary>
         [TestMethod]
         public void TestHintDirective() {
             var s = RunCstTest(p => p.ParseHint(false), "library");

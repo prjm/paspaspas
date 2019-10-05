@@ -5,8 +5,18 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace SampleRunner.Scenarios {
 
+    /// <summary>
+    ///     abstract syntax tree demo
+    /// </summary>
     public static class CreateAst {
 
+        /// <summary>
+        ///     create an abstract syntax tree
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="environment"></param>
+        /// <param name="testPath"></param>
+        /// <param name="reapeat"></param>
         public static void Run(TextWriter b, ITypedEnvironment environment, string testPath, int reapeat) {
             for (var i = 0; i < reapeat; i++) {
                 var resolver = CommonApi.CreateAnyFileResolver();

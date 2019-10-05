@@ -57,6 +57,10 @@ namespace PasPasPas.Typings.Structured {
         ///     defining type
         /// </summary>
         public int DefiningType { get; }
+
+        /// <summary>
+        ///     routine flags
+        /// </summary>
         public RoutineFlags Flags { get; }
 
         /// <summary>
@@ -77,6 +81,9 @@ namespace PasPasPas.Typings.Structured {
         public CommonTypeKind TypeKind
             => CommonTypeKind.ProcedureType;
 
+        /// <summary>
+        ///     test if this routine is a class item
+        /// </summary>
         public bool IsClassItem
             => Flags?.IsClassItem ?? false;
 
@@ -136,19 +143,5 @@ namespace PasPasPas.Typings.Structured {
             }
         }
 
-        /// <summary>
-        ///     create a signature for the given parameters
-        /// </summary>
-        /// <returns></returns>
-        public Signature CreateSignature() {
-            var runtime = TypeRegistry.Runtime;
-            var param = Parameters[0].Parameters;
-
-            if (param != default) {
-
-            }
-
-            return new Signature();
-        }
     }
 }

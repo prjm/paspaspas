@@ -59,6 +59,9 @@ namespace PasPasPasTests.Assemblies {
             RunAssemblyTest(file, program, v, errorMessages);
         }
 
+        /// <summary>
+        ///     test assembly name
+        /// </summary>
         [TestMethod]
         public void TestAssemblyName() {
             bool t(Assembly a) => string.Equals(a.GetName().Name, "x.z", StringComparison.OrdinalIgnoreCase);
@@ -66,6 +69,9 @@ namespace PasPasPasTests.Assemblies {
             RunAssemblyTest("x.z", "unit x.z; interface implementation end.", default, BuilderErrorMessages.UndefinedProjectName);
         }
 
+        /// <summary>
+        ///     test unit types
+        /// </summary>
         [TestMethod]
         public void TestUnitType() {
             const string typeName = "P3.x_z.<UnitClass>";
@@ -73,6 +79,9 @@ namespace PasPasPasTests.Assemblies {
             RunTypeTest("x.z", "program x.z; begin end.", d, typeName);
         }
 
+        /// <summary>
+        ///     test variables and their types
+        /// </summary>
         [TestMethod]
         public void TestVariablesAndTypes() {
             const string typeName = "P3.x_z.<UnitClass>";

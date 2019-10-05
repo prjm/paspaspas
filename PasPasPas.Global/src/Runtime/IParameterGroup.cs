@@ -36,6 +36,6 @@ namespace PasPasPas.Globals.Runtime {
         ///     create a signature
         /// </summary>
         /// <returns></returns>
-        Signature CreateSignature(IRuntimeValueFactory runtime);
+        Signature CreateSignature(ITypeRegistry runtime);
     }
 }

@@ -3,8 +3,14 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
 
+    /// <summary>
+    ///     test declarations
+    /// </summary>
     public class TestDeclarations : ParserTestBase {
 
+        /// <summary>
+        ///     test constant declarations
+        /// </summary>
         [TestMethod]
         public void TestConstants() {
             ParseString("program test; const x = (); .");
