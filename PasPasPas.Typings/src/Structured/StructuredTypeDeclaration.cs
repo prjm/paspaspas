@@ -258,11 +258,15 @@ namespace PasPasPas.Typings.Structured {
         /// <returns></returns>
         public IRoutine FindMethod(string name, bool classItem) {
             foreach (var method in Methods) {
-                if (method.IsClassItem != classItem)
+                if (!string.Equals(name, method.Name, StringComparison.OrdinalIgnoreCase))
                     continue;
 
-                if (string.Equals(name, method.Name, StringComparison.OrdinalIgnoreCase))
+                foreach (var paramGroup in method.Parameters) {
+                    if (paramGroup.IsClassItem != classItem)
+                        continue;
+
                     return method;
+                }
             }
 
             return default;

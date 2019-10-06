@@ -41,6 +41,12 @@ namespace PasPasPas.Typings.Common {
             => Routine.Parameters[Index].IsClassItem;
 
         /// <summary>
+        ///     parameters
+        /// </summary>
+        public IParameterGroup Parameters
+            => Routine.Parameters[Index];
+
+        /// <summary>
         ///     create a signature
         /// </summary>
         /// <param name="registeredTypes"></param>

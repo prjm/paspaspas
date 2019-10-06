@@ -16,15 +16,13 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="kind">routine kind</param>
         /// <param name="types">type registry</param>
         /// <param name="definingType">defining type</param>
-        /// <param name="flags"></param>
         /// <param name="genericTypeId">generic type id</param>
-        public Routine(ITypeRegistry types, string name, ProcedureKind kind, int genericTypeId = KnownTypeIds.ErrorType, int definingType = KnownTypeIds.ErrorType, RoutineFlags flags = default) {
+        public Routine(ITypeRegistry types, string name, ProcedureKind kind, int genericTypeId = KnownTypeIds.ErrorType, int definingType = KnownTypeIds.ErrorType) {
             Name = name;
             Kind = kind;
             TypeRegistry = types;
             TypeId = genericTypeId;
             DefiningType = definingType;
-            Flags = flags;
         }
 
         /// <summary>
@@ -57,11 +55,7 @@ namespace PasPasPas.Typings.Structured {
         ///     defining type
         /// </summary>
         public int DefiningType { get; }
-
-        /// <summary>
-        ///     routine flags
-        /// </summary>
-        public RoutineFlags Flags { get; }
+            = KnownTypeIds.UnspecifiedType;
 
         /// <summary>
         ///     internal type format
@@ -80,12 +74,6 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public CommonTypeKind TypeKind
             => CommonTypeKind.ProcedureType;
-
-        /// <summary>
-        ///     test if this routine is a class item
-        /// </summary>
-        public bool IsClassItem
-            => Flags?.IsClassItem ?? false;
 
         /// <summary>
         ///     add a parameter group

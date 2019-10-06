@@ -78,13 +78,7 @@ namespace PasPasPas.Typings.Routines {
         ///     defining type
         /// </summary>
         public int DefiningType
-            => KnownTypeIds.ErrorType;
-
-        /// <summary>
-        ///     check if this is a class item
-        /// </summary>
-        public bool IsClassItem
-            => false;
+            => KnownTypeIds.UnspecifiedType;
 
         /// <summary>
         ///     parameters

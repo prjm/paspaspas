@@ -16,6 +16,9 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
 
+    /// <summary>
+    ///     test file references
+    /// </summary>
     public class FileReferenceTest : ParserTestBase {
 
         internal class TestBundle {
@@ -61,6 +64,9 @@ namespace PasPasPasTests.Parser {
                 => new RequiredUnitsFinder(GetCurrentDir(), Options.Meta.IncludePathResolver, Log);
         }
 
+        /// <summary>
+        ///     test unit resolver in programs
+        /// </summary>
         [TestMethod]
         public void TestProgramUnitResolver() {
             var t = new TestBundle();
@@ -106,6 +112,9 @@ namespace PasPasPasTests.Parser {
             Assert.IsFalse(f.HasMissingFiles);
         }
 
+        /// <summary>
+        ///     test unit resolver for packages
+        /// </summary>
         [TestMethod]
         public void TestPackageUnitResolver() {
             var t = new TestBundle();
@@ -119,6 +128,9 @@ namespace PasPasPasTests.Parser {
             Assert.IsFalse(f.HasMissingFiles);
         }
 
+        /// <summary>
+        ///     test unit not found error
+        /// </summary>
         [TestMethod]
         public void TestUnitNotFoundInProgram() {
             var t = new TestBundle();
@@ -131,6 +143,9 @@ namespace PasPasPasTests.Parser {
             Assert.IsTrue(f.HasMissingFiles);
         }
 
+        /// <summary>
+        ///     test simple constants
+        /// </summary>
         [TestMethod]
         public void TestSimpleReferencedConstant() {
             var t = new TestBundle();

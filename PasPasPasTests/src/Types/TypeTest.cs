@@ -31,7 +31,7 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
-        ///     assert const expression type
+        ///     assert constant expression type
         /// </summary>
         /// <param name="expression"></param>
         /// <param name="typeId"></param>
@@ -93,7 +93,13 @@ namespace PasPasPasTests.Types {
         protected void AssertExprType(string expression, int typeId, string decls = "") {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} begin Writeln({expression}); end. ";
-            SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
+
+            SymbolReferencePart searchfunction(object x) {
+                if (string.Equals((x as SymbolReferencePart)?.Name, "writeln", StringComparison.OrdinalIgnoreCase))
+                    return x as SymbolReferencePart;
+                return default;
+            }
+
             IExpression firstParam = null;
 
             firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined, out var env) as IExpression;
@@ -101,7 +107,6 @@ namespace PasPasPasTests.Types {
             Assert.IsNotNull(firstParam);
             Assert.IsNotNull(firstParam.TypeInfo);
             Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
-
         }
 
         /// <summary>

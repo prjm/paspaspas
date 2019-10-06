@@ -25,11 +25,6 @@ namespace PasPasPas.Globals.Runtime {
         int DefiningType { get; }
 
         /// <summary>
-        ///     check if this routine is a class item
-        /// </summary>
-        bool IsClassItem { get; }
-
-        /// <summary>
         ///     resolve callable routines for a given signature
         /// </summary>
         /// <param name="callableRoutines">list to collect callable routines</param>

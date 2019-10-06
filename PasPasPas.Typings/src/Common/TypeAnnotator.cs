@@ -665,7 +665,9 @@ namespace PasPasPas.Typings.Common {
         public void StartVisit(MethodDeclaration element) {
             if (element.Name == null)
                 return;
+
             var method = default(IRoutine);
+            var f = new RoutineFlags();
 
             if (element is GlobalMethod gm) {
                 if (CurrentUnit.InterfaceSymbols != default) {
@@ -680,7 +682,6 @@ namespace PasPasPas.Typings.Common {
                 var classMethod = m?.ClassItem ?? false;
                 var genericTypeId = KnownTypeIds.ErrorType;
                 var d = environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId);
-                var f = new RoutineFlags();
                 /*
                 if (d is RoutineType rt) {
                     d =
@@ -694,18 +695,14 @@ namespace PasPasPas.Typings.Common {
                     genericTypeId = functionType.TypeId;
                 }
 
-                if (classMethod) {
-                    f.IsClassItem = true;
-                    method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId, f);
-                }
-
-                else {
-                    method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId, f);
-                }
+                f.IsClassItem = classMethod;
+                method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId);
             }
 
             currentTypeDefinition.Push((Routine)method);
-            currentMethodParameters.Push(((Routine)method).AddParameterGroup());
+            var parameters = ((Routine)method).AddParameterGroup();
+            parameters.IsClassItem = f.IsClassItem;
+            currentMethodParameters.Push(parameters);
         }
 
         /// <summary>
@@ -741,10 +738,9 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(ParameterTypeDefinition element) {
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null) {
 
-                if (currentTypeDefinition.Count < 1)
+                if (currentMethodParameters.Count < 1)
                     return;
 
-                var typeDef = currentTypeDefinition.Peek() as StructuredTypeDeclaration;
                 var parms = currentMethodParameters.Peek();
 
                 foreach (var name in element.Parameters) {
@@ -1055,30 +1051,6 @@ namespace PasPasPas.Typings.Common {
             if (routine != default) {
                 resolver.OpenScope();
                 currentMethodImplementation.Push(new RoutineIndex(routine, -1));
-
-
-                if (element.Parameters != default && !element.DefaultParameters) {
-                    foreach (var parameter in element.Parameters) {
-                        resolver.AddToScope(parameter.Name.Name, ReferenceKind.RefToParameter, parameter);
-                    }
-                }
-
-                if (element.DefaultParameters && element.Declaration?.Parameters != default) {
-                    foreach (var parameter in element.Declaration.Parameters) {
-                        resolver.AddToScope(parameter.Name.Name, ReferenceKind.RefToParameter, parameter);
-                    }
-                }
-            }
-
-            if (isClassMethod) {
-                var baseTypeDef = GetTypeByIdOrUndefinedType(element.Declaration.DefiningType.TypeId) as IStructuredType;
-
-                if (baseTypeDef != default && !routine.IsClassItem)
-                    resolver.AddToScope("Self", ReferenceKind.RefToSelf, baseTypeDef);
-
-                if (baseTypeDef != default && routine.IsClassItem) {
-                    resolver.AddToScope("Self", ReferenceKind.RefToSelfClass, baseTypeDef);
-                }
             }
         }
 
@@ -1087,8 +1059,29 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(ProcedureHeadingMarker element) {
+            if (currentMethodImplementation.Count < 1)
+                return;
+
             var routine = currentMethodImplementation.Peek();
             routine.Index = 0;
+
+            var parameters = routine.Parameters;
+            if (parameters != default && parameters.Parameters != default) {
+                foreach (var parameter in parameters.Parameters) {
+                    resolver.AddToScope(parameter.Name, ReferenceKind.RefToParameter, parameter);
+                }
+            }
+
+            if (routine.DefiningType != KnownTypeIds.UnspecifiedType) {
+                var baseTypeDef = GetTypeByIdOrUndefinedType(routine.DefiningType) as IStructuredType;
+
+                if (baseTypeDef != default && !routine.IsClassItem)
+                    resolver.AddToScope("Self", ReferenceKind.RefToSelf, baseTypeDef);
+
+                if (baseTypeDef != default && routine.IsClassItem) {
+                    resolver.AddToScope("Self", ReferenceKind.RefToSelfClass, baseTypeDef);
+                }
+            }
         }
 
         /// <summary>

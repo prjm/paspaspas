@@ -43,10 +43,9 @@ namespace PasPasPas.Typings.Structured {
         ///     add a method definition
         /// </summary>
         /// <param name="completeName">method name</param>
-        /// <param name="flags">method flags</param>
         /// <param name="kind">method kind</param>
         /// <param name="genericTypeId">generic type id</param>
-        public IRoutine AddOrExtendMethod(string completeName, ProcedureKind kind, int genericTypeId, RoutineFlags flags) {
+        public IRoutine AddOrExtendMethod(string completeName, ProcedureKind kind, int genericTypeId) {
             foreach (var method in Methods)
                 if (string.Equals(method.Name, completeName, StringComparison.OrdinalIgnoreCase))
                     return method;
@@ -54,7 +53,7 @@ namespace PasPasPas.Typings.Structured {
             if (TypeRegistry == null)
                 throw new InvalidOperationException();
 
-            var newMethod = new Routine(TypeRegistry, completeName, kind, genericTypeId, TypeId, flags);
+            var newMethod = new Routine(TypeRegistry, completeName, kind, genericTypeId, TypeId);
             Methods.Add(newMethod);
             return newMethod;
         }

@@ -56,7 +56,9 @@ namespace PasPasPasTests.Types {
             AssertExprType(file, program, typeId, false, string.Empty);
         }
 
-
+        /// <summary>
+        ///     test result definitions
+        /// </summary>
         [TestMethod]
         public void TestResultDef() {
             AssertExprTypeInProc("function a: Integer;", "a", typeId: KnownTypeIds.IntegerType);
@@ -69,6 +71,9 @@ namespace PasPasPasTests.Types {
             AssertExprTypeInProc("function a: Integer; function b: string; ", "a", "", "", KnownTypeIds.IntegerType, " begin end; ");
         }
 
+        /// <summary>
+        ///     test method parameters
+        /// </summary>
         [TestMethod]
         public void TestMethodParams() {
             AssertExprTypeInProc("procedure b(a: Integer);", "a", typeId: KnownTypeIds.IntegerType);
@@ -96,6 +101,9 @@ namespace PasPasPasTests.Types {
             AssertExprTypeInProc("type x = class class var z: string; class procedure b; end; class procedure x.b;", "z", typeId: KnownTypeIds.StringType);
         }
 
+        /// <summary>
+        ///     test visibility for private members
+        /// </summary>   
         [TestMethod]
         public void TestVisibilityPrivate() {
             var i = AccessModifierTestMode.InType;
@@ -111,6 +119,9 @@ namespace PasPasPasTests.Types {
             AssertTypeForAccessModifier("strict private", "f: integer;", "f", u, KnownTypeIds.ErrorType);
         }
 
+        /// <summary>
+        ///     test calls to inherited methods
+        /// </summary>
         [TestMethod]
         public void TestInherited() {
             var o = AccessModifierTestMode.InDerivedType;
@@ -118,6 +129,9 @@ namespace PasPasPasTests.Types {
             AssertTypeForAccessModifier(string.Empty, "function f: integer;", "inherited", o, KnownTypeIds.IntegerType, true);
         }
 
+        /// <summary>
+        ///     test protected visibility of members
+        /// </summary>
         [TestMethod]
         public void TestVisibilityProtected() {
             var i = AccessModifierTestMode.InType;
@@ -142,6 +156,9 @@ namespace PasPasPasTests.Types {
         }
         */
 
+        /// <summary>
+        ///     test global methods
+        /// </summary>
         [TestMethod]
         public void TestGlobalMethod() {
             var f = "SimpleExpr";
@@ -151,7 +168,9 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef<ErrorType>(program: p, f, NativeIntSize.Undefined, v);
         }
 
-
+        /// <summary>
+        ///     test global method invocation
+        /// </summary>
         [TestMethod]
         public void TestGlobalMethodInvocation() {
             var p = "WriteLn('a')";
