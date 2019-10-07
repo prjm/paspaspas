@@ -39,4 +39,28 @@ namespace PasPasPas.Globals.Runtime {
     }
 
 
+    /// <summary>
+    ///     helper methods
+    /// </summary>
+    public static class IRoutineHelpers {
+
+        /// <summary>
+        ///     get the index of a given parameter group
+        /// </summary>
+        /// <param name="routine"></param>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        public static int GetIndexOfParameterGroup(this IRoutine routine, IParameterGroup group) {
+            if (routine.Parameters == default)
+                return -1;
+
+            for (var i = 0; i < routine.Parameters.Count; i++)
+                if (routine.Parameters[i].Equals(group))
+                    return i;
+
+            return -1;
+        }
+
+    }
+
 }

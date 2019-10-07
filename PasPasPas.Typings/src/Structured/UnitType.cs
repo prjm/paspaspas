@@ -96,8 +96,10 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="routine"></param>
         public void AddGlobal(IRoutine routine) {
 
-            if (routine is IntrinsicRoutine r)
+            if (routine is IntrinsicRoutine r) {
                 r.TypeRegistry = TypeRegistry;
+                r.CreateParameters();
+            }
 
             globalRoutines.Add(routine);
             if (symbols.TryGetValue(routine.Name, out var reference))

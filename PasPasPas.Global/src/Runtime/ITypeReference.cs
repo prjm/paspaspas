@@ -42,8 +42,12 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>
-        public static bool IsConstant(this ITypeReference typeReference)
-            => typeReference.ReferenceKind == TypeReferenceKind.ConstantValue;
+        public static bool IsConstant(this ITypeReference typeReference) {
+            if (typeReference.ReferenceKind == TypeReferenceKind.ConstantValue)
+                return true;
+
+            return false;
+        }
 
 
         /// <summary>

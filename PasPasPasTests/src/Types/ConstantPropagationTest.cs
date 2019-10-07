@@ -46,10 +46,10 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Abs(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(5)), "type Ta=-4..8; const a: Ta = 5;");
             AssertExprValue("Abs(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(0)), "type Ta=-4..8; const a: Ta = 0;");
             AssertExprValue("Abs(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3)), "type Ta=-4..8; const a: Ta = -3;");
-            AssertExprValue("Abs(a)", GetUnkownValue(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType), "var a: integer;", isConstant: false);
-            AssertExprValue("Abs(-a)", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
-            AssertExprValue("Abs(a)", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
-            AssertExprValue("Abs(-a)", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(a)", GetInvocationValue(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType), "var a: integer;", isConstant: false);
+            AssertExprValue("Abs(-a)", GetInvocationValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(a)", GetInvocationValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(-a)", GetInvocationValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
 
 
             AssertExprValue("Abs(5.4)", GetExtendedValue("5.4"));
@@ -75,7 +75,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Hi($FFFFFF)", GetIntegerValue(0xff));
 
             AssertExprValue("Hi(a)", GetIntegerValue(0xf0), "type ta = 3..$FFFF; const a: ta = $F0FF;");
-            AssertExprValue("Hi(a)", GetUnkownValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "type ta = 3..$FFFF; var a: ta;", isConstant: false);
+            AssertExprValue("Hi(a)", GetInvocationValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "type ta = 3..$FFFF; var a: ta;", isConstant: false);
         }
 
         [TestMethod]
@@ -118,7 +118,7 @@ namespace PasPasPasTests.Types {
 
             AssertExprValue("Length(a)", GetIntegerValue(3), "const a = (1,2,3);");
             AssertExprValue("Length(a)", GetIntegerValue(1), "type Ta = 'a'..'c'; const a: Ta = 'a';");
-            AssertExprValue("Length(a)", GetUnkownValue(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType), "type Ta = 'a'..'c'; var a: Ta;", isConstant: false);
+            AssertExprValue("Length(a)", GetInvocationValue(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType), "type Ta = 'a'..'c'; var a: Ta;", isConstant: false);
         }
 
         [TestMethod]
@@ -166,8 +166,8 @@ namespace PasPasPasTests.Types {
         public void TestOdd() {
             AssertExprValue("Odd(-3)", GetBooleanValue(true));
             AssertExprValue("Odd(4)", GetBooleanValue(false));
-            AssertExprValue("Odd(a)", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "var a: ShortInt;", isConstant: false);
-            AssertExprValue("Odd(a)", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = -3..3; var a: Ta;", isConstant: false);
+            AssertExprValue("Odd(a)", GetInvocationValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "var a: ShortInt;", isConstant: false);
+            AssertExprValue("Odd(a)", GetInvocationValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = -3..3; var a: Ta;", isConstant: false);
         }
 
         [TestMethod]
@@ -191,20 +191,20 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Ord(a)", GetIntegerValue(116), "type Ta = 's'..'z'; const a: Ta = 't';");
             AssertExprValue("Ord(a)", GetIntegerValue(1), "type Ta = (xa, xb, cx); Tb = xa..xb; const a: Tb = xb;");
 
-            AssertExprValue("Ord(a)", GetUnkownValue(KnownTypeIds.WordType, CommonTypeKind.IntegerType), "var a: WideChar;", isConstant: false);
-            AssertExprValue("Ord(a)", GetUnkownValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "var a: AnsiChar;", isConstant: false);
+            AssertExprValue("Ord(a)", GetInvocationValue(KnownTypeIds.WordType, CommonTypeKind.IntegerType), "var a: WideChar;", isConstant: false);
+            AssertExprValue("Ord(a)", GetInvocationValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "var a: AnsiChar;", isConstant: false);
 
-            AssertExprValue("Ord(q)", GetUnkownValue(KnownTypeIds.ShortInt, CommonTypeKind.IntegerType), "var q: ShortInt;", isConstant: false);
-            AssertExprValue("Ord(q)", GetUnkownValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "var q: Boolean;", isConstant: false);
-            AssertExprValue("Ord(q)", GetUnkownValue(KnownTypeIds.ShortInt, CommonTypeKind.IntegerType), "type Ta = (xc,xb,xa); var q: Ta;", isConstant: false);
+            AssertExprValue("Ord(q)", GetInvocationValue(KnownTypeIds.ShortInt, CommonTypeKind.IntegerType), "var q: ShortInt;", isConstant: false);
+            AssertExprValue("Ord(q)", GetInvocationValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "var q: Boolean;", isConstant: false);
+            AssertExprValue("Ord(q)", GetInvocationValue(KnownTypeIds.ShortInt, CommonTypeKind.IntegerType), "type Ta = (xc,xb,xa); var q: Ta;", isConstant: false);
         }
 
         [TestMethod]
         public void TestMulDiv64() {
             AssertExprValue("MulDivInt64(10, 4, 2)", GetIntegerValue(20));
             AssertExprValue("MulDivInt64(-10, 4, 2)", GetIntegerValue(-20));
-            AssertExprValue("MulDivInt64(a, 4, 2)", GetUnkownValue(KnownTypeIds.Int64Type, CommonTypeKind.Int64Type), "var a: byte;", isConstant: false);
-            AssertExprValue("MulDivInt64(a, 4, 2)", GetUnkownValue(KnownTypeIds.Int64Type, CommonTypeKind.Int64Type), "type Ta = 3..8; var a: Ta;", isConstant: false);
+            AssertExprValue("MulDivInt64(a, 4, 2)", GetInvocationValue(KnownTypeIds.Int64Type, CommonTypeKind.Int64Type), "var a: byte;", isConstant: false);
+            AssertExprValue("MulDivInt64(a, 4, 2)", GetInvocationValue(KnownTypeIds.Int64Type, CommonTypeKind.Int64Type), "type Ta = 3..8; var a: Ta;", isConstant: false);
         }
 
         [TestMethod]
@@ -222,8 +222,8 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Concat(a, a, a)", GetUnicodeStringValue("aaa"), "type Ta = 'a'..'b'; const a: Ta = 'a';");
             AssertExprValue("Concat(a)", GetWideCharValue('a'), "type Ta = 'a'..'b'; const a: Ta = 'a';");
 
-            AssertExprValue("Concat(a, a, a)", GetUnkownValue(KnownTypeIds.UnicodeStringType, CommonTypeKind.UnicodeStringType), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
-            AssertExprValue("Concat(a)", GetUnkownValue(KnownTypeIds.WideCharType, CommonTypeKind.WideCharType), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
+            AssertExprValue("Concat(a, a, a)", GetInvocationValue(KnownTypeIds.UnicodeStringType, CommonTypeKind.UnicodeStringType), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
+            AssertExprValue("Concat(a)", GetInvocationValue(KnownTypeIds.WideCharType, CommonTypeKind.WideCharType), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
         }
 
         [TestMethod]

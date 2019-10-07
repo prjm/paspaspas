@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values {
@@ -6,33 +7,40 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     make a new invocation result
     /// </summary>
-    public class InvocationResult : ITypeReference {
+    public class InvocationResult : IInvocationResult, IEquatable<InvocationResult> {
 
         /// <summary>
         ///     create a new invocation result
         /// </summary>
-        /// <param name="resultType"></param>
-        /// <param name="signature"></param>
         /// <param name="routine"></param>
-        /// <param name="resultKind"></param>
-        public InvocationResult(int resultType, CommonTypeKind resultKind, Signature signature, IRefSymbol routine) {
-            ResultType = resultType;
-            ResultKind = resultKind;
-            Signature = signature;
+        /// <param name="routineIndex">routine index</param>
+        public InvocationResult(IRoutine routine, int routineIndex) {
             Routine = routine;
+            RoutineIndex = routineIndex;
         }
 
         /// <summary>
         ///     result type
         /// </summary>
-        public int TypeId
-            => ResultType;
+        public int TypeId {
+            get {
+                if (RoutineIndex < 0)
+                    return KnownTypeIds.ErrorType;
+                return Routine.Parameters[RoutineIndex].ResultType.TypeId;
+            }
+        }
 
         /// <summary>
         ///     internal type format
         /// </summary>
-        public string InternalTypeFormat
-            => $"#{ResultType}";
+        public string InternalTypeFormat {
+            get {
+                if (RoutineIndex < 0)
+                    return "#??";
+
+                return $"#{Routine.Parameters[RoutineIndex].ResultType}";
+            }
+        }
 
         /// <summary>
         ///     invocation result
@@ -43,27 +51,42 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     result type kind
         /// </summary>
-        public CommonTypeKind TypeKind
-            => ResultKind;
+        public CommonTypeKind TypeKind {
+            get {
+                if (RoutineIndex < 0)
+                    return CommonTypeKind.UnknownType;
 
-        /// <summary>
-        ///     result type
-        /// </summary>
-        public int ResultType { get; }
-
-        /// <summary>
-        ///     result kind
-        /// </summary>
-        public CommonTypeKind ResultKind { get; }
-
-        /// <summary>
-        ///     signature
-        /// </summary>
-        public Signature Signature { get; }
+                return Routine.Parameters[RoutineIndex].ResultType.TypeKind;
+            }
+        }
 
         /// <summary>
         ///     referenced routine
         /// </summary>
-        public IRefSymbol Routine { get; }
+        public IRoutine Routine { get; }
+
+        /// <summary>
+        ///     routine index
+        /// </summary>
+        public int RoutineIndex { get; }
+
+        /// <summary>
+        ///     test if this result is a constant value
+        /// </summary>
+        public bool IsConstant {
+            get {
+                if (RoutineIndex < 0)
+                    return false;
+                return Routine.Parameters[RoutineIndex].ResultType.IsConstant();
+            }
+        }
+
+        /// <summary>
+        ///     compare
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(InvocationResult other)
+            => (other.TypeKind == TypeKind) && (other.TypeId == TypeId);
     }
 }

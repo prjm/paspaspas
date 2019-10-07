@@ -24,6 +24,11 @@ namespace PasPasPas.Globals.Runtime {
         bool IsClassItem { get; }
 
         /// <summary>
+        ///     parent routine
+        /// </summary>
+        IRoutine Routine { get; }
+
+        /// <summary>
         ///     check if the routine matches
         /// </summary>
         /// <param name="typeRegistry"></param>

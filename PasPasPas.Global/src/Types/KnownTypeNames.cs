@@ -15,5 +15,9 @@
         /// </summary>
         public const string MainMethod = "<>main";
 
+        /// <summary>
+        ///     WriteLn method name
+        /// </summary>
+        public const string WriteLn = "WriteLn";
     }
 }

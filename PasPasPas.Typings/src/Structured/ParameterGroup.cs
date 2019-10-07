@@ -11,6 +11,13 @@ namespace PasPasPas.Typings.Structured {
     public class ParameterGroup : IParameterGroup {
 
         /// <summary>
+        ///     create a new parameter group
+        /// </summary>
+        /// <param name="parent"></param>
+        public ParameterGroup(IRoutine parent)
+            => Routine = parent;
+
+        /// <summary>
         ///     result type
         /// </summary>
         public ITypeReference ResultType { get; set; }
@@ -24,6 +31,11 @@ namespace PasPasPas.Typings.Structured {
         ///     class item
         /// </summary>
         public bool IsClassItem { get; set; }
+
+        /// <summary>
+        ///     parent routine
+        /// </summary>
+        public IRoutine Routine { get; }
 
         /// <summary>
         ///     add a parameter definition

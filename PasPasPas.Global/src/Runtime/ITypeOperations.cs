@@ -1,6 +1,4 @@
-﻿using PasPasPas.Globals.Types;
-
-namespace PasPasPas.Globals.Runtime {
+﻿namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     value factory for undefined types
@@ -31,12 +29,9 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     make an invocation result
         /// </summary>
-        /// <param name="resultType"></param>
-        /// <param name="signature"></param>
-        /// <param name="routine"></param>
-        /// <param name="resultKind"></param>
-        /// <returns></returns>
-        ITypeReference MakeInvocationResult(int resultType, CommonTypeKind resultKind, Signature signature, IRefSymbol routine);
+        /// <param name="routine">routine</param>
+        /// <param name="routineIndex">routine index</param>
+        ITypeReference MakeInvocationResult(IRoutine routine, int routineIndex);
 
         /// <summary>
         ///     make a pointer value

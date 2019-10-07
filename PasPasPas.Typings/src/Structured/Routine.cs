@@ -80,7 +80,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <returns></returns>
         public ParameterGroup AddParameterGroup() {
-            var result = new ParameterGroup();
+            var result = new ParameterGroup(this);
             Parameters.Add(result);
             return result;
         }
@@ -90,7 +90,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="resultType">result type</param>
         public ParameterGroup AddParameterGroup(ITypeReference resultType) {
-            var result = new ParameterGroup {
+            var result = new ParameterGroup(this) {
                 ResultType = resultType
             };
 
@@ -106,7 +106,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="parameterName">parameter name</param>
         /// <returns></returns>
         public ParameterGroup AddParameterGroup(string parameterName, ITypeReference firstParam, ITypeReference resultType) {
-            var result = new ParameterGroup {
+            var result = new ParameterGroup(this) {
                 ResultType = resultType
             };
 

@@ -87,12 +87,9 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     make a new method invocation result
         /// </summary>
-        /// <param name="resultType"></param>
-        /// <param name="signature"></param>
         /// <param name="routine"></param>
-        /// <param name="resultKind"></param>
-        /// <returns></returns>
-        public ITypeReference MakeInvocationResult(int resultType, CommonTypeKind resultKind, Signature signature, IRefSymbol routine)
-            => new InvocationResult(resultType, resultKind, signature, routine);
+        /// <param name="rotineIndex"></param>
+        public ITypeReference MakeInvocationResult(IRoutine routine, int rotineIndex)
+            => new InvocationResult(routine, rotineIndex);
     }
 }

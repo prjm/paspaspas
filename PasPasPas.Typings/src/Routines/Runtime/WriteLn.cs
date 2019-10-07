@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Routines.Runtime {
 
@@ -12,7 +13,7 @@ namespace PasPasPas.Typings.Routines.Runtime {
         ///     routine name
         /// </summary>
         public override string Name
-            => "WriteLn";
+            => KnownTypeNames.WriteLn;
 
         /// <summary>
         ///     dynamic routine
@@ -48,6 +49,12 @@ namespace PasPasPas.Typings.Routines.Runtime {
             return false;
         }
 
+        internal override void CreateParameters() {
+            var p = new ParameterGroup(this);
+            p.ResultType = TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.NoType);
+            Parameters.Add(p);
+        }
+
         /// <summary>
         ///     resolve a call
         /// </summary>
@@ -55,7 +62,7 @@ namespace PasPasPas.Typings.Routines.Runtime {
         /// <returns></returns>
         public ITypeReference ResolveCall(Signature signature) {
             var kind = TypeRegistry.GetTypeKindOf(KnownTypeIds.NoType);
-            return Types.MakeInvocationResult(KnownTypeIds.NoType, kind, signature, this);
+            return Types.MakeInvocationResult(this, 0);
         }
     }
 }

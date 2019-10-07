@@ -83,8 +83,8 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     parameters
         /// </summary>
-        public IList<IParameterGroup> Parameters
-            => throw new System.NotImplementedException();
+        public IList<IParameterGroup> Parameters { get; }
+            = new List<IParameterGroup>();
 
         /// <summary>
         ///     make a subrange value
@@ -118,6 +118,11 @@ namespace PasPasPas.Typings.Routines {
             ordinalType = default;
             return false;
         }
+
+        /// <summary>
+        ///     create parameters
+        /// </summary>
+        internal virtual void CreateParameters() { }
 
         /// <summary>
         ///     test if the given type is a short string type
@@ -189,7 +194,7 @@ namespace PasPasPas.Typings.Routines {
             if (!unaryRoutine.CheckParameter(parameter))
                 return;
 
-            var result = new ParameterGroup();
+            var result = new ParameterGroup(unaryRoutine);
             result.AddParameter("AValue").SymbolType = parameter;
             callableRoutines.Add(result);
 
@@ -205,7 +210,7 @@ namespace PasPasPas.Typings.Routines {
             if (!variadicRoutine.CheckParameter(signature))
                 return;
 
-            var result = new ParameterGroup();
+            var result = new ParameterGroup(variadicRoutine);
 
             for (var i = 0; i < signature.Length; i++)
                 result.AddParameter($"AValue{signature}").SymbolType = signature[0];

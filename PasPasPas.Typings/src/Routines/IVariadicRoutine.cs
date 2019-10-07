@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Routines {
     /// <summary>
     ///     intrinsic routine with a variable number of parameters
     /// </summary>
-    public interface IVariadicRoutine {
+    public interface IVariadicRoutine : IRoutine {
 
         /// <summary>
         ///     check parameters

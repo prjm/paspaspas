@@ -131,7 +131,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new Swap());
             systemUnit.AddGlobal(new Trunc());
 
-            // dynamic units
+            // dynamic procedures
             systemUnit.AddGlobal(new WriteLn());
         }
 

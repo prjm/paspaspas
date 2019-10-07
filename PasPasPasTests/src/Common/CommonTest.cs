@@ -8,6 +8,7 @@ using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Runtime.Values.IntValues;
+using PasPasPas.Typings.Structured;
 using SharpFloat.FloatingPoint;
 
 
@@ -79,6 +80,16 @@ namespace PasPasPasTests.Common {
         /// <returns></returns>
         protected static ITypeReference GetUnkownValue(int typeId, CommonTypeKind typeKind)
             => MakeRuntime().Types.MakeTypeInstanceReference(typeId, typeKind);
+
+        /// <summary>
+        ///     make a invocation value
+        /// </summary>
+        /// <returns></returns>
+        protected static ITypeReference GetInvocationValue(int typeId, CommonTypeKind typeKind) {
+            var fakeRoutine = new Routine(default, default, ProcedureKind.Unknown);
+            var _ = fakeRoutine.AddParameterGroup(GetUnkownValue(typeId, typeKind));
+            return MakeRuntime().Types.MakeInvocationResult(fakeRoutine, 0);
+        }
 
         /// <summary>
         ///     get a subrange value
@@ -255,9 +266,6 @@ namespace PasPasPasTests.Common {
         /// <summary>
         ///     create a resolver
         /// </summary>
-        /// <param name="api"></param>
-        /// <param name="path"></param>
-        /// <param name="content"></param>
         /// <returns></returns>
         protected IInputResolver CreateResolver()
             => CommonApi.CreateAnyFileResolver();

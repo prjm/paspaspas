@@ -26,6 +26,11 @@ namespace PasPasPasTests.Common {
             }
         }
 
+        /// <summary>
+        ///     create an input resolver
+        /// </summary>
+        /// <param name="inputResolver"></param>
+        /// <returns></returns>
         public IInputResolver CreateResolver(IInputResolver inputResolver = default) {
             IReaderInput doResolve(IFileReference f, IReaderApi a) {
                 if (inputResolver != default) {

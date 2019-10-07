@@ -84,6 +84,7 @@ namespace PasPasPasTests.Types {
         }
 
 
+
         /// <summary>
         ///     test the type of a given expression
         /// </summary>
@@ -91,6 +92,22 @@ namespace PasPasPasTests.Types {
         /// <param name="typeId">type id to find</param>
         /// <param name="decls">declarations</param>
         protected void AssertExprType(string expression, int typeId, string decls = "") {
+            void tester(IExpression firstParam) {
+                Assert.IsNotNull(firstParam);
+                Assert.IsNotNull(firstParam.TypeInfo);
+                Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
+            }
+
+            AssertExprType(expression, decls, tester);
+        }
+
+        /// <summary>
+        ///     test the type of a given expression
+        /// </summary>
+        /// <param name="expression">expression</param>
+        /// <param name="tester">test function</param>
+        /// <param name="decls">declarations</param>
+        protected void AssertExprType(string expression, string decls, Action<IExpression> tester) {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} begin Writeln({expression}); end. ";
 
@@ -103,10 +120,7 @@ namespace PasPasPasTests.Types {
             IExpression firstParam = null;
 
             firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined, out var env) as IExpression;
-
-            Assert.IsNotNull(firstParam);
-            Assert.IsNotNull(firstParam.TypeInfo);
-            Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
+            tester(firstParam);
         }
 
         /// <summary>

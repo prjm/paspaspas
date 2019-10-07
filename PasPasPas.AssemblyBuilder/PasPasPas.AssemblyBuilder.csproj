@@ -9,10 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Collections.Immutable" Version="1.6.0" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
         <ProjectReference Include="..\PasPasPas.Typings\PasPasPas.Typings.csproj" />
     </ItemGroup>
