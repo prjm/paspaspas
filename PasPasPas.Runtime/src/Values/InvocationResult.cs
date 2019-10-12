@@ -7,7 +7,7 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     make a new invocation result
     /// </summary>
-    public class InvocationResult : IInvocationResult, IEquatable<InvocationResult> {
+    public class InvocationResult : IInvocationResult, IEquatable<InvocationResult>, IEquatable<IntrinsicInvocationResult> {
 
         /// <summary>
         ///     create a new invocation result
@@ -77,6 +77,7 @@ namespace PasPasPas.Runtime.Values {
             get {
                 if (RoutineIndex < 0)
                     return false;
+
                 return Routine.Parameters[RoutineIndex].ResultType.IsConstant();
             }
         }
@@ -87,6 +88,29 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(InvocationResult other)
-            => (other.TypeKind == TypeKind) && (other.TypeId == TypeId);
+            => Routine.Equals(other.Routine) && Routine.Parameters[RoutineIndex].Equals(other.Routine.Parameters[other.RoutineIndex]);
+
+        /// <summary>
+        ///     check equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            if (obj is InvocationResult ir)
+                return Equals(ir);
+
+            if (obj is IntrinsicInvocationResult iir)
+                return Equals(iir);
+
+            return false;
+        }
+
+        /// <summary>
+        ///     check equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(IntrinsicInvocationResult other)
+            => Routine.Equals(other.Routine) && Routine.Parameters[RoutineIndex].Equals(other.Parameters);
     }
 }

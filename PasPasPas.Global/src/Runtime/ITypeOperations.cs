@@ -61,5 +61,13 @@
         /// <param name="typeReference">wrapped value</param>
         /// <returns></returns>
         ITypeReference MakeSubrangeValue(int typeId, ITypeReference typeReference);
+
+        /// <summary>
+        ///     create a new invocation result from an intrinsic routine
+        /// </summary>
+        /// <param name="parameterGroup"></param>
+        /// <param name="targetRoutine"></param>
+        /// <returns></returns>
+        ITypeReference MakeInvocationResultFromIntrinsic(IRoutine targetRoutine, IParameterGroup parameterGroup);
     }
 }

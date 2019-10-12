@@ -192,7 +192,15 @@ namespace PasPasPasTests.Types {
             if (isConstant)
                 Assert.IsTrue(firstParam.TypeInfo.IsConstant());
 
-            Assert.AreEqual(value, firstParam.TypeInfo);
+            if (value.ReferenceKind == TypeReferenceKind.InvocationResult) {
+                var r = firstParam.TypeInfo;
+                Assert.AreEqual(value.TypeKind, r.TypeKind);
+                Assert.AreEqual(value.ReferenceKind, r.ReferenceKind);
+                Assert.AreEqual(value.TypeId, r.TypeId);
+            }
+            else {
+                Assert.AreEqual(value, firstParam.TypeInfo);
+            }
 
             if (typeId != KnownTypeIds.UnspecifiedType)
                 Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);

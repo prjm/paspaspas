@@ -11,6 +11,9 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class ConstantPropagationTest : TypeTest {
 
+        /// <summary>
+        ///     test integer constants
+        /// </summary>
         [TestMethod]
         public void TestIntegerConstants() {
             AssertExprValue("0", GetIntegerValue(0));
@@ -38,6 +41,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("9 mod 4", GetIntegerValue(1));
         }
 
+        /// <summary>
+        ///     test abs function
+        /// </summary>
         [TestMethod]
         public void TestAbs() {
             AssertExprValue("Abs(5)", GetIntegerValue(5));
@@ -68,6 +74,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Chr(a)", GetWideCharValue((char)5), "type ta = 2..9; const a: ta = 5; ");
         }
 
+        /// <summary>
+        ///     teest hi function
+        /// </summary>
         [TestMethod]
         public void TestHi() {
             AssertExprValue("Hi($FF)", GetIntegerValue(0x00));
@@ -78,6 +87,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Hi(a)", GetInvocationValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "type ta = 3..$FFFF; var a: ta;", isConstant: false);
         }
 
+        /// <summary>
+        ///     test high function
+        /// </summary>
         [TestMethod]
         public void TestHigh() {
 
@@ -110,6 +122,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("High(Ta)", GetWideCharValue('c'), "type Ta = array['a'..'c'];");
         }
 
+        /// <summary>
+        ///     test length function
+        /// </summary>
         [TestMethod]
         public void TestLength() {
             AssertExprValue("Length('')", GetIntegerValue(0));
@@ -121,6 +136,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Length(a)", GetInvocationValue(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType), "type Ta = 'a'..'c'; var a: Ta;", isConstant: false);
         }
 
+        /// <summary>
+        ///     test lo function
+        /// </summary>
         [TestMethod]
         public void TestLo() {
             AssertExprValue("Lo($FF)", GetIntegerValue(0xff));
@@ -130,6 +148,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Lo(a)", GetIntegerValue(0x0f), "type ta = 3..$FFFF; const a: ta = $F00F;");
         }
 
+        /// <summary>
+        ///     test low function
+        /// </summary>
         [TestMethod]
         public void TestLow() {
 
@@ -162,6 +183,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Low(Ta)", GetWideCharValue('a'), "type Ta = array['a'..'c'];");
         }
 
+        /// <summary>
+        ///     test odd function
+        /// </summary>
         [TestMethod]
         public void TestOdd() {
             AssertExprValue("Odd(-3)", GetBooleanValue(true));
@@ -170,6 +194,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Odd(a)", GetInvocationValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = -3..3; var a: Ta;", isConstant: false);
         }
 
+        /// <summary>
+        ///     test ord function
+        /// </summary>
         [TestMethod]
         public void TestOrd() {
             AssertExprValue("Ord(-3)", GetIntegerValue(-3));
@@ -199,6 +226,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Ord(q)", GetInvocationValue(KnownTypeIds.ShortInt, CommonTypeKind.IntegerType), "type Ta = (xc,xb,xa); var q: Ta;", isConstant: false);
         }
 
+        /// <summary>
+        ///     test muldiv64 function
+        /// </summary>
         [TestMethod]
         public void TestMulDiv64() {
             AssertExprValue("MulDivInt64(10, 4, 2)", GetIntegerValue(20));
@@ -207,10 +237,17 @@ namespace PasPasPasTests.Types {
             AssertExprValue("MulDivInt64(a, 4, 2)", GetInvocationValue(KnownTypeIds.Int64Type, CommonTypeKind.Int64Type), "type Ta = 3..8; var a: Ta;", isConstant: false);
         }
 
+        /// <summary>
+        ///     evaluate pi function
+        /// </summary>
         [TestMethod]
         public void TestPi()
             => AssertExprValue("Pi()", GetExtendedValue(ExtF80.Pi));
 
+
+        /// <summary>
+        ///     test concat operator
+        /// </summary>
         [TestMethod]
         public void TestConcat() {
             AssertExprValue("Concat('a')", GetWideCharValue('a'));
@@ -226,6 +263,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Concat(a)", GetInvocationValue(KnownTypeIds.WideCharType, CommonTypeKind.WideCharType), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
         }
 
+        /// <summary>
+        ///     test pred operator
+        /// </summary>
         [TestMethod]
         public void TestPred() {
 
@@ -248,10 +288,16 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Pred(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(-3)), "type Te = -3..3; const a: Te = -2;");
         }
 
+        /// <summary>
+        ///     test pointer cast
+        /// </summary>
         [TestMethod]
         public void TestPtr()
             => AssertExprValue("Ptr(4)", GetPointerValue(GetIntegerValue(4)));
 
+        /// <summary>
+        ///     test round function
+        /// </summary>
         [TestMethod]
         public void TestRound() {
             AssertExprValue("Round(2.5)", GetIntegerValue(2));
@@ -274,6 +320,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Round(Pi()", GetIntegerValue(3));
         }
 
+        /// <summary>
+        ///     test succ function
+        /// </summary>
         [TestMethod]
         public void TestSucc() {
 
@@ -296,6 +345,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Succ(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(-1)), "type Te = -3..3; const a: Te = -2;");
         }
 
+        /// <summary>
+        ///     test boolean operations
+        /// </summary>
         [TestMethod]
         public void TestBooleanOperations() {
             AssertExprValue("false and false", GetBooleanValue(false));
@@ -317,6 +369,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("true or a", GetBooleanValue(true), "var a: Boolean");
         }
 
+        /// <summary>
+        ///     test sizeof operator
+        /// </summary>
         [TestMethod]
         public void TestSizeOf() {
             AssertExprValue("SizeOf(AnsiChar)", GetIntegerValue(1));
@@ -377,6 +432,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("SizeOf(Pointer)", GetIntegerValue(4));
         }
 
+        /// <summary>
+        ///     test sqr function
+        /// </summary>
         [TestMethod]
         public void TestSqr() {
             AssertExprValue("Sqr(2)", GetIntegerValue(4));
@@ -384,6 +442,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Sqr(2.25)", GetExtendedValue(5.0625));
         }
 
+        /// <summary>
+        ///     test swap function
+        /// </summary>
         [TestMethod]
         public void TestSwap() {
             AssertExprValue("Swap($ff)", GetIntegerValue(0x00));
@@ -391,6 +452,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Swap($aaff00)", GetIntegerValue(0xaa00ff));
         }
 
+        /// <summary>
+        ///     test trunc function
+        /// </summary>
         [TestMethod]
         public void TestTrunc() {
             AssertExprValue("Trunc(0.0)", GetIntegerValue(0));
@@ -402,12 +466,18 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Trunc(-1)", GetIntegerValue(-1));
         }
 
+        /// <summary>
+        ///     test record constants
+        /// </summary>
         [TestMethod]
         public void TestRecordConstants() {
             AssertExprValue("a", GetRecordValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(1), GetWideCharValue('2')), "const a = (a: 1; b: '2');");
             AssertExprValue("a", GetRecordValue(1 + RegisteredTypes.SmallestUserTypeId, GetExtendedValue(1.0), GetUnicodeStringValue("22")), "const a = (a: 1.0; b: '22');");
         }
 
+        /// <summary>
+        ///     test set constants
+        /// </summary>
         [TestMethod]
         public void TestSetConstants() {
             var v1 = GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(1));
@@ -421,6 +491,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "const b = ['aa','b'];", isConstant: false);
         }
 
+        /// <summary>
+        ///     test array constants
+        /// </summary>
         [TestMethod]
         public void TestArrayConstants() {
 

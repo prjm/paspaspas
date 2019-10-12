@@ -88,8 +88,17 @@ namespace PasPasPas.Runtime.Values {
         ///     make a new method invocation result
         /// </summary>
         /// <param name="routine"></param>
-        /// <param name="rotineIndex"></param>
-        public ITypeReference MakeInvocationResult(IRoutine routine, int rotineIndex)
-            => new InvocationResult(routine, rotineIndex);
+        /// <param name="routineIndex"></param>
+        public ITypeReference MakeInvocationResult(IRoutine routine, int routineIndex)
+            => new InvocationResult(routine, routineIndex);
+
+        /// <summary>
+        ///     create a new invocation result from an intrinsic routine
+        /// </summary>
+        /// <param name="parameterGroup"></param>
+        /// <param name="routine">target routine</param>
+        /// <returns></returns>
+        public ITypeReference MakeInvocationResultFromIntrinsic(IRoutine routine, IParameterGroup parameterGroup)
+            => new IntrinsicInvocationResult(routine, parameterGroup);
     }
 }
