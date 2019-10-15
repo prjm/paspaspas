@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
@@ -42,5 +44,11 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         /// <returns></returns>
         Signature CreateSignature(ITypeRegistry runtime);
+
+        /// <summary>
+        ///     routine code
+        /// </summary>
+        ImmutableArray<IOpCode> Code { get; }
+
     }
 }

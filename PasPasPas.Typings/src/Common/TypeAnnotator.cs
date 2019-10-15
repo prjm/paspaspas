@@ -62,6 +62,7 @@ namespace PasPasPas.Typings.Common {
         private readonly ITypedEnvironment environment;
         private readonly Stack<ITypeReference> currentTypeDefinition;
         private readonly Stack<ParameterGroup> currentMethodParameters;
+        private readonly Stack<CodeBlockBuilder> currentCodeBlock;
         private readonly Resolver resolver;
 
         /// <summary>
@@ -86,6 +87,7 @@ namespace PasPasPas.Typings.Common {
             resolver = new Resolver(new Scope(env.TypeRegistry));
             currentTypeDefinition = new Stack<ITypeReference>();
             currentMethodParameters = new Stack<ParameterGroup>();
+            currentCodeBlock = new Stack<CodeBlockBuilder>();
         }
 
         private ITypeReference GetTypeRefence(ITypedSyntaxNode syntaxNode) {
@@ -301,6 +303,16 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element">symbol reference</param>
         public void EndVisit(SymbolReference element) {
+            DetermineSymbolTypes(element);
+
+            if (element.TypeInfo?.ReferenceKind == TypeReferenceKind.InvocationResult) {
+                var codeBuilder = currentCodeBlock.Peek();
+                var callInfo = element.TypeInfo as IInvocationResult;
+                codeBuilder.AddCall(callInfo);
+            }
+        }
+
+        private void DetermineSymbolTypes(SymbolReference element) {
             var baseTypeValue = GetInstanceTypeById(KnownTypeIds.UnspecifiedType);
 
             if (element.TypeValue is ITypedSyntaxNode typeRef)
@@ -1062,6 +1074,7 @@ namespace PasPasPas.Typings.Common {
             if (routine != default) {
                 resolver.OpenScope();
                 currentMethodImplementation.Push(new RoutineIndex(routine, -1));
+                currentCodeBlock.Push(new CodeBlockBuilder(environment.ListPools));
             }
         }
 
@@ -1114,7 +1127,9 @@ namespace PasPasPas.Typings.Common {
 
             }
 
-            currentMethodImplementation.Pop();
+            var implementation = currentMethodImplementation.Pop();
+            var code = currentCodeBlock.Pop();
+            (implementation.Parameters as ParameterGroup).Code = code.CreateCodeArray();
         }
 
         /// <summary>

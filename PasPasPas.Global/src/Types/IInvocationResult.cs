@@ -8,10 +8,9 @@ namespace PasPasPas.Globals.Types {
     public interface IInvocationResult : ITypeReference {
 
         /// <summary>
-        ///     <c>true</c> if this is a compile time constant
+        ///     get the called routine
         /// </summary>
-        bool IsConstant { get; }
-
+        IRoutine Routine { get; }
 
     }
 }

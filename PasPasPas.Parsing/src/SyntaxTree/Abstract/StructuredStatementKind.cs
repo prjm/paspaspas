@@ -57,7 +57,7 @@
         ForTo = 9,
 
         /// <summary>
-        ///     for / downto statement
+        ///     for / down to statement
         /// </summary>
         ForDownTo = 10,
 

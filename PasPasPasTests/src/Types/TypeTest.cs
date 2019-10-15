@@ -45,6 +45,26 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
+        ///     assert statement type
+        /// </summary>
+        /// <param name="statement"></param>
+        /// <param name="decls"></param>
+        /// <param name="tester"></param>
+        protected void AssertStatementType(string statement, string decls, Action<StructuredStatement> tester) {
+            var file = "SimpleExpr";
+            var program = $"program {file};{decls} begin {statement}; end. ";
+
+            StructuredStatement searchfunction(object x) {
+                if (x is StructuredStatement)
+                    return x as StructuredStatement;
+                return default;
+            }
+
+            var stm = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined, out var env) as StructuredStatement;
+            tester(stm);
+        }
+
+        /// <summary>
         ///     assert expression type
         /// </summary>
         /// <param name="file"></param>

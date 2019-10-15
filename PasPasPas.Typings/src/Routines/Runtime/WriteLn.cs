@@ -61,8 +61,8 @@ namespace PasPasPas.Typings.Routines.Runtime {
         /// <param name="signature"></param>
         /// <returns></returns>
         public ITypeReference ResolveCall(Signature signature) {
-            var kind = TypeRegistry.GetTypeKindOf(KnownTypeIds.NoType);
-            return Types.MakeInvocationResult(this, 0);
+            var kind = MakeTypeInstanceReference(KnownTypeIds.NoType);
+            return Types.MakeInvocationResultFromIntrinsic(this, new ParameterGroup(this) { ResultType = kind });
         }
     }
 }

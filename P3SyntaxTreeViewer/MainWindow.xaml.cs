@@ -173,10 +173,31 @@ namespace P3SyntaxTreeViewer {
 
             var root = new TreeViewItem() { Header = unit.Name };
             tv.Items.Add(root);
+            root.IsExpanded = true;
 
             foreach (var symbol in unit.Symbols) {
-                var s = new TreeViewItem() { Header = symbol.Key + ": " + symbol.Value };
+                var rf = symbol.Value as Reference;
+                var rftext = rf?.Kind.ToString() ?? symbol.Value.GetType().ToString();
+                var s = new TreeViewItem() { Header = symbol.Key + ": " + rftext };
                 root.Items.Add(s);
+                s.IsExpanded = true;
+
+                if (rf?.Symbol is IRoutine r) {
+
+                    foreach (var prm in r.Parameters) {
+
+                        var p = new TreeViewItem() { Header = prm.ToString() };
+                        s.Items.Add(p);
+                        p.IsExpanded = true;
+
+                        foreach (var code in prm.Code) {
+
+                            var c = new TreeViewItem() { Header = code.OpCodeText };
+                            p.Items.Add(c);
+
+                        }
+                    }
+                }
             }
         }
 

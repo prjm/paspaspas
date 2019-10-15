@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -36,6 +37,11 @@ namespace PasPasPas.Typings.Structured {
         ///     parent routine
         /// </summary>
         public IRoutine Routine { get; }
+
+        /// <summary>
+        ///     code
+        /// </summary>
+        public ImmutableArray<IOpCode> Code { get; internal set; }
 
         /// <summary>
         ///     add a parameter definition

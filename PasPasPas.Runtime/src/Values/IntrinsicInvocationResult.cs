@@ -1,12 +1,13 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values {
 
     /// <summary>
     ///     result from an intrinsic routine call
     /// </summary>
-    public class IntrinsicInvocationResult : ITypeReference, IEquatable<InvocationResult>, IEquatable<IntrinsicInvocationResult> {
+    public class IntrinsicInvocationResult : IInvocationResult, IEquatable<InvocationResult>, IEquatable<IntrinsicInvocationResult> {
 
         /// <summary>
         ///     create a new intrinsic invocation result
