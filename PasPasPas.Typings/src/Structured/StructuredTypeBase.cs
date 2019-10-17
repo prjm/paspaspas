@@ -53,7 +53,7 @@ namespace PasPasPas.Typings.Structured {
             if (TypeRegistry == null)
                 throw new InvalidOperationException();
 
-            var newMethod = new Routine(TypeRegistry, completeName, kind, genericTypeId, TypeId);
+            var newMethod = new Routine(TypeRegistry, completeName, genericTypeId, TypeId);
             Methods.Add(newMethod);
             return newMethod;
         }

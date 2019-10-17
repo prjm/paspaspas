@@ -3,9 +3,8 @@ using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
 
-
     /// <summary>
-    ///     generic interface for routines
+    ///     generic interface for routine groups
     /// </summary>
     public interface IRoutine : IRefSymbol {
 
@@ -13,11 +12,6 @@ namespace PasPasPas.Globals.Runtime {
         ///     routine name
         /// </summary>
         string Name { get; }
-
-        /// <summary>
-        ///     procedure kind
-        /// </summary>
-        ProcedureKind Kind { get; }
 
         /// <summary>
         ///     defining type id

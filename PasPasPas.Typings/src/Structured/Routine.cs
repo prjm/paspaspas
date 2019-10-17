@@ -12,14 +12,12 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     create a new routine
         /// </summary>
-        /// <param name="name">routine name</param>
-        /// <param name="kind">routine kind</param>
+        /// <param name="name">routine name</param
         /// <param name="types">type registry</param>
         /// <param name="definingType">defining type</param>
         /// <param name="genericTypeId">generic type id</param>
-        public Routine(ITypeRegistry types, string name, ProcedureKind kind, int genericTypeId = KnownTypeIds.ErrorType, int definingType = KnownTypeIds.ErrorType) {
+        public Routine(ITypeRegistry types, string name, int genericTypeId = KnownTypeIds.ErrorType, int definingType = KnownTypeIds.ErrorType) {
             Name = name;
-            Kind = kind;
             TypeRegistry = types;
             TypeId = genericTypeId;
             DefiningType = definingType;
@@ -79,8 +77,9 @@ namespace PasPasPas.Typings.Structured {
         ///     add a parameter group
         /// </summary>
         /// <returns></returns>
-        public ParameterGroup AddParameterGroup() {
-            var result = new ParameterGroup(this);
+        /// <param name="kind">procedure kind</param>
+        public ParameterGroup AddParameterGroup(ProcedureKind kind) {
+            var result = new ParameterGroup(this, kind);
             Parameters.Add(result);
             return result;
         }
@@ -89,8 +88,9 @@ namespace PasPasPas.Typings.Structured {
         ///     add a parameter group
         /// </summary>
         /// <param name="resultType">result type</param>
-        public ParameterGroup AddParameterGroup(ITypeReference resultType) {
-            var result = new ParameterGroup(this) {
+        /// <param name="kind">procedure kind</param>
+        public ParameterGroup AddParameterGroup(ProcedureKind kind, ITypeReference resultType) {
+            var result = new ParameterGroup(this, kind) {
                 ResultType = resultType
             };
 
@@ -104,9 +104,10 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="firstParam">first parameter</param>
         /// <param name="resultType">result type</param>
         /// <param name="parameterName">parameter name</param>
+        /// <param name="kind">procedure kind</param>
         /// <returns></returns>
-        public ParameterGroup AddParameterGroup(string parameterName, ITypeReference firstParam, ITypeReference resultType) {
-            var result = new ParameterGroup(this) {
+        public ParameterGroup AddParameterGroup(string parameterName, ProcedureKind kind, ITypeReference firstParam, ITypeReference resultType) {
+            var result = new ParameterGroup(this, kind) {
                 ResultType = resultType
             };
 

@@ -6,9 +6,15 @@ using PasPasPas.Globals.Types;
 namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
-    ///     interface for parameter groups
+    ///     interface for parameter groups - describing a
+    ///     routine by its parameters and properties
     /// </summary>
     public interface IParameterGroup {
+
+        /// <summary>
+        ///     routine kind
+        /// </summary>
+        ProcedureKind RoutineKind { get; }
 
         /// <summary>
         ///     result type

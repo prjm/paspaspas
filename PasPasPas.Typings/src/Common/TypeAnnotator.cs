@@ -695,7 +695,7 @@ namespace PasPasPas.Typings.Common {
             if (element is GlobalMethod gm) {
                 if (CurrentUnit.InterfaceSymbols != default) {
                     var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
-                    method = new Routine(TypeRegistry, element.SymbolName, element.Kind);
+                    method = new Routine(TypeRegistry, element.SymbolName);
                     unitType.AddGlobal(method);
                 }
             }
@@ -723,7 +723,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             currentTypeDefinition.Push((Routine)method);
-            var parameters = ((Routine)method).AddParameterGroup();
+            var parameters = ((Routine)method).AddParameterGroup(element.Kind);
             parameters.IsClassItem = f.IsClassItem;
             currentMethodParameters.Push(parameters);
         }
@@ -1053,15 +1053,15 @@ namespace PasPasPas.Typings.Common {
 
                 if (unitType.HasGlobalRoutine(element.SymbolName)) {
                     if (!unitType.AddGlobalImplementation(element.SymbolName, out routine)) {
-                        routine = new Routine(TypeRegistry, element.SymbolName, element.Kind);
+                        routine = new Routine(TypeRegistry, element.SymbolName);
                     }
                 }
                 else {
-                    routine = new Routine(TypeRegistry, element.SymbolName, element.Kind);
+                    routine = new Routine(TypeRegistry, element.SymbolName);
                     unitType.AddGlobal(routine);
                     resolver.AddToScope(element.SymbolName, ReferenceKind.RefToGlobalRoutine, routine);
                 }
-                currentMethodParameters.Push((routine as Routine).AddParameterGroup());
+                currentMethodParameters.Push((routine as Routine).AddParameterGroup(element.Kind));
             }
             else if (isClassMethod) {
                 var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(definingType) as IStructuredType;

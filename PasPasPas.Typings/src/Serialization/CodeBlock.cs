@@ -52,8 +52,7 @@ namespace PasPasPas.Typings.Serialization {
             for (var i = 0; i < n; i++) {
                 var nameIndex = typeReader.ReadUint();
                 var name = stringData[nameIndex];
-                var routineKind = typeReader.ReadByte().ToProcedureKind();
-                var routine = typeReader.Types.TypeCreator.CreateGlobalRoutine(name, routineKind);
+                var routine = typeReader.Types.TypeCreator.CreateGlobalRoutine(name);
                 routines.Add(routine);
             }
         }
@@ -66,7 +65,6 @@ namespace PasPasPas.Typings.Serialization {
                 var routine = routines[i];
                 n = stringData[routine.Name];
                 typeWriter.WriteUint(ref n);
-                typeWriter.WriteByte(routine.Kind.ToByte());
             }
         }
 

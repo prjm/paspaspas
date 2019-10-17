@@ -50,7 +50,7 @@ namespace PasPasPas.Typings.Routines.Runtime {
         }
 
         internal override void CreateParameters() {
-            var p = new ParameterGroup(this);
+            var p = new ParameterGroup(this, ProcedureKind.Procedure);
             p.ResultType = TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.NoType);
             Parameters.Add(p);
         }
@@ -62,7 +62,7 @@ namespace PasPasPas.Typings.Routines.Runtime {
         /// <returns></returns>
         public ITypeReference ResolveCall(Signature signature) {
             var kind = MakeTypeInstanceReference(KnownTypeIds.NoType);
-            return Types.MakeInvocationResultFromIntrinsic(this, new ParameterGroup(this) { ResultType = kind });
+            return Types.MakeInvocationResultFromIntrinsic(this, new ParameterGroup(this, ProcedureKind.Procedure) { ResultType = kind });
         }
     }
 }

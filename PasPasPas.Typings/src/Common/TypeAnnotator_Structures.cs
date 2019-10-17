@@ -18,8 +18,8 @@ namespace PasPasPas.Typings.Common {
             resolver.AddToScope(KnownTypeNames.System, ReferenceKind.RefToUnit, environment.TypeRegistry.SystemUnit);
 
             if (element.FileType == CompilationUnitType.Program) {
-                var mainRoutine = TypeCreator.CreateGlobalRoutine(KnownTypeNames.MainMethod, ProcedureKind.Procedure);
-                var mainParams = (mainRoutine as Routine).AddParameterGroup();
+                var mainRoutine = TypeCreator.CreateGlobalRoutine(KnownTypeNames.MainMethod);
+                var mainParams = (mainRoutine as Routine).AddParameterGroup(ProcedureKind.Procedure);
                 unitType.Symbols.Add(mainRoutine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, mainRoutine));
                 currentMethodImplementation.Push(new RoutineIndex(mainRoutine, 0));
                 currentCodeBlock.Push(new CodeBlockBuilder(environment.ListPools));

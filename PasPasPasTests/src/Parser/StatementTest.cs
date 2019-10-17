@@ -41,6 +41,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin (x as TB).z(); end .");
         }
 
+        /// <summary>
+        ///     test if statements
+        /// </summary>
         [TestMethod]
         public void TestIfStatement() {
             ParseString("program test; begin if a <= b then begin a() end else b() end .");
@@ -50,6 +53,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin if a <> b then begin a(); end else begin b(); end end .");
         }
 
+        /// <summary>
+        ///     test case statements
+        /// </summary>
         [TestMethod]
         public void TestCaseStatement() {
             ParseString("program test; begin case a() of 1: a() end end .");
@@ -57,6 +63,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin case a() of 1..5: a() end end .");
         }
 
+        /// <summary>
+        ///     test repeat statements
+        /// </summary>
         [TestMethod]
         public void TestRepeatStatement() {
             ParseString("program test; begin repeat until true end .");

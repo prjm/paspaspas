@@ -194,7 +194,7 @@ namespace PasPasPas.Typings.Routines {
             if (!unaryRoutine.CheckParameter(parameter))
                 return;
 
-            var result = new ParameterGroup(unaryRoutine);
+            var result = new ParameterGroup(unaryRoutine, unaryRoutine.Kind);
             result.AddParameter("AValue").SymbolType = parameter;
             callableRoutines.Add(result);
 
@@ -210,7 +210,7 @@ namespace PasPasPas.Typings.Routines {
             if (!variadicRoutine.CheckParameter(signature))
                 return;
 
-            var result = new ParameterGroup(variadicRoutine);
+            var result = new ParameterGroup(variadicRoutine, variadicRoutine.Kind);
 
             for (var i = 0; i < signature.Length; i++)
                 result.AddParameter($"AValue{signature}").SymbolType = signature[0];

@@ -21,6 +21,11 @@ namespace PasPasPas.Typings.Routines {
         bool IsConstant { get; }
 
         /// <summary>
+        ///     routine kind
+        /// </summary>
+        ProcedureKind Kind { get; }
+
+        /// <summary>
         ///     resolve a call
         /// </summary>
         /// <param name="signature"></param>

@@ -14,9 +14,12 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     create a new parameter group
         /// </summary>
-        /// <param name="parent"></param>
-        public ParameterGroup(IRoutine parent)
-            => Routine = parent;
+        /// <param name="parent">parent routine group</param>
+        /// <param name="procedureKind">procedure kind</param>
+        public ParameterGroup(IRoutine parent, ProcedureKind procedureKind) {
+            Routine = parent;
+            RoutineKind = procedureKind;
+        }
 
         /// <summary>
         ///     result type
@@ -42,6 +45,8 @@ namespace PasPasPas.Typings.Structured {
         ///     code
         /// </summary>
         public ImmutableArray<IOpCode> Code { get; internal set; }
+
+        public ProcedureKind RoutineKind { get; }
 
         /// <summary>
         ///     add a parameter definition

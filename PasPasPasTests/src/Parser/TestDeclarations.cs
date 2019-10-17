@@ -34,6 +34,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 deprecated experimental platform library; .");
         }
 
+        /// <summary>
+        ///     test various declarations
+        /// </summary>
         [TestMethod]
         public void TestOtherDeclarations() {
             ParseString("program test; function x; deprecated; platform; .");
@@ -54,6 +57,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; exports x(a : Pointer) index 4 name 4 resident ; .");
         }
 
+        /// <summary>
+        ///     test type declarations
+        /// </summary>
         [TestMethod]
         public void TestTypeDeclarations() {
             ParseString("program test; var x : x = ((x:01;x:99;x:'x';x:(x,0,0,0,0,0,0))); .");
@@ -83,6 +89,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x : unicodestring = 5; .");
         }
 
+        /// <summary>
+        ///     test type definitions
+        /// </summary>
         [TestMethod]
         public void TestClassTypeDefinitions() {
             ParseString("unit test; interface implementation procedure x ; external 5 name '5' delayed; end .");
@@ -107,6 +116,9 @@ namespace PasPasPasTests.Parser {
             ParseString("unit test; interface implementation procedure x ; external 5 name 5 index 5; begin end ; end .");
         }
 
+        /// <summary>
+        ///     test class type declarations
+        /// </summary>
         [TestMethod]
         public void TestClassTypeDeclarations() {
             ParseString("program test; type x = interface(IUnknown) [X_ID] procedure test; end; .");
