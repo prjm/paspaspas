@@ -2,8 +2,14 @@
 
 namespace PasPasPasTests.Parser {
 
+    /// <summary>
+    ///     test program declarations
+    /// </summary>
     public class ProgramTest : ParserTestBase {
 
+        /// <summary>
+        ///     test some program declarations
+        /// </summary>
         [TestMethod]
         public void TestPrograms() {
             ParseString("program test; .");

@@ -19,7 +19,7 @@ namespace PasPasPas.Typings.Common {
 
             if (element.FileType == CompilationUnitType.Program) {
                 var mainRoutine = TypeCreator.CreateGlobalRoutine(KnownTypeNames.MainMethod);
-                var mainParams = (mainRoutine as Routine).AddParameterGroup(ProcedureKind.Procedure);
+                var mainParams = (mainRoutine as Routine).AddParameterGroup(ProcedureKind.Procedure, GetInstanceTypeById(KnownTypeIds.NoType));
                 unitType.Symbols.Add(mainRoutine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, mainRoutine));
                 currentMethodImplementation.Push(new RoutineIndex(mainRoutine, 0));
                 currentCodeBlock.Push(new CodeBlockBuilder(environment.ListPools));

@@ -54,6 +54,12 @@ namespace PasPasPas.Typings.Serialization {
                 var name = stringData[nameIndex];
                 var routine = typeReader.Types.TypeCreator.CreateGlobalRoutine(name);
                 routines.Add(routine);
+                var paramCount = typeReader.ReadUint();
+                var paramTag = new ParameterGroupTag();
+                for (var j = 0; j < paramCount; j++) {
+                    typeReader.ReadTag(paramTag);
+                    paramTag.AddToRoutine(routine);
+                }
             }
         }
 
@@ -65,6 +71,13 @@ namespace PasPasPas.Typings.Serialization {
                 var routine = routines[i];
                 n = stringData[routine.Name];
                 typeWriter.WriteUint(ref n);
+                n = (uint)routine.Parameters.Count;
+                typeWriter.WriteUint(ref n);
+                var paramTag = new ParameterGroupTag();
+                for (var j = 0; j < routine.Parameters.Count; j++) {
+                    paramTag.Initialize(routine.Parameters[i]);
+                    typeWriter.WriteTag(paramTag);
+                }
             }
         }
 

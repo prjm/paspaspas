@@ -83,7 +83,7 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     parameters
         /// </summary>
-        public IList<IParameterGroup> Parameters { get; }
+        public List<IParameterGroup> Parameters { get; }
             = new List<IParameterGroup>();
 
         /// <summary>
@@ -194,14 +194,16 @@ namespace PasPasPas.Typings.Routines {
             if (!unaryRoutine.CheckParameter(parameter))
                 return;
 
-            var result = new ParameterGroup(unaryRoutine, unaryRoutine.Kind);
-            result.AddParameter("AValue").SymbolType = parameter;
-            callableRoutines.Add(result);
+            var resultType = default(ITypeReference);
 
             if (unaryRoutine.IsConstant && parameter.IsConstant())
-                result.ResultType = unaryRoutine.ExecuteCall(parameter);
+                resultType = unaryRoutine.ExecuteCall(parameter);
             else
-                result.ResultType = unaryRoutine.ResolveCall(parameter);
+                resultType = unaryRoutine.ResolveCall(parameter);
+
+            var result = new ParameterGroup(unaryRoutine, unaryRoutine.Kind, resultType);
+            result.AddParameter("AValue").SymbolType = parameter;
+            callableRoutines.Add(result);
         }
 
 
@@ -210,16 +212,18 @@ namespace PasPasPas.Typings.Routines {
             if (!variadicRoutine.CheckParameter(signature))
                 return;
 
-            var result = new ParameterGroup(variadicRoutine, variadicRoutine.Kind);
+            var resultType = default(ITypeReference);
+
+            if (variadicRoutine.IsConstant && signature.IsConstant && variadicRoutine is IConstantVariadicRoutine cvr)
+                resultType = cvr.ExecuteCall(signature);
+            else
+                resultType = variadicRoutine.ResolveCall(signature);
+
+            var result = new ParameterGroup(variadicRoutine, variadicRoutine.Kind, resultType);
 
             for (var i = 0; i < signature.Length; i++)
                 result.AddParameter($"AValue{signature}").SymbolType = signature[0];
             callableRoutines.Add(result);
-
-            if (variadicRoutine.IsConstant && signature.IsConstant && variadicRoutine is IConstantVariadicRoutine cvr)
-                result.ResultType = cvr.ExecuteCall(signature);
-            else
-                result.ResultType = variadicRoutine.ResolveCall(signature);
         }
 
 

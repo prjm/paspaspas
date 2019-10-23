@@ -23,10 +23,21 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
 
+    /// <summary>
+    ///     base class for parser tests
+    /// </summary>
     public class ParserTestBase : CommonTest {
 
+        /// <summary>
+        ///     file path
+        /// </summary>
         protected const string CstPath = "z.x.pas";
 
+        /// <summary>
+        ///     compact whitespace of a string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected static string CompactWhitespace(string input) {
             var result = new StringBuilder();
             var wasWhitespace = false;
@@ -49,6 +60,11 @@ namespace PasPasPasTests.Parser {
             return result.ToString().Trim();
         }
 
+        /// <summary>
+        ///     parse a string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
         protected void ParseString(string input, string output = null) {
             if (string.IsNullOrEmpty(output))
                 output = input;
@@ -151,6 +167,14 @@ namespace PasPasPasTests.Parser {
             return tree;
         }
 
+        /// <summary>
+        ///     run a syntax tree test
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tester"></param>
+        /// <param name="tokens"></param>
+        /// <param name="errorMessages"></param>
+        /// <returns></returns>
         protected T RunCstTest<T>(Func<StandardParser, T> tester, string tokens = "", params uint[] errorMessages) {
             var env = CreateEnvironment();
             var msgs = new List<ILogMessage>();
@@ -193,6 +217,12 @@ namespace PasPasPasTests.Parser {
             }
         }
 
+        /// <summary>
+        ///     run an abstract syntax tree test
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="env"></param>
+        /// <returns></returns>
         protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env) {
             var path = env.CreateFileReference("z.x.pas");
             var resolver = CommonApi.CreateResolverForSingleString(path, input);
@@ -207,6 +237,12 @@ namespace PasPasPasTests.Parser {
             }
         }
 
+        /// <summary>
+        ///     test a constant expression
+        /// </summary>
+        /// <param name="expr"></param>
+        /// <param name="constName"></param>
+        /// <param name="typeId"></param>
         protected void TestConstant(string expr, string constName = "x", int typeId = -1) {
             var statement = $"program z.x; const x = {expr}; .";
 
@@ -227,6 +263,12 @@ namespace PasPasPasTests.Parser {
             RunAstTest(statement, search, true, true);
         }
 
+        /// <summary>
+        ///     create a file resolver
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
         protected IInputResolver CreateFileResolver(IFileReference path, string content) {
             IReaderInput doResolve(IFileReference file, IReaderApi a) {
                 var incFile = file.CreateNewFileReference(Path.GetFullPath("dummy.inc"));
@@ -280,6 +322,13 @@ namespace PasPasPasTests.Parser {
             return Factory.CreateInputResolver(doResolve, doCheck);
         }
 
+        /// <summary>
+        ///     run a compiler directive test
+        /// </summary>
+        /// <param name="directive"></param>
+        /// <param name="expected"></param>
+        /// <param name="actual"></param>
+        /// <param name="messages"></param>
         protected void RunCompilerDirective(string directive, object expected, Func<IOptionSet, object> actual, params uint[] messages) {
 
             var env = CreateEnvironment();

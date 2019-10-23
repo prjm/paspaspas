@@ -28,7 +28,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     parameters
         /// </summary>
-        IList<IParameterGroup> Parameters { get; }
+        List<IParameterGroup> Parameters { get; }
 
     }
 

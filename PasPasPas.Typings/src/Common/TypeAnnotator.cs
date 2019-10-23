@@ -723,7 +723,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             currentTypeDefinition.Push((Routine)method);
-            var parameters = ((Routine)method).AddParameterGroup(element.Kind);
+            var parameters = ((Routine)method).AddParameterGroup(element.Kind, GetInstanceTypeById(KnownTypeIds.NoType));
             parameters.IsClassItem = f.IsClassItem;
             currentMethodParameters.Push(parameters);
         }
@@ -1061,7 +1061,7 @@ namespace PasPasPas.Typings.Common {
                     unitType.AddGlobal(routine);
                     resolver.AddToScope(element.SymbolName, ReferenceKind.RefToGlobalRoutine, routine);
                 }
-                currentMethodParameters.Push((routine as Routine).AddParameterGroup(element.Kind));
+                currentMethodParameters.Push((routine as Routine).AddParameterGroup(element.Kind, GetInstanceTypeById(KnownTypeIds.NoType)));
             }
             else if (isClassMethod) {
                 var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(definingType) as IStructuredType;

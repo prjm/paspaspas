@@ -2,9 +2,14 @@
 
 namespace PasPasPasTests.Parser {
 
-
+    /// <summary>
+    ///     test expression parsing
+    /// </summary>
     public class ExpressionTest : ParserTestBase {
 
+        /// <summary>
+        ///     test closure expressions
+        /// </summary>
         [TestMethod]
         public void TestClosureExpressions() {
             ParseString("program test; const x = procedure begin end ; .");
@@ -12,6 +17,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = function (const x : string ): integer begin end ; .");
         }
 
+        /// <summary>
+        ///     test simple expressions
+        /// </summary>
         [TestMethod]
         public void TestSimpleExpressions() {
             ParseString("program test; const x = a.b.c^.d[q].d(asd:d, asd:d:d, ad:d); .");
@@ -44,6 +52,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = x is TObject; .");
         }
 
+        /// <summary>
+        ///     parse terms
+        /// </summary>
         [TestMethod]
         public void TestSimpleTerms() {
             ParseString("program test; const x = 5 + 3 * 4; .");
@@ -56,6 +67,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 + 3 as 4; .");
         }
 
+        /// <summary>
+        ///     parse factors
+        /// </summary>
         [TestMethod]
         public void TestSimpleFactors() {
             ParseString("program test; const x = 5 + 3 * @4; .");
@@ -72,6 +86,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 + 3 * 'x'; .");
         }
 
+        /// <summary>
+        ///     parse constant values
+        /// </summary>
         [TestMethod]
         public void TestConstValues() {
             TestConstant("10");

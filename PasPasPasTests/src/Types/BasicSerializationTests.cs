@@ -2,7 +2,10 @@
 using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Typings.Serialization;
+using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
+using KTI = PasPasPas.Globals.Types.KnownTypeIds;
+using PK = PasPasPas.Globals.Types.ProcedureKind;
 
 namespace PasPasPasTests.Types {
 
@@ -163,7 +166,7 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
-        ///     write an unpooled string
+        ///     write an not pooled string
         /// </summary>
         [TestMethod]
         public void TestWriteReadUnPooledString() {
@@ -397,7 +400,7 @@ namespace PasPasPasTests.Types {
         ///     test writing / reading of references
         /// </summary>
         [TestMethod]
-        public void TestWritOpenReferenceWithoutAddress() {
+        public void TestWriteOpenReferenceWithoutAddress() {
             var env = CreateEnvironment();
             using (var stream = new MemoryStream())
             using (var w = CreateWriter(env, stream))
@@ -410,7 +413,19 @@ namespace PasPasPasTests.Types {
             }
         }
 
+        /// <summary>
+        ///     test reading / write parameter groups
+        /// </summary>
+        [TestMethod]
+        public void TestWriteReadParameterGroup() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var d = new Routine(env.TypeRegistry, "_");
+                var pg = new ParameterGroup(d, PK.Procedure, env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType));
 
-
+            }
+        }
     }
 }

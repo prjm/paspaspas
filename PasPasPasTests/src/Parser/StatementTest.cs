@@ -73,6 +73,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin repeat a(); until true end .");
         }
 
+        /// <summary>
+        ///     test a while statement
+        /// </summary>
         [TestMethod]
         public void TestWhileStatement() {
             //ParseString("program test; begin while a <= a do begin if a = b then (if not x(a, false) then break) else (if not t(a, true) then break); a :=  a + 1; end; ; end .");
@@ -80,6 +83,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin while a() do begin b(); end end .");
         }
 
+        /// <summary>
+        ///     test a form statement
+        /// </summary>
         [TestMethod]
         public void TestForStatement() {
             ParseString("program test; begin for a := 0 to 10 do a() ; end .");
@@ -87,12 +93,18 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin for a in b() do a() ; end .");
         }
 
+        /// <summary>
+        ///     test a with statement
+        /// </summary>
         [TestMethod]
         public void TestWithStatement() {
             ParseString("program test; begin with a do a() ; end .");
             ParseString("program test; begin with a do begin a(); end end .");
         }
 
+        /// <summary>
+        ///     test a raise statement
+        /// </summary>
         [TestMethod]
         public void TestRaiseStatement() {
             ParseString("program test; begin raise; end .");
@@ -101,6 +113,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin raise at b(); end .");
         }
 
+        /// <summary>
+        ///     test a try statement block
+        /// </summary>
         [TestMethod]
         public void TestTryStatement() {
             ParseString("program test; begin try a(); finally b(); end end .");
@@ -110,6 +125,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin try a(); except on x : x.x do b(); else b(); end end .");
         }
 
+        /// <summary>
+        ///     test goto statement
+        /// </summary>
         [TestMethod]
         public void TestGoToStatements() {
             ParseString("program test; begin goto x; end .");
@@ -119,6 +137,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin continue; end .");
         }
 
+        /// <summary>
+        ///     test assembler statements
+        /// </summary>
         [TestMethod]
         public void TestAsmStatement() {
             ParseString("program test; asm end .");

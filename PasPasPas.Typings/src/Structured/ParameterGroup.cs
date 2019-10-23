@@ -16,9 +16,11 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="parent">parent routine group</param>
         /// <param name="procedureKind">procedure kind</param>
-        public ParameterGroup(IRoutine parent, ProcedureKind procedureKind) {
+        /// <param name="resultType">result type</param>
+        public ParameterGroup(IRoutine parent, ProcedureKind procedureKind, ITypeReference resultType) {
             Routine = parent;
             RoutineKind = procedureKind;
+            ResultType = resultType;
         }
 
         /// <summary>

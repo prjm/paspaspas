@@ -10,10 +10,16 @@ namespace PasPasPasTests.Parser {
     /// </summary>
     public class SpecialCaseTests : ParserTestBase {
 
+        /// <summary>
+        ///     test an invalid attribute
+        /// </summary>
         [TestMethod]
         public void TestInvalidAttribute()
             => RunCstTest(p => p.ParseUnit(p.Environment.CreateFileReference(CstPath)), "unit z.x; interface [a] implementation end.", MessageNumbers.MissingToken);
 
+        /// <summary>
+        ///     test a forward declaration
+        /// </summary>
         [TestMethod]
         public void TestForwardDeclaration() {
             var p = "program z.x; procedure x; forward; procedure x; begin end; begin end.";
@@ -21,6 +27,9 @@ namespace PasPasPasTests.Parser {
             RunCstTest(t, p);
         }
 
+        /// <summary>
+        ///     test a export declaration
+        /// </summary>
         [TestMethod]
         public void TestExportDeclaration() {
             var p = "program z.x; procedure x; begin end; exports x; begin end.";

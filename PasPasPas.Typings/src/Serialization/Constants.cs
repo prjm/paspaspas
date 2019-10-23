@@ -11,5 +11,8 @@
         internal const uint UnitMetaDataTag = 102;
         internal const uint StringRegistryTag = 103;
         internal const uint CodeBlockTag = 103;
+        internal const uint RoutineTag = 104;
+        internal const uint ParameterGroupTag = 105;
+
     }
 }

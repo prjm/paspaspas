@@ -5,8 +5,14 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
 
+    /// <summary>
+    ///     test syntax tree parsing
+    /// </summary>
     public class CstTest : ParserTestBase {
 
+        /// <summary>
+        ///     test abstract directive
+        /// </summary>
         [TestMethod]
         public void TestAbstract() {
             var s = RunCstTest(p => p.ParseAbstractDirective(), "abstract ;");
@@ -20,6 +26,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
+        /// <summary>
+        ///     test reintroduce directive
+        /// </summary>
         [TestMethod]
         public void TestReintroduce() {
             var s = RunCstTest(p => p.ParseReintroduceDirective(), "reintroduce;");
@@ -28,6 +37,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(12, s.Length);
         }
 
+        /// <summary>
+        ///     test overload directive
+        /// </summary>
         [TestMethod]
         public void TestOverload() {
             var s = RunCstTest(p => p.ParseOverloadDirective(), "overload;");
@@ -36,6 +48,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
+        /// <summary>
+        ///     test inline directive
+        /// </summary>
         [TestMethod]
         public void TestInline() {
             var s = RunCstTest(p => p.ParseInlineDirective(), "inline ;");
@@ -49,6 +64,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(11, s.Length);
         }
 
+        /// <summary>
+        ///     test message binding
+        /// </summary>
         [TestMethod]
         public void TestBinding() {
             var s = RunCstTest(p => p.ParseBindingDirective(), "message WM_TEXT;");
@@ -70,7 +88,7 @@ namespace PasPasPasTests.Parser {
         }
 
         /// <summary>
-        ///     test hint direcitve
+        ///     test hint directive
         /// </summary>
         [TestMethod]
         public void TestHintDirective() {
@@ -84,6 +102,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(14, s.Length);
         }
 
+        /// <summary>
+        ///     test hint lists
+        /// </summary>
         [TestMethod]
         public void TestHintList() {
             var s = RunCstTest(p => p.ParseHints(true), "library; deprecated;");
@@ -95,6 +116,9 @@ namespace PasPasPasTests.Parser {
 
         }
 
+        /// <summary>
+        ///     test program block
+        /// </summary>
         [TestMethod]
         public void TestProgram() {
             var s = RunCstTest(p => p.ParseProgram(p.Environment.CreateFileReference(CstPath)), "program z.x; uses a in 'a'; begin x; end.");
@@ -105,6 +129,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(41, s.Length);
         }
 
+        /// <summary>
+        ///     test library blocks
+        /// </summary>
         [TestMethod]
         public void TestLibrary() {
             var s = RunCstTest(p => p.ParseLibrary(p.Environment.CreateFileReference(CstPath)), "library a; uses x in 'x'; begin end.");
@@ -115,6 +142,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(36, s.Length);
         }
 
+        /// <summary>
+        ///     test library head
+        /// </summary>
         [TestMethod]
         public void TestLibraryHead() {
             var s = RunCstTest(p => p.ParseLibraryHead(), "library a.b deprecated;");
@@ -125,6 +155,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(23, s.Length);
         }
 
+        /// <summary>
+        ///     test parsing the program header
+        /// </summary>
         [TestMethod]
         public void TestProgramHeader() {
             var s = RunCstTest(p => p.ParseProgramHead(), "program a.b(x,y);");
@@ -135,6 +168,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(17, s.Length);
         }
 
+        /// <summary>
+        ///     test parsing an array index
+        /// </summary>
         [TestMethod]
         public void TestArrayIndex() {
             var s = RunCstTest(p => p.ParseArrayIndex(), "1");
@@ -155,6 +191,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
+        /// <summary>
+        ///     test array types
+        /// </summary>
         [TestMethod]
         public void TestArrayType() {
             var s = RunCstTest(p => p.ParseArrayType(), "array of const");
@@ -182,7 +221,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(22, s.Length);
         }
 
-
+        /// <summary>
+        ///     test parsing an interface section
+        /// </summary>
         [TestMethod]
         public void TestInterfaceSection() {
             var s = RunCstTest(p => p.ParseUnitInterface(), "interface uses a; type x = class;");
@@ -192,6 +233,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(33, s.Length);
         }
 
+        /// <summary>
+        ///     test parsing an interface declaration
+        /// </summary>
         [TestMethod]
         public void TestInterfaceDeclaration() {
             var s = RunCstTest(p => p.ParseInterfaceDeclaration(), "const a = 5;");
@@ -199,6 +243,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(12, s.Length);
         }
 
+        /// <summary>
+        ///     test interface definitions
+        /// </summary>
         [TestMethod]
         public void TestInterfaceDefinition() {
             var s = RunCstTest(p => p.ParseInterfaceDef(), "interface(a) ['a'] function a:x; end");
@@ -210,6 +257,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(36, s.Length);
         }
 
+        /// <summary>
+        ///     test ams blocks
+        /// </summary>
         [TestMethod]
         public void TestAsmBlock() {
             var s = RunCstTest(p => p.ParseAsmBlock(), "asm end");
@@ -230,6 +280,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(16, s.Length);
         }
 
+        /// <summary>
+        ///     test blocks
+        /// </summary>
         [TestMethod]
         public void TestBlock() {
             var s = RunCstTest(p => p.ParseBlock(), "const x = 5;");
@@ -242,6 +295,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(22, s.Length);
         }
 
+        /// <summary>
+        ///     test asm factors
+        /// </summary>
         [TestMethod]
         public void TestAsmFactor() {
             var s = RunCstTest(p => p.ParseAssemblyFactor(), "cs:3");
@@ -287,6 +343,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
+        /// <summary>
+        ///     test asm labels
+        /// </summary>
         [TestMethod]
         public void TestAsmLabel() {
             var s = RunCstTest(p => p.ParseAssemblyLabel(), "a");
@@ -298,6 +357,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(2, s.Length);
         }
 
+        /// <summary>
+        ///     test real numbers
+        /// </summary>
         [TestMethod]
         public void TestRealNumberSymobl() {
             var s = RunCstTest(p => p.RequireRealValue(), "2.5");
@@ -305,6 +367,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
+        /// <summary>
+        ///     test asm operand codes
+        /// </summary>
         [TestMethod]
         public void TestAsmOpCodeSymbol() {
             var s = RunCstTest(p => p.ParseAssemblyOpcode() as AsmOpCodeSymbol, "int");
@@ -312,6 +377,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
+        /// <summary>
+        ///     test asm prefix symbols
+        /// </summary>
         [TestMethod]
         public void TestAsmPrefixSymbol() {
             var s = RunCstTest(p => p.ParseAssemblyPrefix() as AsmPrefixSymbol, "lock cs");
@@ -325,6 +393,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
+        /// <summary>
+        ///     test case statements
+        /// </summary>
         [TestMethod]
         public void TestCaseStatement() {
             var s = RunCstTest(p => p.ParseCaseStatement(), "case a of 1: x; end");
@@ -344,6 +415,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(27, s.Length);
         }
 
+        /// <summary>
+        ///     test case items
+        /// </summary>
         [TestMethod]
         public void TestCaseItem() {
             var s = RunCstTest(p => p.ParseCaseItem(), "5: x;");
@@ -353,6 +427,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
+        /// <summary>
+        ///     test class declarations
+        /// </summary>
         [TestMethod]
         public void TestClassDeclaration() {
             var s = RunCstTest(p => p.ParseClassDeclaration(), "class of TAbc");
@@ -384,6 +461,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(26, s.Length);
         }
 
+        /// <summary>
+        ///     test case labels
+        /// </summary>
         [TestMethod]
         public void TestCaseLabel() {
             var s = RunCstTest(p => p.ParseCaseLabel(), "5");
@@ -404,6 +484,9 @@ namespace PasPasPasTests.Parser {
 
         }
 
+        /// <summary>
+        ///     test block body
+        /// </summary>
         [TestMethod]
         public void TestBlockBody() {
             var s = RunCstTest(p => p.ParseBlockBody() as BlockBodySymbol, "asm end");
@@ -415,6 +498,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
+        /// <summary>
+        ///     test asm pseudo operand symbols
+        /// </summary>
         [TestMethod]
         public void TestAsmPseudoOpSymbol() {
             var s = RunCstTest(p => p.ParseAsmPseudoOp(), ".PARAMS 3");
@@ -437,6 +523,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(8, s.Length);
         }
 
+        /// <summary>
+        ///     test asm statements
+        /// </summary>
         [TestMethod]
         public void TestAsmStatement() {
             var s = RunCstTest(p => p.ParseAsmStatement(), "x: lock int 3");
@@ -447,6 +536,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(13, s.Length);
         }
 
+        /// <summary>
+        ///     test asm terms
+        /// </summary>
         [TestMethod]
         public void TestAsmTerm() {
             var s = RunCstTest(p => p.ParseAssemblyTerm(), "3 / 3");
@@ -461,6 +553,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
+        /// <summary>
+        ///     test asm operands
+        /// </summary>
         [TestMethod]
         public void TestAsmOperand() {
             var s = RunCstTest(p => p.ParseAssemblyOperand(), "not x");
@@ -476,6 +571,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
+        /// <summary>
+        ///     test asm expressions
+        /// </summary>
         [TestMethod]
         public void TestAsmExpression() {
             var s = RunCstTest(p => p.ParseAssemblyExpression(), "offset 3");
@@ -504,6 +602,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
+        /// <summary>
+        ///     test unit declarations
+        /// </summary>
         [TestMethod]
         public void TestUnit() {
             var s = RunCstTest(p => p.ParseUnit(p.Environment.CreateFileReference(CstPath)), "unit z.x; interface implementation initialization finalization end.");
@@ -515,13 +616,18 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(67, s.Length);
         }
 
-
+        /// <summary>
+        ///     test class declaration items
+        /// </summary>
         [TestMethod]
         public void TestClassDeclarationItems() {
             var s = RunCstTest(p => p.ParseClassDeclartionItems(), "var a,b: integer;");
             Assert.AreEqual(17, s.Length);
         }
 
+        /// <summary>
+        ///     test class declaration items
+        /// </summary>
         [TestMethod]
         public void TestClassDeclarationItem() {
             var mode = ClassDeclarationMode.Other;
@@ -584,6 +690,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(10, s.Length);
         }
 
+        /// <summary>
+        ///     test class declaration items
+        /// </summary>
         [TestMethod]
         public void TestClassDeclarationSymbol() {
             var s = RunCstTest(p => p.ParseClassDefinition(), "class");
@@ -620,6 +729,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(21, s.Length);
         }
 
+        /// <summary>
+        ///     test class fields
+        /// </summary>
         [TestMethod]
         public void TestClassField() {
             var s = RunCstTest(p => p.ParseClassFieldDeclararation(), "s: string deprecated;");
@@ -631,6 +743,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(21, s.Length);
         }
 
+        /// <summary>
+        ///     test class helper definition
+        /// </summary>
         [TestMethod]
         public void TestClassHelperDef() {
             var s = RunCstTest(p => p.ParseClassHelper(), "class helper (TQ) for TObject procedure x; end");
@@ -644,7 +759,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(46, s.Length);
         }
 
-
+        /// <summary>
+        ///     test class helper items
+        /// </summary>
         [TestMethod]
         public void TestClassHelperItem() {
             var mode = ClassDeclarationMode.Other;
@@ -707,6 +824,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(10, s.Length);
         }
 
+        /// <summary>
+        ///     test class helper items
+        /// </summary>
         [TestMethod]
         public void TestClassHelperItems() {
             var s = RunCstTest(p => p.ParseClassHelperItems(), "const x = 5;");
@@ -714,6 +834,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(12, s.Length);
         }
 
+        /// <summary>
+        ///     test class methods
+        /// </summary>
         [TestMethod]
         public void TestClassMethod() {
             var s = RunCstTest(p => p.ParseMethodDeclaration(), "procedure x;");
@@ -744,6 +867,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(33, s.Length);
         }
 
+        /// <summary>
+        ///     test class of declaration
+        /// </summary>
         [TestMethod]
         public void TestClassOfDeclaration() {
             var s = RunCstTest(p => p.ParseClassOfDeclaration(), "class of tzing");
@@ -753,7 +879,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(14, s.Length);
         }
 
-
+        /// <summary>
+        ///     test class properties
+        /// </summary>
         [TestMethod]
         public void TestClassProperty() {
             var s = RunCstTest(p => p.ParsePropertyDeclaration(), "property x [a: string]: string index 4 read q; default;");
@@ -772,6 +900,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(55, s.Length);
         }
 
+        /// <summary>
+        ///     test class property specifiers
+        /// </summary>
         [TestMethod]
         public void TestClassPropertySpecifier() {
             var s = RunCstTest(p => p.ParseClassPropertyAccessSpecifier(), "read x");
@@ -802,7 +933,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(12, s.Length);
         }
 
-
+        /// <summary>
+        ///     test property accessors
+        /// </summary>
         [TestMethod]
         public void TestClassPropertyReadWrite() {
             var s = RunCstTest(p => p.ParseClassPropertyReadWrite(), "read x");
@@ -826,7 +959,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(8, s.Length);
         }
 
-
+        /// <summary>
+        ///     test disp interface properties
+        /// </summary>
         [TestMethod]
         public void TestClassPropertyDispIntf() {
             var s = RunCstTest(p => p.ParseClassPropertyDispInterface(), "readonly");
@@ -842,6 +977,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(8, s.Length);
         }
 
+        /// <summary>
+        ///     test closure expressions
+        /// </summary>
         [TestMethod]
         public void TestClosureExpression() {
             var s = RunCstTest(p => p.ParseClosureExpression(), "function (p: Integer): Boolean begin end");
@@ -853,6 +991,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(40, s.Length);
         }
 
+        /// <summary>
+        ///     test compound statements
+        /// </summary>
         [TestMethod]
         public void TestCompoundStatement() {
             var s = RunCstTest(p => p.ParseCompoundStatement(), "asm end");
@@ -866,7 +1007,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(12, s.Length);
         }
 
-
+        /// <summary>
+        ///     test constant expressions
+        /// </summary>
         [TestMethod]
         public void TestConstantExpression() {
             var s = RunCstTest(p => p.ParseConstantExpression(), "5");
@@ -888,6 +1031,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(6, s.Length);
         }
 
+        /// <summary>
+        ///     test constant declaration
+        /// </summary>
         [TestMethod]
         public void TestConstDeclaration() {
             var s = RunCstTest(p => p.ParseConstDeclaration(), "[a,b] a: TA = 5 library;");
@@ -902,6 +1048,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(24, s.Length);
         }
 
+        /// <summary>
+        ///     test constant sections
+        /// </summary>
         [TestMethod]
         public void TestConstSection() {
             var s = RunCstTest(p => p.ParseConstSection(true), "const a = 5;");
@@ -910,6 +1059,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(12, s.Length);
         }
 
+        /// <summary>
+        ///     test generic constraints
+        /// </summary>
         [TestMethod]
         public void TestConstrainedGeneric() {
             var s = RunCstTest(p => p.ParseGenericConstraint(true), "constructor, ");
@@ -923,6 +1075,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(13, s.Length);
         }
 
+        /// <summary>
+        ///     test declarations
+        /// </summary>
         [TestMethod]
         public void TestDeclarations() {
             var s = RunCstTest(p => p.ParseDeclarationSections(), "label x;");
@@ -954,6 +1109,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(47, s.Length);
         }
 
+        /// <summary>
+        ///     test designator items
+        /// </summary>
         [TestMethod]
         public void TestDesignatorItem() {
             var s = RunCstTest(p => p.ParseDesignatorItem(false, default), "^");
@@ -966,6 +1124,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
+        /// <summary>
+        ///     test designator statements
+        /// </summary>
         [TestMethod]
         public void TestDesignatorStatement() {
             var s = RunCstTest(p => p.ParseDesignator(), "inherited");
@@ -986,6 +1147,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(16, s.Length);
         }
 
+        /// <summary>
+        ///     test disp id declarations
+        /// </summary>
         [TestMethod]
         public void TestDispId() {
             var s = RunCstTest(p => p.ParseDispIdDirective(true), "dispid 5;");
@@ -1000,6 +1164,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(8, s.Length);
         }
 
+        /// <summary>
+        ///     test enumerated values
+        /// </summary>
         [TestMethod]
         public void TestEnumValue() {
             var s = RunCstTest(p => p.ParseEnumTypeValue(), "a");
@@ -1020,6 +1187,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(6, s.Length);
         }
 
+        /// <summary>
+        ///     test enumerated type definitions
+        /// </summary>
         [TestMethod]
         public void TestEnumTypeDef() {
             var s = RunCstTest(p => p.ParseEnumType(), "(a,b,c)");
@@ -1031,6 +1201,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
+        /// <summary>
+        ///     test exception handlers
+        /// </summary>
         [TestMethod]
         public void TestExceptHandler() {
             var s = RunCstTest(p => p.ParseExceptHandler(), "on e: Exception do begin end;");
@@ -1044,6 +1217,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(29, s.Length);
         }
 
+        /// <summary>
+        ///     test exported procedure heading
+        /// </summary>
         [TestMethod]
         public void TestExportedProcHeading() {
             var s = RunCstTest(p => p.ParseExportedProcedureHeading(), "function a(var x: string): tobject; inline;");
@@ -1057,6 +1233,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(43, s.Length);
         }
 
+        /// <summary>
+        ///     test export items
+        /// </summary>
         [TestMethod]
         public void TestExportItem() {
             var s = RunCstTest(p => p.ParseExportItem(false), "a(var x: string) index 3 name '3'");
@@ -1069,6 +1248,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(33, s.Length);
         }
 
+        /// <summary>
+        ///     test export section
+        /// </summary>
         [TestMethod]
         public void TestExportsSection() {
             var s = RunCstTest(p => p.ParseExportsSection(), "exports a(x: string) name '3', b() name '4' ;");
@@ -1080,6 +1262,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(45, s.Length);
         }
 
+        /// <summary>
+        ///     test expressions
+        /// </summary>
         [TestMethod]
         public void TestExpression() {
             var s = RunCstTest(p => p.ParseExpression(), "procedure () begin end");
@@ -1139,6 +1324,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(6, s.Length);
         }
 
+        /// <summary>
+        ///     test external directives
+        /// </summary>
         [TestMethod]
         public void TestExternalDirective() {
             var s = RunCstTest(p => p.ParseExternalDirective(), "varargs;");
@@ -1157,6 +1345,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(22, s.Length);
         }
 
+        /// <summary>
+        ///     test external directives
+        /// </summary>
         [TestMethod]
         public void TestExternalDirectiveSpecifier() {
             var s = RunCstTest(p => p.ParseExternalSpecifier(), "name 5");
@@ -1181,6 +1372,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
+        /// <summary>
+        ///     test factors
+        /// </summary>
         [TestMethod]
         public void TestFactor() {
             var s = RunCstTest(p => p.ParseFactor(), "@x");
@@ -1305,6 +1499,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
+        /// <summary>
+        ///     test file types
+        /// </summary>
         [TestMethod]
         public void TestFileType() {
             var s = RunCstTest(p => p.ParseFileType(), "file");
@@ -1318,6 +1515,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(10, s.Length);
         }
 
+        /// <summary>
+        ///     test formal parameters
+        /// </summary>
         [TestMethod]
         public void TestFormalParameter() {
             var dummy = TokenKind.Undefined - 1;
@@ -1330,6 +1530,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(16, s.Length);
         }
 
+        /// <summary>
+        ///     test formal parameter definitions
+        /// </summary>
         [TestMethod]
         public void TestFormalParameterDefinition() {
             var s = RunCstTest(p => p.ParseFormalParameterDefinition(true), "a: integer = 5;");
@@ -1342,6 +1545,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(15, s.Length);
         }
 
+        /// <summary>
+        ///     test formal parameters 
+        /// </summary>
         [TestMethod]
         public void TestFormalParameters() {
             var s = RunCstTest(p => p.ParseFormalParameters(), "a: string; b: string; d: integer");
@@ -1351,6 +1557,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(32, s.Length);
         }
 
+        /// <summary>
+        ///     test formatted expressions
+        /// </summary>
         [TestMethod]
         public void TestFormattedExpression() {
             var s = RunCstTest(p => p.ParseFormattedExpression(), "a:2:1");
@@ -1362,6 +1571,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
+        /// <summary>
+        ///     test for statement
+        /// </summary>
         [TestMethod]
         public void TestForStatement() {
             var s = RunCstTest(p => p.ParseForStatement(), "for I := 0 to 9 do begin a; end");
@@ -1396,6 +1608,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(26, s.Length);
         }
 
+        /// <summary>
+        ///     test forward directive
+        /// </summary>
         [TestMethod]
         public void TestForwardDirective() {
             var s = RunCstTest(p => p.ParseForwardDirective(), "forward;");
@@ -1404,6 +1619,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(8, s.Length);
         }
 
+        /// <summary>
+        ///     test function directives
+        /// </summary>
         [TestMethod]
         public void TestParseFunctionDirectives() {
             var s = RunCstTest(p => p.ParseFunctionDirectives(), "overload; inline;");
@@ -1412,6 +1630,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(17, s.Length);
         }
 
+        /// <summary>
+        ///     test generic type definitions
+        /// </summary>
         [TestMethod]
         public void TestParseGenericDefinition() {
             var s = RunCstTest(p => p.ParseGenericDefinition(), "<a>");
@@ -1435,6 +1656,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(15, s.Length);
         }
 
+        /// <summary>
+        ///     test generic definition parts
+        /// </summary>
         [TestMethod]
         public void TestGenericDefinitionPart() {
             var s = RunCstTest(p => p.ParseGenericDefinitionPart(), "a: b, c");
@@ -1444,6 +1668,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
+        /// <summary>
+        ///     test generic namespace names
+        /// </summary>
         [TestMethod]
         public void TestGenericNamespaceName() {
             var s = RunCstTest(p => p.ParseGenericNamespaceName(), "a<b>.c");
@@ -1456,6 +1683,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(1, s.Length);
         }
 
+        /// <summary>
+        ///     test generic type identifiers
+        /// </summary>
         [TestMethod]
         public void TestGenericTypeIdent() {
             var s = RunCstTest(p => p.ParseGenericTypeIdent(), "a<b>");
@@ -1468,6 +1698,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(1, s.Length);
         }
 
+        /// <summary>
+        ///     test generic suffixes
+        /// </summary>
         [TestMethod]
         public void TestGenericSuffix() {
             var s = RunCstTest(p => p.ParseGenericSuffix(), "<a>");
@@ -1485,6 +1718,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
+        /// <summary>
+        ///     test goto statements
+        /// </summary>
         [TestMethod]
         public void TestGotoStatement() {
             var s = RunCstTest(p => p.ParseGoToStatement(), "goto a");
@@ -1512,6 +1748,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
+        /// <summary>
+        ///     test hexadecimal numbers
+        /// </summary>
         [TestMethod]
         public void TestHexNumber() {
             var s = RunCstTest(p => p.RequireHexValue(), "$33");
@@ -1519,6 +1758,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
+        /// <summary>
+        ///     test identifiers
+        /// </summary>
         [TestMethod]
         public void TestIdentifier() {
             var s = RunCstTest(p => p.RequireIdentifier(), "rr");
@@ -1530,6 +1772,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(2, s.Length);
         }
 
+        /// <summary>
+        ///     test identifier lists
+        /// </summary>
         [TestMethod]
         public void TestIdentList() {
             var s = RunCstTest(p => p.ParseIdentList(true), "a,[a] b");
@@ -1538,6 +1783,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
+        /// <summary>
+        ///     test if statements
+        /// </summary>
         [TestMethod]
         public void TestParseIfStatement() {
             var s = RunCstTest(p => p.ParseIfStatement(), "if a then b");
@@ -1557,6 +1805,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(18, s.Length);
         }
 
+        /// <summary>
+        ///     test interface GUID
+        /// </summary>
         [TestMethod]
         public void TestInterfaceGuid() {
             var s = RunCstTest(p => p.ParseInterfaceGuid(), "['a']");
@@ -1572,6 +1823,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
+        /// <summary>
+        ///     test interface items
+        /// </summary>
         [TestMethod]
         public void TestInterfaceItem() {
             var s = RunCstTest(p => p.ParseInterfaceItem(out var x), "function x: string;");
@@ -1583,6 +1837,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(29, s.Length);
         }
 
+        /// <summary>
+        ///     test labels
+        /// </summary>
         [TestMethod]
         public void TestLabel() {
             var s = RunCstTest(p => p.ParseLabel(), "a");
@@ -1598,6 +1855,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(1, s.Length);
         }
 
+        /// <summary>
+        ///     test asm labels
+        /// </summary>
         [TestMethod]
         public void TestLocalAsmLabel() {
             var s = RunCstTest(p => p.ParseLocalAsmLabel(), "@a");
@@ -1622,6 +1882,9 @@ namespace PasPasPasTests.Parser {
 
         }
 
+        /// <summary>
+        ///     test method declarations
+        /// </summary>
         [TestMethod]
         public void TestMethodDecl() {
             var s = RunCstTest(p => p.ParseMethodDecl(default, default), "function a.b.c(a: string): string; inline; begin end;");
@@ -1633,6 +1896,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(53, s.Length);
         }
 
+        /// <summary>
+        ///     test method declaration names
+        /// </summary>
         [TestMethod]
         public void TestMethodDeclarationName() {
             var s = RunCstTest(p => p.ParseMethodDeclarationName(false), "a.b.c<d>.");
@@ -1642,6 +1908,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
+        /// <summary>
+        ///     test method declaration heading
+        /// </summary>
         [TestMethod]
         public void TestMethodDeclarationHeading() {
             var s = RunCstTest(p => p.ParseMethodDeclHeading(), "function x(a: string): [a] string");
@@ -1653,6 +1922,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(33, s.Length);
         }
 
+        /// <summary>
+        ///     test method directives
+        /// </summary>
         [TestMethod]
         public void TestMethodDirectives() {
             var s = RunCstTest(p => p.ParseMethodDirectives(), "overload; reintroduce;");
@@ -1661,6 +1933,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(22, s.Length);
         }
 
+        /// <summary>
+        ///     test method resolution
+        /// </summary>
         [TestMethod]
         public void TestMethodResolution() {
             var s = RunCstTest(p => p.ParseMethodResolution(), "function a.c = d;");
@@ -1672,6 +1947,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(17, s.Length);
         }
 
+        /// <summary>
+        ///     test namespace file names
+        /// </summary>
         [TestMethod]
         public void TestNamespaceFileName() {
             var s = RunCstTest(p => p.ParseNamespaceFileName(true), "a.b.c");
@@ -1692,6 +1970,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(13, s.Length);
         }
 
+        /// <summary>
+        ///     test namespace file name list
+        /// </summary>
         [TestMethod]
         public void TestNamespaceFileNameList() {
             var s = RunCstTest(p => p.ParseNamespaceFileNameList(), "a,b,c");
@@ -1707,6 +1988,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(26, s.Length);
         }
 
+        /// <summary>
+        ///     test namespace names
+        /// </summary>
         [TestMethod]
         public void TestNamespaceName() {
             var s = RunCstTest(p => p.ParseNamespaceName(), "a.b.c");
@@ -1716,6 +2000,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
+        /// <summary>
+        ///     test namespace name list
+        /// </summary>
         [TestMethod]
         public void TestNamespaceNameList() {
             var s = RunCstTest(p => p.ParseNamespaceNameList(), "a.b.c, d");
@@ -1725,7 +2012,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(8, s.Length);
         }
 
-
+        /// <summary>
+        ///     test object declaration
+        /// </summary>
         [TestMethod]
         public void TestObjectDeclaration() {
             var s = RunCstTest(p => p.ParseObjectDecl(), "object(a) procedure x; end");
@@ -1736,6 +2025,9 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(26, s.Length);
         }
 
+        /// <summary>
+        ///     test object items
+        /// </summary>
         [TestMethod]
         public void TestObjectItem() {
             var mode = ClassDeclarationMode.Other;
