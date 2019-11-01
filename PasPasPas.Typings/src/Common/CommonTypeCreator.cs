@@ -75,7 +75,6 @@ namespace PasPasPas.Typings.Common {
         ///     manually create a global routine
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="kind"></param>
         /// <returns></returns>
         public IRoutine CreateGlobalRoutine(string name) {
             var routine = new Routine(RegisteredTypes, name);

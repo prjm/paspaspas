@@ -7,8 +7,14 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Tokenizer {
 
+    /// <summary>
+    ///     simple tokenizer tests
+    /// </summary>
     public class SimpleTokenizerTests : TokenizerTest {
 
+        /// <summary>
+        ///     test identifiers
+        /// </summary>
         [TestMethod]
         public void TestIdentifiers() {
             IsIdentifier("abcd");
@@ -21,6 +27,9 @@ namespace PasPasPasTests.Tokenizer {
             IsIdentifier("asd994");
         }
 
+        /// <summary>
+        ///     test integers
+        /// </summary>
         [TestMethod]
         public void TestIntegers() {
             IsInteger("2", 2);
@@ -44,6 +53,9 @@ namespace PasPasPasTests.Tokenizer {
             IsWhitespace("  ");
         }
 
+        /// <summary>
+        ///     test real numbers
+        /// </summary>
         [TestMethod]
         public void TestRealNumbers() {
             IsReal("123E10", "123E10");
@@ -55,6 +67,9 @@ namespace PasPasPasTests.Tokenizer {
             IsReal("123.123E+10", "123.123E+10");
         }
 
+        /// <summary>
+        ///     test preprocessor commands
+        /// </summary>
         [TestMethod]
         public void TestIsPreprocessorCommand() {
             IsPreprocessor("{$}", "");
@@ -63,6 +78,9 @@ namespace PasPasPasTests.Tokenizer {
             IsPreprocessor("(*$HPPEMIT '}'*)", "HPPEMIT '}'");
         }
 
+        /// <summary>
+        ///     test different comments
+        /// </summary>
         [TestMethod]
         public void TestComment() {
             IsComment("// dsfssdf ");
@@ -70,6 +88,9 @@ namespace PasPasPasTests.Tokenizer {
             IsComment("(* HPPEMIT '}'*)");
         }
 
+        /// <summary>
+        ///     test control characters
+        /// </summary>
         [TestMethod]
         public void TestControlChars() {
             IsControlChar("\u0000");
@@ -100,6 +121,9 @@ namespace PasPasPasTests.Tokenizer {
             IsControlChar("\u001F");
         }
 
+        /// <summary>
+        ///     test simple tokens
+        /// </summary>
         [TestMethod]
         public void TestSimpleTokens() {
             IsToken(TokenKind.Comma, ",");
@@ -133,6 +157,9 @@ namespace PasPasPasTests.Tokenizer {
             IsToken(TokenKind.DoubleQuotedString, "\"\"", "\"\"", GetUnicodeStringValue(string.Empty));
         }
 
+        /// <summary>
+        ///     test hex numbers
+        /// </summary>
         [TestMethod]
         public void TestHexNumbers() {
             IsHexNumber("$333F", GetIntegerValue((short)0x333F));
@@ -140,6 +167,9 @@ namespace PasPasPasTests.Tokenizer {
             IsHexNumber("$FFFFFFFFFFFFFFFF", GetIntegerValue(0xFFFFFFFFFFFFFFFF));
         }
 
+        /// <summary>
+        ///     test quoted strings
+        /// </summary>
         [TestMethod]
         public void TestQuotedString() {
             IsQuotedString("''", string.Empty);
@@ -152,6 +182,9 @@ namespace PasPasPasTests.Tokenizer {
             IsQuotedString("'ddd'#$58D'xxx'", "ddd֍xxx");
         }
 
+        /// <summary>
+        ///     test messages
+        /// </summary>
         [TestMethod]
         public void TestMessages() {
             TokenizerMessageIsGenerated(MessageNumbers.IncompleteHexNumber, "$");

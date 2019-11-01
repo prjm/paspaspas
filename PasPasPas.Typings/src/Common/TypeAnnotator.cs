@@ -719,7 +719,7 @@ namespace PasPasPas.Typings.Common {
                 }
 
                 f.IsClassItem = classMethod;
-                method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind, genericTypeId);
+                method = typeDef.AddOrExtendMethod(element.Name.CompleteName, genericTypeId);
             }
 
             currentTypeDefinition.Push((Routine)method);

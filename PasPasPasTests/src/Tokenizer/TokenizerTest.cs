@@ -10,8 +10,16 @@ using SharpFloat.FloatingPoint;
 
 namespace PasPasPasTests.Tokenizer {
 
+    /// <summary>
+    ///     tokenizer tests
+    /// </summary>
     public class TokenizerTest : CommonTest {
 
+        /// <summary>
+        ///     check if a message is generated
+        /// </summary>
+        /// <param name="messageNumber"></param>
+        /// <param name="input"></param>
         public static void TokenizerMessageIsGenerated(uint messageNumber, string input) {
             var messages = new List<ILogMessage>();
             var result = RunTokenizer(input, messages);
@@ -19,6 +27,12 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsTrue(hasMessage);
         }
 
+        /// <summary>
+        ///     fetch a token
+        /// </summary>
+        /// <param name="tokenIndex"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static Token GetToken(int tokenIndex, string input) {
             var messages = new List<ILogMessage>();
             var result = RunTokenizer(input, messages);
@@ -29,6 +43,12 @@ namespace PasPasPasTests.Tokenizer {
                 return result[tokenIndex];
         }
 
+        /// <summary>
+        ///     run tokenizer
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="messages"></param>
+        /// <returns></returns>
         public static IList<Token> RunTokenizer(string input, IList<ILogMessage> messages = null) {
             var result = new List<Token>();
             var messageHandler = new ListLogTarget();

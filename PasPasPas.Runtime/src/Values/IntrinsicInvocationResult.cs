@@ -70,6 +70,11 @@ namespace PasPasPas.Runtime.Values {
         public bool Equals(InvocationResult other)
             => Routine.Equals(other.Routine) && Parameters.Equals(other.Routine.Parameters[other.RoutineIndex]);
 
+        /// <summary>
+        ///     check equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj) {
 
             if (obj is IntrinsicInvocationResult iir)

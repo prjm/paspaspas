@@ -424,7 +424,19 @@ namespace PasPasPasTests.Types {
             using (var r = CreateReader(env, stream)) {
                 var d = new Routine(env.TypeRegistry, "_");
                 var pg = new ParameterGroup(d, PK.Procedure, env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType));
+                var t = new ParameterGroupTag();
 
+                t.Initialize(pg);
+                w.WriteTag(t);
+
+                stream.Seek(0, SeekOrigin.Begin);
+                t = new ParameterGroupTag();
+                d = new Routine(env.TypeRegistry, "_");
+                r.ReadTag(t);
+                t.AddToRoutine(d);
+
+                pg = d.Parameters[0] as ParameterGroup;
+                Assert.AreEqual(pg.RoutineKind, PK.Procedure);
             }
         }
     }

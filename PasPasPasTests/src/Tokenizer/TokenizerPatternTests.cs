@@ -13,10 +13,18 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Tokenizer {
 
+    /// <summary>
+    ///     test token patterns
+    /// </summary>
     public class TokenizerPatternTests : CommonTest {
 
         private const string TestFileName = "test_file_name.pas";
 
+        /// <summary>
+        ///     run a tokenizer test
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected static IList<Token> RunTestTokenizer(string input) {
             var env = CreateEnvironment();
             var path = env.CreateFileReference(TestFileName);
@@ -37,7 +45,9 @@ namespace PasPasPasTests.Tokenizer {
             return result;
         }
 
-
+        /// <summary>
+        ///     example tests
+        /// </summary>
         [TestMethod]
         public void SimpleTests() {
             Assert.AreEqual(0, RunTestTokenizer(string.Empty).Count);
@@ -45,6 +55,9 @@ namespace PasPasPasTests.Tokenizer {
             //Assert.AreEqual(3, RunTestTokenizer(" \n\n  ")[0].EndPosition.Line);
         }
 
+        /// <summary>
+        ///     test char matching
+        /// </summary>
         [TestMethod]
         public void TestSimpleCharClass() {
             var cc = new SingleCharClass('x');
@@ -64,6 +77,9 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsFalse(cc.Matches('\n'));
         }
 
+        /// <summary>
+        ///     test number matching
+        /// </summary>
         [TestMethod]
         public void TestNumberCharClass() {
             var cc = new DigitCharClass(false);
@@ -80,6 +96,9 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsFalse(cc.Matches(' '));
         }
 
+        /// <summary>
+        ///     test identifier matching
+        /// </summary>
         [TestMethod]
         public void TestIdentifierCharClass() {
             var cc = new IdentifierCharacterClass();
@@ -138,9 +157,24 @@ namespace PasPasPasTests.Tokenizer {
             }
         }
 
+        /// <summary>
+        ///     pattern test helper
+        /// </summary>
+        /// <param name="patterns"></param>
+        /// <param name="input"></param>
+        /// <param name="tokenValues"></param>
+        /// <returns></returns>
         public Token TestPattern(InputPatterns patterns, string input, params int[] tokenValues)
             => TestPattern(patterns, 0, input, tokenValues);
 
+        /// <summary>
+        ///     test a pattern
+        /// </summary>
+        /// <param name="patterns"></param>
+        /// <param name="expectedMessage"></param>
+        /// <param name="input"></param>
+        /// <param name="tokenValues"></param>
+        /// <returns></returns>
         public Token TestPattern(InputPatterns patterns, uint expectedMessage, string input, params int[] tokenValues) {
             var result = RunTestPattern(patterns, expectedMessage, input);
             var values = new List<string>();
@@ -159,6 +193,9 @@ namespace PasPasPasTests.Tokenizer {
             return Token.Empty;
         }
 
+        /// <summary>
+        ///     test simple input patterns
+        /// </summary>
         [TestMethod]
         public void TestSimpleInputPatterns() {
             var patterns = new InputPatterns(null);
@@ -171,6 +208,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "b", PatternB);
         }
 
+        /// <summary>
+        ///     test curly brace comments
+        /// </summary>
         [TestMethod]
         public void TestCurlyBraceCommentTokenValue() {
             var patterns = new InputPatterns(null);
@@ -186,7 +226,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, MessageNumbers.UnexpectedEndOfToken, "a{", PatternA, TokenKind.Comment);
         }
 
-
+        /// <summary>
+        ///     test combined brace comments
+        /// </summary>
         [TestMethod]
         public void TestAlternativeCurlyBraceCommentTokenValue() {
             var patterns = new InputPatterns(null);
@@ -206,6 +248,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, MessageNumbers.UnexpectedEndOfToken, "a(*", PatternA, TokenKind.Comment);
         }
 
+        /// <summary>
+        ///     test preprocessor tokens
+        /// </summary>
         [TestMethod]
         public void TestPreprocessorTokenVaue() {
             var patterns = new InputPatterns(null);
@@ -217,7 +262,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, MessageNumbers.UnexpectedEndOfToken, "a{$", PatternA, TokenKind.Preprocessor);
         }
 
-
+        /// <summary>
+        ///     test control chars
+        /// </summary>
         [TestMethod]
         public void TestControlCharTokenValue() {
             var patterns = new InputPatterns(null);
@@ -229,6 +276,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, MessageNumbers.UnexpectedCharacter, "\n", TokenKind.Invalid);
         }
 
+        /// <summary>
+        ///     test whitespace token values
+        /// </summary>
         [TestMethod]
         public void TestWhitespaceCharTokenValue() {
             var patterns = new InputPatterns(null);
@@ -241,6 +291,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "aa\na", PatternA, PatternA, TokenKind.WhiteSpace, PatternA);
         }
 
+        /// <summary>
+        ///     test digit matching
+        /// </summary>
         [TestMethod]
         public void TestDigitTokenValue() {
             var patterns = new InputPatterns(null);
@@ -253,6 +306,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, MessageNumbers.UnexpectedCharacter, "1３", TokenKind.IntegralNumber, TokenKind.Invalid);
         }
 
+        /// <summary>
+        ///     test hex numbers
+        /// </summary>
         [TestMethod]
         public void TestHexNumberTokenValue() {
             var patterns = new InputPatterns(null);
@@ -280,6 +336,9 @@ namespace PasPasPasTests.Tokenizer {
             return patterns;
         }
 
+        /// <summary>
+        ///     test identifier tokens
+        /// </summary>
         [TestMethod]
         public void TestIdentifierTokenValue() {
             var patterns = CreatePatterns();
@@ -299,6 +358,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "a.9", TokenKind.Identifier);
         }
 
+        /// <summary>
+        ///     test end of line comments
+        /// </summary>
         [TestMethod]
         public void TestEndOfLineCommentTokenValue() {
             var patterns = new InputPatterns(null);
@@ -312,6 +374,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "/ // / /\n /", TokenKind.Slash, TokenKind.WhiteSpace, TokenKind.Comment, TokenKind.WhiteSpace, TokenKind.Slash);
         }
 
+        /// <summary>
+        ///     test numeric tokens
+        /// </summary>
         [TestMethod]
         public void TestNumberTokenValue() {
             var patterns = new InputPatterns(null);
@@ -336,6 +401,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "9999.9999E-3.", TokenKind.RealNumber, TokenKind.Dot);
         }
 
+        /// <summary>
+        ///     test double quoted strings
+        /// </summary>
         [TestMethod]
         public void TestDoubleQuotedStringTokenValue() {
             var patterns = new InputPatterns(null);
@@ -348,6 +416,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, MessageNumbers.IncompleteString, "\"", TokenKind.DoubleQuotedString);
         }
 
+        /// <summary>
+        ///     test quoted strings
+        /// </summary>
         [TestMethod]
         public void TestQuotedStringTokenValue() {
             var patterns = new InputPatterns(null);
@@ -363,6 +434,9 @@ namespace PasPasPasTests.Tokenizer {
             Assert.AreEqual(GetUnicodeStringValue("a'aa"), TestPattern(patterns, "'a''aa'", TokenKind.QuotedString).ParsedValue);
         }
 
+        /// <summary>
+        ///     test string tokenizer
+        /// </summary>
         [TestMethod]
         public void TestStringGroupTokenValue() {
             var patterns = new InputPatterns(null);

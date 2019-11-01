@@ -34,6 +34,7 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="statement"></param>
         /// <param name="typeId"></param>
+        /// <param name="kind"></param>
         /// <param name="decls"></param>
         protected void AssertCallStatementType(string statement, int typeId, string decls, StructuredStatementKind kind) {
             void tester(StructuredStatement value) {
