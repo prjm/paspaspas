@@ -85,5 +85,18 @@ namespace PasPasPas.Runtime.Values {
 
             return false;
         }
+
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            var result = 17;
+            unchecked {
+                result = result * 31 + Parameters.GetHashCode();
+                result = result * 31 + Routine.GetHashCode();
+                return result;
+            }
+        }
     }
 }

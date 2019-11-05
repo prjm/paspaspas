@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
 
@@ -33,6 +34,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         public bool IsConstant
             => true;
+
+        /// <summary>
+        ///     routine kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
 
         /// <summary>
         ///     resolve a call

@@ -15,6 +15,12 @@ namespace PasPasPas.Typings.Routines {
             => true;
 
         /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
+
+        /// <summary>
         ///     routine name
         /// </summary>
         public override string Name

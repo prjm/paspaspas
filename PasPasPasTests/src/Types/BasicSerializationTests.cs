@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Runtime.Values;
+using PasPasPas.Typings.OpCodes;
 using PasPasPas.Typings.Serialization;
 using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
@@ -439,5 +441,26 @@ namespace PasPasPasTests.Types {
                 Assert.AreEqual(pg.RoutineKind, PK.Procedure);
             }
         }
+
+        /// <summary>
+        ///     test write / read a call instruction
+        /// </summary>
+        [TestMethod]
+        public void TestWriteReadCallInstruction() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var u = env.TypeRegistry.GetTypeByIdOrUndefinedType(KTI.SystemUnit) as UnitType;
+                var rr = u.Symbols["writeln"].Symbol as Routine;
+                var parms = new ParameterGroup(rr, PK.Procedure, env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType));
+                var callInfo = new IntrinsicInvocationResult(rr, parms);
+                var op = new CallOpCode(callInfo);
+                var t = new OpCodeTag();
+                t.Initialize(op);
+                //w.WriteTag(t);
+            }
+        }
+
     }
 }

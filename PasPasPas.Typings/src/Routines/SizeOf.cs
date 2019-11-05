@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
 
@@ -18,6 +19,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         public override string Name
             => "SizeOf";
+
+        /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
 
         /// <summary>
         ///     check parameters

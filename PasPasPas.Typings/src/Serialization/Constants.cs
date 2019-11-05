@@ -13,6 +13,6 @@
         internal const uint CodeBlockTag = 103;
         internal const uint RoutineTag = 104;
         internal const uint ParameterGroupTag = 105;
-
+        internal const uint OpCodeTag = 106;
     }
 }

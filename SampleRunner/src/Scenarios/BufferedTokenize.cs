@@ -4,12 +4,20 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using PasPasPas.Api;
-using PasPasPas.Globals.Environment;
 
 namespace SampleRunner.Scenarios {
 
+    /// <summary>
+    ///     demo: buffered tokenizer
+    /// </summary>
     public static class BufferedTokenizeFile {
 
+        /// <summary>
+        ///     run the demo
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="testPath"></param>
+        /// <param name="reapeat"></param>
         public static void Run(TextWriter b, string testPath, int reapeat) {
             var registry = new Dictionary<int, Tuple<ulong, long>>();
 

@@ -9,5 +9,10 @@
         ///     textual representation
         /// </summary>
         string OpCodeText { get; }
+
+        /// <summary>
+        ///    op-code id
+        /// </summary>
+        byte Id { get; }
     }
 }

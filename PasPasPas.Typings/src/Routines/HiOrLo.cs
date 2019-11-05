@@ -67,6 +67,12 @@ namespace PasPasPas.Typings.Routines {
         public HiLoMode Mode { get; }
 
         /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
+
+        /// <summary>
         ///     check parameter types
         /// </summary>
         /// <param name="parameter"></param>

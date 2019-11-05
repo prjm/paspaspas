@@ -38,6 +38,5 @@ namespace PasPasPas.Typings.Routines {
         ///     procedure kind
         /// </summary>
         ProcedureKind Kind { get; }
-
     }
 }

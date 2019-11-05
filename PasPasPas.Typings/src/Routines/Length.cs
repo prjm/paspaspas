@@ -15,6 +15,12 @@ namespace PasPasPas.Typings.Routines {
             => "Length";
 
         /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
+
+        /// <summary>
         ///     constant routine
         /// </summary>
         public bool IsConstant

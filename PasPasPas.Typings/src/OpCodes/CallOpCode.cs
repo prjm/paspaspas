@@ -24,5 +24,11 @@ namespace PasPasPas.Typings.OpCodes {
         /// </summary>
         public override string OpCodeText
             => $"call {CallInfo?.Routine?.Name}";
+
+        /// <summary>
+        ///     op code id
+        /// </summary>
+        public override byte Id =>
+            OpCodeBase.CallId;
     }
 }

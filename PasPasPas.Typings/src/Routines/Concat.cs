@@ -21,6 +21,12 @@ namespace PasPasPas.Typings.Routines {
             => true;
 
         /// <summary>
+        ///     routine kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
+
+        /// <summary>
         ///     check type parameters
         /// </summary>
         /// <param name="signature"></param>

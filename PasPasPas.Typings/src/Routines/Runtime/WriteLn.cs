@@ -16,6 +16,12 @@ namespace PasPasPas.Typings.Routines.Runtime {
             => KnownTypeNames.WriteLn;
 
         /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Procedure;
+
+        /// <summary>
         ///     dynamic routine
         /// </summary>
         public bool IsConstant

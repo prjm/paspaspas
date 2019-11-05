@@ -42,6 +42,12 @@ namespace PasPasPas.Typings.Routines {
         }
 
         /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
+
+        /// <summary>
         ///     <pre>pred</pre>
         /// </summary>
         public bool Pred

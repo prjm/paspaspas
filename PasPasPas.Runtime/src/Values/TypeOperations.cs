@@ -96,9 +96,9 @@ namespace PasPasPas.Runtime.Values {
         ///     create a new invocation result from an intrinsic routine
         /// </summary>
         /// <param name="parameterGroup"></param>
-        /// <param name="routine">target routine</param>
+        /// <param name="targetRoutine">target routine</param>
         /// <returns></returns>
-        public ITypeReference MakeInvocationResultFromIntrinsic(IRoutine routine, IParameterGroup parameterGroup)
-            => new IntrinsicInvocationResult(routine, parameterGroup);
+        public ITypeReference MakeInvocationResultFromIntrinsic(IRoutine targetRoutine, IParameterGroup parameterGroup)
+            => new IntrinsicInvocationResult(targetRoutine, parameterGroup);
     }
 }
