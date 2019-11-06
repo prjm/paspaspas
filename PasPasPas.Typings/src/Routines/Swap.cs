@@ -1,9 +1,10 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
-    ///     <c>hi</c> function
+    ///     <c>swap</c> function
     /// </summary>
     public class Swap : IntrinsicRoutine, IUnaryRoutine {
 
@@ -19,6 +20,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         public bool IsConstant
             => true;
+
+        /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
 
         /// <summary>
         ///     check parameter types

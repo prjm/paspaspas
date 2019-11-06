@@ -69,12 +69,6 @@ namespace PasPasPas.Typings.Routines {
             => TypeRegistry.Runtime.RealNumbers;
 
         /// <summary>
-        ///     unknown unit kind
-        /// </summary>
-        public ProcedureKind Kind
-            => ProcedureKind.Unknown;
-
-        /// <summary>
         ///     defining type
         /// </summary>
         public int DefiningType

@@ -8,6 +8,9 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class StatementTypeTest : TypeTest {
 
+        /// <summary>
+        ///     test identical types
+        /// </summary>
         [TestMethod]
         public void TestTypeIdentity() {
             AssertAssignmentCompat("Integer", "System.Integer");

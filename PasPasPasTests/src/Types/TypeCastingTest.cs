@@ -11,6 +11,9 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class TypeCastingTest : TypeTest {
 
+        /// <summary>
+        ///     test direct type casting
+        /// </summary>
         [TestMethod]
         public void TestIntegerCastingDirect() {
             AssertExprValue("ShortInt(384)", new ShortIntValue(-128), "", KnownTypeIds.ShortInt);
@@ -38,6 +41,9 @@ namespace PasPasPasTests.Types {
                 GetSubrangeValue(RegisteredTypes.SmallestUserTypeId + 1, new ShortIntValue(1)), "type e = -2..2;", 1001);
         }
 
+        /// <summary>
+        ///     test integer casting
+        /// </summary>
         [TestMethod]
         public void TestIntegerCastingIndirect() {
             AssertExprTypeByVar("Integer", "ShortInt(a)", KnownTypeIds.ShortInt);
@@ -62,7 +68,7 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
-        ///     test casting direct
+        ///     test direct string casting
         /// </summary>
         [TestMethod]
         public void TestStringCastingDirect() {
@@ -70,6 +76,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("AnsiString('a')", GetAnsiStringValue("a"), "", KnownTypeIds.AnsiStringType);
         }
 
+        /// <summary>
+        ///     test direct char casting
+        /// </summary>
         [TestMethod]
         public void TestCharCastingDirect() {
             AssertExprValue("ShortInt('a')", new ShortIntValue(97), "", KnownTypeIds.ShortInt);
@@ -99,6 +108,9 @@ namespace PasPasPasTests.Types {
 
         }
 
+        /// <summary>
+        ///     test direct boolean casting
+        /// </summary>
         [TestMethod]
         public void TestBooleanCastingDirect() {
             AssertExprValue(" Boolean(true)", GetBooleanValue(true), "", KnownTypeIds.BooleanType);
@@ -111,6 +123,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("LongBool(false)", GetLongBooleanValue(0x0), "", KnownTypeIds.LongBoolType);
         }
 
+        /// <summary>
+        ///     test boolean casting
+        /// </summary>
         [TestMethod]
         public void TestBooleanCastingIndirect() {
             AssertExprTypeByVar("Boolean", "Boolean(a)", KnownTypeIds.BooleanType);
@@ -119,6 +134,9 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Boolean", "LongBool(a)", KnownTypeIds.LongBoolType);
         }
 
+        /// <summary>
+        ///     test char casting
+        /// </summary>
         [TestMethod]
         public void TestCharCastingIndirectDirect() {
             AssertExprTypeByVar("WideChar", "ShortInt(a)", KnownTypeIds.ShortInt);
@@ -147,6 +165,9 @@ namespace PasPasPasTests.Types {
 
         }
 
+        /// <summary>
+        ///     test array casting
+        /// </summary>
         [TestMethod]
         public void TestArrayCasting() {
             AssertExprValue("a", GetArrayValue(RegisteredTypes.SmallestUserTypeId + 1, KnownTypeIds.StringType, GetUnicodeStringValue("a"), GetUnicodeStringValue("a")), "const a: array[0..1] of string = ('a', 'a');");

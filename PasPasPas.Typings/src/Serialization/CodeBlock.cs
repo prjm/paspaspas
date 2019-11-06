@@ -39,7 +39,7 @@ namespace PasPasPas.Typings.Serialization {
         public override uint Kind
             => Constants.CodeBlockTag;
 
-        private List<IRoutine> routines
+        private readonly List<IRoutine> routines
             = new List<IRoutine>();
 
         private StringRegistry stringData;
@@ -75,7 +75,7 @@ namespace PasPasPas.Typings.Serialization {
                 typeWriter.WriteUint(ref n);
                 var paramTag = new ParameterGroupTag();
                 for (var j = 0; j < routine.Parameters.Count; j++) {
-                    paramTag.Initialize(routine.Parameters[i]);
+                    paramTag.Initialize(routine.Parameters[j]);
                     typeWriter.WriteTag(paramTag);
                 }
             }

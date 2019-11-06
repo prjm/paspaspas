@@ -21,6 +21,12 @@ namespace PasPasPas.Typings.Routines {
             => "Trunc";
 
         /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
+
+        /// <summary>
         ///     check parameter
         /// </summary>
         /// <param name="parameter"></param>

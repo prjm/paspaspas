@@ -4,7 +4,7 @@ using PasPasPas.Globals.Types;
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
-    ///     round routine
+    ///     <c>round</c> routine
     /// </summary>
     public class Round : IntrinsicRoutine, IUnaryRoutine {
 
@@ -13,6 +13,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         public bool IsConstant
             => true;
+
+        /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
 
         /// <summary>
         ///     routine name

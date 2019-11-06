@@ -21,6 +21,12 @@ namespace PasPasPas.Typings.Routines {
             => true;
 
         /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
+
+        /// <summary>
         ///     check if the parameter matches
         /// </summary>
         /// <param name="parameter"></param>

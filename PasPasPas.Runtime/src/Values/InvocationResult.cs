@@ -112,5 +112,18 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public bool Equals(IntrinsicInvocationResult other)
             => Routine.Equals(other.Routine) && Routine.Parameters[RoutineIndex].Equals(other.Parameters);
+
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            var result = 17;
+            unchecked {
+                result = result * 31 + Routine.GetHashCode();
+                result = result * 31 + RoutineIndex;
+                return result;
+            }
+        }
     }
 }

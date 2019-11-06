@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
 
@@ -60,6 +61,12 @@ namespace PasPasPas.Typings.Routines {
         ///     mode
         /// </summary>
         public HighOrLowMode Mode { get; }
+
+        /// <summary>
+        ///     procedure kind: function
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
 
         /// <summary>
         ///     check parameter types

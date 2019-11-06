@@ -9,8 +9,14 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
 
+    /// <summary>
+    ///     test compile directives
+    /// </summary>
     public class CompilerDirectiveTest : ParserTestBase {
 
+        /// <summary>
+        ///     test align switch
+        /// </summary>
         [TestMethod]
         public void TestAlign() {
             object f(IOptionSet o) => o.CompilerOptions.CodeGeneration.Align.Value;
@@ -36,6 +42,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("A", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
         }
 
+        /// <summary>
+        ///     test application type switch
+        /// </summary>
         [TestMethod]
         public void TestApptype() {
             object f(IOptionSet o) => o.CompilerOptions.LinkOptions.ApplicationType.Value;
@@ -47,6 +56,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("APPTYPE", AppType.Undefined, f, CompilerDirectiveParserErrors.InvalidApplicationType);
         }
 
+        /// <summary>
+        ///     test message switches
+        /// </summary>
         [TestMethod]
         public void TestMessage() {
             object f(IOptionSet o) => true;
@@ -61,6 +73,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("MESSAGE ", true, f, CompilerDirectiveParserErrors.InvalidMessageDirective);
         }
 
+        /// <summary>
+        ///     test stack size switch
+        /// </summary>
         [TestMethod]
         public void TestMemStackSize() {
             object mi(IOptionSet o) => o.CompilerOptions.LinkOptions.MinimumStackMemorySize.Value;
@@ -94,6 +109,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("BOOLEVAL", BooleanEvaluation.Undefined, f, CompilerDirectiveParserErrors.InvalidBoolEvalDirective);
         }
 
+        /// <summary>
+        ///     test code align options
+        /// </summary>
         [TestMethod]
         public void TestCodeAlignParameter() {
             object f(IOptionSet o) => o.CompilerOptions.CodeGeneration.CodeAlign.Value;
@@ -108,6 +126,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("CODEALIGN", CodeAlignment.Undefined, f, CompilerDirectiveParserErrors.InvalidCodeAlignDirective);
         }
 
+        /// <summary>
+        ///     test conditional defines
+        /// </summary>
         [TestMethod]
         public void TestDefine() {
             object f(IOptionSet o) => o.ConditionalCompilation.IsSymbolDefined("TESTSYM");
@@ -150,6 +171,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("IFDEF X § ELSE | DEFINE Z ", false, f, MessageNumbers.PendingCondition);
         }
 
+        /// <summary>
+        ///     test assertions
+        /// </summary>
         [TestMethod]
         public void TestAssertions() {
             object f(IOptionSet o) => o.CompilerOptions.DebugOptions.Assertions.Value;
@@ -164,6 +188,9 @@ namespace PasPasPasTests.Parser {
         }
 
 
+        /// <summary>
+        ///     test debug info switch
+        /// </summary>
         [TestMethod]
         public void TestDebugInfo() {
             object f(IOptionSet o) => o.CompilerOptions.DebugOptions.DebugInfo.Value;
@@ -177,6 +204,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("D", DebugInformation.Undefined, f, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
         }
 
+        /// <summary>
+        ///     test deny package unit switch
+        /// </summary>
         [TestMethod]
         public void TestDenyPackageUnit() {
             object f(IOptionSet o) => o.ConditionalCompilation.DenyInPackages.Value;
@@ -187,6 +217,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("DENYPACKAGEUNIT", DenyUnitInPackage.Undefined, f, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective);
         }
 
+        /// <summary>
+        ///     test description switch
+        /// </summary>
         [TestMethod]
         public void TestDescription() {
             object f(IOptionSet o) => o.Meta.Description.Value;
@@ -199,6 +232,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("D", null, f, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
         }
 
+        /// <summary>
+        ///     test design time only switch
+        /// </summary>
         [TestMethod]
         public void TestDesigntimeOnly() {
             object f(IOptionSet o) => o.ConditionalCompilation.DesignOnly.Value;
@@ -209,6 +245,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("DESIGNONLY", DesignOnlyUnit.Undefined, f, CompilerDirectiveParserErrors.InvalidDesignTimeOnlyDirective);
         }
 
+        /// <summary>
+        ///     test extensions switch
+        /// </summary>
         [TestMethod]
         public void TestExtensionsSwitch() {
             object f(IOptionSet o) => o.Meta.FileExtension.Value;
@@ -221,6 +260,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("EXTENSION", null, f, CompilerDirectiveParserErrors.InvalidExtensionDirective);
         }
 
+        /// <summary>
+        ///     test export all switch
+        /// </summary>
         [TestMethod]
         public void TestObjExportAll() {
             object f(IOptionSet o) => o.CompilerOptions.LinkOptions.ExportCppObjects.Value;
@@ -231,6 +273,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("OBJEXPORTALL", ExportCppObjectMode.Undefined, f, CompilerDirectiveParserErrors.InvalidObjectExportDirective);
         }
 
+        /// <summary>
+        ///     test extended compatibility
+        /// </summary>
         [TestMethod]
         public void TestExtendedCompatibility() {
             object f(IOptionSet o) => o.CompilerOptions.AdditionalOptions.ExtendedCompatibility.Value;
@@ -241,6 +286,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("EXTENDEDCOMPATIBILITY", ExtendedCompatibilityMode.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective);
         }
 
+        /// <summary>
+        ///     test extended syntax switch
+        /// </summary>
         [TestMethod]
         public void TestExtendedSyntax() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.UseExtendedSyntax.Value;
@@ -255,6 +303,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("EXTENDEDSYNTAX", ExtendedSyntax.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedSyntaxDirective);
         }
 
+        /// <summary>
+        ///     test external symbol switch
+        /// </summary>
         [TestMethod]
         public void TestExternalSymbol() {
             object c(IOptionSet o) => o.Meta.ExternalSymbols.Count;
@@ -267,6 +318,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("EXTERNALSYM", 0, c, CompilerDirectiveParserErrors.InvalidExternalSymbolDirective);
         }
 
+        /// <summary>
+        ///     test excess precision switch
+        /// </summary>
         [TestMethod]
         public void TestExcessPrecision() {
             object f(IOptionSet o) => o.CompilerOptions.AdditionalOptions.ExcessPrecision.Value;
@@ -277,6 +331,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("EXCESSPRECISION  ", ExcessPrecisionForResult.Undefined, f, CompilerDirectiveParserErrors.InvalidExcessPrecisionDirective);
         }
 
+        /// <summary>
+        ///     test high char UNICODE switch
+        /// </summary>
         [TestMethod]
         public void TestHighCharUnicode() {
             object f(IOptionSet o) => o.CompilerOptions.AdditionalOptions.HighCharUnicode.Value;
@@ -287,6 +344,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("HIGHCHARUNICODE ", HighCharsUnicode.Undefined, f, CompilerDirectiveParserErrors.InvalidHighCharUnicodeDirective);
         }
 
+        /// <summary>
+        ///     test hint switch
+        /// </summary>
         [TestMethod]
         public void TestHints() {
             object f(IOptionSet o) => o.CompilerOptions.HintsAndWarnings.Hints.Value;
@@ -297,6 +357,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("HINTS ", CompilerHint.Undefined, f, CompilerDirectiveParserErrors.InvalidHintsDirective);
         }
 
+        /// <summary>
+        ///     test HPP emit directive
+        /// </summary>
         [TestMethod]
         public void TestHppEmit() {
             object c(IOptionSet o) => o.Meta.HeaderStrings.Count;
@@ -314,6 +377,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("HPPEMIT ", false, f, CompilerDirectiveParserErrors.InvalidHppEmitDirective);
         }
 
+        /// <summary>
+        ///     test image base switch
+        /// </summary>
         [TestMethod]
         public void TestImageBase() {
             object f(IOptionSet o) => o.CompilerOptions.LinkOptions.ImageBase.Value;
@@ -324,6 +390,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("IMAGEBASE ", 0UL, f, CompilerDirectiveParserErrors.InvalidImageBaseDirective);
         }
 
+        /// <summary>
+        ///     test implicit build switch
+        /// </summary>
         [TestMethod]
         public void TestImplicitBuild() {
             object f(IOptionSet o) => o.CompilerOptions.AdditionalOptions.ImplicitBuild.Value;
@@ -334,6 +403,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("IMPLICITBUILD ", ImplicitBuildUnit.Undefined, f, CompilerDirectiveParserErrors.InvalidImplicitBuildDirective);
         }
 
+        /// <summary>
+        ///     test import directive
+        /// </summary>
         [TestMethod]
         public void TestImportUnitData() {
             object f(IOptionSet o) => o.CompilerOptions.DebugOptions.ImportedData.Value;
@@ -349,6 +421,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("IMPORTEDDATA ", ImportGlobalUnitData.Undefined, f, CompilerDirectiveParserErrors.InvalidImportedDataDirective);
         }
 
+        /// <summary>
+        ///     test include switch
+        /// </summary>
         [TestMethod]
         public void TestInclude() {
             object f(IOptionSet o) => o.ConditionalCompilation.IsSymbolDefined("DUMMY_INC");
@@ -363,6 +438,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("I ", false, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
         }
 
+        /// <summary>
+        ///     test IO checks switch
+        /// </summary>
         [TestMethod]
         public void TestIoChecks() {
             object f(IOptionSet o) => o.CompilerOptions.RuntimeChecks.IoChecks.Value;
@@ -377,6 +455,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("IOCHECKS ", IoCallCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
         }
 
+        /// <summary>
+        ///     test local symbols switch
+        /// </summary>
         [TestMethod]
         public void TestLocalSymbols() {
             object f(IOptionSet o) => o.CompilerOptions.DebugOptions.LocalSymbols.Value;
@@ -389,6 +470,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("LOCALSYMBOLS ", LocalDebugSymbolMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective);
         }
 
+        /// <summary>
+        ///     test long strings
+        /// </summary>
         [TestMethod]
         public void TestLongStrings() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.LongStrings.Value;
@@ -403,6 +487,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("LONGSTRINGS  ", LongStringMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
         }
 
+        /// <summary>
+        ///     test open strings
+        /// </summary>
         [TestMethod]
         public void TestOpenStrings() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.OpenStrings.Value;
@@ -417,6 +504,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("OPENSTRINGS  ", OpenStringTypeMode.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
         }
 
+        /// <summary>
+        ///     test optimization switch
+        /// </summary>
         [TestMethod]
         public void TestOptimization() {
             object f(IOptionSet o) => o.CompilerOptions.CodeGeneration.Optimization.Value;
@@ -431,6 +521,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("OPTIMIZATION  ", CompilerOptimization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
         }
 
+        /// <summary>
+        ///     test overflow switch
+        /// </summary>
         [TestMethod]
         public void TestOverflow() {
             object f(IOptionSet o) => o.CompilerOptions.RuntimeChecks.CheckOverflows.Value;
@@ -445,6 +538,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("OVERFLOWCHECKS ", RuntimeOverflowCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
         }
 
+        /// <summary>
+        ///     test save divide
+        /// </summary>
         [TestMethod]
         public void TestSaveDivide() {
             object f(IOptionSet o) => o.CompilerOptions.CodeGeneration.SafeDivide.Value;
@@ -459,6 +555,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("SAFEDIVIDE  ", FDivSafeDivide.Undefined, f, CompilerDirectiveParserErrors.InvalidSafeDivide);
         }
 
+        /// <summary>
+        ///     test range checks
+        /// </summary>
         [TestMethod]
         public void TestRangeChecks() {
             object f(IOptionSet o) => o.CompilerOptions.RuntimeChecks.RangeChecks.Value;
@@ -471,6 +570,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("RANGECHECKS ", RuntimeRangeCheckMode.Undefined, f, CompilerDirectiveParserErrors.InvalidRangeCheckDirective);
         }
 
+        /// <summary>
+        ///     test stack frames
+        /// </summary>
         [TestMethod]
         public void TestStackFrames() {
             object f(IOptionSet o) => o.CompilerOptions.CodeGeneration.StackFrames.Value;
@@ -485,6 +587,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("STACKFRAMES  ", StackFrameGeneration.Undefined, f, CompilerDirectiveParserErrors.InvalidStackFramesDirective);
         }
 
+        /// <summary>
+        ///     test zero based strings switch
+        /// </summary>
         [TestMethod]
         public void TestZeroBasedStrings() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.IndexOfFirstCharInString.Value;
@@ -495,6 +600,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("ZEROBASEDSTRINGS  ", FirstCharIndex.Undefined, f, CompilerDirectiveParserErrors.InvalidZeroBasedStringsDirective);
         }
 
+        /// <summary>
+        ///     test writable constant declarations switch
+        /// </summary>
         [TestMethod]
         public void TestWritableConst() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.WritableConstants.Value;
@@ -509,6 +617,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("WRITEABLECONST  ", ConstantValue.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
         }
 
+        /// <summary>
+        ///     test weak link RTTI switch
+        /// </summary>
         [TestMethod]
         public void TestWeakLinkRtti() {
             object f(IOptionSet o) => o.CompilerOptions.LinkOptions.WeakLinkRtti.Value;
@@ -519,6 +630,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("WEAKLINKRTTI  ", RttiLinkMode.Undefined, f, CompilerDirectiveParserErrors.InvalidWeakLinkRttiDirective);
         }
 
+        /// <summary>
+        ///     test weak package unit switch
+        /// </summary>
         [TestMethod]
         public void TestWeakPackageUnit() {
             object f(IOptionSet o) => o.CompilerOptions.LinkOptions.WeakPackageUnit.Value;
@@ -529,6 +643,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("WEAKPACKAGEUNIT", WeakPackaging.Undefined, f, CompilerDirectiveParserErrors.InvalidWeakPackageUnitDirective);
         }
 
+        /// <summary>
+        ///     test warnings switch
+        /// </summary>
         [TestMethod]
         public void TestWarnings() {
             object f(IOptionSet o) => o.CompilerOptions.HintsAndWarnings.Warnings.Value;
@@ -539,6 +656,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("WARNINGS  ", CompilerWarning.Undefined, f, CompilerDirectiveParserErrors.InvalidWarningsDirective);
         }
 
+        /// <summary>
+        ///     test warning switch
+        /// </summary>
         [TestMethod]
         public void TestWarn() {
             object f(IOptionSet o) => o.Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED");
@@ -555,6 +675,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("WARN  ", WarningMode.Undefined, f, CompilerDirectiveParserErrors.InvalidWarnDirective);
         }
 
+        /// <summary>
+        ///     test string checks
+        /// </summary>
         [TestMethod]
         public void TestVarStringChecks() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.VarStringChecks.Value;
@@ -569,6 +692,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("VARSTRINGCHECKS  ", ShortVarStringCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
         }
 
+        /// <summary>
+        ///     test type checked points
+        /// </summary>
         [TestMethod]
         public void TestTypeCheckedPointers() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.TypedPointers.Value;
@@ -583,6 +709,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("TYPEDADDRESS ", UsePointersWithTypeChecking.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
         }
 
+        /// <summary>
+        ///     test symbol definition info switch
+        /// </summary>
         [TestMethod]
         public void TestSymbolDefinitionInfo() {
             object f(IOptionSet o) => o.CompilerOptions.DebugOptions.SymbolDefinitions.Value;
@@ -598,6 +727,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("DEFINITIONINFO ", SymbolDefinitionInfo.Undefined, f, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective);
         }
 
+        /// <summary>
+        ///     test symbol reference info switch
+        /// </summary>
         [TestMethod]
         public void TestSymbolReferenceInfo() {
             object f(IOptionSet o) => o.CompilerOptions.DebugOptions.SymbolReferences.Value;
@@ -613,6 +745,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("REFERENCEINFO ", SymbolReferenceInfo.Undefined, f, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective);
         }
 
+        /// <summary>
+        ///     test strong linking switch
+        /// </summary>
         [TestMethod]
         public void TestStrongLinking() {
             object f(IOptionSet o) => o.CompilerOptions.LinkOptions.LinkAllTypes.Value;
@@ -621,6 +756,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("STRONGLINKTYPES OFF", StrongTypeLinking.Disable, f);
         }
 
+        /// <summary>
+        ///     test scoped enumerations
+        /// </summary>
         [TestMethod]
         public void TestScopedEnums() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.ScopedEnums.Value;
@@ -631,6 +769,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("SCOPEDENUMS ", RequireScopedEnumMode.Undefined, f, CompilerDirectiveParserErrors.InvalidScopedEnumsDirective);
         }
 
+        /// <summary>
+        ///     test type info switch
+        /// </summary>
         [TestMethod]
         public void TestTypeInfo() {
             object f(IOptionSet o) => o.CompilerOptions.CodeGeneration.PublishedRtti.Value;
@@ -645,6 +786,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("TYPEINFO ", RttiForPublishedPropertieMode.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
         }
 
+        /// <summary>
+        ///     test run only
+        /// </summary>
         [TestMethod]
         public void TestRunOnly() {
             object f(IOptionSet o) => o.CompilerOptions.LinkOptions.RuntimeOnlyPackage.Value;
@@ -655,6 +799,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("RUNONLY ", RuntimePackageMode.Undefined, f, CompilerDirectiveParserErrors.InvalidRunOnlyDirective);
         }
 
+        /// <summary>
+        ///     test link files switch
+        /// </summary>
         [TestMethod]
         public void TestLinkedFiles() {
             object f(IOptionSet o) => o.Meta.LinkedFiles.Where(t => t.TargetPath != null).Select(t => t.TargetPath).Any(t => t.FileName.IndexOf("link.dll", StringComparison.OrdinalIgnoreCase) >= 0);
@@ -665,6 +812,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("LINK ", false, f, CompilerDirectiveParserErrors.InvalidLinkDirective, CompilerDirectiveParserErrors.InvalidFileName);
         }
 
+        /// <summary>
+        ///     test legacy if end
+        /// </summary>
         [TestMethod]
         public void TestLegacyIfEnd() {
             object f(IOptionSet o) => o.CompilerOptions.AdditionalOptions.LegacyIfEnd.Value;
@@ -684,6 +834,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective(opt + "- § IFOPT " + opt + "+ § DEFINE TT § ENDIF", false, f);
         }
 
+        /// <summary>
+        ///     test IFOPT directive
+        /// </summary>
         [TestMethod]
         public void TestIfOpt() {
             TestIfOptHelper('A');
@@ -754,6 +907,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("RTTI ", p(u), n(l(o1)[0]), CompilerDirectiveParserErrors.InvalidRttiDirective);
         }
 
+        /// <summary>
+        ///     test resource reference directives
+        /// </summary>
         [TestMethod]
         public void TestResourceReference() {
 
@@ -775,6 +931,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("RESOURCE  ", false, h, CompilerDirectiveParserErrors.InvalidResourceDirective, CompilerDirectiveParserErrors.InvalidFileName);
         }
 
+        /// <summary>
+        ///     test region
+        /// </summary>
         [TestMethod]
         public void TestRegion() {
             object f(IOptionSet o) => o.Meta.HasRegions;
@@ -785,6 +944,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("ENDREGION", false, f, CompilerDirectiveParserErrors.EndRegionWithoutRegion);
         }
 
+        /// <summary>
+        ///     test real compatibility
+        /// </summary>
         [TestMethod]
         public void TestRealCompatibility() {
             object f(IOptionSet o) => o.CompilerOptions.AdditionalOptions.RealCompatibility.Value;
@@ -795,6 +957,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("REALCOMPATIBILITY UNDEFINED", Real48.Undefined, f, CompilerDirectiveParserErrors.InvalidRealCompatibilityMode);
         }
 
+        /// <summary>
+        ///     test pointer match switch
+        /// </summary>
         [TestMethod]
         public void TestPointerMath() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.PointerMath.Value;
@@ -805,6 +970,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("POINTERMATH ", PointerManipulation.Undefined, f, CompilerDirectiveParserErrors.InvalidPointerMathDirective);
         }
 
+        /// <summary>
+        ///     test old type layout switch
+        /// </summary>
         [TestMethod]
         public void TestOldTypeLayout() {
             object f(IOptionSet o) => o.CompilerOptions.AdditionalOptions.OldTypeLayout.Value;
@@ -815,6 +983,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("OLDTYPELAYOUT  ", OldRecordTypeMode.Undefined, f, CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective);
         }
 
+        /// <summary>
+        ///     test no define switch
+        /// </summary>
         [TestMethod]
         public void TestNoDefine() {
             object f(IOptionSet o) => o.Meta.NoDefines.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase));
@@ -830,6 +1001,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("NODEFINE ", false, f, CompilerDirectiveParserErrors.InvalidNoDefineDirective);
         }
 
+        /// <summary>
+        ///     test object type name switch
+        /// </summary>
         [TestMethod]
         public void TestObjTypeName() {
             object f(IOptionSet o) => o.Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase));
@@ -843,6 +1017,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("OBJTYPENAME ''", false, f, CompilerDirectiveParserErrors.InvalidObjTypeDirective);
         }
 
+        /// <summary>
+        ///     test no include switch
+        /// </summary>
         [TestMethod]
         public void TestNoInclude() {
             object f(IOptionSet o) => o.Meta.NoIncludes.Any(t => t.StartsWith("Winapi", StringComparison.OrdinalIgnoreCase));
@@ -852,6 +1029,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("NOINCLUDE ", false, f, CompilerDirectiveParserErrors.InvalidNoIncludeDirective);
         }
 
+        /// <summary>
+        ///     test minimum enumeration size switch
+        /// </summary>
         [TestMethod]
         public void TestMinEnumSize() {
             object f(IOptionSet o) => o.CompilerOptions.CodeGeneration.MinimumEnumSize.Value;
@@ -870,6 +1050,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("MINENUMSIZE ", EnumSize.Undefined, f, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
         }
 
+        /// <summary>
+        ///     test method info switch
+        /// </summary>
         [TestMethod]
         public void TestMethodInfo() {
             object f(IOptionSet o) => o.CompilerOptions.CodeGeneration.MethodInfo.Value;
@@ -880,6 +1063,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("METHODINFO ", MethodInfoRttiMode.Undefined, f, CompilerDirectiveParserErrors.InvalidMethodInfoDirective);
         }
 
+        /// <summary>
+        ///     test variant property setter switch
+        /// </summary>
         [TestMethod]
         public void TestVarPropSetter() {
             object f(IOptionSet o) => o.CompilerOptions.Syntax.VarPropSetter.Value;
@@ -890,6 +1076,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("VARPROPSETTER ", VarPropSetterMode.Undefined, f, CompilerDirectiveParserErrors.InvalidVarPropSetterDirective);
         }
 
+        /// <summary>
+        ///     test meta options
+        /// </summary>
         [TestMethod]
         public void TestLibMeta() {
             object f(IOptionSet o) => o.Meta.LibPrefix.Value;
@@ -909,6 +1098,9 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("LIBVERSION ", null, h, CompilerDirectiveParserErrors.InvalidLibDirective);
         }
 
+        /// <summary>
+        ///     test PE version options
+        /// </summary>
         [TestMethod]
         public void TestPeVersions() {
             Func<IOptionSet, object> ma = (IOptionSet o) => o.Meta.PEOsVersion.MajorVersion.Value;

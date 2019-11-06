@@ -8,6 +8,9 @@ namespace PasPasPasTests.Infra {
     /// </summary>
     public class ScopedNames {
 
+        /// <summary>
+        ///     test scoped names
+        /// </summary>
         [TestMethod]
         public void TestScopedSimpleNames() {
             var name1 = new ScopedName("teSt");

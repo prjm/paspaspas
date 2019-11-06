@@ -48,6 +48,9 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public ImmutableArray<IOpCode> Code { get; internal set; }
 
+        /// <summary>
+        ///     routine kind
+        /// </summary>
         public ProcedureKind RoutineKind { get; }
 
         /// <summary>

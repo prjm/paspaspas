@@ -21,7 +21,7 @@ namespace PasPasPas.Typings.Routines {
         bool IsConstant { get; }
 
         /// <summary>
-        ///     routine kind
+        ///     procedure kind
         /// </summary>
         ProcedureKind Kind { get; }
 

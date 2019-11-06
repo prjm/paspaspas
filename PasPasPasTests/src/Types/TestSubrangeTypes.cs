@@ -9,6 +9,9 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class TestSubrangeTypes : TypeTest {
 
+        /// <summary>
+        ///     test subrange type definitions
+        /// </summary>
         [TestMethod]
         public void TestSubrangeTypeDefs() {
             AssertExprTypeByVar("2..126", "a", KnownTypeIds.ShortInt, true);

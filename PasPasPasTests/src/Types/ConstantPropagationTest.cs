@@ -65,6 +65,10 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Abs(a)", GetSubrangeValue(1 + RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3)), "type Ta = 1..9; const a: Ta = 3;");
         }
 
+
+        /// <summary>
+        ///     test the <c>chr</c> function
+        /// </summary>
         [TestMethod]
         public void TestChr() {
             AssertExprValue("Chr(5)", GetWideCharValue((char)5));
@@ -75,7 +79,7 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
-        ///     teest hi function
+        ///     test <c>hi</c> function
         /// </summary>
         [TestMethod]
         public void TestHi() {
@@ -123,7 +127,7 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
-        ///     test length function
+        ///     test <c>length</c>function
         /// </summary>
         [TestMethod]
         public void TestLength() {
@@ -195,7 +199,7 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
-        ///     test ord function
+        ///     test <c>ord</c> function
         /// </summary>
         [TestMethod]
         public void TestOrd() {

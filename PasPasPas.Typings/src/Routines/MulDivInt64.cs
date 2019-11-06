@@ -16,6 +16,12 @@ namespace PasPasPas.Typings.Routines {
             => "MulDivInt64";
 
         /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind
+            => ProcedureKind.Function;
+
+        /// <summary>
         ///     intrinsic routine
         /// </summary>
         public bool IsConstant

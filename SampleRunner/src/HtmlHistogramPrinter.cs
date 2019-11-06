@@ -30,16 +30,27 @@ namespace SampleRunner {
             => System.Security.SecurityElement.Escape(Key);
     }
 
+    /// <summary>
+    ///     HTML histograms
+    /// </summary>
     public class HtmlHistogram {
 
         private readonly long max;
 
+        /// <summary>
+        ///     histogram id
+        /// </summary>
         public int Id { get; }
 
         private readonly long min;
         private readonly IList<HtmlHistogramValue> values
             = new List<HtmlHistogramValue>();
 
+        /// <summary>
+        ///     create a new histogram
+        /// </summary>
+        /// <param name="histogram"></param>
+        /// <param name="id"></param>
         public HtmlHistogram(Histogram histogram, int id) {
             Key = histogram.Key;
             min = histogram.MinValue;
@@ -51,6 +62,10 @@ namespace SampleRunner {
         ///     histogram key
         /// </summary>
         public string Key { get; }
+
+        /// <summary>
+        ///     histogram key
+        /// </summary>
         public object FormattedKey
             => System.Security.SecurityElement.Escape(Key);
 
@@ -81,14 +96,27 @@ namespace SampleRunner {
         }
     }
 
+    /// <summary>
+    ///     histogram printer
+    /// </summary>
     public class HtmlHistogramPrinter : IHistogramPrinter {
 
         private readonly IList<HtmlHistogram> histograms
             = new List<HtmlHistogram>();
 
+        /// <summary>
+        ///     print a histogram
+        /// </summary>
+        /// <param name="histogram"></param>
         public void PrintHistogram(Histogram histogram)
             => histograms.Add(new HtmlHistogram(histogram, histograms.Count));
 
+        /// <summary>
+        ///     print a histogram value
+        /// </summary>
+        /// <param name="histogram"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void PrintValue(Histogram histogram, string key, long value) {
             var item = histograms.First(t => string.Equals(histogram.Key, t.Key, StringComparison.OrdinalIgnoreCase));
             item.AddValue(key, value);

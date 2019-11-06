@@ -70,6 +70,11 @@ namespace PasPasPas.Runtime.Values {
         public bool Equals(InvocationResult other)
             => Routine.Equals(other.Routine) && Parameters.Equals(other.Routine.Parameters[other.RoutineIndex]);
 
+        /// <summary>
+        ///     check equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj) {
 
             if (obj is IntrinsicInvocationResult iir)
@@ -79,6 +84,19 @@ namespace PasPasPas.Runtime.Values {
                 return Equals(ir);
 
             return false;
+        }
+
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            var result = 17;
+            unchecked {
+                result = result * 31 + Parameters.GetHashCode();
+                result = result * 31 + Routine.GetHashCode();
+                return result;
+            }
         }
     }
 }

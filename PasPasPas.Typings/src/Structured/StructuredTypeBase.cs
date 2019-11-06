@@ -43,9 +43,8 @@ namespace PasPasPas.Typings.Structured {
         ///     add a method definition
         /// </summary>
         /// <param name="completeName">method name</param>
-        /// <param name="kind">method kind</param>
         /// <param name="genericTypeId">generic type id</param>
-        public IRoutine AddOrExtendMethod(string completeName, ProcedureKind kind, int genericTypeId) {
+        public IRoutine AddOrExtendMethod(string completeName, int genericTypeId) {
             foreach (var method in Methods)
                 if (string.Equals(method.Name, completeName, StringComparison.OrdinalIgnoreCase))
                     return method;

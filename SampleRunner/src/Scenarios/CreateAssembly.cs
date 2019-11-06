@@ -8,6 +8,14 @@ namespace SampleRunner.Scenarios {
     ///     test to create an assembly
     /// </summary>
     public static class CreateAssembly {
+
+        /// <summary>
+        ///     run the assembly creator test
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="environment"></param>
+        /// <param name="testPath"></param>
+        /// <param name="reapeat"></param>
         public static void Run(TextWriter b, IAssemblyBuilderEnvironment environment, string testPath, int reapeat) {
             for (var i = 0; i < reapeat; i++) {
                 var resolver = CommonApi.CreateAnyFileResolver();

@@ -6,8 +6,14 @@ using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Runtime {
 
+    /// <summary>
+    ///     runtime values test
+    /// </summary>
     public class RuntimeValuesTest : CommonTest {
 
+        /// <summary>
+        ///     test integer values
+        /// </summary>
         [TestMethod]
         public void TestIntegerValues() {
 
@@ -111,6 +117,9 @@ namespace PasPasPasTests.Runtime {
 
         }
 
+        /// <summary>
+        ///     test integer addition
+        /// </summary>
         [TestMethod]
         public void TestIntegerAddition() {
             string a(ITypeReference v1, ITypeReference v2) {
@@ -137,6 +146,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("0", a(GetIntegerValue(9223372036854775807), GetIntegerValue(-9223372036854775807)));
         }
 
+        /// <summary>
+        ///     test integer subtract
+        /// </summary>
         [TestMethod]
         public void TestIntegerSubtraction() {
             string s(ITypeReference v1, ITypeReference v2) {
@@ -160,6 +172,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("0", s(GetIntegerValue(-9223372036854775807), GetIntegerValue(-9223372036854775807)));
         }
 
+        /// <summary>
+        ///     test integer multiplication
+        /// </summary>
         [TestMethod]
         public void TestIntegerMultiplication() {
             string m(ITypeReference v1, ITypeReference v2) {
@@ -178,6 +193,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("IO", m(GetIntegerValue(4867420397139656704), GetIntegerValue(4867420397139656704)));
         }
 
+        /// <summary>
+        ///     test integer division
+        /// </summary>
         [TestMethod]
         public void TestIntegerDivision() {
             string d(ITypeReference v1, ITypeReference v2) {
@@ -196,6 +214,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("9223372036854775808", d(GetIntegerValue(-9223372036854775808), GetIntegerValue(-1)));
         }
 
+        /// <summary>
+        ///     test integer modulo
+        /// </summary>
         [TestMethod]
         public void TestIntegerModulo() {
             string m(ITypeReference v1, ITypeReference v2) {
@@ -215,6 +236,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("-9223372036854775808", m(GetIntegerValue(-9223372036854775808), GetIntegerValue(9223372036854775809)));
         }
 
+        /// <summary>
+        ///     test the <c>not</c> operator
+        /// </summary>
         [TestMethod]
         public void TestIntegerNot() {
             string m(ITypeReference v, int typeKind) {
@@ -232,6 +256,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("1", m(GetIntegerValue(18446744073709551614), KnownTypeIds.ShortInt));
         }
 
+        /// <summary>
+        ///     test integer and
+        /// </summary>
         [TestMethod]
         public void TestIntegerAnd() {
             string a(ITypeReference v1, ITypeReference v2) {
@@ -247,6 +274,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("18446744073709551615", a(GetIntegerValue(18446744073709551615), GetIntegerValue(18446744073709551615)));
         }
 
+        /// <summary>
+        ///     test integer or
+        /// </summary>
         [TestMethod]
         public void TestIntegerOr() {
             string o(ITypeReference v1, ITypeReference v2) {
@@ -261,6 +291,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("255", o(GetIntegerValue(240), GetIntegerValue(15)));
         }
 
+        /// <summary>
+        ///     test <c>xor</c> operator
+        /// </summary>
         [TestMethod]
         public void TestIntegerXor() {
             string x(ITypeReference v1, ITypeReference v2) {
@@ -275,6 +308,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("-2", x(GetIntegerValue(-127), GetIntegerValue(127)));
         }
 
+        /// <summary>
+        ///     test the <c>shl</c> operator
+        /// </summary>
         [TestMethod]
         public void TestIntegerShl() {
             string sl(ITypeReference v1, ITypeReference v2) {
@@ -288,6 +324,9 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("8", sl(GetIntegerValue(4), GetIntegerValue(1)));
         }
 
+        /// <summary>
+        ///     test integer shift right
+        /// </summary>
         [TestMethod]
         public void TestIntegerShr() {
             string sr(ITypeReference v1, ITypeReference v2) {

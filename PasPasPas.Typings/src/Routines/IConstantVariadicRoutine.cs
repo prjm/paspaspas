@@ -8,7 +8,6 @@ namespace PasPasPas.Typings.Routines {
     /// </summary>
     public interface IConstantVariadicRoutine : IVariadicRoutine {
 
-
         /// <summary>
         ///     execute a call
         /// </summary>

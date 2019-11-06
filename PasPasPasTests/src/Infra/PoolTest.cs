@@ -8,6 +8,9 @@ namespace PasPasPasTests.Infra {
     /// </summary>
     public class PoolTest {
 
+        /// <summary>
+        ///     test string builder pool
+        /// </summary>
         [TestMethod]
         public void TestStringBuilderBool() {
             var pool = new StringBuilderPool();
