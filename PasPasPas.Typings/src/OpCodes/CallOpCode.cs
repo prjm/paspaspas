@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.CodeGen;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.OpCodes {
 
@@ -28,7 +29,7 @@ namespace PasPasPas.Typings.OpCodes {
         /// <summary>
         ///     op code id
         /// </summary>
-        public override byte Id =>
-            OpCodeBase.CallId;
+        public override OpCodeId Id =>
+            OpCodeId.Call;
     }
 }

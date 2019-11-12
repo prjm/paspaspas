@@ -27,6 +27,12 @@ namespace PasPasPas.Typings.Routines {
             => "Round";
 
         /// <summary>
+        ///     <c>round</c> routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.Round;
+
+        /// <summary>
         ///     check the parameter
         /// </summary>
         /// <param name="parameter"></param>

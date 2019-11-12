@@ -8,11 +8,6 @@ namespace PasPasPas.Typings.OpCodes {
     public abstract class OpCodeBase : IOpCode {
 
         /// <summary>
-        ///     call opcode
-        /// </summary>
-        internal const byte CallId = 100;
-
-        /// <summary>
         ///     get the opcode text
         /// </summary>
         public abstract string OpCodeText { get; }
@@ -20,6 +15,6 @@ namespace PasPasPas.Typings.OpCodes {
         /// <summary>
         ///     get the opcode id
         /// </summary>
-        public abstract byte Id { get; }
+        public abstract OpCodeId Id { get; }
     }
 }

@@ -8,7 +8,7 @@ using PasPasPas.Desktop.BackwardCompatibility;
 namespace PasPasPas.Typings.Serialization {
     internal partial class TypeReader {
 
-        private int ReadSpan(in Span<byte> data)
+        private int ReadSpan(Span<byte> data)
             => ReadableStream.Read(data);
 
         /// <summary>

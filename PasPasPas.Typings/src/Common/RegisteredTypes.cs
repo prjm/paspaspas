@@ -503,5 +503,23 @@ namespace PasPasPas.Typings.Common {
         public ITypeReference MakeTypeReference(int typeId)
             => Runtime.Types.MakeTypeReference(typeId);
 
+        /// <summary>
+        ///     find an intrinsic routine from the system unit
+        /// </summary>
+        /// <param name="routineId"></param>
+        /// <returns></returns>
+        public IRoutine GetIntrinsicRoutine(IntrinsicRoutineId routineId) {
+            var system = SystemUnit as IUnitType;
+
+            foreach (var reference in system.Symbols) {
+                if (!(reference.Value.Symbol is IRoutine routine))
+                    continue;
+
+                if (routine.RoutineId == routineId)
+                    return routine;
+            }
+
+            return default;
+        }
     }
 }

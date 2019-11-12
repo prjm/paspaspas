@@ -81,6 +81,11 @@ namespace PasPasPas.Typings.Routines {
             = new List<IParameterGroup>();
 
         /// <summary>
+        ///     unique routine id
+        /// </summary>
+        public abstract IntrinsicRoutineId RoutineId { get; }
+
+        /// <summary>
         ///     make a subrange value
         /// </summary>
         /// <param name="typeId"></param>

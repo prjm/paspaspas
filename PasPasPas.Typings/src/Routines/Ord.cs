@@ -27,6 +27,12 @@ namespace PasPasPas.Typings.Routines {
             => "Ord";
 
         /// <summary>
+        ///     <c>ord</c> routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.Ord;
+
+        /// <summary>
         ///     check parameter types
         /// </summary>
         /// <param name="parameter"></param>

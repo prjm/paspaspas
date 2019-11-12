@@ -27,6 +27,12 @@ namespace PasPasPas.Typings.Routines {
             => ProcedureKind.Function;
 
         /// <summary>
+        ///     routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.SizeOf;
+
+        /// <summary>
         ///     check parameters
         /// </summary>
         /// <param name="parameter"></param>

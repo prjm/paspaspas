@@ -13,6 +13,6 @@
         /// <summary>
         ///    op-code id
         /// </summary>
-        byte Id { get; }
+        OpCodeId Id { get; }
     }
 }

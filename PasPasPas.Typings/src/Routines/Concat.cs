@@ -27,6 +27,12 @@ namespace PasPasPas.Typings.Routines {
             => ProcedureKind.Function;
 
         /// <summary>
+        ///     <c>concat</c> routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.Concat;
+
+        /// <summary>
         ///     check type parameters
         /// </summary>
         /// <param name="signature"></param>

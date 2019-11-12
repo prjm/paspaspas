@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
@@ -75,6 +76,19 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         public bool IsConstant
             => true;
+
+        /// <summary>
+        ///     routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId {
+            get {
+                if (Mode == PredSuccMode.Pred)
+                    return IntrinsicRoutineId.Pred;
+                else if (Mode == PredSuccMode.Succ)
+                    return IntrinsicRoutineId.Succ;
+                throw new InvalidOperationException();
+            }
+        }
 
         /// <summary>
         ///     check for ordinal parameters

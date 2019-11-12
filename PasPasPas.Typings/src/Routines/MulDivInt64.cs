@@ -28,6 +28,12 @@ namespace PasPasPas.Typings.Routines {
             => true;
 
         /// <summary>
+        ///     <c>muldiv64</c> routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.MulDiv64;
+
+        /// <summary>
         ///     check parameters
         /// </summary>
         /// <param name="signature"></param>

@@ -30,6 +30,11 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         List<IParameterGroup> Parameters { get; }
 
+        /// <summary>
+        ///     <c>true</c> for intrinsic routines
+        /// </summary>
+        IntrinsicRoutineId RoutineId { get; }
+
     }
 
 

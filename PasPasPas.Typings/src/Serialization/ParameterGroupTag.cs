@@ -27,7 +27,10 @@ namespace PasPasPas.Typings.Serialization {
         }
 
         internal void AddToRoutine(IRoutine routine)
-            => routine.Parameters.Add(new ParameterGroup(routine, procedureKind, resultType));
+            => routine.Parameters.Add(ToParameterGroup(routine));
+
+        internal IParameterGroup ToParameterGroup(IRoutine routine)
+            => new ParameterGroup(routine, procedureKind, resultType);
 
         internal void Initialize(IParameterGroup parameterGroup)
             => procedureKind = parameterGroup.RoutineKind;

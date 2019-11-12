@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     value factory for undefined types
@@ -68,6 +70,6 @@
         /// <param name="parameterGroup"></param>
         /// <param name="targetRoutine"></param>
         /// <returns></returns>
-        ITypeReference MakeInvocationResultFromIntrinsic(IRoutine targetRoutine, IParameterGroup parameterGroup);
+        IIntrinsicInvocationResult MakeInvocationResultFromIntrinsic(IRoutine targetRoutine, IParameterGroup parameterGroup);
     }
 }

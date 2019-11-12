@@ -28,6 +28,12 @@ namespace PasPasPas.Typings.Routines {
             => "Pi";
 
         /// <summary>
+        ///     <c>pi</c> routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.Pi;
+
+        /// <summary>
         ///     check
         /// </summary>
         /// <param name="signature"></param>

@@ -69,6 +69,12 @@ namespace PasPasPas.Typings.Structured {
             => CommonTypeKind.ProcedureType;
 
         /// <summary>
+        ///     no intrinsic routine
+        /// </summary>
+        public IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.Unknown;
+
+        /// <summary>
         ///     add a parameter group
         /// </summary>
         /// <param name="resultType">result type</param>

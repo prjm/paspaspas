@@ -82,7 +82,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public string PoolString(in Span<byte> item) {
+        public string PoolString(Span<byte> item) {
             lock (lockObject) {
                 if (pool.TryGetValue(item, out var data)) {
                     LogHistogram(data);

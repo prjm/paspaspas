@@ -8,7 +8,6 @@ namespace PasPasPas.Typings.Routines {
     /// </summary>
     public class Swap : IntrinsicRoutine, IUnaryRoutine {
 
-
         /// <summary>
         ///     name of the function
         /// </summary>
@@ -26,6 +25,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         public ProcedureKind Kind
             => ProcedureKind.Function;
+
+        /// <summary>
+        ///     routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.Swap;
 
         /// <summary>
         ///     check parameter types

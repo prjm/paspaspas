@@ -4,10 +4,9 @@ using PasPasPas.Globals.Types;
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
-    ///     <pre>sqr</pre> routine
+    ///     <c>sqr</c> routine
     /// </summary>
     public class Sqr : IntrinsicRoutine, IUnaryRoutine {
-
 
         /// <summary>
         ///     constant routine
@@ -26,6 +25,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         public ProcedureKind Kind
             => ProcedureKind.Function;
+
+        /// <summary>
+        ///     routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.Sqr;
 
         /// <summary>
         ///     check parameters

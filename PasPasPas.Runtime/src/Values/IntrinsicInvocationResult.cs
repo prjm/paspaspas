@@ -7,7 +7,7 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     result from an intrinsic routine call
     /// </summary>
-    public class IntrinsicInvocationResult : IInvocationResult, IEquatable<InvocationResult>, IEquatable<IntrinsicInvocationResult> {
+    public class IntrinsicInvocationResult : IIntrinsicInvocationResult, IEquatable<InvocationResult>, IEquatable<IntrinsicInvocationResult> {
 
         /// <summary>
         ///     create a new intrinsic invocation result

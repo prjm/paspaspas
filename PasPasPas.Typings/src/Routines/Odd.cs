@@ -27,6 +27,12 @@ namespace PasPasPas.Typings.Routines {
             => "Odd";
 
         /// <summary>
+        ///     <c>odd</c> routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.Odd;
+
+        /// <summary>
         ///     check procedure parameters
         /// </summary>
         /// <param name="parameter"></param>

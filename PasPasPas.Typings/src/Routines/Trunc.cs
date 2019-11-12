@@ -4,7 +4,7 @@ using PasPasPas.Globals.Types;
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
-    ///     <pre>trunc</pre> routine
+    ///     <c>trunc</c> routine
     /// </summary>
     public class Trunc : IntrinsicRoutine, IUnaryRoutine {
 
@@ -25,6 +25,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         public ProcedureKind Kind
             => ProcedureKind.Function;
+
+        /// <summary>
+        ///     routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.Trunc;
 
         /// <summary>
         ///     check parameter

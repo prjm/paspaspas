@@ -101,7 +101,7 @@
         public const int CharType = 15;
 
         /// <summary>
-        ///     ucs2 char type (type alias for widechar)
+        ///     ucs2 char type (type alias for wide char)
         /// </summary>
         public const int Ucs2CharType = 16;
 

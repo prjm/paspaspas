@@ -73,6 +73,19 @@ namespace PasPasPas.Typings.Routines {
             => ProcedureKind.Function;
 
         /// <summary>
+        ///     routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId {
+            get {
+                if (Mode == HiLoMode.Hi)
+                    return IntrinsicRoutineId.Hi;
+                else if (Mode == HiLoMode.Lo)
+                    return IntrinsicRoutineId.Lo;
+                throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
         ///     check parameter types
         /// </summary>
         /// <param name="parameter"></param>

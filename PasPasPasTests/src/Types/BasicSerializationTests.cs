@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Typings.OpCodes;
@@ -424,8 +426,9 @@ namespace PasPasPasTests.Types {
             using (var stream = new MemoryStream())
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
+                var nt = env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType);
                 var d = new Routine(env.TypeRegistry, "_");
-                var pg = new ParameterGroup(d, PK.Procedure, env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType));
+                var pg = new ParameterGroup(d, PK.Procedure, nt);
                 var t = new ParameterGroupTag();
 
                 t.Initialize(pg);
@@ -452,13 +455,21 @@ namespace PasPasPasTests.Types {
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
                 var u = env.TypeRegistry.GetTypeByIdOrUndefinedType(KTI.SystemUnit) as UnitType;
-                var rr = u.Symbols["writeln"].Symbol as Routine;
+                var rr = u.Symbols["writeln"].Symbol as IRoutine;
                 var parms = new ParameterGroup(rr, PK.Procedure, env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType));
                 var callInfo = new IntrinsicInvocationResult(rr, parms);
                 var op = new CallOpCode(callInfo);
                 var t = new OpCodeTag();
                 t.Initialize(op);
-                //w.WriteTag(t);
+                w.WriteTag(t);
+
+                stream.Seek(0, SeekOrigin.Begin);
+                t = new OpCodeTag();
+                r.ReadTag(t);
+
+                Assert.AreEqual(t.OpCode.Id, OpCodeId.Call);
+                var c = t.OpCode as CallOpCode;
+                Assert.AreEqual(c.CallInfo.Routine.RoutineId, IntrinsicRoutineId.WriteLn);
             }
         }
 

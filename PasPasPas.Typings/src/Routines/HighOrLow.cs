@@ -69,6 +69,19 @@ namespace PasPasPas.Typings.Routines {
             => ProcedureKind.Function;
 
         /// <summary>
+        ///     routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId {
+            get {
+                if (Mode == HighOrLowMode.High)
+                    return IntrinsicRoutineId.High;
+                else if (Mode == HighOrLowMode.Low)
+                    return IntrinsicRoutineId.Low;
+                throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
         ///     check parameter types
         /// </summary>
         /// <param name="parameter"></param>

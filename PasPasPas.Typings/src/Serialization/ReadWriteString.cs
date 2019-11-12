@@ -51,7 +51,7 @@ namespace PasPasPas.Typings.Serialization {
     internal partial class TypeWriter {
 
 
-        private static void GetBytes(string text, in Span<byte> buffer)
+        private static void GetBytes(string text, Span<byte> buffer)
             => Encoding.Unicode.GetBytes(text, buffer);
 
         private static void GetBytes(string text, byte[] buffer)

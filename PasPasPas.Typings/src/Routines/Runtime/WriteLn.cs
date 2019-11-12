@@ -28,6 +28,12 @@ namespace PasPasPas.Typings.Routines.Runtime {
             => false;
 
         /// <summary>
+        ///     routine id
+        /// </summary>
+        public override IntrinsicRoutineId RoutineId
+            => IntrinsicRoutineId.WriteLn;
+
+        /// <summary>
         ///     check parameters
         /// </summary>
         /// <param name="signature"></param>
