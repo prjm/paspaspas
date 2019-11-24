@@ -54,7 +54,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     registered types
         /// </summary>
-        public IEnumerable<ITypeDefinition> RegisteredTypeDefinitios
+        public IEnumerable<ITypeDefinition> RegisteredTypeDefinitions
             => types.Values;
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace PasPasPas.Typings.Common {
         private void RegisterTObject() {
             var def = new StructuredTypeDeclaration(KnownTypeIds.TObject, StructuredTypeKind.Class);
             //var meta = new MetaStructuredTypeDeclaration(KnownTypeIds.TClass, KnownTypeIds.TObject);
-            var alias = TypeCreator.CreateTypeAlias(KnownTypeIds.TClass, false, KnownTypeIds.TClassAlias);
+            //var alias = TypeCreator.CreateTypeAlias(KnownTypeIds.TClass, false, KnownTypeIds.TClassAlias);
             RegisterSystemType(def, "TObject");
             //RegisterSystemType(meta, "TObject");
             //RegisterSystemType(alias, "TClass");
@@ -420,13 +420,13 @@ namespace PasPasPas.Typings.Common {
             var sourceTypeKind = GetTypeKindOf(sourceType);
 
             if (sourceTypeKind.IsIntegral())
-                return CastIntTo(sourceType, targetType);
+                return CastIntTo(targetType);
 
             if (sourceTypeKind.IsChar())
-                return CastCharTo(sourceType, targetType);
+                return CastCharTo(targetType);
 
             if (sourceTypeKind == CommonTypeKind.BooleanType)
-                return CastBooleanTo(sourceType, targetType);
+                return CastBooleanTo(targetType);
 
             if (sourceTypeKind == CommonTypeKind.RecordType)
                 return CastRecordTo(sourceType, targetType);
@@ -434,7 +434,7 @@ namespace PasPasPas.Typings.Common {
             return KnownTypeIds.ErrorType;
         }
 
-        private int CastIntTo(int sourceType, int targetType) {
+        private int CastIntTo(int targetType) {
             var targetTypeKind = GetTypeKindOf(targetType);
 
             if (targetTypeKind.IsIntegral())
@@ -462,7 +462,7 @@ namespace PasPasPas.Typings.Common {
             return KnownTypeIds.ErrorType;
         }
 
-        private int CastBooleanTo(int sourceType, int targetType) {
+        private int CastBooleanTo(int targetType) {
             var targetTypeKind = GetTypeKindOf(targetType);
 
             if (targetTypeKind == CommonTypeKind.BooleanType)
@@ -471,7 +471,7 @@ namespace PasPasPas.Typings.Common {
             return KnownTypeIds.ErrorType;
         }
 
-        private int CastCharTo(int sourceType, int targetType) {
+        private int CastCharTo(int targetType) {
             var targetTypeKind = GetTypeKindOf(targetType);
 
             if (targetTypeKind.IsIntegral())

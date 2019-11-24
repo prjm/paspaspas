@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Runtime;
@@ -27,6 +28,12 @@ namespace PasPasPas.Typings.Structured {
         ///     result type
         /// </summary>
         public ITypeReference ResultType { get; set; }
+
+        /// <summary>
+        ///     symbols
+        /// </summary>
+        public IDictionary<string, Reference> Symbols { get; }
+            = new Dictionary<string, Reference>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         ///     routine parameters

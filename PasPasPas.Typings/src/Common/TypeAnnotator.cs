@@ -56,7 +56,8 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<GenericConstraint>,
         IEndVisitor<GenericTypeNameCollection>,
         IEndVisitor<DeclaredSymbolCollection>,
-        IEndVisitor<RequiredUnitName> {
+        IEndVisitor<RequiredUnitName>,
+        IStartVisitor<BlockOfStatements>, IEndVisitor<BlockOfStatements> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -95,13 +96,6 @@ namespace PasPasPas.Typings.Common {
                 return syntaxNode.TypeInfo;
 
             return GetErrorTypeReference(syntaxNode);
-        }
-
-        private ITypeDefinition GetRegisteredType(ITypedSyntaxNode syntaxNode) {
-            if (syntaxNode != null && syntaxNode.TypeInfo != null)
-                return environment.TypeRegistry.GetTypeByIdOrUndefinedType(syntaxNode.TypeInfo.TypeId);
-
-            return GetErrorType(syntaxNode);
         }
 
         private ITypeDefinition GetTypeByIdOrUndefinedType(int typeId)
@@ -143,18 +137,32 @@ namespace PasPasPas.Typings.Common {
 
             foreach (var vardef in element.Names) {
 
-                resolver.AddToScope(vardef.Name.CompleteName, ReferenceKind.RefToVariable, vardef);
+                var varname = vardef.Name.CompleteName;
+                var variable = new Variable();
+                var unitType = TypeRegistry.GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as IUnitType;
+                var cmi = currentMethodImplementation.Count < 1 ? default : currentMethodImplementation.Peek();
+                variable.Name = varname;
+
+                if (cmi == default)
+                    unitType.Symbols.Add(varname, new Reference(ReferenceKind.RefToVariable, variable));
+                else if (cmi.Index >= 0)
+                    cmi.Parameters.Symbols.Add(varname, new Reference(ReferenceKind.RefToVariable, variable));
+
+                resolver.AddToScope(varname, ReferenceKind.RefToVariable, variable);
 
                 if (vardef is FunctionResult fn) {
                     if (fn.Method.TypeValue != default)
                         vardef.TypeInfo = GetInstanceTypeById(fn.Method.TypeValue.TypeInfo.TypeId);
                     else
                         vardef.TypeInfo = GetErrorTypeReference(element);
+
+                    variable.SymbolType = vardef.TypeInfo;
                     continue;
                 }
 
                 fromResult = false;
                 vardef.TypeInfo = element.TypeInfo;
+                variable.SymbolType = vardef.TypeInfo;
             }
 
             if (fromResult && element.Names.Count > 0 && element.Names[0].TypeInfo != default) {

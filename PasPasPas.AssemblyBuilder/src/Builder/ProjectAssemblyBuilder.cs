@@ -3,26 +3,16 @@ using PasPasPas.AssemblyBuilder.Builder.Definitions;
 using PasPasPas.AssemblyBuilder.Builder.Net;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
-using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.AssemblyBuilder.Builder {
 
     /// <summary>
-    ///     visitor to build an assembly
+    ///     generic tool to build an assembly
     /// </summary>
-    public class ProjectAssemblyBuilder :
-
-        IStartVisitor<ProjectItemCollection>, IEndVisitor<ProjectItemCollection>,
-        IStartVisitor<CompilationUnit>, IEndVisitor<CompilationUnit>,
-        IStartVisitor<BlockOfStatements>, IEndVisitor<BlockOfStatements>,
-        IStartVisitor<VariableDeclaration>,
-        IEndVisitor<ConstantValue> {
-
-        private readonly IStartEndVisitor visitor;
+    public class ProjectAssemblyBuilder {
 
         /// <summary>
         ///     environment
@@ -42,7 +32,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         /// <summary>
         ///     current unit
         /// </summary>
-        private CompilationUnit CurrentUnit { get; set; }
+        private IUnitType CurrentUnit { get; set; }
 
         /// <summary>
         ///     unit type
@@ -59,7 +49,6 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         /// </summary>
         /// <param name="environment"></param>
         public ProjectAssemblyBuilder(IAssemblyBuilderEnvironment environment) {
-            visitor = new ChildVisitor(this);
             Environment = environment;
             LogSource = environment.Log.CreateLogSource(MessageGroups.AssemblyBuilder);
             Builder = new NetAssemblyBuilder(environment.TypeRegistry);
@@ -67,35 +56,65 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         }
 
         /// <summary>
-        ///     helper object
+        ///     prepare to create an assembly
         /// </summary>
-        /// <returns></returns>
-        public IStartEndVisitor AsVisitor()
-            => visitor;
-
-        /// <summary>
-        ///     start visiting a project
-        /// </summary>
-        /// <param name="element"></param>
-        public void StartVisit(ProjectItemCollection element) {
-            var projectName = element.ProjectName;
-
+        /// <param name="projectName">project name</param>
+        public void PrepareAssembly(string projectName) {
             if (string.IsNullOrWhiteSpace(projectName)) {
                 LogError(BuilderErrorMessages.UndefinedProjectName);
-                projectName = element[element.Count - 1].SymbolName;
+                return;
             }
+
             Builder.StartAssembly(projectName);
+
+            foreach (var typeDef in Environment.TypeRegistry.RegisteredTypeDefinitions) {
+                if (!(typeDef is IUnitType unit))
+                    continue;
+
+                PrepareUnit(unit);
+            }
+
+            Builder.EndAssembly();
+        }
+
+        private void PrepareUnit(IUnitType unit) {
+            CurrentUnit = unit;
+            UnitType = Builder.StartUnit(unit.Name);
+
+            foreach (var symbol in unit.Symbols.Values) {
+
+                if (symbol.Kind == ReferenceKind.RefToGlobalRoutine) {
+                    PrepareGlobalMethod(symbol.Symbol as IRoutine);
+                }
+                else if (symbol.Kind == ReferenceKind.RefToVariable) {
+                    PrepareVariable(symbol.Symbol as IVariable);
+                }
+
+            }
+
+            UnitType.CreateType();
+            CurrentUnit = default;
+            UnitType = default;
+        }
+
+        private void PrepareVariable(IVariable variable) {
+            if (CurrentMethod.Count < 1) {
+                UnitType.DefineClassVariable(variable.Name, variable.SymbolType);
+            }
+        }
+
+        private void PrepareGlobalMethod(IRoutine routine) {
+            var globalMethod = UnitType.StartClassMethodDefinition(routine.Name);
+            globalMethod.ReturnType = KnownTypeIds.NoType;
+            globalMethod.DefineMethodBody();
+            CurrentMethod.Push(globalMethod);
+
+            var mainMethod = CurrentMethod.Pop();
+            mainMethod.FinishMethod();
         }
 
         private void LogError(uint messageNumber)
             => LogSource.LogError(messageNumber);
-
-        /// <summary>
-        ///     end visiting a project
-        /// </summary>
-        /// <param name="element"></param>
-        public void EndVisit(ProjectItemCollection element)
-            => Builder.EndAssembly();
 
         /// <summary>
         ///     create a new assembly reference
@@ -103,49 +122,6 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         /// <returns></returns>
         public IAssemblyReference CreateAssemblyReference()
             => Builder.CreateAssemblyReference();
-
-        /// <summary>
-        ///     start visiting a block of statements
-        /// </summary>
-        /// <param name="element"></param>
-        public void StartVisit(BlockOfStatements element) {
-            if (CurrentUnit.FileType == CompilationUnitType.Program && CurrentMethod.Count < 1) {
-                var mainMethod = UnitType.StartClassMethodDefinition("Main");
-                mainMethod.ReturnType = KnownTypeIds.NoType;
-                mainMethod.DefineMethodBody();
-                CurrentMethod.Push(mainMethod);
-            }
-        }
-
-        /// <summary>
-        ///     end visiting a block of statements
-        /// </summary>
-        /// <param name="element"></param>
-        public void EndVisit(BlockOfStatements element) {
-            if (CurrentUnit.FileType == CompilationUnitType.Program && CurrentMethod.Count == 1) {
-                var mainMethod = CurrentMethod.Pop();
-                mainMethod.FinishMethod();
-            }
-        }
-
-        /// <summary>
-        ///     start visiting a unit
-        /// </summary>
-        /// <param name="element"></param>
-        public void StartVisit(CompilationUnit element) {
-            CurrentUnit = element;
-            UnitType = Builder.StartUnit(element.SymbolName);
-        }
-
-        /// <summary>
-        ///     end visiting unit
-        /// </summary>
-        /// <param name="element"></param>
-        public void EndVisit(CompilationUnit element) {
-            UnitType.CreateType();
-            CurrentUnit = default;
-            UnitType = default;
-        }
 
         /// <summary>
         ///     visit a constant value
@@ -163,17 +139,5 @@ namespace PasPasPas.AssemblyBuilder.Builder {
             }
         }
 
-        /// <summary>
-        ///     define a variable
-        /// </summary>
-        /// <param name="element"></param>
-        public void StartVisit(VariableDeclaration element) {
-            if (CurrentUnit.FileType == CompilationUnitType.Program && CurrentMethod.Count < 1) {
-
-                foreach (var name in element.Names) {
-                    UnitType.DefineClassVariable(name.SymbolName, element.TypeInfo);
-                }
-            }
-        }
     }
 }

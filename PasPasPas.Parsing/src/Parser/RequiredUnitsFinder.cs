@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Parser {
     /// </summary>
     internal class RequiredUnitsFinder {
 
-        private List<IFileReference> requiredUnits
+        private readonly List<IFileReference> requiredUnits
             = new List<IFileReference>();
 
         private readonly IPathResolver fileResolver;

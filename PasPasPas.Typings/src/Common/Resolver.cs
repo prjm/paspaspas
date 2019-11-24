@@ -135,8 +135,6 @@ namespace PasPasPas.Typings.Common {
             if (reference == default || reference.Symbol == default)
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 
-            var baseTypeValue = TypeRegistry.GetTypeByIdOrUndefinedType(reference.Symbol.TypeId);
-
             if (reference.Kind == ReferenceKind.RefToConstant)
                 return (reference.Symbol as ITypedSyntaxNode)?.TypeInfo;
 
@@ -194,7 +192,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="completeName"></param>
         /// <returns></returns>
         public UnitType ResolveUnit(string completeName) {
-            foreach (var type in TypeRegistry.RegisteredTypeDefinitios) {
+            foreach (var type in TypeRegistry.RegisteredTypeDefinitions) {
                 if (!(type is UnitType unit))
                     continue;
 

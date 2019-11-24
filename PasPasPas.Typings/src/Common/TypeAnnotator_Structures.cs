@@ -3,8 +3,8 @@ using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
-    public partial class TypeAnnotator {
 
+    public partial class TypeAnnotator {
 
         /// <summary>
         ///     begin visit a unit
@@ -16,10 +16,27 @@ namespace PasPasPas.Typings.Common {
             CurrentUnit.TypeInfo = GetTypeReferenceById(unitType.TypeId);
             resolver.OpenScope();
             resolver.AddToScope(KnownTypeNames.System, ReferenceKind.RefToUnit, environment.TypeRegistry.SystemUnit);
+        }
 
-            if (element.FileType == CompilationUnitType.Program) {
+        /// <summary>
+        ///     end visiting a unit
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(CompilationUnit element) {
+            resolver.CloseScope();
+            CurrentUnit = null;
+        }
+
+        /// <summary>
+        ///     begin visit a unit
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(BlockOfStatements element) {
+            resolver.OpenScope();
+            if (currentMethodImplementation.Count < 1) {
                 var mainRoutine = TypeCreator.CreateGlobalRoutine(KnownTypeNames.MainMethod);
-                var mainParams = (mainRoutine as Routine).AddParameterGroup(ProcedureKind.Procedure, GetInstanceTypeById(KnownTypeIds.NoType));
+                mainRoutine.Parameters.Add(new ParameterGroup(mainRoutine, ProcedureKind.Procedure, GetInstanceTypeById(KnownTypeIds.NoType)));
+                var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as IUnitType;
                 unitType.Symbols.Add(mainRoutine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, mainRoutine));
                 currentMethodImplementation.Push(new RoutineIndex(mainRoutine, 0));
                 currentCodeBlock.Push(new CodeBlockBuilder(environment.ListPools));
@@ -30,14 +47,14 @@ namespace PasPasPas.Typings.Common {
         ///     end visiting a unit
         /// </summary>
         /// <param name="element"></param>
-        public void EndVisit(CompilationUnit element) {
+        public void EndVisit(BlockOfStatements element) {
             resolver.CloseScope();
-            CurrentUnit = null;
 
-            if (element.FileType == CompilationUnitType.Program) {
+            var cmi = currentMethodImplementation.Count > 0 ? currentMethodImplementation.Peek() : default;
+
+            if (cmi != default && string.Equals(cmi.Name, KnownTypeNames.MainMethod, System.StringComparison.OrdinalIgnoreCase)) {
                 var mi = currentMethodImplementation.Pop();
                 var cb = currentCodeBlock.Pop();
-
                 (mi.Parameters as ParameterGroup).Code = cb.CreateCodeArray();
                 cb.Dispose();
             }

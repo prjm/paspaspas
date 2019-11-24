@@ -22,9 +22,7 @@ namespace PasPasPas.Globals.Files {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            var otherKey = obj as ResolvedPathKey;
-
-            if (otherKey is null)
+            if (!(obj is ResolvedPathKey otherKey))
                 return false;
 
             var basePathEquals = BasePath.Equals(otherKey.BasePath);

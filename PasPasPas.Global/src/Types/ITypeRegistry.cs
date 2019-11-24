@@ -12,7 +12,7 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     all registered types
         /// </summary>
-        IEnumerable<ITypeDefinition> RegisteredTypeDefinitios { get; }
+        IEnumerable<ITypeDefinition> RegisteredTypeDefinitions { get; }
 
         /// <summary>
         ///     system unit

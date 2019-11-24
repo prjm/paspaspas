@@ -3,7 +3,7 @@ using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
-using PasPasPas.Globals.Parsing;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Api {
 
@@ -28,22 +28,21 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="file"></param>
         public IAssemblyReference CreateAssemblyForProject(IFileReference file) {
-            var data = Parser.Tokenizer.Readers.CreateInputForPath(file);
             using (var parser = Parser.CreateParser(file)) {
                 var result = parser.Parse();
-                var project = Parser.CreateAbstractSyntraxTree(result);
+                var project = Parser.CreateAbstractSyntraxTree(result) as ProjectItemCollection;
                 Parser.AnnotateWithTypes(project);
-                return CreateAssembly(project);
+                return CreateAssembly(project.ProjectName);
             }
         }
 
         /// <summary>
         ///     create a assembly for a given project
         /// </summary>
-        /// <param name="project"></param>
-        private IAssemblyReference CreateAssembly(ISyntaxPart project) {
+        /// <param name="projectName"></param>
+        private IAssemblyReference CreateAssembly(string projectName) {
             var builder = new ProjectAssemblyBuilder(SystemEnvironment);
-            project.Accept(builder.AsVisitor());
+            builder.PrepareAssembly(projectName);
             return builder.CreateAssemblyReference();
         }
 

@@ -56,5 +56,10 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         ImmutableArray<IOpCode> Code { get; }
 
+        /// <summary>
+        ///     other symbols of this routine
+        /// </summary>
+        IDictionary<string, Reference> Symbols { get; }
+
     }
 }

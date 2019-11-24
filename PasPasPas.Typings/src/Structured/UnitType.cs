@@ -14,12 +14,6 @@ namespace PasPasPas.Typings.Structured {
     public class UnitType : TypeBase, IUnitType {
 
         /// <summary>
-        ///     declared symbols
-        /// </summary>
-        private readonly IDictionary<string, Reference> symbols
-            = new Dictionary<string, Reference>(StringComparer.OrdinalIgnoreCase);
-
-        /// <summary>
         ///     global routines
         /// </summary>
         private readonly List<IRoutine> globalRoutines
@@ -34,8 +28,8 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     symbols
         /// </summary>
-        public IDictionary<string, Reference> Symbols
-            => symbols;
+        public IDictionary<string, Reference> Symbols { get; }
+            = new Dictionary<string, Reference>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         ///     unit type
@@ -70,9 +64,9 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="numberOfTypeParameters">number of generic type parameters</param>
         public void RegisterSymbol(string symbolName, Reference entry, int numberOfTypeParameters = 0) {
             if (numberOfTypeParameters < 1)
-                symbols.Add(symbolName, entry);
+                Symbols.Add(symbolName, entry);
             else
-                symbols.Add(string.Concat(symbolName, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters), entry);
+                Symbols.Add(string.Concat(symbolName, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters), entry);
         }
 
         /// <summary>
@@ -87,7 +81,7 @@ namespace PasPasPas.Typings.Structured {
                 return false;
             }
 
-            return symbols.TryGetValue(symbolName, out entry);
+            return Symbols.TryGetValue(symbolName, out entry);
         }
 
         /// <summary>
@@ -102,13 +96,13 @@ namespace PasPasPas.Typings.Structured {
             }
 
             globalRoutines.Add(routine);
-            if (symbols.TryGetValue(routine.Name, out var reference))
+            if (Symbols.TryGetValue(routine.Name, out var reference))
                 if (reference.Kind == ReferenceKind.RefToGlobalRoutine)
-                    symbols[routine.Name] = new Reference(ReferenceKind.RefToGlobalRoutine, routine);
+                    Symbols[routine.Name] = new Reference(ReferenceKind.RefToGlobalRoutine, routine);
                 else
-                    symbols[routine.Name] = new Reference(ReferenceKind.RefToGlobalRoutine, routine);
+                    Symbols[routine.Name] = new Reference(ReferenceKind.RefToGlobalRoutine, routine);
             else
-                symbols.Add(routine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, routine));
+                Symbols.Add(routine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, routine));
         }
 
         /// <summary>

@@ -6,9 +6,10 @@ using PasPasPas.Infrastructure.Log;
 namespace SampleRunner {
 
     internal class ConsoleLogListener : LogTarget {
-        private TextWriter result;
+        private readonly TextWriter result;
 
-        public ConsoleLogListener(TextWriter result) => this.result = result;
+        public ConsoleLogListener(TextWriter result)
+            => this.result = result;
 
         public override void HandleMessage(ILogMessage message) {
             result.Write(message.MessageID.ToString("X4", CultureInfo.InvariantCulture));

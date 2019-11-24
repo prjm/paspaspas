@@ -30,7 +30,7 @@ namespace PasPasPas.Globals.Environment {
         ///     pool a string from an utf16 byte span
         /// </summary>
         /// <param name="item"></param>
-        string PoolString(Span<byte> item);
+        string PoolString(in ReadOnlySpan<byte> item);
 
         /// <summary>
         ///     test if a string is already included in the pool
