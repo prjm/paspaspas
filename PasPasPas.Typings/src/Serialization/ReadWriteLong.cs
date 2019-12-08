@@ -35,7 +35,7 @@ namespace PasPasPas.Typings.Serialization {
         ///     write an unsigned integer
         /// </summary>
         /// <param name="value"></param>
-        public void WriteLong(ref long value) {
+        public void WriteLong(long value) {
             Span<byte> data = stackalloc byte[sizeof(long)];
             MemoryMarshal.Write(data, ref value);
             WriteSpan(data);

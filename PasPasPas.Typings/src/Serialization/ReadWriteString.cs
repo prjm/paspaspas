@@ -59,7 +59,7 @@ namespace PasPasPas.Typings.Serialization {
 
         public void WriteString(string text) {
             var len = (uint)text.Length;
-            WriteUint(ref len);
+            WriteUint(len);
 
             if (len <= StringPool.MaximalStringLength)
                 WriteSmallString(text);

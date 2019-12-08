@@ -40,9 +40,9 @@ namespace PasPasPasTests.Types {
 
         internal override void WriteData(TypeWriter typeWriter) {
             var v = Point1;
-            typeWriter.WriteUint(ref v);
+            typeWriter.WriteUint(v);
             v = Point2;
-            typeWriter.WriteUint(ref v);
+            typeWriter.WriteUint(v);
         }
 
         internal override void ReadData(uint kind, TypeReader typeReader) {
@@ -66,7 +66,7 @@ namespace PasPasPasTests.Types {
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
                 var i = Constants.MagicNumber;
-                w.WriteUint(ref i);
+                w.WriteUint(i);
                 stream.Seek(0, SeekOrigin.Begin);
                 var o = r.ReadUint();
                 Assert.AreEqual(i, o);
@@ -117,7 +117,7 @@ namespace PasPasPasTests.Types {
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
                 var i = -0xAD_F0_DF_FF_CA_24_76;
-                w.WriteLong(ref i);
+                w.WriteLong(i);
                 stream.Seek(0, SeekOrigin.Begin);
                 var o = r.ReadLong();
                 Assert.AreEqual(i, o);
@@ -134,7 +134,7 @@ namespace PasPasPasTests.Types {
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
                 var i = Constants.MagicNumber;
-                w.WriteUint(ref i);
+                w.WriteUint(i);
                 stream.Seek(0, SeekOrigin.Begin);
                 Assert.Throws<UnexpectedEndOfFileException>(() => r.ReadLong());
             }
@@ -202,7 +202,7 @@ namespace PasPasPasTests.Types {
                 w.WriteString(z);
                 stream.Seek(0, SeekOrigin.Begin);
                 var invalidLen = (uint)(99 * z.Length);
-                w.WriteUint(ref invalidLen);
+                w.WriteUint(invalidLen);
                 stream.Seek(0, SeekOrigin.Begin);
                 Assert.Throws<UnexpectedEndOfFileException>(() => r.ReadString());
             }
@@ -221,7 +221,7 @@ namespace PasPasPasTests.Types {
                 w.WriteString(z);
                 stream.Seek(0, SeekOrigin.Begin);
                 var invalidLen = 60u;
-                w.WriteUint(ref invalidLen);
+                w.WriteUint(invalidLen);
                 stream.Seek(0, SeekOrigin.Begin);
                 Assert.Throws<UnexpectedEndOfFileException>(() => r.ReadString());
             }
@@ -274,7 +274,7 @@ namespace PasPasPasTests.Types {
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
                 var i = Constants.MagicNumber - 20;
-                w.WriteUint(ref i);
+                w.WriteUint(i);
                 stream.Seek(0, SeekOrigin.Begin);
                 var o = r.ReadUnit();
                 Assert.IsNull(o);
@@ -361,12 +361,12 @@ namespace PasPasPasTests.Types {
                 Assert.IsFalse(rf.HasAddress);
                 w.WriteReferenceAddress(rf);
                 Assert.IsFalse(rf.HasAddress);
-                w.WriteUint(ref n);
-                w.WriteUint(ref n);
+                w.WriteUint(n);
+                w.WriteUint(n);
                 w.WriteReferenceValue(rf);
                 Assert.AreEqual(offset, stream.Position);
                 Assert.IsTrue(rf.HasAddress);
-                w.WriteUint(ref n);
+                w.WriteUint(n);
                 Assert.AreEqual(offset, rf.Address);
                 w.WriteOpenReferences();
 
@@ -393,8 +393,8 @@ namespace PasPasPasTests.Types {
                 Assert.IsFalse(rf.HasAddress);
                 w.WriteReferenceAddress(rf);
                 Assert.IsFalse(rf.HasAddress);
-                w.WriteUint(ref n);
-                w.WriteUint(ref n);
+                w.WriteUint(n);
+                w.WriteUint(n);
                 w.WriteReferenceValue(rf);
                 Assert.Throws<TypeReaderWriteException>(() => w.WriteReferenceValue(rf));
             }
@@ -446,6 +446,36 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
+        ///     test write / read boolean constant values
+        /// </summary>
+        [TestMethod]
+        public void TestWriteReadBooleanValue() {
+            var env = CreateEnvironment();
+            var rt = env.Runtime.Booleans;
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var b1 = rt.ToBoolean(true, KTI.BooleanType);
+                var b2 = rt.ToByteBool(2, KTI.ByteBoolType);
+                var b3 = rt.ToWordBool(4433, KTI.WordBoolType);
+                var b4 = rt.ToLongBool(23, KTI.LongBoolType);
+                var t = new TypeRefTag();
+
+                foreach (var b in new[] { b1, b2, b3, b4 }) {
+                    t.Initialize(b);
+                    w.WriteTag(t);
+                }
+
+                stream.Seek(0, SeekOrigin.Begin);
+                foreach (var b in new[] { b1, b2, b3, b4 }) {
+                    t = new TypeRefTag();
+                    r.ReadTag(t);
+                    Assert.AreEqual(b, t.TypeReference);
+                }
+            }
+        }
+
+        /// <summary>
         ///     test write / read a call instruction
         /// </summary>
         [TestMethod]
@@ -470,6 +500,39 @@ namespace PasPasPasTests.Types {
                 Assert.AreEqual(t.OpCode.Id, OpCodeId.Call);
                 var c = t.OpCode as CallOpCode;
                 Assert.AreEqual(c.CallInfo.Routine.RoutineId, IntrinsicRoutineId.WriteLn);
+            }
+        }
+
+
+        /// <summary>
+        ///     read write integer
+        /// </summary>
+        [TestMethod]
+        public void TestWriteReadUShort() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                var i = (ushort)23332;
+                w.WriteUShort(i);
+                stream.Seek(0, SeekOrigin.Begin);
+                var o = r.ReadUshort();
+                Assert.AreEqual(i, o);
+            }
+        }
+
+        /// <summary>
+        ///     test read an invalid integer
+        /// </summary>
+        [TestMethod]
+        public void TestReadInvalidUShort() {
+            var env = CreateEnvironment();
+            using (var stream = new MemoryStream())
+            using (var w = CreateWriter(env, stream))
+            using (var r = CreateReader(env, stream)) {
+                w.WriteByte(0xA0);
+                stream.Seek(0, SeekOrigin.Begin);
+                Assert.Throws<UnexpectedEndOfFileException>(() => r.ReadUshort());
             }
         }
 

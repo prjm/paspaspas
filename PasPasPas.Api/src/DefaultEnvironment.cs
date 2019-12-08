@@ -149,7 +149,7 @@ namespace PasPasPas.Api {
             => new FileReference(path);
 
         public ITypeWriter CreateTypeWriter(Stream writableStream)
-            => new TypeWriter(writableStream, StringPool);
+            => new TypeWriter(writableStream, TypeRegistry, StringPool);
 
         public ITypeReader CreateTypeReader(Stream readableStream)
             => new TypeReader(readableStream, Log, StringPool, TypeRegistry);

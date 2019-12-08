@@ -27,7 +27,7 @@
             if (reference != default)
                 WriteReferenceValue(reference);
 
-            WriteUint(ref v);
+            WriteUint(v);
             tag.WriteData(this);
         }
 

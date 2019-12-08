@@ -9,14 +9,14 @@ namespace PasPasPas.Typings.Serialization {
         ///     read an unsigned integer
         /// </summary>
         /// <returns></returns>
-        public uint ReadUint() {
-            Span<byte> data = stackalloc byte[sizeof(uint)];
+        public ushort ReadUshort() {
+            Span<byte> data = stackalloc byte[sizeof(ushort)];
             var count = ReadSpan(data);
 
             if (count != data.Length)
                 throw new UnexpectedEndOfFileException();
 
-            return MemoryMarshal.Read<uint>(data);
+            return MemoryMarshal.Read<ushort>(data);
         }
     }
 
@@ -26,11 +26,12 @@ namespace PasPasPas.Typings.Serialization {
         ///     write an unsigned integer
         /// </summary>
         /// <param name="value"></param>
-        public void WriteUint(uint value) {
-            Span<byte> data = stackalloc byte[sizeof(uint)];
+        public void WriteUShort(ushort value) {
+            Span<byte> data = stackalloc byte[sizeof(ushort)];
             MemoryMarshal.Write(data, ref value);
             WriteSpan(data);
         }
 
     }
+
 }

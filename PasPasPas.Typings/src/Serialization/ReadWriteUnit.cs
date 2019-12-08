@@ -20,6 +20,7 @@ namespace PasPasPas.Typings.Serialization {
             var toc = ReadTag(new TableOfContents());
             ReadTag(toc.Strings);
             ReadTag(toc.Meta);
+            ReadTag(toc.Data);
             ReadTag(toc.Routines);
 
             var result = Types.TypeCreator.CreateUnitType(toc.Strings[toc.Meta.UnitName]);
@@ -34,16 +35,18 @@ namespace PasPasPas.Typings.Serialization {
 
         public void WriteUnit(IUnitType unit) {
             var number = Constants.MagicNumber;
-            WriteUint(ref number);
+            WriteUint(number);
 
             var toc = new TableOfContents();
             toc.Meta.PrepareStrings(unit, toc.Strings);
-            toc.Routines.PrepareRoutines(unit, toc.Strings);
+            toc.Data.PrepareData(unit);
+            toc.Routines.PrepareRoutines(unit);
 
             WriteTag(toc);
 
             WriteTag(toc.Strings, toc.ReferenceToStrings);
             WriteTag(toc.Meta, toc.ReferenceToMetadata);
+            WriteTag(toc.Data, toc.ReferenceToData);
             WriteTag(toc.Routines, toc.ReferenceToRoutines);
 
             WriteOpenReferences();

@@ -38,7 +38,7 @@ namespace PasPasPas.Typings.Serialization {
                 openReferences.Enqueue(new OpenReference(WritableStream.Position, value));
 
             var adr = value.Address;
-            WriteLong(ref adr);
+            WriteLong(adr);
             return result;
         }
 

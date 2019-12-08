@@ -53,6 +53,12 @@ namespace PasPasPas.Typings.Simple {
             => (BitSize - 1) / 8u + 1u;
 
         /// <summary>
+        ///     type kind
+        /// </summary>
+        public BooleanTypeKind Kind
+            => BooleanTypeKind.Boolean;
+
+        /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>

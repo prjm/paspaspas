@@ -5,5 +5,10 @@
     /// </summary>
     public interface IBooleanType : IOrdinalType {
 
+        /// <summary>
+        ///     boolean type kind
+        /// </summary>
+        BooleanTypeKind Kind { get; }
+
     }
 }

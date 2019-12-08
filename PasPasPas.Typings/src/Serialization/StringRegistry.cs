@@ -31,7 +31,7 @@ namespace PasPasPas.Typings.Serialization {
             var size = (uint)mapping.Count;
             var stringTag = new StringTag();
 
-            typeWriter.WriteUint(ref size);
+            typeWriter.WriteUint(size);
             foreach (var item in mapping) {
                 stringTag.Id = item.Value;
                 stringTag.Value = item.Key;

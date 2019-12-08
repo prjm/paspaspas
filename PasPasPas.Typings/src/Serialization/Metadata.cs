@@ -22,7 +22,7 @@ namespace PasPasPas.Typings.Serialization {
 
         internal override void WriteData(TypeWriter typeWriter) {
             var n = UnitName;
-            typeWriter.WriteUint(ref n);
+            typeWriter.WriteUint(n);
         }
 
         internal void PrepareStrings(IUnitType unitType, StringRegistry strings)

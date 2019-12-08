@@ -42,8 +42,7 @@ namespace PasPasPas.Typings.Serialization {
         private readonly List<IRoutine> routines
             = new List<IRoutine>();
 
-        private StringRegistry stringData;
-
+        private readonly StringRegistry stringData;
 
         internal override void ReadData(uint kind, TypeReader typeReader) {
             var n = typeReader.ReadUint();
@@ -65,14 +64,14 @@ namespace PasPasPas.Typings.Serialization {
 
         internal override void WriteData(TypeWriter typeWriter) {
             var n = (uint)routines.Count;
-            typeWriter.WriteUint(ref n);
+            typeWriter.WriteUint(n);
 
             for (var i = 0; i < n; i++) {
                 var routine = routines[i];
                 n = stringData[routine.Name];
-                typeWriter.WriteUint(ref n);
+                typeWriter.WriteUint(n);
                 n = (uint)routine.Parameters.Count;
-                typeWriter.WriteUint(ref n);
+                typeWriter.WriteUint(n);
                 var paramTag = new ParameterGroupTag();
                 for (var j = 0; j < routine.Parameters.Count; j++) {
                     paramTag.Initialize(routine.Parameters[j]);
@@ -81,15 +80,13 @@ namespace PasPasPas.Typings.Serialization {
             }
         }
 
-        internal void PrepareRoutines(IUnitType unit, StringRegistry strings) {
-            stringData = strings;
-
+        internal void PrepareRoutines(IUnitType unit) {
             foreach (var symbol in unit.Symbols) {
                 var reference = symbol.Value as Globals.Types.Reference;
                 if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
                     var routine = reference.Symbol as IRoutine;
                     routines.Add(routine);
-                    var _ = strings[routine.Name];
+                    var _ = stringData[routine.Name];
                 }
             }
         }

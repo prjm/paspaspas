@@ -14,9 +14,11 @@ namespace PasPasPas.Typings.Serialization {
         ///     create a new type write
         /// </summary>
         /// <param name="writableStream"></param>
+        /// <param name="registeredTypes"></param>
         /// <param name="stringPool"></param>
-        public TypeWriter(Stream writableStream, IStringPool stringPool) {
+        public TypeWriter(Stream writableStream, ITypeRegistry registeredTypes, IStringPool stringPool) {
             WritableStream = writableStream;
+            RegisteredTypes = registeredTypes;
             StringPool = stringPool;
         }
 
@@ -26,6 +28,7 @@ namespace PasPasPas.Typings.Serialization {
         ///     stream
         /// </summary>
         public Stream WritableStream { get; }
+        public ITypeRegistry RegisteredTypes { get; }
         public IStringPool StringPool { get; }
 
 

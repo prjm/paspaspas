@@ -17,7 +17,7 @@
 
         internal override void WriteData(TypeWriter typeWriter) {
             var aId = Id;
-            typeWriter.WriteUint(ref aId);
+            typeWriter.WriteUint(aId);
             typeWriter.WriteString(Value);
         }
 
