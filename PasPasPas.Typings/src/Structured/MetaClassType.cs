@@ -49,6 +49,18 @@ namespace PasPasPas.Typings.Structured {
         public int TypeId { get; }
 
         /// <summary>
+        ///     short type name
+        /// </summary>
+        public string ShortName
+            => "";
+
+        /// <summary>
+        ///     long type name
+        /// </summary>
+        public string LongName
+            => "";
+
+        /// <summary>
         ///     test assignments
         /// </summary>
         /// <param name="otherType"></param>

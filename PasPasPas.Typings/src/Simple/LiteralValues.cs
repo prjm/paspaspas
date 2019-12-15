@@ -27,7 +27,7 @@ namespace PasPasPas.Typings.Simple {
             else if (literalValue is uint)
                 return KnownTypeIds.CardinalType;
             else if (literalValue is ulong)
-                return KnownTypeIds.Uint64Type;
+                return KnownTypeIds.UInt64Type;
             else if (literalValue is long)
                 return KnownTypeIds.Int64Type;
             else if (literalValue is bool)

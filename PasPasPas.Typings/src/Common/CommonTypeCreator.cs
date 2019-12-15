@@ -176,11 +176,12 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="baseType"></param>
         /// <param name="newType"></param>
+        /// <param name="aliasName">alias name</param>
         /// <param name="systemTypeId">system type id</param>
         /// <returns></returns>
-        public IAliasedType CreateTypeAlias(int baseType, bool newType, int systemTypeId = -1) {
+        public IAliasedType CreateTypeAlias(int baseType, string aliasName, bool newType, int systemTypeId = -1) {
             var usedTypeId = systemTypeId < 0 ? RegisteredTypes.RequireUserTypeId() : systemTypeId;
-            var result = new TypeAlias(usedTypeId, baseType, newType);
+            var result = new TypeAlias(usedTypeId, aliasName, baseType, newType);
             RegisteredTypes.RegisterType(result);
             return result;
         }

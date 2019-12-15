@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -8,9 +9,6 @@ namespace PasPasPas.Typings.Simple {
     ///     create a new integral type
     /// </summary>
     public class IntegralType : OrdinalTypeBase, IIntegralType {
-
-        private readonly bool signed;
-        private readonly uint bitSize;
         private readonly object lockObject = new object();
         private ITypeReference highestElement;
         private ITypeReference lowestElement;
@@ -22,8 +20,8 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="isSigned"><c>true</c> if the type is signed</param>
         /// <param name="withBitSize">bit size of the type</param>
         public IntegralType(int withId, bool isSigned, uint withBitSize) : base(withId) {
-            signed = isSigned;
-            bitSize = withBitSize;
+            IsSigned = isSigned;
+            BitSize = withBitSize;
         }
 
         /// <summary>
@@ -35,14 +33,12 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     check if this type is signed
         /// </summary>
-        public bool IsSigned
-            => signed;
+        public bool IsSigned { get; }
 
         /// <summary>
         ///     get the size in bits
         /// </summary>
-        public uint BitSize
-            => bitSize;
+        public uint BitSize { get; }
 
         /// <summary>
         ///     get the highest element
@@ -50,7 +46,7 @@ namespace PasPasPas.Typings.Simple {
         private ITypeReference GenerateHighestElement() {
             var ints = TypeRegistry.Runtime.Integers;
 
-            if (signed) {
+            if (IsSigned) {
                 if (BitSize == 8)
                     return ints.ToScaledIntegerValue(127);
                 else if (BitSize == 16)
@@ -75,7 +71,7 @@ namespace PasPasPas.Typings.Simple {
         private ITypeReference GenerateLowestElement() {
             var ints = TypeRegistry.Runtime.Integers;
 
-            if (!signed)
+            if (!IsSigned)
                 return ints.Zero;
 
             if (BitSize == 8)
@@ -144,11 +140,39 @@ namespace PasPasPas.Typings.Simple {
         }
 
         /// <summary>
-        ///     short info
+        ///     get the long type name
         /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => $"{(signed ? string.Empty : "U")}Int{BitSize}";
+        public override string LongName {
+            get {
+                switch (BitSize) {
+                    case 8:
+                        return IsSigned ? KnownTypeNames.ShortInt : KnownTypeNames.Byte;
+                    case 16:
+                        return IsSigned ? KnownTypeNames.SmallInt : KnownTypeNames.Word;
+                    case 32:
+                        return IsSigned ? KnownTypeNames.Integer : KnownTypeNames.Cardinal;
+                }
 
+                throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        ///     get the short type name
+        /// </summary>
+        public override string ShortName {
+            get {
+                switch (BitSize) {
+                    case 8:
+                        return IsSigned ? KnownTypeNames.ZC : KnownTypeNames.UC;
+                    case 16:
+                        return IsSigned ? KnownTypeNames.S : KnownTypeNames.US;
+                    case 32:
+                        return IsSigned ? KnownTypeNames.I : KnownTypeNames.UI;
+                }
+
+                throw new InvalidOperationException();
+            }
+        }
     }
 }

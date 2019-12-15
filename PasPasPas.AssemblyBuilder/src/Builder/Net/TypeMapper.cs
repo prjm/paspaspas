@@ -57,7 +57,7 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
             if (value == KnownTypeIds.CardinalType)
                 return typeof(uint);
 
-            if (value == KnownTypeIds.Uint64Type)
+            if (value == KnownTypeIds.UInt64Type)
                 return typeof(ulong);
 
             if (value == KnownTypeIds.WideCharType)

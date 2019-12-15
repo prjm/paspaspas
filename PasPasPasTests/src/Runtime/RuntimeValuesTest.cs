@@ -63,7 +63,7 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("0", GetIntegerValue((ulong)0).ToString());
             Assert.AreEqual(KnownTypeIds.ShortInt, GetIntegerValue((ulong)0).TypeId);
             Assert.AreEqual("18446744073709551615", GetIntegerValue(18446744073709551615).ToString());
-            Assert.AreEqual(KnownTypeIds.Uint64Type, GetIntegerValue(18446744073709551615).TypeId);
+            Assert.AreEqual(KnownTypeIds.UInt64Type, GetIntegerValue(18446744073709551615).TypeId);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("0", n(GetIntegerValue((long)0), KnownTypeIds.ShortInt));
             Assert.AreEqual("-9223372036854775807", n(GetIntegerValue(9223372036854775807), KnownTypeIds.Int64Type));
             Assert.AreEqual("9223372036854775807", n(GetIntegerValue(-9223372036854775807), KnownTypeIds.Int64Type));
-            Assert.AreEqual("9223372036854775808", n(GetIntegerValue(-9223372036854775808), KnownTypeIds.Uint64Type));
+            Assert.AreEqual("9223372036854775808", n(GetIntegerValue(-9223372036854775808), KnownTypeIds.UInt64Type));
             Assert.AreEqual("IO", n(GetIntegerValue(9223372036854775809), KnownTypeIds.ErrorType));
             Assert.AreEqual("IO", n(GetIntegerValue(18446744073709551615), KnownTypeIds.ErrorType));
 

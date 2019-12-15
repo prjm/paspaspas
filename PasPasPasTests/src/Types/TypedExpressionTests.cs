@@ -35,7 +35,7 @@ namespace PasPasPasTests.Types {
             AssertExprType("4294967295", KnownTypeIds.CardinalType);
             AssertExprType("4294967296", KnownTypeIds.Int64Type);
             AssertExprType("9223372036854775807", KnownTypeIds.Int64Type);
-            AssertExprType("18446744073709551615", KnownTypeIds.Uint64Type);
+            AssertExprType("18446744073709551615", KnownTypeIds.UInt64Type);
         }
 
         /// <summary>
@@ -422,7 +422,7 @@ namespace PasPasPasTests.Types {
                 Tuple.Create("Byte", KnownTypeIds.IntegerType),
                 Tuple.Create("Word", KnownTypeIds.IntegerType),
                 Tuple.Create("Cardinal", KnownTypeIds.CardinalType),
-                Tuple.Create("UInt64", KnownTypeIds.Uint64Type),
+                Tuple.Create("UInt64", KnownTypeIds.UInt64Type),
                 Tuple.Create("SmallInt", KnownTypeIds.IntegerType),
                 Tuple.Create("ShortInt", KnownTypeIds.IntegerType),
                 Tuple.Create("Integer", KnownTypeIds.IntegerType),
@@ -436,7 +436,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Byte", "+ a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "+ a", KnownTypeIds.WordType);
             AssertExprTypeByVar("Cardinal", "+ a", KnownTypeIds.CardinalType);
-            AssertExprTypeByVar("UInt64", "+ a", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("UInt64", "+ a", KnownTypeIds.UInt64Type);
             AssertExprTypeByVar("ShortInt", "+ a", KnownTypeIds.ShortInt);
             AssertExprTypeByVar("SmallInt", "+ a", KnownTypeIds.SmallInt);
             AssertExprTypeByVar("Integer", "+ a", KnownTypeIds.IntegerType);
@@ -445,7 +445,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Byte", "- a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "- a", KnownTypeIds.WordType);
             AssertExprTypeByVar("Cardinal", "- a", KnownTypeIds.CardinalType);
-            AssertExprTypeByVar("UInt64", "- a", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("UInt64", "- a", KnownTypeIds.UInt64Type);
             AssertExprTypeByVar("ShortInt", "- a", KnownTypeIds.ShortInt);
             AssertExprTypeByVar("SmallInt", "- a", KnownTypeIds.SmallInt);
             AssertExprTypeByVar("Integer", "- a", KnownTypeIds.IntegerType);
@@ -480,7 +480,7 @@ namespace PasPasPasTests.Types {
                 Tuple.Create("Byte", KnownTypeIds.ByteType),
                 Tuple.Create("Word", KnownTypeIds.WordType),
                 Tuple.Create("Cardinal", KnownTypeIds.CardinalType),
-                Tuple.Create("UInt64", KnownTypeIds.Uint64Type),
+                Tuple.Create("UInt64", KnownTypeIds.UInt64Type),
                 Tuple.Create("SmallInt", KnownTypeIds.SmallInt),
                 Tuple.Create("ShortInt", KnownTypeIds.ShortInt),
                 Tuple.Create("Integer", KnownTypeIds.IntegerType),
@@ -494,7 +494,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Byte", "not a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "not a", KnownTypeIds.WordType);
             AssertExprTypeByVar("Cardinal", "not a", KnownTypeIds.CardinalType);
-            AssertExprTypeByVar("UInt64", "not a", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("UInt64", "not a", KnownTypeIds.UInt64Type);
             AssertExprTypeByVar("ShortInt", "not a", KnownTypeIds.ShortInt);
             AssertExprTypeByVar("SmallInt", "not a", KnownTypeIds.SmallInt);
             AssertExprTypeByVar("Integer", "not a", KnownTypeIds.IntegerType);
@@ -560,7 +560,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Byte", "a shl 33", KnownTypeIds.ErrorType);
             AssertExprTypeByVar("Word", "a shl 33", KnownTypeIds.ErrorType);
             AssertExprTypeByVar("Cardinal", "a shl 33", KnownTypeIds.ErrorType);
-            AssertExprTypeByVar("UInt64", "a shl 33", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("UInt64", "a shl 33", KnownTypeIds.UInt64Type);
             AssertExprTypeByVar("ShortInt", "a shl 33", KnownTypeIds.ErrorType);
             AssertExprTypeByVar("SmallInt", "a shl 33", KnownTypeIds.ErrorType);
             AssertExprTypeByVar("Integer", "a shl 33", KnownTypeIds.ErrorType);
@@ -568,7 +568,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Byte", "a shl 32", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("Word", "a shl 32", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("Cardinal", "a shl 32", KnownTypeIds.CardinalType);
-            AssertExprTypeByVar("UInt64", "a shl 32", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("UInt64", "a shl 32", KnownTypeIds.UInt64Type);
             AssertExprTypeByVar("ShortInt", "a shl 32", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("SmallInt", "a shl 32", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("Integer", "a shl 32", KnownTypeIds.IntegerType);
@@ -576,7 +576,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Byte", "a shr 33", KnownTypeIds.ErrorType);
             AssertExprTypeByVar("Word", "a shr 33", KnownTypeIds.ErrorType);
             AssertExprTypeByVar("Cardinal", "a shr 33", KnownTypeIds.ErrorType);
-            AssertExprTypeByVar("UInt64", "a shr 33", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("UInt64", "a shr 33", KnownTypeIds.UInt64Type);
             AssertExprTypeByVar("ShortInt", "a shr 33", KnownTypeIds.ErrorType);
             AssertExprTypeByVar("SmallInt", "a shr 33", KnownTypeIds.ErrorType);
             AssertExprTypeByVar("Integer", "a shr 33", KnownTypeIds.ErrorType);
@@ -584,7 +584,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Byte", "a shr 32", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("Word", "a shr 32", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("Cardinal", "a shr 32", KnownTypeIds.CardinalType);
-            AssertExprTypeByVar("UInt64", "a shr 32", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("UInt64", "a shr 32", KnownTypeIds.UInt64Type);
             AssertExprTypeByVar("ShortInt", "a shr 32", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("SmallInt", "a shr 32", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("Integer", "a shr 32", KnownTypeIds.IntegerType);
@@ -627,7 +627,7 @@ namespace PasPasPasTests.Types {
                 Tuple.Create("Byte", KnownTypeIds.ByteType),
                 Tuple.Create("Word", KnownTypeIds.WordType),
                 Tuple.Create("Cardinal", KnownTypeIds.CardinalType),
-                Tuple.Create("UInt64", KnownTypeIds.Uint64Type),
+                Tuple.Create("UInt64", KnownTypeIds.UInt64Type),
                 Tuple.Create("SmallInt", KnownTypeIds.SmallInt),
                 Tuple.Create("ShortInt", KnownTypeIds.ShortInt),
                 Tuple.Create("Integer", KnownTypeIds.IntegerType),
@@ -694,11 +694,11 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestConstantArrayTypes() {
-            AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange Int32] of int8");
-            AssertExprTypeByConst("('a','b')", KnownTypeIds.UnspecifiedType, false, "static array [Subrange Int32] of WideChar");
-            AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "static array [Subrange Int32] of UnicodeString");
-            AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange Int32] of extended");
-            AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange Int32] of enum Int8", "type ta = (a,b);");
+            AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of zc");
+            AssertExprTypeByConst("('a','b')", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of WideChar");
+            AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of UnicodeString");
+            AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of extended");
+            AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of enum zc", "type ta = (a,b);");
             AssertExprValue("a", GetArrayValue(RegisteredTypes.SmallestUserTypeId, KnownTypeIds.StringType, GetUnicodeStringValue("11"), GetUnicodeStringValue("2")), "const a: array [0 .. 1] of String = ('11', '2');");
         }
 

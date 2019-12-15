@@ -222,7 +222,7 @@ namespace PasPasPas.Typings.Common {
             var type = GetTypeByIdOrUndefinedType(typeId);
 
             if (element.IsNewType) {
-                typeId = TypeCreator.CreateTypeAlias(typeId, true).TypeId;
+                typeId = TypeCreator.CreateTypeAlias(typeId, "", true).TypeId;
             }
 
             element.TypeInfo = GetInstanceTypeById(typeId);

@@ -23,7 +23,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Integer(384)", new IntegerValue(384), "", KnownTypeIds.IntegerType);
             AssertExprValue("Cardinal(384)", new CardinalValue(384), "", KnownTypeIds.CardinalType);
             AssertExprValue("Int64(384)", new Int64Value(384), "", KnownTypeIds.Int64Type);
-            AssertExprValue("UInt64(384)", new UInt64Value(384), "", KnownTypeIds.Uint64Type);
+            AssertExprValue("UInt64(384)", new UInt64Value(384), "", KnownTypeIds.UInt64Type);
 
             AssertExprValue("WideChar(384)", GetWideCharValue((char)384), "", KnownTypeIds.WideCharType);
             AssertExprValue("Char(384)", GetWideCharValue((char)384), "", KnownTypeIds.CharType);
@@ -53,7 +53,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Byte", "Integer(a)", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("Byte", "Cardinal(a)", KnownTypeIds.CardinalType);
             AssertExprTypeByVar("Byte", "Int64(a)", KnownTypeIds.Int64Type);
-            AssertExprTypeByVar("Byte", "UInt64(a)", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("Byte", "UInt64(a)", KnownTypeIds.UInt64Type);
 
             AssertExprTypeByVar("Byte", "WideChar(a)", KnownTypeIds.WideCharType);
             AssertExprTypeByVar("Byte", "Char(a)", KnownTypeIds.CharType);
@@ -88,7 +88,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Integer('a')", new IntegerValue(97), "", KnownTypeIds.IntegerType);
             AssertExprValue("Cardinal('a')", new CardinalValue(97), "", KnownTypeIds.CardinalType);
             AssertExprValue("Int64('a')", new Int64Value(97), "", KnownTypeIds.Int64Type);
-            AssertExprValue("UInt64('a')", new UInt64Value(97), "", KnownTypeIds.Uint64Type);
+            AssertExprValue("UInt64('a')", new UInt64Value(97), "", KnownTypeIds.UInt64Type);
 
             AssertExprValue("WideChar('a')", GetWideCharValue('a'), "", KnownTypeIds.WideCharType);
             AssertExprValue("Char('a')", GetWideCharValue('a'), "", KnownTypeIds.CharType);
@@ -146,7 +146,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("WideChar", "Integer(a)", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("WideChar", "Cardinal(a)", KnownTypeIds.CardinalType);
             AssertExprTypeByVar("WideChar", "Int64(a)", KnownTypeIds.Int64Type);
-            AssertExprTypeByVar("WideChar", "UInt64(a)", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("WideChar", "UInt64(a)", KnownTypeIds.UInt64Type);
 
             AssertExprTypeByVar("WideChar", "WideChar(a)", KnownTypeIds.WideCharType);
             AssertExprTypeByVar("WideChar", "Char(a)", KnownTypeIds.CharType);

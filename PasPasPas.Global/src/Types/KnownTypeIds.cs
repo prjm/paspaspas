@@ -43,7 +43,7 @@
         /// <summary>
         ///     unit64 type (8 byte unsigned integer)
         /// </summary>
-        public const int Uint64Type = 4;
+        public const int UInt64Type = 4;
 
         /// <summary>
         ///     boolean type

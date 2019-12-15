@@ -47,7 +47,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         public ExtF80 AsExtended {
             get {
-                if (TypeId == KnownTypeIds.Uint64Type)
+                if (TypeId == KnownTypeIds.UInt64Type)
                     return UnsignedValue;
 
                 return SignedValue;
@@ -160,7 +160,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
 
         internal static ITypeReference ShlAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             BigInteger s;
-            if (firstOperator.TypeId == KnownTypeIds.Int64Type || firstOperator.TypeId == KnownTypeIds.Uint64Type)
+            if (firstOperator.TypeId == KnownTypeIds.Int64Type || firstOperator.TypeId == KnownTypeIds.UInt64Type)
                 s = new BigInteger(firstOperator.SignedValue << (int)secondOperator.SignedValue);
             else
                 s = new BigInteger((int)firstOperator.SignedValue << (int)secondOperator.SignedValue);
@@ -170,7 +170,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
 
         internal static ITypeReference ShrAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             BigInteger s;
-            if (firstOperator.TypeId == KnownTypeIds.Int64Type || firstOperator.TypeId == KnownTypeIds.Uint64Type)
+            if (firstOperator.TypeId == KnownTypeIds.Int64Type || firstOperator.TypeId == KnownTypeIds.UInt64Type)
                 s = new BigInteger((ulong)firstOperator.SignedValue >> (int)secondOperator.SignedValue);
             else
                 s = new BigInteger((uint)firstOperator.SignedValue >> (int)secondOperator.SignedValue);

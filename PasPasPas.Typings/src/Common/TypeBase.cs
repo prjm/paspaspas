@@ -44,6 +44,18 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public abstract uint TypeSizeInBytes { get; }
 
+        /// <summary>
+        ///     short type name
+        /// </summary>
+        public virtual string ShortName
+            => "";
+
+        /// <summary>
+        ///     long type name
+        /// </summary>
+        public virtual string LongName
+            => "";
+
         private static bool CanBeAssignedFromAlias(TypeAlias alias) {
 
             if (alias.TypeKind == CommonTypeKind.IntegerType)
@@ -119,6 +131,12 @@ namespace PasPasPas.Typings.Common {
             return false;
         }
 
+        /// <summary>
+        ///     get the short type name
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => ShortName;
 
         /// <summary>
         ///     helper function: get a list item

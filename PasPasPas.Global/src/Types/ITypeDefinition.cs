@@ -23,6 +23,16 @@ namespace PasPasPas.Globals.Types {
         uint TypeSizeInBytes { get; }
 
         /// <summary>
+        ///     short type name
+        /// </summary>
+        string ShortName { get; }
+
+        /// <summary>
+        ///     long type name
+        /// </summary>
+        string LongName { get; }
+
+        /// <summary>
         ///     check if this type can be assigned from another type
         /// </summary>
         /// <param name="otherType">type which will be assigned to this type</param>

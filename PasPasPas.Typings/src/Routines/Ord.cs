@@ -75,7 +75,7 @@ namespace PasPasPas.Typings.Routines {
                     return signed ? KnownTypeIds.IntegerType : KnownTypeIds.CardinalType;
 
                 if (bitSize > 32 && bitSize <= 64)
-                    return signed ? KnownTypeIds.Int64Type : KnownTypeIds.Uint64Type;
+                    return signed ? KnownTypeIds.Int64Type : KnownTypeIds.UInt64Type;
 
                 return KnownTypeIds.ErrorType;
             };

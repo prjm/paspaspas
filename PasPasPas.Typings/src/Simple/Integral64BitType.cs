@@ -100,5 +100,19 @@ namespace PasPasPas.Typings.Simple {
         /// <returns></returns>
         public override string ToString()
             => $"{(IsSigned ? string.Empty : "U")}Int64";
+
+        /// <summary>
+        ///     long type name
+        /// </summary>
+        public override string LongName
+            => IsSigned ? KnownTypeNames.Int64 : KnownTypeNames.UInt64;
+
+        /// <summary>
+        ///     short type name
+        /// </summary>
+        public override string ShortName
+            => IsSigned ? KnownTypeNames.J : KnownTypeNames.UJ;
+
+
     }
 }

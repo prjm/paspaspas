@@ -23,7 +23,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         ///     type id: uint64
         /// </summary>
         public override int TypeId
-            => KnownTypeIds.Uint64Type;
+            => KnownTypeIds.UInt64Type;
 
         /// <summary>
         ///     value

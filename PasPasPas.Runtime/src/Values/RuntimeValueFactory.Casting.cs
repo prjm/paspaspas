@@ -127,7 +127,7 @@ namespace PasPasPas.Runtime.Values {
                     return Integers.ToIntegerValue((uint)integer.UnsignedValue);
                 case KnownTypeIds.Int64Type:
                     return Integers.ToIntegerValue(integer.SignedValue);
-                case KnownTypeIds.Uint64Type:
+                case KnownTypeIds.UInt64Type:
                     return Integers.ToIntegerValue(integer.UnsignedValue);
                 case KnownTypeIds.WideCharType:
                     return Chars.ToWideCharValue(typeId, (char)integer.UnsignedValue);
@@ -245,7 +245,7 @@ namespace PasPasPas.Runtime.Values {
                     return Integers.ToIntegerValue((uint)charValue.AsWideChar);
                 case KnownTypeIds.Int64Type:
                     return Integers.ToIntegerValue((long)charValue.AsWideChar);
-                case KnownTypeIds.Uint64Type:
+                case KnownTypeIds.UInt64Type:
                     return Integers.ToIntegerValue((ulong)charValue.AsWideChar);
                 case KnownTypeIds.WideCharType:
                     return Chars.ToWideCharValue(typeId, charValue.AsWideChar);

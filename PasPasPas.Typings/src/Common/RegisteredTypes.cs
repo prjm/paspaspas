@@ -13,6 +13,9 @@ using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
+    using Ids = KnownTypeIds;
+    using Names = KnownTypeNames;
+
     /// <summary>
     ///     common type registry - contains all system defined types
     /// </summary>
@@ -97,7 +100,7 @@ namespace PasPasPas.Typings.Common {
             Runtime = runtime;
             ListPools = listPools;
             TypeCreator = new CommonTypeCreator(this);
-            systemUnit = new UnitType(KnownTypeIds.SystemUnit, "System");
+            systemUnit = new UnitType(Ids.SystemUnit, "System");
             RegisterType(systemUnit);
 
             RegisterCommonTypes(runtime, intSize);
@@ -172,10 +175,21 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
+        ///     register a type alias name
+        /// </summary>
+        /// <param name="baseTypeId">base type id</param>
+        /// <param name="typeName">alias name</param>
+        /// <param name="withId">alias type id</param>
+        private void RegisterSystemAlias(int withId, int baseTypeId, string typeName) {
+            var alias = new TypeAlias(withId, typeName, baseTypeId);
+            RegisterSystemType(alias, alias.AliasName);
+        }
+
+        /// <summary>
         ///     register built-in types
         /// </summary>
         private void RegisterCommonTypes(IRuntimeValueFactory runtime, NativeIntSize intSize) {
-            RegisterType(new ErrorType(KnownTypeIds.ErrorType));
+            RegisterType(new ErrorType(Ids.ErrorType));
 
             RegisterIntTypes();
             RegisterBoolTypes();
@@ -185,75 +199,75 @@ namespace PasPasPas.Typings.Common {
             RegisterAliasTypes();
             RegisterNativeIntTypes(intSize);
             RegisterHiddenTypes();
-            RegisterSystemType(new GenericArrayType(KnownTypeIds.GenericArrayType), "TArray", 1);
-            RegisterSystemType(new FileType(KnownTypeIds.UntypedFile, KnownTypeIds.GenericPointer), "");
-            RegisterSystemType(new GenericConstraintType(KnownTypeIds.GenericClassConstraint), "");
-            RegisterSystemType(new GenericConstraintType(KnownTypeIds.GenericRecordConstraint), "");
-            RegisterSystemType(new GenericConstraintType(KnownTypeIds.GenericConstructorConstraint), "");
+            RegisterSystemType(new GenericArrayType(Ids.GenericArrayType), "TArray", 1);
+            RegisterSystemType(new FileType(Ids.UntypedFile, Ids.GenericPointer), "");
+            RegisterSystemType(new GenericConstraintType(Ids.GenericClassConstraint), "");
+            RegisterSystemType(new GenericConstraintType(Ids.GenericRecordConstraint), "");
+            RegisterSystemType(new GenericConstraintType(Ids.GenericConstructorConstraint), "");
         }
 
         private void RegisterHiddenTypes() {
-            RegisterSystemType(new UnspecifiedType(KnownTypeIds.UnspecifiedType), null);
-            RegisterSystemType(new VoidType(KnownTypeIds.NoType), null);
-            RegisterSystemType(new GenericTypeParameter(KnownTypeIds.UnconstrainedGenericTypeParameter, ImmutableArray<int>.Empty), null);
+            RegisterSystemType(new UnspecifiedType(Ids.UnspecifiedType), null);
+            RegisterSystemType(new VoidType(Ids.NoType), null);
+            RegisterSystemType(new GenericTypeParameter(Ids.UnconstrainedGenericTypeParameter, ImmutableArray<int>.Empty), null);
         }
 
         /// <summary>
         ///     register type alias
         /// </summary>
         private void RegisterAliasTypes() {
-            RegisterSystemType(new TypeAlias(KnownTypeIds.CharType, KnownTypeIds.WideCharType), "Char");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Ucs2CharType, KnownTypeIds.WideCharType), "UCS2Char");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Ucs4CharType, KnownTypeIds.CardinalType), "UCS4Char");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.StringType, KnownTypeIds.UnicodeStringType), "String");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Real, KnownTypeIds.DoubleType), "Real");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.PChar, KnownTypeIds.PAnsiChar), "PChar");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.PString, KnownTypeIds.PUnicodeString), "PString");
+            RegisterSystemAlias(Ids.CharType, Ids.WideCharType, "Char");
+            RegisterSystemAlias(Ids.Ucs2CharType, Ids.WideCharType, "UCS2Char");
+            RegisterSystemAlias(Ids.Ucs4CharType, Ids.CardinalType, "UCS4Char");
+            RegisterSystemAlias(Ids.StringType, Ids.UnicodeStringType, "String");
+            RegisterSystemAlias(Ids.Real, Ids.DoubleType, "Real");
+            RegisterSystemAlias(Ids.PChar, Ids.PAnsiChar, "PChar");
+            RegisterSystemAlias(Ids.PString, Ids.PUnicodeString, "PString");
         }
 
         private void RegisterPointerTypes() {
-            RegisterSystemType(new PointerType(KnownTypeIds.GenericPointer, KnownTypeIds.UntypedPointer), "Pointer");
-            RegisterSystemType(new PointerType(KnownTypeIds.PByte, KnownTypeIds.ByteType), "PByte");
-            RegisterSystemType(new PointerType(KnownTypeIds.PShortInt, KnownTypeIds.ShortInt), "PShortInt");
-            RegisterSystemType(new PointerType(KnownTypeIds.PWord, KnownTypeIds.WordType), "PWord");
-            RegisterSystemType(new PointerType(KnownTypeIds.PSmallInt, KnownTypeIds.SmallInt), "PSmallInt");
-            RegisterSystemType(new PointerType(KnownTypeIds.PCardinal, KnownTypeIds.CardinalType), "PCardinal");
-            RegisterSystemType(new PointerType(KnownTypeIds.PLongword, KnownTypeIds.LongWord), "PLongword");
-            RegisterSystemType(new PointerType(KnownTypeIds.PFixedUint, KnownTypeIds.FixedUInt), "PFixedUint");
-            RegisterSystemType(new PointerType(KnownTypeIds.PInteger, KnownTypeIds.IntegerType), "PInteger");
-            RegisterSystemType(new PointerType(KnownTypeIds.PLongInt, KnownTypeIds.LongInt), "PLongInt");
-            RegisterSystemType(new PointerType(KnownTypeIds.PFixedInt, KnownTypeIds.FixedInt), "PFixedInt");
-            RegisterSystemType(new PointerType(KnownTypeIds.PUInt64, KnownTypeIds.Uint64Type), "PUInt64");
-            RegisterSystemType(new PointerType(KnownTypeIds.PInt64, KnownTypeIds.CardinalType), "PInt64");
-            RegisterSystemType(new PointerType(KnownTypeIds.PNativeUInt, KnownTypeIds.NativeUInt), "PNativeUInt");
-            RegisterSystemType(new PointerType(KnownTypeIds.PNativeInt, KnownTypeIds.NativeInt), "PNativeInt");
-            RegisterSystemType(new PointerType(KnownTypeIds.PSingle, KnownTypeIds.SingleType), "PSingle");
-            RegisterSystemType(new PointerType(KnownTypeIds.PDouble, KnownTypeIds.DoubleType), "PDouble");
-            RegisterSystemType(new PointerType(KnownTypeIds.PExtended, KnownTypeIds.Extended), "PExtended");
-            RegisterSystemType(new PointerType(KnownTypeIds.PAnsiChar, KnownTypeIds.AnsiCharType), "PAnsiChar");
-            RegisterSystemType(new PointerType(KnownTypeIds.PWideChar, KnownTypeIds.WideCharType), "PWideChar");
-            RegisterSystemType(new PointerType(KnownTypeIds.PAnsiString, KnownTypeIds.AnsiStringType), "PAnsiString");
-            RegisterSystemType(new PointerType(KnownTypeIds.PRawByteString, KnownTypeIds.RawByteString), "PRawByteString");
-            RegisterSystemType(new PointerType(KnownTypeIds.PUnicodeString, KnownTypeIds.UnicodeStringType), "PUnicodeString");
-            RegisterSystemType(new PointerType(KnownTypeIds.PShortString, KnownTypeIds.ShortStringType), "PShortString");
-            RegisterSystemType(new PointerType(KnownTypeIds.PWideString, KnownTypeIds.WideStringType), "PWideString");
-            RegisterSystemType(new PointerType(KnownTypeIds.PBoolean, KnownTypeIds.BooleanType), "PBoolean");
-            RegisterSystemType(new PointerType(KnownTypeIds.PLongBool, KnownTypeIds.LongBoolType), "PLongBool");
-            RegisterSystemType(new PointerType(KnownTypeIds.PWordBool, KnownTypeIds.WordBoolType), "PWordBool");
-            RegisterSystemType(new PointerType(KnownTypeIds.PPointer, KnownTypeIds.GenericPointer), "PPointer");
-            RegisterSystemType(new PointerType(KnownTypeIds.PCurrency, KnownTypeIds.Currency), "PCurrency");
+            RegisterSystemType(new PointerType(Ids.GenericPointer, Ids.UntypedPointer), "Pointer");
+            RegisterSystemType(new PointerType(Ids.PByte, Ids.ByteType), "PByte");
+            RegisterSystemType(new PointerType(Ids.PShortInt, Ids.ShortInt), "PShortInt");
+            RegisterSystemType(new PointerType(Ids.PWord, Ids.WordType), "PWord");
+            RegisterSystemType(new PointerType(Ids.PSmallInt, Ids.SmallInt), "PSmallInt");
+            RegisterSystemType(new PointerType(Ids.PCardinal, Ids.CardinalType), "PCardinal");
+            RegisterSystemType(new PointerType(Ids.PLongword, Ids.LongWord), "PLongword");
+            RegisterSystemType(new PointerType(Ids.PFixedUint, Ids.FixedUInt), "PFixedUint");
+            RegisterSystemType(new PointerType(Ids.PInteger, Ids.IntegerType), "PInteger");
+            RegisterSystemType(new PointerType(Ids.PLongInt, Ids.LongInt), "PLongInt");
+            RegisterSystemType(new PointerType(Ids.PFixedInt, Ids.FixedInt), "PFixedInt");
+            RegisterSystemType(new PointerType(Ids.PUInt64, Ids.UInt64Type), "PUInt64");
+            RegisterSystemType(new PointerType(Ids.PInt64, Ids.CardinalType), "PInt64");
+            RegisterSystemType(new PointerType(Ids.PNativeUInt, Ids.NativeUInt), "PNativeUInt");
+            RegisterSystemType(new PointerType(Ids.PNativeInt, Ids.NativeInt), "PNativeInt");
+            RegisterSystemType(new PointerType(Ids.PSingle, Ids.SingleType), "PSingle");
+            RegisterSystemType(new PointerType(Ids.PDouble, Ids.DoubleType), "PDouble");
+            RegisterSystemType(new PointerType(Ids.PExtended, Ids.Extended), "PExtended");
+            RegisterSystemType(new PointerType(Ids.PAnsiChar, Ids.AnsiCharType), "PAnsiChar");
+            RegisterSystemType(new PointerType(Ids.PWideChar, Ids.WideCharType), "PWideChar");
+            RegisterSystemType(new PointerType(Ids.PAnsiString, Ids.AnsiStringType), "PAnsiString");
+            RegisterSystemType(new PointerType(Ids.PRawByteString, Ids.RawByteString), "PRawByteString");
+            RegisterSystemType(new PointerType(Ids.PUnicodeString, Ids.UnicodeStringType), "PUnicodeString");
+            RegisterSystemType(new PointerType(Ids.PShortString, Ids.ShortStringType), "PShortString");
+            RegisterSystemType(new PointerType(Ids.PWideString, Ids.WideStringType), "PWideString");
+            RegisterSystemType(new PointerType(Ids.PBoolean, Ids.BooleanType), "PBoolean");
+            RegisterSystemType(new PointerType(Ids.PLongBool, Ids.LongBoolType), "PLongBool");
+            RegisterSystemType(new PointerType(Ids.PWordBool, Ids.WordBoolType), "PWordBool");
+            RegisterSystemType(new PointerType(Ids.PPointer, Ids.GenericPointer), "PPointer");
+            RegisterSystemType(new PointerType(Ids.PCurrency, Ids.Currency), "PCurrency");
         }
 
         /// <summary>
         ///     register real types
         /// </summary>
         private void RegisterRealTypes() {
-            RegisterSystemType(new RealType(KnownTypeIds.Real48Type, 48), "Real48");
-            RegisterSystemType(new RealType(KnownTypeIds.SingleType, 32), "Single");
-            RegisterSystemType(new RealType(KnownTypeIds.DoubleType, 64), "Double");
-            RegisterSystemType(new ExtendedType(KnownTypeIds.Extended), "Extended");
-            RegisterSystemType(new RealType(KnownTypeIds.Comp, 64), "Comp");
-            RegisterSystemType(new RealType(KnownTypeIds.Currency, 64), "Currency");
+            RegisterSystemType(new RealType(Ids.Real48Type, 48), "Real48");
+            RegisterSystemType(new RealType(Ids.SingleType, 32), "Single");
+            RegisterSystemType(new RealType(Ids.DoubleType, 64), "Double");
+            RegisterSystemType(new ExtendedType(Ids.Extended), "Extended");
+            RegisterSystemType(new RealType(Ids.Comp, 64), "Comp");
+            RegisterSystemType(new RealType(Ids.Currency, 64), "Currency");
         }
 
         /// <summary>
@@ -261,26 +275,26 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="intSize">integer size</param>
         private void RegisterNativeIntTypes(NativeIntSize intSize) {
-            RegisterSystemType(new TypeAlias(KnownTypeIds.FixedInt, KnownTypeIds.IntegerType), "FixedInt");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.FixedUInt, KnownTypeIds.CardinalType), "FixedUInt");
+            RegisterSystemAlias(Ids.FixedInt, Ids.IntegerType, "FixedInt");
+            RegisterSystemAlias(Ids.FixedUInt, Ids.CardinalType, "FixedUInt");
 
             if (intSize == NativeIntSize.Windows64bit) {
-                RegisterSystemType(new TypeAlias(KnownTypeIds.NativeInt, KnownTypeIds.Int64Type), "NativeInt");
-                RegisterSystemType(new TypeAlias(KnownTypeIds.NativeUInt, KnownTypeIds.Uint64Type), "NativeUInt");
-                RegisterSystemType(new TypeAlias(KnownTypeIds.LongInt, KnownTypeIds.IntegerType), "LongInt");
-                RegisterSystemType(new TypeAlias(KnownTypeIds.LongWord, KnownTypeIds.CardinalType), "LongWord");
+                RegisterSystemAlias(Ids.NativeInt, Ids.Int64Type, "NativeInt");
+                RegisterSystemAlias(Ids.NativeUInt, Ids.UInt64Type, "NativeUInt");
+                RegisterSystemAlias(Ids.LongInt, Ids.IntegerType, "LongInt");
+                RegisterSystemAlias(Ids.LongWord, Ids.CardinalType, "LongWord");
             }
             else if (intSize == NativeIntSize.All64bit) {
-                RegisterSystemType(new TypeAlias(KnownTypeIds.NativeInt, KnownTypeIds.Int64Type), "NativeInt");
-                RegisterSystemType(new TypeAlias(KnownTypeIds.NativeUInt, KnownTypeIds.Uint64Type), "NativeUInt");
-                RegisterSystemType(new TypeAlias(KnownTypeIds.LongInt, KnownTypeIds.Int64Type), "LongInt");
-                RegisterSystemType(new TypeAlias(KnownTypeIds.LongWord, KnownTypeIds.Uint64Type), "LongWord");
+                RegisterSystemAlias(Ids.NativeInt, Ids.Int64Type, "NativeInt");
+                RegisterSystemAlias(Ids.NativeUInt, Ids.UInt64Type, "NativeUInt");
+                RegisterSystemAlias(Ids.LongInt, Ids.Int64Type, "LongInt");
+                RegisterSystemAlias(Ids.LongWord, Ids.UInt64Type, "LongWord");
             }
             else {
-                RegisterSystemType(new TypeAlias(KnownTypeIds.NativeInt, KnownTypeIds.IntegerType), "NativeInt");
-                RegisterSystemType(new TypeAlias(KnownTypeIds.NativeUInt, KnownTypeIds.CardinalType), "NativeUInt");
-                RegisterSystemType(new TypeAlias(KnownTypeIds.LongInt, KnownTypeIds.IntegerType), "LongInt");
-                RegisterSystemType(new TypeAlias(KnownTypeIds.LongWord, KnownTypeIds.CardinalType), "LongWord");
+                RegisterSystemAlias(Ids.NativeInt, Ids.IntegerType, "NativeInt");
+                RegisterSystemAlias(Ids.NativeUInt, Ids.CardinalType, "NativeUInt");
+                RegisterSystemAlias(Ids.LongInt, Ids.IntegerType, "LongInt");
+                RegisterSystemAlias(Ids.LongWord, Ids.CardinalType, "LongWord");
             }
         }
 
@@ -288,44 +302,44 @@ namespace PasPasPas.Typings.Common {
         ///     register string types
         /// </summary>
         private void RegisterStringTypes(IRuntimeValueFactory runtime) {
-            RegisterSystemType(new AnsiCharType(KnownTypeIds.AnsiCharType), "AnsiChar");
-            RegisterSystemType(new WideCharType(KnownTypeIds.WideCharType), "WideChar");
-            RegisterSystemType(new AnsiStringType(KnownTypeIds.AnsiStringType), "AnsiString");
-            RegisterSystemType(new AnsiStringType(KnownTypeIds.RawByteString), "RawByteString");
-            RegisterSystemType(new ShortStringType(KnownTypeIds.ShortStringType, runtime.Integers.ToIntegerValue(0xff)), "ShortString");
-            RegisterSystemType(new UnicodeStringType(KnownTypeIds.UnicodeStringType), "UnicodeString");
-            RegisterSystemType(new WideStringType(KnownTypeIds.WideStringType), "WideString");
+            RegisterSystemType(new AnsiCharType(Ids.AnsiCharType), "AnsiChar");
+            RegisterSystemType(new WideCharType(Ids.WideCharType), "WideChar");
+            RegisterSystemType(new AnsiStringType(Ids.AnsiStringType), "AnsiString");
+            RegisterSystemType(new AnsiStringType(Ids.RawByteString), "RawByteString");
+            RegisterSystemType(new ShortStringType(Ids.ShortStringType, runtime.Integers.ToIntegerValue(0xff)), "ShortString");
+            RegisterSystemType(new UnicodeStringType(Ids.UnicodeStringType), "UnicodeString");
+            RegisterSystemType(new WideStringType(Ids.WideStringType), "WideString");
         }
 
         /// <summary>
         ///     register boolean types
         /// </summary>
         private void RegisterBoolTypes() {
-            RegisterSystemType(new BooleanType(KnownTypeIds.BooleanType, 1), "Boolean");
-            RegisterSystemType(new BooleanType(KnownTypeIds.ByteBoolType, 8), "ByteBool");
-            RegisterSystemType(new BooleanType(KnownTypeIds.WordBoolType, 16), "WordBool");
-            RegisterSystemType(new BooleanType(KnownTypeIds.LongBoolType, 32), "LongBool");
+            RegisterSystemType(new BooleanType(Ids.BooleanType, 1), "Boolean");
+            RegisterSystemType(new BooleanType(Ids.ByteBoolType, 8), "ByteBool");
+            RegisterSystemType(new BooleanType(Ids.WordBoolType, 16), "WordBool");
+            RegisterSystemType(new BooleanType(Ids.LongBoolType, 32), "LongBool");
         }
 
         /// <summary>
         ///     register integer types
         /// </summary>
         private void RegisterIntTypes() {
-            RegisterSystemType(new IntegralType(KnownTypeIds.ByteType, false, 8), "Byte");
-            RegisterSystemType(new IntegralType(KnownTypeIds.ShortInt, true, 8), "ShortInt");
-            RegisterSystemType(new IntegralType(KnownTypeIds.WordType, false, 16), "Word");
-            RegisterSystemType(new IntegralType(KnownTypeIds.SmallInt, true, 16), "SmallInt");
-            RegisterSystemType(new IntegralType(KnownTypeIds.CardinalType, false, 32), "Cardinal");
-            RegisterSystemType(new IntegralType(KnownTypeIds.IntegerType, true, 32), "Integer");
-            RegisterSystemType(new Integral64BitType(KnownTypeIds.Uint64Type, false), "UInt64");
-            RegisterSystemType(new Integral64BitType(KnownTypeIds.Int64Type, true), "Int64");
+            RegisterSystemType(new IntegralType(Ids.ByteType, false, 8), Names.Byte);
+            RegisterSystemType(new IntegralType(Ids.ShortInt, true, 8), Names.ShortInt);
+            RegisterSystemType(new IntegralType(Ids.WordType, false, 16), Names.Word);
+            RegisterSystemType(new IntegralType(Ids.SmallInt, true, 16), Names.SmallInt);
+            RegisterSystemType(new IntegralType(Ids.CardinalType, false, 32), Names.Cardinal);
+            RegisterSystemType(new IntegralType(Ids.IntegerType, true, 32), Names.Integer);
+            RegisterSystemType(new Integral64BitType(Ids.UInt64Type, false), Names.UInt64);
+            RegisterSystemType(new Integral64BitType(Ids.Int64Type, true), Names.Int64);
 
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Unsigned8BitInteger, KnownTypeIds.ByteType), "UInt8");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Signed8BitInteger, KnownTypeIds.ShortInt), "Int8");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Unsigned16BitInteger, KnownTypeIds.WordType), "UInt16");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Signed16BitInteger, KnownTypeIds.SmallInt), "Int16");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Unsigned32BitInteger, KnownTypeIds.CardinalType), "UInt32");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Signed32BitInteger, KnownTypeIds.IntegerType), "Int32");
+            RegisterSystemAlias(Ids.Unsigned8BitInteger, Ids.ByteType, Names.UInt8);
+            RegisterSystemAlias(Ids.Signed8BitInteger, Ids.ShortInt, Names.Int8);
+            RegisterSystemAlias(Ids.Unsigned16BitInteger, Ids.WordType, Names.UInt16);
+            RegisterSystemAlias(Ids.Signed16BitInteger, Ids.SmallInt, Names.Int16);
+            RegisterSystemAlias(Ids.Unsigned32BitInteger, Ids.CardinalType, Names.UInt32);
+            RegisterSystemAlias(Ids.Signed32BitInteger, Ids.IntegerType, Names.Int32);
         }
 
         /// <summary>
@@ -346,7 +360,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public ITypeDefinition GetTypeByIdOrUndefinedType(int typeId) {
             if (!types.TryGetValue(typeId, out var result))
-                result = types[KnownTypeIds.ErrorType];
+                result = types[Ids.ErrorType];
 
             return result;
         }
@@ -364,7 +378,7 @@ namespace PasPasPas.Typings.Common {
         ///     register the global TObject class
         /// </summary>
         private void RegisterTObject() {
-            var def = new StructuredTypeDeclaration(KnownTypeIds.TObject, StructuredTypeKind.Class);
+            var def = new StructuredTypeDeclaration(Ids.TObject, StructuredTypeKind.Class);
             //var meta = new MetaStructuredTypeDeclaration(KnownTypeIds.TClass, KnownTypeIds.TObject);
             //var alias = TypeCreator.CreateTypeAlias(KnownTypeIds.TClass, false, KnownTypeIds.TClassAlias);
             RegisterSystemType(def, "TObject");
@@ -431,7 +445,7 @@ namespace PasPasPas.Typings.Common {
             if (sourceTypeKind == CommonTypeKind.RecordType)
                 return CastRecordTo(sourceType, targetType);
 
-            return KnownTypeIds.ErrorType;
+            return Ids.ErrorType;
         }
 
         private int CastIntTo(int targetType) {
@@ -452,14 +466,14 @@ namespace PasPasPas.Typings.Common {
             if (targetTypeKind == CommonTypeKind.SubrangeType)
                 return targetType;
 
-            return KnownTypeIds.ErrorType;
+            return Ids.ErrorType;
         }
 
         private int CastRecordTo(int sourceType, int targetType) {
             if (this.AreRecordTypesCompatible(sourceType, targetType))
                 return targetType;
 
-            return KnownTypeIds.ErrorType;
+            return Ids.ErrorType;
         }
 
         private int CastBooleanTo(int targetType) {
@@ -468,7 +482,7 @@ namespace PasPasPas.Typings.Common {
             if (targetTypeKind == CommonTypeKind.BooleanType)
                 return targetType;
 
-            return KnownTypeIds.ErrorType;
+            return Ids.ErrorType;
         }
 
         private int CastCharTo(int targetType) {
@@ -492,7 +506,7 @@ namespace PasPasPas.Typings.Common {
             if (targetTypeKind == CommonTypeKind.SubrangeType)
                 return targetType;
 
-            return KnownTypeIds.ErrorType;
+            return Ids.ErrorType;
         }
 
         /// <summary>

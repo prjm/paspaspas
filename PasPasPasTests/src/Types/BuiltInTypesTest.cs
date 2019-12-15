@@ -19,7 +19,7 @@ namespace PasPasPasTests.Types {
             AssertDeclType("System.Byte", KnownTypeIds.ByteType);
             AssertDeclType("System.Word", KnownTypeIds.WordType);
             AssertDeclType("System.Cardinal", KnownTypeIds.CardinalType);
-            AssertDeclType("System.UInt64", KnownTypeIds.Uint64Type);
+            AssertDeclType("System.UInt64", KnownTypeIds.UInt64Type);
             AssertDeclType("System.ShortInt", KnownTypeIds.ShortInt);
             AssertDeclType("System.SmallInt", KnownTypeIds.SmallInt);
             AssertDeclType("System.Integer", KnownTypeIds.IntegerType);
@@ -28,7 +28,7 @@ namespace PasPasPasTests.Types {
             AssertDeclType("Byte", KnownTypeIds.ByteType);
             AssertDeclType("Word", KnownTypeIds.WordType);
             AssertDeclType("Cardinal", KnownTypeIds.CardinalType);
-            AssertDeclType("UInt64", KnownTypeIds.Uint64Type);
+            AssertDeclType("UInt64", KnownTypeIds.UInt64Type);
             AssertDeclType("ShortInt", KnownTypeIds.ShortInt);
             AssertDeclType("SmallInt", KnownTypeIds.SmallInt);
             AssertDeclType("Integer", KnownTypeIds.IntegerType);
