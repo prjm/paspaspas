@@ -105,13 +105,13 @@ namespace PasPasPas.Typings.Simple {
         ///     long type name
         /// </summary>
         public override string LongName
-            => IsSigned ? KnownTypeNames.Int64 : KnownTypeNames.UInt64;
+            => IsSigned ? KnownNames.Int64 : KnownNames.UInt64;
 
         /// <summary>
         ///     short type name
         /// </summary>
         public override string ShortName
-            => IsSigned ? KnownTypeNames.J : KnownTypeNames.UJ;
+            => IsSigned ? KnownNames.J : KnownNames.UJ;
 
 
     }

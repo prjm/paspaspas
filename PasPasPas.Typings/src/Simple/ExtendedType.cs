@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Typings.Simple {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Typings.Simple {
 
     /// <summary>
     ///     extended type
@@ -12,11 +14,16 @@
         public ExtendedType(int withId) : base(withId, 80) { }
 
         /// <summary>
-        ///     type name
+        ///     long type name
         /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => "Extended";
+        public override string LongName
+            => KnownNames.Extended;
+
+        /// <summary>
+        ///     short type name
+        /// </summary>
+        public override string ShortName
+            => KnownNames.G;
 
     }
 }

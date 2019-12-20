@@ -695,9 +695,9 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestConstantArrayTypes() {
             AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of zc");
-            AssertExprTypeByConst("('a','b')", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of WideChar");
+            AssertExprTypeByConst("('a','b')", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of b");
             AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of UnicodeString");
-            AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of extended");
+            AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of g");
             AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of enum zc", "type ta = (a,b);");
             AssertExprValue("a", GetArrayValue(RegisteredTypes.SmallestUserTypeId, KnownTypeIds.StringType, GetUnicodeStringValue("11"), GetUnicodeStringValue("2")), "const a: array [0 .. 1] of String = ('11', '2');");
         }

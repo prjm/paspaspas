@@ -86,11 +86,16 @@ namespace PasPasPas.Typings.Simple {
         }
 
         /// <summary>
-        ///     readable type name
+        ///     long type name
         /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => "WideChar";
+        public override string LongName
+            => KnownNames.WideChar;
+
+        /// <summary>
+        ///     short type name
+        /// </summary>
+        public override string ShortName
+            => KnownNames.B;
 
     }
 }

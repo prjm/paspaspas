@@ -146,11 +146,11 @@ namespace PasPasPas.Typings.Simple {
             get {
                 switch (BitSize) {
                     case 8:
-                        return IsSigned ? KnownTypeNames.ShortInt : KnownTypeNames.Byte;
+                        return IsSigned ? KnownNames.ShortInt : KnownNames.Byte;
                     case 16:
-                        return IsSigned ? KnownTypeNames.SmallInt : KnownTypeNames.Word;
+                        return IsSigned ? KnownNames.SmallInt : KnownNames.Word;
                     case 32:
-                        return IsSigned ? KnownTypeNames.Integer : KnownTypeNames.Cardinal;
+                        return IsSigned ? KnownNames.Integer : KnownNames.Cardinal;
                 }
 
                 throw new InvalidOperationException();
@@ -164,11 +164,11 @@ namespace PasPasPas.Typings.Simple {
             get {
                 switch (BitSize) {
                     case 8:
-                        return IsSigned ? KnownTypeNames.ZC : KnownTypeNames.UC;
+                        return IsSigned ? KnownNames.ZC : KnownNames.UC;
                     case 16:
-                        return IsSigned ? KnownTypeNames.S : KnownTypeNames.US;
+                        return IsSigned ? KnownNames.S : KnownNames.US;
                     case 32:
-                        return IsSigned ? KnownTypeNames.I : KnownTypeNames.UI;
+                        return IsSigned ? KnownNames.I : KnownNames.UI;
                 }
 
                 throw new InvalidOperationException();

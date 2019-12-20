@@ -25,7 +25,7 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestUnitMainMethod() {
             void tester(IUnitType u) {
-                var m = u.Symbols[KnownTypeNames.MainMethod];
+                var m = u.Symbols[KnownNames.MainMethod];
                 Assert.IsNotNull(m);
             }
 

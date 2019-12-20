@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -74,19 +75,43 @@ namespace PasPasPas.Typings.Simple {
         }
 
         /// <summary>
-        ///     convert this type to string
+        ///     short type name
         /// </summary>
-        /// <returns></returns>
-        public override string ToString() {
-            switch (BitSize) {
-                case 1:
-                    return "Boolean";
-                case 8:
-                    return "ByteBool";
-                case 16:
-                    return "WordBool";
-                default:
-                    return $"Bool{BitSize}";
+        public override string ShortName {
+            get {
+                switch (BitSize) {
+                    case 1:
+                        return KnownNames.O;
+                    case 8:
+                        return KnownNames.UC;
+                    case 16:
+                        return KnownNames.US;
+                    case 32:
+                        return KnownNames.I;
+                }
+
+                throw new InvalidOperationException();
+            }
+        }
+
+
+        /// <summary>
+        ///     long type name
+        /// </summary>
+        public override string LongName {
+            get {
+                switch (BitSize) {
+                    case 1:
+                        return KnownNames.Boolean;
+                    case 8:
+                        return KnownNames.ByteBool;
+                    case 16:
+                        return KnownNames.WordBool;
+                    case 32:
+                        return KnownNames.LongBool;
+                }
+
+                throw new InvalidOperationException();
             }
         }
     }

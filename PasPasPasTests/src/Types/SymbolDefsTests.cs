@@ -36,7 +36,7 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestMainMethodExistence() {
             bool t(IUnitType u) {
-                var s = u.Symbols[KnownTypeNames.MainMethod];
+                var s = u.Symbols[KnownNames.MainMethod];
                 return s != default;
             }
             TestOnUnitType(t);

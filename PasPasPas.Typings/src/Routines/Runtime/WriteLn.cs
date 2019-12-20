@@ -13,7 +13,7 @@ namespace PasPasPas.Typings.Routines.Runtime {
         ///     routine name
         /// </summary>
         public override string Name
-            => KnownTypeNames.WriteLn;
+            => KnownNames.WriteLn;
 
         /// <summary>
         ///     procedure kind

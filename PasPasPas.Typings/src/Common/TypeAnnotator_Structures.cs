@@ -15,7 +15,7 @@ namespace PasPasPas.Typings.Common {
             CurrentUnit = element;
             CurrentUnit.TypeInfo = GetTypeReferenceById(unitType.TypeId);
             resolver.OpenScope();
-            resolver.AddToScope(KnownTypeNames.System, ReferenceKind.RefToUnit, environment.TypeRegistry.SystemUnit);
+            resolver.AddToScope(KnownNames.System, ReferenceKind.RefToUnit, environment.TypeRegistry.SystemUnit);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace PasPasPas.Typings.Common {
         public void StartVisit(BlockOfStatements element) {
             resolver.OpenScope();
             if (currentMethodImplementation.Count < 1) {
-                var mainRoutine = TypeCreator.CreateGlobalRoutine(KnownTypeNames.MainMethod);
+                var mainRoutine = TypeCreator.CreateGlobalRoutine(KnownNames.MainMethod);
                 mainRoutine.Parameters.Add(new ParameterGroup(mainRoutine, ProcedureKind.Procedure, GetInstanceTypeById(KnownTypeIds.NoType)));
                 var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as IUnitType;
                 unitType.Symbols.Add(mainRoutine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, mainRoutine));
@@ -52,7 +52,7 @@ namespace PasPasPas.Typings.Common {
 
             var cmi = currentMethodImplementation.Count > 0 ? currentMethodImplementation.Peek() : default;
 
-            if (cmi != default && string.Equals(cmi.Name, KnownTypeNames.MainMethod, System.StringComparison.OrdinalIgnoreCase)) {
+            if (cmi != default && string.Equals(cmi.Name, KnownNames.MainMethod, System.StringComparison.OrdinalIgnoreCase)) {
                 var mi = currentMethodImplementation.Pop();
                 var cb = currentCodeBlock.Pop();
                 (mi.Parameters as ParameterGroup).Code = cb.CreateCodeArray();
