@@ -60,11 +60,16 @@ namespace PasPasPas.Typings.Simple {
             => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
 
         /// <summary>
-        ///     format this type as string
+        ///     type name
         /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => "UnicodeString";
+        public override string LongName
+            => KnownNames.UnicodeString;
+
+        /// <summary>
+        ///      short string
+        /// </summary>
+        public override string ShortName
+            => KnownNames.SystemAtUnicodeString;
     }
 
 
@@ -81,7 +86,7 @@ namespace PasPasPas.Typings.Simple {
         }
 
         /// <summary>
-        ///     unicode string type
+        ///     UNICODE string type
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.WideStringType;
@@ -92,6 +97,17 @@ namespace PasPasPas.Typings.Simple {
         public override uint TypeSizeInBytes
             => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
 
+        /// <summary>
+        ///     long string name
+        /// </summary>
+        public override string LongName
+            => KnownNames.WideString;
+
+        /// <summary>
+        ///     short string name
+        /// </summary>
+        public override string ShortName
+            => KnownNames.SystemAtWideString;
     }
 
     /// <summary>
@@ -100,14 +116,28 @@ namespace PasPasPas.Typings.Simple {
     public class AnsiStringType : StringTypeBase {
 
         /// <summary>
+        ///     default system code page
+        /// </summary>
+        public const ushort DefaultSystemCodePage = 0;
+
+        /// <summary>
+        ///     no code page
+        /// </summary>
+        public const ushort NoCodePage = 0xffff;
+
+        /// <summary>
         ///     create a new string type
         /// </summary>
         /// <param name="withId">type id</param>
-        public AnsiStringType(int withId) : base(withId) {
+        /// <param name="withCodePage">code page</param>
+        /// <param name="longTypeName">long type name</param>
+        public AnsiStringType(string longTypeName, int withId, ushort withCodePage) : base(withId) {
+            WithCodePage = withCodePage;
+            LongName = longTypeName;
         }
 
         /// <summary>
-        ///     unicode string type
+        ///      string type
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.LongStringType;
@@ -117,6 +147,23 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override uint TypeSizeInBytes
             => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
+
+        /// <summary>
+        ///     code page
+        /// </summary>
+        public ushort WithCodePage { get; }
+
+        /// <summary>
+        ///     long type name
+        /// </summary>
+        public override string LongName { get; }
+
+        /// <summary>
+        ///     short type name
+        /// </summary>
+        public override string ShortName
+            => $"%AnsiStringT$us$i{WithCodePage}$%";
+
     }
 
 

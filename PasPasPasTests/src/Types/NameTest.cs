@@ -50,7 +50,11 @@
             (string, string) g(int id) => GetInternalTypeName(id);
             Assert.AreEqual(("AnsiChar", "c"), g(KTI.AnsiCharType));
             Assert.AreEqual(("WideChar", "b"), g(KTI.WideCharType));
-
+            Assert.AreEqual(("AnsiString", "%AnsiStringT$us$i0$%"), g(KTI.AnsiStringType));
+            Assert.AreEqual(("RawByteString", "%AnsiStringT$us$i65535$%"), g(KTI.RawByteString));
+            Assert.AreEqual(("ShortString", "System@%SmallString$uc$i255$%"), g(KTI.ShortStringType));
+            Assert.AreEqual(("WideString", "System@WideString"), g(KTI.WideStringType));
+            Assert.AreEqual(("UnicodeString", "System@UnicodeString"), g(KTI.UnicodeStringType));
         }
 
         /// <summary>
@@ -85,6 +89,23 @@
             Assert.AreEqual(("ByteBool", "uc"), g(KTI.ByteBoolType));
             Assert.AreEqual(("WordBool", "us"), g(KTI.WordBoolType));
             Assert.AreEqual(("LongBool", "i"), g(KTI.LongBoolType));
+        }
+
+        /// <summary>
+        ///     test pointer names
+        /// </summary>
+        [TestMethod]
+        public void TestPointerTypes() {
+            (string, string) g(int id) => GetInternalTypeName(id);
+            Assert.AreEqual(("Pointer", "pv"), g(KTI.GenericPointer));
+            Assert.AreEqual(("PByte", "puc"), g(KTI.PByte));
+            Assert.AreEqual(("PShortInt", "pzc"), g(KTI.PShortInt));
+            Assert.AreEqual(("PWord", "pus"), g(KTI.PWord));
+            Assert.AreEqual(("PSmallInt", "ps"), g(KTI.PSmallInt));
+            Assert.AreEqual(("PCardinal", "pui"), g(KTI.PCardinal));
+            Assert.AreEqual(("PLongword", "pui"), g(KTI.PLongword));
+            Assert.AreEqual(("PFixedUInt", "pui"), g(KTI.PFixedUint));
+            Assert.AreEqual(("PInteger", "pi"), g(KTI.PInteger));
         }
 
     }

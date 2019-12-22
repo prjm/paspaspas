@@ -1,6 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     short string type definition
@@ -10,6 +8,6 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     string size
         /// </summary>
-        ITypeReference Size { get; }
+        byte Size { get; }
     }
 }

@@ -269,7 +269,11 @@ namespace PasPasPas.Typings.Common {
                 if (element.Value != default && element.Value.TypeInfo != default && element.Value.TypeInfo.IsConstant())
                     length = element.Value.TypeInfo;
 
-                var userType = TypeCreator.CreateShortStringType(length);
+                byte stringLength = 0xff;
+                if (length.IsIntegralValue(out var iintegralValue))
+                    stringLength = (byte)iintegralValue.UnsignedValue;
+
+                var userType = TypeCreator.CreateShortStringType(stringLength);
                 element.TypeInfo = environment.Runtime.Types.MakeTypeReference(userType.TypeId);
             }
 

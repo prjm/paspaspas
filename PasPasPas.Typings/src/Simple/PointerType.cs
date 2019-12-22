@@ -9,15 +9,16 @@ namespace PasPasPas.Typings.Simple {
     /// </summary>
     public class PointerType : TypeBase {
 
-        private readonly int baseTypeId;
-
         /// <summary>
         ///     create a new pointer type definition
         /// </summary>
         /// <param name="withId">type id</param>
         /// <param name="baseType">base type id</param>
-        public PointerType(int withId, int baseType) : base(withId)
-            => baseTypeId = baseType;
+        /// <param name="longTypeName">pointer type name</param>
+        public PointerType(int withId, int baseType, string longTypeName = "") : base(withId) {
+            BaseTypeId = baseType;
+            LongName = longTypeName;
+        }
 
         /// <summary>
         ///     get the type kind
@@ -31,5 +32,26 @@ namespace PasPasPas.Typings.Simple {
         public override uint TypeSizeInBytes
             => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
 
+        /// <summary>
+        ///     base type id
+        /// </summary>
+        public int BaseTypeId { get; }
+
+        /// <summary>
+        ///     long type name
+        /// </summary>
+        public override string LongName { get; }
+
+        /// <summary>
+        ///     short type name
+        /// </summary>
+        public override string ShortName {
+            get {
+                if (BaseTypeId == KnownTypeIds.UntypedPointer)
+                    return KnownNames.PV;
+                var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(BaseTypeId);
+                return string.Concat(KnownNames.P, baseType.ShortName);
+            }
+        }
     }
 }

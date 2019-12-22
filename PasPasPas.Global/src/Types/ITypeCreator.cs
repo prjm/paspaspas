@@ -69,7 +69,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="length">string length</param>
         /// <returns></returns>
-        IShortStringType CreateShortStringType(ITypeReference length);
+        IShortStringType CreateShortStringType(byte length);
 
         /// <summary>
         ///     create a new unit type

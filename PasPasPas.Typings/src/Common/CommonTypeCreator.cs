@@ -121,7 +121,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        public IShortStringType CreateShortStringType(ITypeReference length) {
+        public IShortStringType CreateShortStringType(byte length) {
             var typeId = RegisteredTypes.RequireUserTypeId();
             var result = new ShortStringType(typeId, length);
             RegisteredTypes.RegisterType(result);

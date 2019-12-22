@@ -173,7 +173,7 @@
         public const string Extended = "Extended";
 
         /// <summary>
-        ///     ansi char type
+        ///     ANSI char type
         /// </summary>
         public const string AnsiChar = "AnsiChar";
 
@@ -181,6 +181,41 @@
         ///     wide char type
         /// </summary>
         public const string WideChar = "WideChar";
+
+        /// <summary>
+        ///     ANSI string type
+        /// </summary>
+        public const string AnsiString = "AnsiString";
+
+        /// <summary>
+        ///     raw byte string
+        /// </summary>
+        public const string RawByteString = "RawByteString";
+
+        /// <summary>
+        ///     short string
+        /// </summary>
+        public const string ShortString = "ShortString";
+
+        /// <summary>
+        ///     UNICODE string
+        /// </summary>
+        public const string UnicodeString = "UnicodeString";
+
+        /// <summary>
+        ///     wide string
+        /// </summary>
+        public const string WideString = "WideString";
+
+        /// <summary>
+        ///     pointer type
+        /// </summary>
+        public const string Pointer = "Pointer";
+
+        /// <summary>
+        ///     pointer to a byte value
+        /// </summary>
+        public const string PByte = "PByte";
 
         #endregion
         #region Short Type names
@@ -261,7 +296,7 @@
         public const string G = "g";
 
         /// <summary>
-        ///     shorthand for ansi char
+        ///     shorthand for ANSI char
         /// </summary>
         public const string C = "c";
 
@@ -269,6 +304,33 @@
         ///     shorthand for wide char
         /// </summary>
         public const string B = "b";
+
+        /// <summary>
+        ///     shorthand for wide string
+        /// </summary>
+        public const string SystemAtWideString = "System@WideString";
+
+        /// <summary>
+        ///     shorthand for UNICODE string
+        /// </summary>
+        public const string SystemAtUnicodeString = "System@UnicodeString";
+
+        /// <summary>
+        ///     shorthand for generic pointer type
+        /// </summary>
+        public const string PV = "pv";
+
+        /// <summary>
+        ///     shorthand for pointer type
+        /// </summary>
+        public const string P = "p";
+        public static string PShortInt = "PShortInt";
+        public static string PWord = "PWord";
+        public static string PSmallInt = "PSmallInt";
+        public static string PCardinal = "PCardinal";
+        public static string PLongword = "PLongword";
+        public static string PFixedUint = "PFixedUInt";
+        public static string PInteger = "PInteger";
 
         #endregion
 
