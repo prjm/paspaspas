@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.AssemblyBuilder.Builder.Definitions;
 using PasPasPas.AssemblyBuilder.Builder.Net;
 using PasPasPas.Globals.Environment;
@@ -71,6 +72,9 @@ namespace PasPasPas.AssemblyBuilder.Builder {
                 if (!(typeDef is IUnitType unit))
                     continue;
 
+                if (string.Equals(unit.Name, "System", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
                 PrepareUnit(unit);
             }
 
@@ -104,13 +108,17 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         }
 
         private void PrepareGlobalMethod(IRoutine routine) {
-            var globalMethod = UnitType.StartClassMethodDefinition(routine.Name);
-            globalMethod.ReturnType = KnownTypeIds.NoType;
-            globalMethod.DefineMethodBody();
-            CurrentMethod.Push(globalMethod);
+            foreach (var p in routine.Parameters) {
+                var globalMethod = UnitType.StartClassMethodDefinition(routine.Name);
+                globalMethod.Parameters = p;
+                globalMethod.ReturnType = KnownTypeIds.NoType;
 
-            var mainMethod = CurrentMethod.Pop();
-            mainMethod.FinishMethod();
+                globalMethod.DefineMethodBody();
+                CurrentMethod.Push(globalMethod);
+
+                var mainMethod = CurrentMethod.Pop();
+                mainMethod.FinishMethod();
+            }
         }
 
         private void LogError(uint messageNumber)

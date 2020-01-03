@@ -54,7 +54,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     routine code
         /// </summary>
-        ImmutableArray<IOpCode> Code { get; }
+        ImmutableArray<OpCode> Code { get; }
 
         /// <summary>
         ///     other symbols of this routine

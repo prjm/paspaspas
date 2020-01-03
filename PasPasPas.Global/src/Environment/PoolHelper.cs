@@ -13,8 +13,8 @@ namespace PasPasPas.Globals.Environment {
         /// <typeparam name="T">list type</typeparam>
         /// <param name="poolItem">pooled list</param>
         /// <param name="item">item to add</param>
-        public static T Add<T>(this IPoolItem<List<T>> poolItem, T item) where T : class {
-            if (item != default)
+        public static T Add<T>(this IPoolItem<List<T>> poolItem, T item) {
+            if (!EqualityComparer<T>.Default.Equals(item, default))
                 poolItem.Item.Add(item);
             return item;
         }

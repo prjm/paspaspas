@@ -14,4 +14,8 @@
         <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="src\OpCodes\" />
+    </ItemGroup>
+
 </Project>

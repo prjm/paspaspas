@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
+﻿using PasPasPas.Globals.Runtime;
+
+namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
 
     /// <summary>
     ///     method builder
@@ -9,6 +11,7 @@
         ///     set the return type
         /// </summary>
         int ReturnType { get; set; }
+        IParameterGroup Parameters { get; set; }
 
         /// <summary>
         ///     define a method body

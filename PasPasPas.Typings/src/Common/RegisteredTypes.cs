@@ -245,27 +245,27 @@ namespace PasPasPas.Typings.Common {
             RegisterSystemType(new PointerType(Ids.PLongword, Ids.LongWord, Names.PLongword));
             RegisterSystemType(new PointerType(Ids.PFixedUint, Ids.FixedUInt, Names.PFixedUint));
             RegisterSystemType(new PointerType(Ids.PInteger, Ids.IntegerType, Names.PInteger));
-            RegisterSystemType(new PointerType(Ids.PLongInt, Ids.LongInt), "PLongInt");
-            RegisterSystemType(new PointerType(Ids.PFixedInt, Ids.FixedInt), "PFixedInt");
-            RegisterSystemType(new PointerType(Ids.PUInt64, Ids.UInt64Type), "PUInt64");
-            RegisterSystemType(new PointerType(Ids.PInt64, Ids.CardinalType), "PInt64");
-            RegisterSystemType(new PointerType(Ids.PNativeUInt, Ids.NativeUInt), "PNativeUInt");
-            RegisterSystemType(new PointerType(Ids.PNativeInt, Ids.NativeInt), "PNativeInt");
-            RegisterSystemType(new PointerType(Ids.PSingle, Ids.SingleType), "PSingle");
-            RegisterSystemType(new PointerType(Ids.PDouble, Ids.DoubleType), "PDouble");
-            RegisterSystemType(new PointerType(Ids.PExtended, Ids.Extended), "PExtended");
-            RegisterSystemType(new PointerType(Ids.PAnsiChar, Ids.AnsiCharType), "PAnsiChar");
-            RegisterSystemType(new PointerType(Ids.PWideChar, Ids.WideCharType), "PWideChar");
-            RegisterSystemType(new PointerType(Ids.PAnsiString, Ids.AnsiStringType), "PAnsiString");
-            RegisterSystemType(new PointerType(Ids.PRawByteString, Ids.RawByteString), "PRawByteString");
-            RegisterSystemType(new PointerType(Ids.PUnicodeString, Ids.UnicodeStringType), "PUnicodeString");
-            RegisterSystemType(new PointerType(Ids.PShortString, Ids.ShortStringType), "PShortString");
-            RegisterSystemType(new PointerType(Ids.PWideString, Ids.WideStringType), "PWideString");
-            RegisterSystemType(new PointerType(Ids.PBoolean, Ids.BooleanType), "PBoolean");
-            RegisterSystemType(new PointerType(Ids.PLongBool, Ids.LongBoolType), "PLongBool");
-            RegisterSystemType(new PointerType(Ids.PWordBool, Ids.WordBoolType), "PWordBool");
-            RegisterSystemType(new PointerType(Ids.PPointer, Ids.GenericPointer), "PPointer");
-            RegisterSystemType(new PointerType(Ids.PCurrency, Ids.Currency), "PCurrency");
+            RegisterSystemType(new PointerType(Ids.PLongInt, Ids.LongInt, Names.PLongInt));
+            RegisterSystemType(new PointerType(Ids.PFixedInt, Ids.FixedInt, Names.PFixedInt));
+            RegisterSystemType(new PointerType(Ids.PUInt64, Ids.UInt64Type, Names.PUInt64));
+            RegisterSystemType(new PointerType(Ids.PInt64, Ids.Int64Type, Names.PInt64));
+            RegisterSystemType(new PointerType(Ids.PNativeUInt, Ids.NativeUInt, Names.PNativeUInt));
+            RegisterSystemType(new PointerType(Ids.PNativeInt, Ids.NativeInt, Names.PNativeInt));
+            RegisterSystemType(new PointerType(Ids.PSingle, Ids.SingleType, Names.PSingle));
+            RegisterSystemType(new PointerType(Ids.PDouble, Ids.DoubleType, Names.PDouble));
+            RegisterSystemType(new PointerType(Ids.PExtended, Ids.Extended, Names.PExtended));
+            RegisterSystemType(new PointerType(Ids.PAnsiChar, Ids.AnsiCharType, Names.PAnsiChar));
+            RegisterSystemType(new PointerType(Ids.PWideChar, Ids.WideCharType, Names.PWideChar));
+            RegisterSystemType(new PointerType(Ids.PAnsiString, Ids.AnsiStringType, Names.PAnsiString));
+            RegisterSystemType(new PointerType(Ids.PRawByteString, Ids.RawByteString, Names.PRawByteString));
+            RegisterSystemType(new PointerType(Ids.PUnicodeString, Ids.UnicodeStringType, Names.PUnicodeString));
+            RegisterSystemType(new PointerType(Ids.PShortString, Ids.ShortStringType, Names.PShortString));
+            RegisterSystemType(new PointerType(Ids.PWideString, Ids.WideStringType, Names.PWideString));
+            RegisterSystemType(new PointerType(Ids.PBoolean, Ids.BooleanType, Names.PBoolean));
+            RegisterSystemType(new PointerType(Ids.PLongBool, Ids.LongBoolType, Names.PLongBool));
+            RegisterSystemType(new PointerType(Ids.PWordBool, Ids.WordBoolType, Names.PWordBool));
+            RegisterSystemType(new PointerType(Ids.PPointer, Ids.GenericPointer, Names.PPointer));
+            RegisterSystemType(new PointerType(Ids.PCurrency, Ids.Currency, Names.PCurrency));
         }
 
         /// <summary>

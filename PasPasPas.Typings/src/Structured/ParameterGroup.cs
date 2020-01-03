@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Serialization;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -25,6 +26,25 @@ namespace PasPasPas.Typings.Structured {
         }
 
         /// <summary>
+        ///     read a parameter group from a byte array
+        /// </summary>
+        /// <param name="params"></param>
+        public ParameterGroup(ImmutableArray<byte> @params, ITypeRegistry types) {
+            RoutineKind = @params[0].ToProcedureKind();
+
+            var iri = @params[1].ToIntrinsicRoutineId();
+
+            if (iri != IntrinsicRoutineId.Unknown) {
+                Routine = types.GetIntrinsicRoutine(iri);
+            }
+            else {
+                Routine = default;
+            }
+
+            ResultType = default;
+        }
+
+        /// <summary>
         ///     result type
         /// </summary>
         public ITypeReference ResultType { get; set; }
@@ -32,8 +52,8 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     symbols
         /// </summary>
-        public IDictionary<string, Reference> Symbols { get; }
-            = new Dictionary<string, Reference>(StringComparer.OrdinalIgnoreCase);
+        public IDictionary<string, Globals.Types.Reference> Symbols { get; }
+            = new Dictionary<string, Globals.Types.Reference>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         ///     routine parameters
@@ -53,7 +73,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     code
         /// </summary>
-        public ImmutableArray<IOpCode> Code { get; internal set; }
+        public ImmutableArray<OpCode> Code { get; set; }
 
         /// <summary>
         ///     routine kind
@@ -126,6 +146,13 @@ namespace PasPasPas.Typings.Structured {
 
                 return new Signature(ResultType, runtime.ListPools.GetFixedArray(list));
             }
+        }
+
+        public ImmutableArray<byte> Encode() {
+            var result = new byte[2];
+            result[0] = RoutineKind.ToByte();
+            result[1] = Routine.RoutineId.ToByte();
+            return ImmutableArray.Create<byte>(result);
         }
     }
 }

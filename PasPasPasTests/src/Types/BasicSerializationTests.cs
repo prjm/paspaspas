@@ -4,7 +4,6 @@ using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Runtime.Values;
-using PasPasPas.Typings.OpCodes;
 using PasPasPas.Typings.Serialization;
 using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
@@ -488,7 +487,7 @@ namespace PasPasPasTests.Types {
                 var rr = u.Symbols["writeln"].Symbol as IRoutine;
                 var parms = new ParameterGroup(rr, PK.Procedure, env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType));
                 var callInfo = new IntrinsicInvocationResult(rr, parms);
-                var op = new CallOpCode(callInfo);
+                var op = new OpCode(OpCodeId.Call, parms.Encode());
                 var t = new OpCodeTag();
                 t.Initialize(op);
                 w.WriteTag(t);
@@ -498,8 +497,8 @@ namespace PasPasPasTests.Types {
                 r.ReadTag(t);
 
                 Assert.AreEqual(t.OpCode.Id, OpCodeId.Call);
-                var c = t.OpCode as CallOpCode;
-                Assert.AreEqual(c.CallInfo.Routine.RoutineId, IntrinsicRoutineId.WriteLn);
+                var c = new ParameterGroup(t.OpCode.Params, env.TypeRegistry);
+                Assert.AreEqual(c.Routine.RoutineId, IntrinsicRoutineId.WriteLn);
             }
         }
 

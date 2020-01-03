@@ -217,6 +217,148 @@
         /// </summary>
         public const string PByte = "PByte";
 
+        /// <summary>
+        ///     pointer to short int type
+        /// </summary>
+        public const string PShortInt = "PShortInt";
+
+        /// <summary>
+        ///     pointer to word type
+        /// </summary>
+        public const string PWord = "PWord";
+
+        /// <summary>
+        ///     pointer to small int type
+        /// </summary>
+        public const string PSmallInt = "PSmallInt";
+
+        /// <summary>
+        ///     pointer to cardinal type
+        /// </summary>
+        public const string PCardinal = "PCardinal";
+
+        /// <summary>
+        ///     pointer to longword
+        /// </summary>
+        public const string PLongword = "PLongword";
+
+        /// <summary>
+        ///     pointer to fixed unsigned integer
+        /// </summary>
+        public const string PFixedUint = "PFixedUInt";
+
+        /// <summary>
+        ///     pointer to an integer
+        /// </summary>
+        public const string PInteger = "PInteger";
+
+        /// <summary>
+        ///     pointer to a long integer
+        /// </summary>
+        public const string PLongInt = "PLongInt";
+
+        /// <summary>
+        ///     pointer to a fixed integer
+        /// </summary>
+        public const string PFixedInt = "PFixedInt";
+
+        /// <summary>
+        ///     pointer to 64 bit unsigned integer
+        /// </summary>
+        public const string PUInt64 = "PUInt64";
+
+        /// <summary>
+        ///     pointer to 64 bit integer
+        /// </summary>
+        public const string PInt64 = "PInt64";
+
+        /// <summary>
+        ///     pointer to a native integer
+        /// </summary>
+        public const string PNativeInt = "PNativeInt";
+
+        /// <summary>
+        ///     pointer to a native unsigned integer
+        /// </summary>
+        public const string PNativeUInt = "PNativeUInt";
+
+        /// <summary>
+        ///     pointer to a single floating point value
+        /// </summary>
+        public const string PSingle = "PSingle";
+
+        /// <summary>
+        ///     pointer to a double floating point value
+        /// </summary>
+        public const string PDouble = "PDouble";
+
+        /// <summary>
+        ///     pointer to a extended floating point value
+        /// </summary>
+        public const string PExtended = "PExtended";
+
+        /// <summary>
+        ///     pointer to an ANSI char
+        /// </summary>
+        public const string PAnsiChar = "PAnsiChar";
+
+        /// <summary>
+        ///     pointer to a wide char
+        /// </summary>
+        public const string PWideChar = "PWideChar";
+
+        /// <summary>
+        ///     pointer to a boolean
+        /// </summary>
+        public const string PBoolean = "PBoolean";
+
+        /// <summary>
+        ///     pointer to a long boolean
+        /// </summary>
+        public const string PLongBool = "PLongBool";
+
+        /// <summary>
+        ///     pointer to a word boolean
+        /// </summary>
+        public const string PWordBool = "PWordBool";
+
+        /// <summary>
+        ///     generic pointer to a pointer
+        /// </summary>
+        public const string PPointer = "PPointer";
+
+        /// <summary>
+        ///     pointer to a currency value
+        /// </summary>
+        public const string PCurrency = "PCurrency";
+
+        /// <summary>
+        ///     pointer to a wide string
+        /// </summary>
+        public const string PWideString = "PWideString";
+
+        /// <summary>
+        ///     pointer to a raw byte string
+        /// </summary>
+        public const string PRawByteString = "PRawByteString";
+
+        /// <summary>
+        ///     pointer to a UNICODE string
+        /// </summary>
+        public const string PUnicodeString = "PUnicodeString";
+
+        /// <summary>
+        ///     pointer to short string
+        /// </summary>
+        public const string PShortString = "PShortString";
+
+        /// <summary>
+        ///     pointer to ANIS string
+        /// </summary>
+        public const string PAnsiString = "PAnsiString";
+
+
+
         #endregion
         #region Short Type names
 
@@ -324,13 +466,6 @@
         ///     shorthand for pointer type
         /// </summary>
         public const string P = "p";
-        public static string PShortInt = "PShortInt";
-        public static string PWord = "PWord";
-        public static string PSmallInt = "PSmallInt";
-        public static string PCardinal = "PCardinal";
-        public static string PLongword = "PLongword";
-        public static string PFixedUint = "PFixedUInt";
-        public static string PInteger = "PInteger";
 
         #endregion
 

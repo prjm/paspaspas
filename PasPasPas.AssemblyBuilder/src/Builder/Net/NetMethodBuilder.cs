@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection.Emit;
 using PasPasPas.AssemblyBuilder.Builder.Definitions;
+using PasPasPas.Globals.CodeGen;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.AssemblyBuilder.Builder.Net {
@@ -9,6 +11,11 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
     ///     net method builder encapsulation
     /// </summary>
     public class NetMethodBuilder : IMethodBuilder {
+
+        /// <summary>
+        ///     parameters
+        /// </summary>
+        public IParameterGroup Parameters { get; set; }
 
         /// <summary>
         ///     internal method builder
@@ -43,8 +50,36 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         /// <summary>
         ///     define the method body
         /// </summary>
-        public void DefineMethodBody()
-            => Generator = InternalBuilder.GetILGenerator();
+        public void DefineMethodBody() {
+            Generator = InternalBuilder.GetILGenerator();
+
+            if (Parameters == default)
+                return;
+
+            foreach (var instruction in Parameters.Code) {
+
+                Generator.Emit(OpCodes.Nop);
+
+                switch (instruction.Id) {
+
+                    case OpCodeId.Call:
+                        EmitCall(instruction);
+                        break;
+
+
+                    default:
+                        throw new InvalidOperationException();
+
+                }
+
+            }
+        }
+
+        private void EmitCall(Globals.CodeGen.OpCode instruction) {
+            var c = Type.GetType("System.Console, mscorlib");
+            var m = c.GetMethod("WriteLine", Array.Empty<Type>());
+            Generator.Emit(OpCodes.Call, m);
+        }
 
         /// <summary>
         ///     finish the method definition

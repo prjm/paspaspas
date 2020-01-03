@@ -29,7 +29,7 @@ namespace SampleRunner.Scenarios {
 #else
                 var crt = new Lokad.ILPack.AssemblyGenerator();
 
-                crt.GenerateAssembly(asm.GeneratedAssembly, @"C:\temp\demo.dll");
+                crt.GenerateAssembly(asm.GeneratedAssembly, @"D:\temp\demo.dll");
                 b.WriteLine("Test assembly created.");
 
 #endif

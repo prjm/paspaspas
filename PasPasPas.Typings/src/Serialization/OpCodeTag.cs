@@ -1,9 +1,6 @@
-﻿using System;
+﻿using System.Collections.Immutable;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
-using PasPasPas.Typings.OpCodes;
-using PasPasPas.Typings.Routines;
 
 namespace PasPasPas.Typings.Serialization {
 
@@ -24,7 +21,7 @@ namespace PasPasPas.Typings.Serialization {
         /// <summary>
         ///     operation code
         /// </summary>
-        public IOpCode OpCode { get; private set; }
+        public OpCode OpCode { get; private set; }
 
         /// <summary>
         ///     read the tag
@@ -33,17 +30,12 @@ namespace PasPasPas.Typings.Serialization {
         /// <param name="typeReader"></param>
         internal override void ReadData(uint kind, TypeReader typeReader) {
             var opcodeId = typeReader.ReadByte().ToOpCodeId();
+            var paramLength = (int)typeReader.ReadUint();
+            var parms = new byte[paramLength];
+            for (var i = 0; i < paramLength; i++)
+                parms[i] = typeReader.ReadByte();
 
-            switch (opcodeId) {
-
-                case OpCodeId.Call:
-                    ReadCallOpCode(typeReader);
-                    break;
-
-                default:
-                    throw new InvalidOperationException(opcodeId.ToString());
-
-            }
+            OpCode = new OpCode(opcodeId, ImmutableArray.Create(parms));
         }
 
         /// <summary>
@@ -52,47 +44,16 @@ namespace PasPasPas.Typings.Serialization {
         /// <param name="typeWriter"></param>
         internal override void WriteData(TypeWriter typeWriter) {
             typeWriter.WriteByte(OpCode.Id.ToByte());
-
-            switch (OpCode) {
-                case CallOpCode call:
-                    WriteCallOpCode(typeWriter, call);
-                    break;
-
-                default:
-                    throw new InvalidOperationException(OpCode.OpCodeText);
-            }
-        }
-
-        private void WriteCallOpCode(TypeWriter typeWriter, CallOpCode call) {
-            var invocResult = call.CallInfo;
-
-            if (invocResult.Routine.RoutineId == Globals.Runtime.IntrinsicRoutineId.Unknown)
-                throw new InvalidOperationException();
-
-            var iroutine = invocResult.Routine as IntrinsicRoutine;
-            var iresult = invocResult as IIntrinsicInvocationResult;
-            typeWriter.WriteByte(iroutine.RoutineId.ToByte());
-            parms.Initialize(iresult.Parameters);
-            typeWriter.WriteTag(parms);
-        }
-
-        private void ReadCallOpCode(TypeReader reader) {
-            var routineId = reader.ReadByte().ToIntrinsicRoutineId();
-
-            if (routineId == IntrinsicRoutineId.Unknown)
-                throw new InvalidOperationException();
-
-            var routine = reader.Types.GetIntrinsicRoutine(routineId);
-            reader.ReadTag(parms);
-            var invocResult = reader.Types.Runtime.Types.MakeInvocationResultFromIntrinsic(routine, parms.ToParameterGroup(routine));
-            OpCode = new CallOpCode(invocResult);
+            typeWriter.WriteUint((uint)OpCode.Params.Length);
+            for (var i = 0; i < OpCode.Params.Length; i++)
+                typeWriter.WriteByte(OpCode.Params[i]);
         }
 
         /// <summary>
         ///     initialize with a given op code
         /// </summary>
         /// <param name="op"></param>
-        internal void Initialize(IOpCode op)
+        internal void Initialize(OpCode op)
             => OpCode = op;
     }
 }

@@ -15,7 +15,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="withId">type id</param>
         /// <param name="baseType">base type id</param>
         /// <param name="longTypeName">pointer type name</param>
-        public PointerType(int withId, int baseType, string longTypeName = "") : base(withId) {
+        public PointerType(int withId, int baseType, string longTypeName) : base(withId) {
             BaseTypeId = baseType;
             LongName = longTypeName;
         }

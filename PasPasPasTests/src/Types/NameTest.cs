@@ -106,6 +106,23 @@
             Assert.AreEqual(("PLongword", "pui"), g(KTI.PLongword));
             Assert.AreEqual(("PFixedUInt", "pui"), g(KTI.PFixedUint));
             Assert.AreEqual(("PInteger", "pi"), g(KTI.PInteger));
+            Assert.AreEqual(("PLongInt", "pi"), g(KTI.PLongInt));
+            Assert.AreEqual(("PFixedInt", "pi"), g(KTI.PFixedInt));
+            Assert.AreEqual(("PUInt64", "puj"), g(KTI.PUInt64));
+            Assert.AreEqual(("PInt64", "pj"), g(KTI.PInt64));
+            Assert.AreEqual(("PNativeInt", "pi"), g(KTI.PNativeInt));
+            Assert.AreEqual(("PNativeUInt", "pui"), g(KTI.PNativeUInt));
+            Assert.AreEqual(("PAnsiChar", "pc"), g(KTI.PAnsiChar));
+            Assert.AreEqual(("PWideChar", "pb"), g(KTI.PWideChar));
+            Assert.AreEqual(("PBoolean", "po"), g(KTI.PBoolean));
+            Assert.AreEqual(("PWordBool", "pus"), g(KTI.PWordBool));
+            Assert.AreEqual(("PLongBool", "pi"), g(KTI.PLongBool));
+            Assert.AreEqual(("PPointer", "ppv"), g(KTI.PPointer));
+            Assert.AreEqual(("PCurrency", "pSystem@Currency"), g(KTI.PCurrency));
+            Assert.AreEqual(("PWideString", "pSystem@WideString"), g(KTI.PWideString));
+            Assert.AreEqual(("PUnicodeString", "pSystem@UnicodeString"), g(KTI.PUnicodeString));
+            Assert.AreEqual(("PShortString", "pSystem@%SmallString$uc$i255$%"), g(KTI.PShortString));
+            Assert.AreEqual(("PRawByteString", "p%AnsiStringT$us$i65535$%"), g(KTI.PRawByteString));
         }
 
     }

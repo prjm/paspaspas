@@ -4,7 +4,6 @@ using System.Collections.Immutable;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.OpCodes;
 
 namespace PasPasPas.Typings.Common {
 
@@ -19,7 +18,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="pools"></param>
         public CodeBlockBuilder(IListPools pools) {
             ListPools = pools;
-            OpCodes = pools.GetList<IOpCode>();
+            OpCodes = pools.GetList<OpCode>();
         }
 
         /// <summary>
@@ -30,7 +29,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     generated op codes
         /// </summary>
-        public IPoolItem<List<IOpCode>> OpCodes { get; private set; }
+        public IPoolItem<List<OpCode>> OpCodes { get; private set; }
 
         private bool disposedValue = false; // To detect redundant calls
 
@@ -60,7 +59,7 @@ namespace PasPasPas.Typings.Common {
         ///     create a fixed code array
         /// </summary>
         /// <returns></returns>
-        public ImmutableArray<IOpCode> CreateCodeArray()
+        public ImmutableArray<OpCode> CreateCodeArray()
             => ListPools.GetFixedArray(OpCodes);
 
         /// <summary>
@@ -68,6 +67,6 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="callInfo"></param>
         public void AddCall(IInvocationResult callInfo)
-            => OpCodes.Add(new CallOpCode(callInfo));
+            => OpCodes.Add(new OpCode(OpCodeId.Call));
     }
 }
