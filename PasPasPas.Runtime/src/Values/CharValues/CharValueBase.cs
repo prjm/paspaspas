@@ -25,7 +25,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public abstract ITypeReference CharAt(int index);
+        public abstract IOldTypeReference CharAt(int index);
 
         /// <summary>
         ///     convert this char to a string
@@ -96,6 +96,6 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public abstract ITypeReference GetOrdinalValue(ITypeRegistry types);
+        public abstract IOldTypeReference GetOrdinalValue(ITypeRegistry types);
     }
 }

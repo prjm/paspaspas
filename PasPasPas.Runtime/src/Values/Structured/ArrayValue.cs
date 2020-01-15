@@ -16,7 +16,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="baseTypeId"></param>
         /// <param name="constantValues"></param>
         /// <param name="typeId"></param>
-        public ArrayValue(int typeId, int baseTypeId, ImmutableArray<ITypeReference> constantValues) {
+        public ArrayValue(int typeId, int baseTypeId, ImmutableArray<IOldTypeReference> constantValues) {
             TypeId = typeId;
             BaseType = baseTypeId;
             Values = constantValues;
@@ -30,7 +30,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <summary>
         ///     constant values
         /// </summary>
-        public ImmutableArray<ITypeReference> Values { get; }
+        public ImmutableArray<IOldTypeReference> Values { get; }
 
         /// <summary>
         ///     type id

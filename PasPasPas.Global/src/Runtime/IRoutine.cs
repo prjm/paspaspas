@@ -19,7 +19,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     result type
         /// </summary>
-        ITypeReference ResultType { get; }
+        IOldTypeReference ResultType { get; }
 
         /// <summary>
         ///     parameters

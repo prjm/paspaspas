@@ -15,13 +15,13 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="values"></param>
-        public SetValue(int typeId, ImmutableArray<ITypeReference> values) : base(typeId)
+        public SetValue(int typeId, ImmutableArray<IOldTypeReference> values) : base(typeId)
             => Values = values.ToImmutableHashSet();
 
         /// <summary>
         ///     set values
         /// </summary>
-        public IImmutableSet<ITypeReference> Values { get; }
+        public IImmutableSet<IOldTypeReference> Values { get; }
 
         /// <summary>
         ///     internal type format

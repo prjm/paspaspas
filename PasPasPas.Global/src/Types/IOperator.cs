@@ -32,7 +32,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="input">operator input - type reference or constant</param>
         /// <returns>operator result - type reference or constant</returns>
-        ITypeReference EvaluateOperator(Signature input);
+        IOldTypeReference EvaluateOperator(Signature input);
 
     }
 }

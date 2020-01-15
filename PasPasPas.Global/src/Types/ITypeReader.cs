@@ -18,6 +18,6 @@ namespace PasPasPas.Globals.Types {
         ///     read a constant value
         /// </summary>
         /// <returns></returns>
-        ITypeReference ReadConstant();
+        IOldTypeReference ReadConstant();
     }
 }

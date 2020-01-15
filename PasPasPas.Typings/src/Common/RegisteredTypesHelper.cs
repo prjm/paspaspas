@@ -287,7 +287,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="left">left type reference</param>
         /// <param name="right">right type reference</param>
         /// <returns>operator id</returns>
-        public static int GetOperatorId(this ITypeRegistry typeRegistry, ExpressionKind kind, ITypeReference left, ITypeReference right) {
+        public static int GetOperatorId(this ITypeRegistry typeRegistry, ExpressionKind kind, IOldTypeReference left, IOldTypeReference right) {
             var leftType = left.TypeKind;
             var rightType = right.TypeKind;
 
@@ -391,7 +391,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="lowerBound">lower bound of the subrange</param>
         /// <param name="upperBound">upper bound of the subrange type</param>
         /// <returns></returns>
-        public static int GetTypeForSubrangeType(this ITypeRegistry types, ITypeReference lowerBound, ITypeReference upperBound) {
+        public static int GetTypeForSubrangeType(this ITypeRegistry types, IOldTypeReference lowerBound, IOldTypeReference upperBound) {
             var left = lowerBound.TypeKind;
             var right = upperBound.TypeKind;
 
@@ -446,7 +446,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="baseType"></param>
         /// <param name="elementType"></param>
         /// <returns></returns>
-        public static ITypeReference GetBaseTypeForArrayOrSet(this ITypeRegistry types, ITypeReference baseType, ITypeReference elementType) {
+        public static IOldTypeReference GetBaseTypeForArrayOrSet(this ITypeRegistry types, IOldTypeReference baseType, IOldTypeReference elementType) {
             if (elementType == default)
                 baseType = types.Runtime.Types.MakeErrorTypeReference();
             else if (baseType == default)
@@ -472,7 +472,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="right"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        public static ITypeReference GetMatchingSetType(this ITypeRegistry types, ITypeReference left, ITypeReference right) {
+        public static IOldTypeReference GetMatchingSetType(this ITypeRegistry types, IOldTypeReference left, IOldTypeReference right) {
             var baseType = types.GetMatchingSetBaseType(left, right, out var newType);
             if (baseType == KnownTypeIds.ErrorType)
                 return types.Runtime.Types.MakeErrorTypeReference();
@@ -492,7 +492,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool HaveSetsCommonBaseType(this ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right) {
+        public static bool HaveSetsCommonBaseType(this ITypeRegistry typeRegistry, IOldTypeReference left, IOldTypeReference right) {
             var baseType = typeRegistry.GetMatchingSetBaseType(left, right, out var _);
             return baseType != KnownTypeIds.ErrorType;
         }
@@ -505,7 +505,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeRegistry"></param>
         /// <param name="requireNewType"></param>
         /// <returns></returns>
-        public static int GetMatchingSetBaseType(this ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right, out bool requireNewType) {
+        public static int GetMatchingSetBaseType(this ITypeRegistry typeRegistry, IOldTypeReference left, IOldTypeReference right, out bool requireNewType) {
             requireNewType = false;
 
             if (!(typeRegistry.GetTypeByIdOrUndefinedType(left.TypeId) is ISetType leftType))

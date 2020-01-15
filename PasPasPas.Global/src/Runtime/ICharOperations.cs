@@ -11,7 +11,7 @@
         /// <param name="character">Unicode character (16 bits)</param>
         /// <param name="typeId">type id</param>
         /// <returns></returns>
-        ITypeReference ToWideCharValue(int typeId, char character);
+        IOldTypeReference ToWideCharValue(int typeId, char character);
 
         /// <summary>
         ///     convert a ANSI char to a runtime value object
@@ -19,6 +19,6 @@
         /// <param name="character">ANSI character (8 bits)</param>
         /// <param name="typeId">type id</param>
         /// <returns></returns>
-        ITypeReference ToAnsiCharValue(int typeId, byte character);
+        IOldTypeReference ToAnsiCharValue(int typeId, byte character);
     }
 }

@@ -24,6 +24,6 @@ namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
         /// </summary>
         /// <param name="symbolName">variable name</param>
         /// <param name="typeInfo">type info</param>
-        void DefineClassVariable(string symbolName, ITypeReference typeInfo);
+        void DefineClassVariable(string symbolName, IOldTypeReference typeInfo);
     }
 }

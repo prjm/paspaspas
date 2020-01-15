@@ -8,7 +8,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
     /// </summary>
     public class StringOperations : IStringOperations {
 
-        private readonly ITypeReference invalidString
+        private readonly IOldTypeReference invalidString
             = new SpecialValue(SpecialConstantKind.InvalidString);
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public ITypeReference ToUnicodeString(string text)
+        public IOldTypeReference ToUnicodeString(string text)
             => new UnicodeStringValue(KnownTypeIds.UnicodeStringType, text);
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public ITypeReference Concat(ITypeReference value1, ITypeReference value2) {
+        public IOldTypeReference Concat(IOldTypeReference value1, IOldTypeReference value2) {
             if (value1 is IStringValue string1 && value2 is IStringValue string2) {
 
                 if (value2 is EmptyStringValue)
@@ -58,7 +58,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference Equal(ITypeReference left, ITypeReference right) {
+        public IOldTypeReference Equal(IOldTypeReference left, IOldTypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return Booleans.ToBoolean(StringValueBase.Equal(string1, string2), KnownTypeIds.BooleanType);
             else
@@ -71,7 +71,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference GreaterThen(ITypeReference left, ITypeReference right) {
+        public IOldTypeReference GreaterThen(IOldTypeReference left, IOldTypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return Booleans.ToBoolean(StringValueBase.GreaterThen(string1, string2), KnownTypeIds.BooleanType);
             else
@@ -84,7 +84,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference GreaterThenEqual(ITypeReference left, ITypeReference right) {
+        public IOldTypeReference GreaterThenEqual(IOldTypeReference left, IOldTypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return Booleans.ToBoolean(StringValueBase.GreaterThenEqual(string1, string2), KnownTypeIds.BooleanType);
             else
@@ -97,7 +97,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference LessThen(ITypeReference left, ITypeReference right) {
+        public IOldTypeReference LessThen(IOldTypeReference left, IOldTypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return Booleans.ToBoolean(StringValueBase.LessThen(string1, string2), KnownTypeIds.BooleanType);
             else
@@ -110,7 +110,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference LessThenOrEqual(ITypeReference left, ITypeReference right) {
+        public IOldTypeReference LessThenOrEqual(IOldTypeReference left, IOldTypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return Booleans.ToBoolean(StringValueBase.LessThenOrEqual(string1, string2), KnownTypeIds.BooleanType);
             else
@@ -124,7 +124,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference NotEquals(ITypeReference left, ITypeReference right) {
+        public IOldTypeReference NotEquals(IOldTypeReference left, IOldTypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return Booleans.ToBoolean(StringValueBase.NotEquals(string1, string2), KnownTypeIds.BooleanType);
             else
@@ -136,7 +136,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public ITypeReference ToAnsiString(string text)
+        public IOldTypeReference ToAnsiString(string text)
             => new AnsiStringValue(KnownTypeIds.AnsiStringType, text);
 
         /// <summary>
@@ -144,14 +144,14 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public ITypeReference ToShortString(string text)
+        public IOldTypeReference ToShortString(string text)
             => new ShortStringValue(KnownTypeIds.ShortStringType, text);
 
         /// <summary>
         ///     get the empty string value
         /// </summary>
         /// <returns></returns>
-        public ITypeReference EmptyString { get; }
+        public IOldTypeReference EmptyString { get; }
             = new EmptyStringValue(KnownTypeIds.UnicodeStringType);
     }
 }

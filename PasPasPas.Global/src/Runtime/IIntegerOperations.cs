@@ -12,22 +12,22 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     invalid integer
         /// </summary>
-        ITypeReference Invalid { get; }
+        IOldTypeReference Invalid { get; }
 
         /// <summary>
         ///     integer overflow
         /// </summary>
-        ITypeReference Overflow { get; }
+        IOldTypeReference Overflow { get; }
 
         /// <summary>
         ///     zero value
         /// </summary>
-        ITypeReference Zero { get; }
+        IOldTypeReference Zero { get; }
 
         /// <summary>
         ///     one value
         /// </summary>
-        ITypeReference One { get; }
+        IOldTypeReference One { get; }
 
         /// <summary>
         ///     integer division
@@ -35,7 +35,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="dividend"></param>
         /// <param name="divisor"></param>
         /// <returns></returns>
-        ITypeReference Divide(ITypeReference dividend, ITypeReference divisor);
+        IOldTypeReference Divide(IOldTypeReference dividend, IOldTypeReference divisor);
 
         /// <summary>
         ///     integer remainder
@@ -43,7 +43,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="dividend"></param>
         /// <param name="divisor"></param>
         /// <returns></returns>
-        ITypeReference Modulo(ITypeReference dividend, ITypeReference divisor);
+        IOldTypeReference Modulo(IOldTypeReference dividend, IOldTypeReference divisor);
 
         /// <summary>
         ///     swap high and low bit
@@ -51,28 +51,28 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="parameter"></param>
         /// <param name="types">type registry</param>
         /// <returns></returns>
-        ITypeReference Swap(ITypeReference parameter, ITypeRegistry types);
+        IOldTypeReference Swap(IOldTypeReference parameter, ITypeRegistry types);
 
         /// <summary>
         ///     <c>hi</c> function: return the upper byte from a 16 bit value
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>
-        ITypeReference Hi(ITypeReference typeReference);
+        IOldTypeReference Hi(IOldTypeReference typeReference);
 
         /// <summary>
         ///     <c>chr</c> function: return a character for a given integer value
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>
-        ITypeReference Chr(ITypeReference typeReference);
+        IOldTypeReference Chr(IOldTypeReference typeReference);
 
         /// <summary>
         ///     <c>ki</c> function
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>
-        ITypeReference Lo(ITypeReference typeReference);
+        IOldTypeReference Lo(IOldTypeReference typeReference);
 
         /// <summary>
         ///     shift left
@@ -80,7 +80,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="firstOperand"></param>
         /// <param name="secondOperand"></param>
         /// <returns></returns>
-        ITypeReference Shl(ITypeReference firstOperand, ITypeReference secondOperand);
+        IOldTypeReference Shl(IOldTypeReference firstOperand, IOldTypeReference secondOperand);
 
         /// <summary>
         ///     shift right
@@ -88,21 +88,21 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="firstOperand"></param>
         /// <param name="secondOperand"></param>
         /// <returns></returns>
-        ITypeReference Shr(ITypeReference firstOperand, ITypeReference secondOperand);
+        IOldTypeReference Shr(IOldTypeReference firstOperand, IOldTypeReference secondOperand);
 
         /// <summary>
         ///     increment a value
         /// </summary>
         /// <param name="value">value to increment</param>
         /// <returns>incremented value</returns>
-        ITypeReference Increment(ITypeReference value);
+        IOldTypeReference Increment(IOldTypeReference value);
 
         /// <summary>
         ///     absolute value of a value
         /// </summary>
         /// <param name="value">value to increment</param>
         /// <returns>incremented value</returns>
-        ITypeReference Abs(ITypeReference value);
+        IOldTypeReference Abs(IOldTypeReference value);
 
     }
 }

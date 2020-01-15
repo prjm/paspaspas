@@ -21,7 +21,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     get the type id
         /// </summary>
-        public ITypeReference TypeInfo
+        public IOldTypeReference TypeInfo
             => TypeRegistry.MakeTypeInstanceReference(TypeId);
 
         /// <summary>

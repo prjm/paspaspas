@@ -37,7 +37,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static ITypeReference GetIntegerValue(sbyte number)
+        protected static IOldTypeReference GetIntegerValue(sbyte number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static ITypeReference GetIntegerValue(byte number)
+        protected static IOldTypeReference GetIntegerValue(byte number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static ITypeReference GetIntegerValue(short number)
+        protected static IOldTypeReference GetIntegerValue(short number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static ITypeReference GetIntegerValue(ushort number)
+        protected static IOldTypeReference GetIntegerValue(ushort number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static ITypeReference GetIntegerValue(int number)
+        protected static IOldTypeReference GetIntegerValue(int number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -78,14 +78,14 @@ namespace PasPasPasTests.Common {
         /// <param name="typeId"></param>
         /// <param name="typeKind"></param>
         /// <returns></returns>
-        protected static ITypeReference GetUnkownValue(int typeId, CommonTypeKind typeKind)
+        protected static IOldTypeReference GetUnkownValue(int typeId, CommonTypeKind typeKind)
             => MakeRuntime().Types.MakeTypeInstanceReference(typeId, typeKind);
 
         /// <summary>
         ///     make a invocation value
         /// </summary>
         /// <returns></returns>
-        protected static ITypeReference GetInvocationValue(int typeId, CommonTypeKind typeKind) {
+        protected static IOldTypeReference GetInvocationValue(int typeId, CommonTypeKind typeKind) {
             var fakeRoutine = new RoutineGroup(default, default);
             var _ = fakeRoutine.AddParameterGroup(RoutineKind.Function, GetUnkownValue(typeId, typeKind));
             return MakeRuntime().Types.MakeInvocationResult(fakeRoutine, 0);
@@ -97,7 +97,7 @@ namespace PasPasPasTests.Common {
         /// <param name="typeId"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        protected static ITypeReference GetSubrangeValue(int typeId, ITypeReference value)
+        protected static IOldTypeReference GetSubrangeValue(int typeId, IOldTypeReference value)
             => new SubrangeValue(typeId, value);
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        protected static ITypeReference GetPointerValue(ITypeReference address)
+        protected static IOldTypeReference GetPointerValue(IOldTypeReference address)
             => MakeRuntime().Types.MakePointerValue(KnownTypeIds.UntypedPointer, address);
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        protected static ITypeReference GetUnicodeStringValue(string text)
+        protected static IOldTypeReference GetUnicodeStringValue(string text)
             => MakeRuntime().Strings.ToUnicodeString(text);
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace PasPasPasTests.Common {
         /// <param name="baseTypeId"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        protected static ITypeReference GetArrayValue(int typeId, int baseTypeId, params ITypeReference[] values)
+        protected static IOldTypeReference GetArrayValue(int typeId, int baseTypeId, params IOldTypeReference[] values)
             => MakeRuntime().Structured.CreateArrayValue(typeId, baseTypeId, values.ToImmutableArray());
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        protected static ITypeReference GetAnsiStringValue(string text)
+        protected static IOldTypeReference GetAnsiStringValue(string text)
             => MakeRuntime().Strings.ToAnsiString(text);
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        protected static ITypeReference GetShortStringValue(string text)
+        protected static IOldTypeReference GetShortStringValue(string text)
             => MakeRuntime().Strings.ToShortString(text);
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        protected static ITypeReference GetWideCharValue(char text)
+        protected static IOldTypeReference GetWideCharValue(char text)
             => MakeRuntime().Chars.ToWideCharValue(KnownTypeIds.WideCharType, text);
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        protected static ITypeReference GetAnsiCharValue(byte text)
+        protected static IOldTypeReference GetAnsiCharValue(byte text)
             => MakeRuntime().Chars.ToAnsiCharValue(KnownTypeIds.AnsiCharType, text);
 
 
@@ -165,7 +165,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static ITypeReference GetIntegerValue(uint number)
+        protected static IOldTypeReference GetIntegerValue(uint number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
 
@@ -174,7 +174,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static ITypeReference GetIntegerValue(long number)
+        protected static IOldTypeReference GetIntegerValue(long number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static ITypeReference GetIntegerValue(ulong number)
+        protected static IOldTypeReference GetIntegerValue(ulong number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number">number</param>
         /// <returns>number value</returns>
-        protected static ITypeReference GetExtendedValue(in ExtF80 number)
+        protected static IOldTypeReference GetExtendedValue(in ExtF80 number)
             => MakeRuntime().RealNumbers.ToExtendedValue(KnownTypeIds.Extended, number);
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number">number</param>
         /// <returns>number value</returns>
-        protected static ITypeReference GetExtendedValue(string number)
+        protected static IOldTypeReference GetExtendedValue(string number)
             => MakeRuntime().RealNumbers.ToExtendedValue(KnownTypeIds.Extended, ExtF80.TryParse(number, out var d) ? d : ExtF80.Zero);
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        protected static ITypeReference GetBooleanValue(bool value)
+        protected static IOldTypeReference GetBooleanValue(bool value)
             => value ?
                 MakeRuntime().Booleans.TrueValue :
                 MakeRuntime().Booleans.FalseValue;
@@ -216,7 +216,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        protected static ITypeReference GetByteBooleanValue(byte value)
+        protected static IOldTypeReference GetByteBooleanValue(byte value)
             => MakeRuntime().Booleans.ToByteBool(value, KnownTypeIds.ByteBoolType);
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        protected static ITypeReference GetLongBooleanValue(uint value)
+        protected static IOldTypeReference GetLongBooleanValue(uint value)
             => MakeRuntime().Booleans.ToLongBool(value, KnownTypeIds.LongBoolType);
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        protected static ITypeReference GetWordBooleanValue(ushort value)
+        protected static IOldTypeReference GetWordBooleanValue(ushort value)
             => MakeRuntime().Booleans.ToWordBool(value, KnownTypeIds.WordBoolType);
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace PasPasPasTests.Common {
         /// <param name="typeId"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        protected static ITypeReference GetRecordValue(int typeId, params ITypeReference[] values)
+        protected static IOldTypeReference GetRecordValue(int typeId, params IOldTypeReference[] values)
             => MakeRuntime().Structured.CreateRecordValue(typeId, values.ToImmutableArray());
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace PasPasPasTests.Common {
         /// <param name="typeId"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        protected static ITypeReference GetSetValue(int typeId, params ITypeReference[] values)
+        protected static IOldTypeReference GetSetValue(int typeId, params IOldTypeReference[] values)
             => MakeRuntime().Structured.CreateSetValue(typeId, values.ToImmutableArray());
 
 

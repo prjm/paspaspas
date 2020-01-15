@@ -196,8 +196,8 @@ namespace PasPasPas.Typings.Structured {
         ///     create a constant record value from this type declaration
         /// </summary>
         /// <returns></returns>
-        public ITypeReference MakeConstant() {
-            using (var list = GetList<ITypeReference>()) {
+        public IOldTypeReference MakeConstant() {
+            using (var list = GetList<IOldTypeReference>()) {
                 foreach (var value in Fields) {
                     list.Add(value.SymbolType);
                     ((Variable)value).SymbolType = TypeRegistry.Runtime.Types.MakeTypeInstanceReference(value.SymbolType.TypeId, value.SymbolType.TypeKind);

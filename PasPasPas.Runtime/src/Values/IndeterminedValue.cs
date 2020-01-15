@@ -6,7 +6,7 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     indetermined value
     /// </summary>
-    public class IndeterminedRuntimeValue : ITypeReference, IEquatable<IndeterminedRuntimeValue> {
+    public class IndeterminedRuntimeValue : IOldTypeReference, IEquatable<IndeterminedRuntimeValue> {
 
         /// <summary>
         ///     create a new indetermined runtime value

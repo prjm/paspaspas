@@ -82,7 +82,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public override ITypeReference CharAt(int index) {
+        public override IOldTypeReference CharAt(int index) {
             if (index < 0 || index >= data.Length)
                 return new SpecialValue(SpecialConstantKind.InvalidChar);
 

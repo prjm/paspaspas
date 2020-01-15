@@ -34,7 +34,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public override uint TypeSizeInBytes {
             get {
-                ITypeReference div8(ITypeReference v)
+                IOldTypeReference div8(IOldTypeReference v)
                     => TypeRegistry.Runtime.Integers.Divide(v, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(8));
 
                 var enumType = BaseType as EnumeratedType;

@@ -5,7 +5,7 @@ namespace PasPasPas.Globals.Runtime {
     /// <summary>
     ///     interface for numerical values
     /// </summary>
-    public interface INumericalValue : ITypeReference {
+    public interface INumericalValue : IOldTypeReference {
 
         /// <summary>
         ///     test if this value is negative

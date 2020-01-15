@@ -10,7 +10,7 @@ namespace PasPasPas.Globals.Parsing {
         /// <summary>
         ///     type information
         /// </summary>
-        ITypeReference TypeInfo { get; set; }
+        IOldTypeReference TypeInfo { get; set; }
 
     }
 }

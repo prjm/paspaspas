@@ -13,7 +13,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <param name="character"></param>
         /// <param name="typeId">type id</param>
         /// <returns></returns>
-        public ITypeReference ToAnsiCharValue(int typeId, byte character)
+        public IOldTypeReference ToAnsiCharValue(int typeId, byte character)
             => new AnsiCharValue(typeId, character);
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <param name="character"></param>
         /// <param name="typeId">type id</param>
         /// <returns></returns>
-        public ITypeReference ToWideCharValue(int typeId, char character)
+        public IOldTypeReference ToWideCharValue(int typeId, char character)
             => new WideCharValue(typeId, character);
 
     }

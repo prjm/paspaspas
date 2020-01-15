@@ -16,7 +16,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     invalid real number
         /// </summary>
-        ITypeReference Invalid { get; }
+        IOldTypeReference Invalid { get; }
 
         /// <summary>
         ///     floating point division
@@ -24,7 +24,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="dividend"></param>
         /// <param name="divisor"></param>
         /// <returns></returns>
-        ITypeReference Divide(ITypeReference dividend, ITypeReference divisor);
+        IOldTypeReference Divide(IOldTypeReference dividend, IOldTypeReference divisor);
 
         /// <summary>
         ///     convert a double to the appropriate runtime constant
@@ -32,27 +32,27 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="value">parsed value</param>
         /// <param name="typeId">type id</param>
         /// <returns>constant value</returns>
-        ITypeReference ToExtendedValue(int typeId, in ExtF80 value);
+        IOldTypeReference ToExtendedValue(int typeId, in ExtF80 value);
 
         /// <summary>
         ///     absolute value
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>
-        ITypeReference Abs(ITypeReference typeReference);
+        IOldTypeReference Abs(IOldTypeReference typeReference);
 
         /// <summary>
         ///     round a real number
         /// </summary>
         /// <param name="realValue"></param>
         /// <returns></returns>
-        ITypeReference Round(ITypeReference realValue);
+        IOldTypeReference Round(IOldTypeReference realValue);
 
         /// <summary>
         ///     truncate a real number
         /// </summary>
         /// <param name="realNumberValue"></param>
         /// <returns></returns>
-        ITypeReference Trunc(IRealNumberValue realNumberValue);
+        IOldTypeReference Trunc(IRealNumberValue realNumberValue);
     }
 }

@@ -49,19 +49,19 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <returns></returns>
         public abstract override int GetHashCode();
 
-        internal static ITypeReference Multiply(INumericalValue first, INumericalValue second)
+        internal static IOldTypeReference Multiply(INumericalValue first, INumericalValue second)
             => new ExtendedValue(GetCommonTypeId(first, second), first.AsExtended * second.AsExtended);
 
-        internal static ITypeReference Divide(INumericalValue numberDividend, INumericalValue numberDivisor)
+        internal static IOldTypeReference Divide(INumericalValue numberDividend, INumericalValue numberDivisor)
             => new ExtendedValue(GetCommonTypeId(numberDividend, numberDivisor), numberDividend.AsExtended / numberDivisor.AsExtended);
 
-        internal static ITypeReference Add(INumericalValue first, INumericalValue second)
+        internal static IOldTypeReference Add(INumericalValue first, INumericalValue second)
             => new ExtendedValue(GetCommonTypeId(first, second), first.AsExtended + second.AsExtended);
 
-        internal static ITypeReference Subtract(INumericalValue first, INumericalValue second)
+        internal static IOldTypeReference Subtract(INumericalValue first, INumericalValue second)
             => new ExtendedValue(GetCommonTypeId(first, second), first.AsExtended - second.AsExtended);
 
-        internal static ITypeReference Negate(INumericalValue value)
+        internal static IOldTypeReference Negate(INumericalValue value)
             => new ExtendedValue(GetCommonTypeId(value), -value.AsExtended);
 
         internal static bool Equal(INumericalValue floatLeft, INumericalValue floatRight)
@@ -87,7 +87,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         /// <param name="floatValue"></param>
         /// <returns></returns>
-        public static ITypeReference Abs(INumericalValue floatValue) {
+        public static IOldTypeReference Abs(INumericalValue floatValue) {
             if (floatValue.IsNegative)
                 return new ExtendedValue(GetCommonTypeId(floatValue), -floatValue.AsExtended);
 

@@ -32,13 +32,13 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     true value
         /// </summary>
-        public ITypeReference HighestElement
+        public IOldTypeReference HighestElement
             => TypeRegistry.Runtime.Booleans.TrueValue;
 
         /// <summary>
         ///     false value
         /// </summary>
-        public ITypeReference LowestElement
+        public IOldTypeReference LowestElement
             => TypeRegistry.Runtime.Booleans.FalseValue;
 
         /// <summary>

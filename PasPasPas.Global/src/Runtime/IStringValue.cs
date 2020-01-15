@@ -3,7 +3,7 @@
     /// <summary>
     ///     string value
     /// </summary>
-    public interface IStringValue : ITypeReference {
+    public interface IStringValue : IOldTypeReference {
 
         /// <summary>
         ///     get string value
@@ -20,6 +20,6 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        ITypeReference CharAt(int index);
+        IOldTypeReference CharAt(int index);
     }
 }

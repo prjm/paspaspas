@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Serialization {
 
     internal partial class TypeReader {
 
-        internal ITypeReference ReadIntValue(IIntegralType typeDef) {
+        internal IOldTypeReference ReadIntValue(IIntegralType typeDef) {
 
             switch (typeDef.TypeSizeInBytes) {
                 case 1:

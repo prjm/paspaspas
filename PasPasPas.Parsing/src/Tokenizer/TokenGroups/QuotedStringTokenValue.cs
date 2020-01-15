@@ -60,7 +60,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 if (!found)
                     state.Error(MessageNumbers.IncompleteString);
 
-                ITypeReference value;
+                IOldTypeReference value;
                 if (resultBuilder.Item.Length == 1)
                     value = state.RuntimeValues.Chars.ToWideCharValue(KnownTypeIds.WideCharType, resultBuilder.Item[0]);
                 else

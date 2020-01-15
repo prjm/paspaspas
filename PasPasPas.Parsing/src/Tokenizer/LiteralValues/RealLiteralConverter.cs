@@ -10,15 +10,15 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     helper class to convert real literals
     /// </summary>
-    public class RealLiteralConverter : IILiteralParser, ILookupFunction<string, ITypeReference> {
+    public class RealLiteralConverter : IILiteralParser, ILookupFunction<string, IOldTypeReference> {
 
         private readonly IRuntimeValueFactory constantsValues;
-        private readonly LookupTable<string, ITypeReference> data;
+        private readonly LookupTable<string, IOldTypeReference> data;
 
         /// <summary>
         ///     table entries
         /// </summary>
-        public LookupTable<string, ITypeReference> Table
+        public LookupTable<string, IOldTypeReference> Table
             => data;
 
         LookupTable ILookupFunction.Table
@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         ///     create a new real literal converter
         /// </summary>
         public RealLiteralConverter(IRuntimeValueFactory constValues) {
-            data = new LookupTable<string, ITypeReference>(ConvertLiterals);
+            data = new LookupTable<string, IOldTypeReference>(ConvertLiterals);
             constantsValues = constValues;
         }
 
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public ITypeReference ConvertLiterals(string value) {
+        public IOldTypeReference ConvertLiterals(string value) {
             if (ExtF80.TryParse(value, out var realValue))
                 return constantsValues.RealNumbers.ToExtendedValue(KnownTypeIds.Extended, realValue);
             return constantsValues.RealNumbers.Invalid;
@@ -53,7 +53,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         ///     convert a parsed real number to a real literal
         /// </summary>
         /// <returns></returns>
-        public ITypeReference Parse(string input)
+        public IOldTypeReference Parse(string input)
             => data.GetValue(input);
     }
 };

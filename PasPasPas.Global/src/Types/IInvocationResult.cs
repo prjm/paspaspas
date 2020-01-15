@@ -5,7 +5,7 @@ namespace PasPasPas.Globals.Types {
     /// <summary>
     ///     result of an invocation
     /// </summary>
-    public interface IInvocationResult : ITypeReference {
+    public interface IInvocationResult : IOldTypeReference {
 
         /// <summary>
         ///     get the called routine

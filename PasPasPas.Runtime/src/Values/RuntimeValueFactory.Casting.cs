@@ -17,7 +17,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="value"></param>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        public ITypeReference Cast(ITypeRegistry types, ITypeReference value, int typeId) {
+        public IOldTypeReference Cast(ITypeRegistry types, IOldTypeReference value, int typeId) {
             var typeKind = CommonTypeKind.UnknownType;
 
             if (value.TypeId == typeId)
@@ -61,13 +61,13 @@ namespace PasPasPas.Runtime.Values {
             return Types.MakeErrorTypeReference();
         }
 
-        private ITypeReference CastSet(ITypeRegistry types, ITypeReference value, int typeId) {
+        private IOldTypeReference CastSet(ITypeRegistry types, IOldTypeReference value, int typeId) {
             var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
             typeDef = TypeBase.ResolveAlias(typeDef);
 
             if (typeDef is ISetType setType && value is SetValue setValue) {
 
-                using (var list = ListPools.GetList<ITypeReference>()) {
+                using (var list = ListPools.GetList<IOldTypeReference>()) {
                     foreach (var sourceValue in setValue.Values) {
                         var targetValue = Cast(types, sourceValue, setType.BaseTypeId);
 
@@ -84,7 +84,7 @@ namespace PasPasPas.Runtime.Values {
             return Types.MakeErrorTypeReference();
         }
 
-        private ITypeReference CastEnum(ITypeRegistry types, ITypeReference value, int typeId) {
+        private IOldTypeReference CastEnum(ITypeRegistry types, IOldTypeReference value, int typeId) {
             var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
             typeDef = TypeBase.ResolveAlias(typeDef);
 
@@ -96,7 +96,7 @@ namespace PasPasPas.Runtime.Values {
             return Types.MakeErrorTypeReference();
         }
 
-        private ITypeReference CastInteger(ITypeRegistry types, ITypeReference value, int typeId) {
+        private IOldTypeReference CastInteger(ITypeRegistry types, IOldTypeReference value, int typeId) {
 
             var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
             typeDef = TypeBase.ResolveAlias(typeDef);
@@ -144,7 +144,7 @@ namespace PasPasPas.Runtime.Values {
             return Types.MakeErrorTypeReference();
         }
 
-        private ITypeReference CastString(ITypeRegistry types, ITypeReference value, int typeId) {
+        private IOldTypeReference CastString(ITypeRegistry types, IOldTypeReference value, int typeId) {
             var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
             typeDef = TypeBase.ResolveAlias(typeDef);
 
@@ -172,7 +172,7 @@ namespace PasPasPas.Runtime.Values {
 
                 if (typeDef is IArrayType arrayType && types.GetTypeByIdOrUndefinedType(arrayType.BaseTypeId).TypeKind.IsChar()) {
 
-                    using (var values = ListPools.GetList<ITypeReference>()) {
+                    using (var values = ListPools.GetList<IOldTypeReference>()) {
 
                         for (var index = 0; index < stringValue.NumberOfCharElements; index++)
                             values.Item.Add(Cast(types, stringValue.CharAt(index), arrayType.BaseTypeId));
@@ -193,7 +193,7 @@ namespace PasPasPas.Runtime.Values {
         }
 
 
-        private ITypeReference CastChar(ITypeRegistry types, ITypeReference value, int typeId) {
+        private IOldTypeReference CastChar(ITypeRegistry types, IOldTypeReference value, int typeId) {
 
             var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
             typeDef = TypeBase.ResolveAlias(typeDef);
@@ -270,7 +270,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="value"></param>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        private ITypeReference CastBoolean(ITypeRegistry types, ITypeReference value, int typeId) {
+        private IOldTypeReference CastBoolean(ITypeRegistry types, IOldTypeReference value, int typeId) {
             var type = TypeBase.ResolveAlias(types.GetTypeByIdOrUndefinedType(typeId));
 
             if (type is ISubrangeType subrangeType) {
@@ -301,7 +301,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="value"></param>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        private ITypeReference CastArray(ITypeRegistry types, ITypeReference value, int typeId) {
+        private IOldTypeReference CastArray(ITypeRegistry types, IOldTypeReference value, int typeId) {
             var type = TypeBase.ResolveAlias(types.GetTypeByIdOrUndefinedType(typeId));
 
             if (!value.IsConstant())
@@ -315,7 +315,7 @@ namespace PasPasPas.Runtime.Values {
                     if (newBaseType.TypeId == KnownTypeIds.ErrorType)
                         return Types.MakeErrorTypeReference();
 
-                    using (var values = ListPools.GetList<ITypeReference>()) {
+                    using (var values = ListPools.GetList<IOldTypeReference>()) {
 
                         foreach (var itemValue in array.Values) {
                             values.Item.Add(Cast(types, itemValue, newBaseType.TypeId));
@@ -331,14 +331,14 @@ namespace PasPasPas.Runtime.Values {
             return Types.MakeErrorTypeReference();
         }
 
-        private ITypeReference CastRecord(ITypeRegistry types, ITypeReference value, int typeId) {
+        private IOldTypeReference CastRecord(ITypeRegistry types, IOldTypeReference value, int typeId) {
             var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
             typeDef = TypeBase.ResolveAlias(typeDef);
 
             if (!(typeDef is StructuredTypeDeclaration structType) || !types.AreRecordTypesCompatible(value.TypeId, typeId) || !(value is RecordValue record))
                 return types.Runtime.Types.MakeErrorTypeReference();
 
-            using (var list = ListPools.GetList<ITypeReference>()) {
+            using (var list = ListPools.GetList<IOldTypeReference>()) {
 
                 for (var i = 0; i < record.Values.Length; i++)
                     list.Add(Cast(types, record.Values[i], structType.Fields[i].TypeId));

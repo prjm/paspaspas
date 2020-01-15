@@ -120,7 +120,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="operatorKind"></param>
         /// <param name="operand"></param>
         /// <returns></returns>
-        private ITypeReference GetTypeOfOperator(int operatorKind, ITypeReference operand) {
+        private IOldTypeReference GetTypeOfOperator(int operatorKind, IOldTypeReference operand) {
             if (operand == null)
                 return GetErrorTypeReference(null);
 

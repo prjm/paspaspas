@@ -10,8 +10,8 @@ namespace PasPasPas.Typings.Simple {
     /// </summary>
     public class IntegralType : OrdinalTypeBase, IIntegralType {
         private readonly object lockObject = new object();
-        private ITypeReference highestElement;
-        private ITypeReference lowestElement;
+        private IOldTypeReference highestElement;
+        private IOldTypeReference lowestElement;
 
         /// <summary>
         ///     create a new type
@@ -43,7 +43,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     get the highest element
         /// </summary>
-        private ITypeReference GenerateHighestElement() {
+        private IOldTypeReference GenerateHighestElement() {
             var ints = TypeRegistry.Runtime.Integers;
 
             if (IsSigned) {
@@ -68,7 +68,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     get the highest element
         /// </summary>
-        private ITypeReference GenerateLowestElement() {
+        private IOldTypeReference GenerateLowestElement() {
             var ints = TypeRegistry.Runtime.Integers;
 
             if (!IsSigned)
@@ -89,7 +89,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     highest element
         /// </summary>
-        public ITypeReference HighestElement {
+        public IOldTypeReference HighestElement {
             get {
                 lock (lockObject) {
                     if (highestElement == default)
@@ -102,7 +102,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     lowest element
         /// </summary>
-        public ITypeReference LowestElement {
+        public IOldTypeReference LowestElement {
             get {
                 lock (lockObject) {
                     if (lowestElement == default)

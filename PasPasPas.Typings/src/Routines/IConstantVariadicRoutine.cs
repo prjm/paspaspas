@@ -13,7 +13,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        ITypeReference ExecuteCall(Signature signature);
+        IOldTypeReference ExecuteCall(Signature signature);
 
     }
 }

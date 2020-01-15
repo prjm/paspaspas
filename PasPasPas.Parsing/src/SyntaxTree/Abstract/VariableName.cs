@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     get the type id for this variable
         /// </summary>
-        public ITypeReference TypeInfo { get; set; }
+        public IOldTypeReference TypeInfo { get; set; }
 
         /// <summary>
         ///     type id

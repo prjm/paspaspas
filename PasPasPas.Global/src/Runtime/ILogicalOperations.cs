@@ -11,7 +11,7 @@
         /// <param name="firstOperand"></param>
         /// <param name="secondOperand"></param>
         /// <returns></returns>
-        ITypeReference AndOperator(ITypeReference firstOperand, ITypeReference secondOperand);
+        IOldTypeReference AndOperator(IOldTypeReference firstOperand, IOldTypeReference secondOperand);
 
         /// <summary>
         ///     <c>or</c> operation
@@ -19,7 +19,7 @@
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        ITypeReference OrOperator(ITypeReference value1, ITypeReference value2);
+        IOldTypeReference OrOperator(IOldTypeReference value1, IOldTypeReference value2);
 
         /// <summary>
         ///     <c>xor</c> operation
@@ -27,14 +27,14 @@
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        ITypeReference XorOperator(ITypeReference value1, ITypeReference value2);
+        IOldTypeReference XorOperator(IOldTypeReference value1, IOldTypeReference value2);
 
         /// <summary>
         ///     <c>not</c> operation
         /// </summary>
         /// <param name="value">value to invert</param>
         /// <returns>inverted value</returns>
-        ITypeReference NotOperator(ITypeReference value);
+        IOldTypeReference NotOperator(IOldTypeReference value);
 
     }
 }

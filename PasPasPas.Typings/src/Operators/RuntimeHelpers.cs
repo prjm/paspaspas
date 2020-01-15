@@ -16,7 +16,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="types"></param>
         /// <param name="type">type reference</param>
         /// <returns></returns>
-        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference type) {
+        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, IOldTypeReference type) {
             var typeKind = type.TypeKind;
 
             if (typeKind.IsIntegral())
@@ -41,7 +41,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="types">type registry</param>
         /// <param name="type">operand type</param>
         /// <returns></returns>
-        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference type) {
+        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, IOldTypeReference type) {
             var typeKind = type.TypeKind;
 
             if (typeKind == CommonTypeKind.BooleanType)
@@ -67,7 +67,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="leftType">left operand</param>
         /// <param name="rightType">right operand</param>
         /// <returns></returns>
-        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference leftType, ITypeReference rightType) {
+        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, IOldTypeReference leftType, IOldTypeReference rightType) {
             var left = leftType.TypeKind;
             var right = rightType.TypeKind;
 
@@ -103,7 +103,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="rightType">right operand</param>
         /// <param name="types">type registry</param>
         /// <returns></returns>
-        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference leftType, ITypeReference rightType) {
+        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, IOldTypeReference leftType, IOldTypeReference rightType) {
             var left = leftType.TypeKind;
             var right = rightType.TypeKind;
 
@@ -136,7 +136,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="leftType">left operand</param>
         /// <param name="rightType">right operand</param>
         /// <returns></returns>
-        public static IRelationalOperations GetRelationalOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference leftType, ITypeReference rightType) {
+        public static IRelationalOperations GetRelationalOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, IOldTypeReference leftType, IOldTypeReference rightType) {
             var left = leftType.TypeKind;
             var right = rightType.TypeKind;
 
@@ -195,7 +195,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="left">first operand</param>
         /// <param name="right">second operand</param>
         /// <returns><c>true</c> if the first operand is greater then the second operand</returns>
-        public static bool IsValueGreaterThen(this IRuntimeValueFactory runtime, ITypeReference left, ITypeReference right) {
+        public static bool IsValueGreaterThen(this IRuntimeValueFactory runtime, IOldTypeReference left, IOldTypeReference right) {
 
             if (!left.IsConstant())
                 return false;
@@ -248,7 +248,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="left">first operand</param>
         /// <param name="right">second operand</param>
         /// <returns></returns>
-        public static bool AreValuesUnsigned(this IRuntimeValueFactory runtime, ITypeReference left, ITypeReference right) {
+        public static bool AreValuesUnsigned(this IRuntimeValueFactory runtime, IOldTypeReference left, IOldTypeReference right) {
             if (!left.IsConstant())
                 return false;
 

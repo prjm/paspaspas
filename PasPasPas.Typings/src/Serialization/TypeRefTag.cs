@@ -22,7 +22,7 @@ namespace PasPasPas.Typings.Serialization {
         public override uint Kind
             => Constants.TypeRefTag;
 
-        public ITypeReference TypeReference { get; private set; }
+        public IOldTypeReference TypeReference { get; private set; }
 
         public TypeRefKind ToTypeRefKind(byte value)
             => (TypeRefKind)value;
@@ -30,7 +30,7 @@ namespace PasPasPas.Typings.Serialization {
         public byte ToByte(TypeRefKind value)
             => (byte)value;
 
-        internal void Initialize(ITypeReference value)
+        internal void Initialize(IOldTypeReference value)
             => TypeReference = value;
 
         internal override void ReadData(uint kind, TypeReader typeReader) {

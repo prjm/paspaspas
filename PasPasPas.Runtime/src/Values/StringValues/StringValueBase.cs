@@ -36,7 +36,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         public abstract int NumberOfCharElements { get; }
 
-        internal static ITypeReference Concat(IStringValue string1, IStringValue string2)
+        internal static IOldTypeReference Concat(IStringValue string1, IStringValue string2)
             => new UnicodeStringValue(KnownTypeIds.UnicodeStringType, string.Concat(string1.AsUnicodeString, string2.AsUnicodeString));
 
         internal static bool Equal(IStringValue string1, IStringValue string2)
@@ -79,7 +79,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public abstract ITypeReference CharAt(int index);
+        public abstract IOldTypeReference CharAt(int index);
 
         /// <summary>
         ///     compute a hash code

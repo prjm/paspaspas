@@ -33,7 +33,7 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         /// <param name="baseValue"></param>
         /// <returns></returns>
-        ITypeReference MakePointerValue(ITypeReference baseValue);
+        IOldTypeReference MakePointerValue(IOldTypeReference baseValue);
 
         /// <summary>
         ///     provides operations on characters
@@ -57,7 +57,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeId">target type id</param>
         /// <param name="types"></param>
         /// <returns></returns>
-        ITypeReference Cast(ITypeRegistry types, ITypeReference value, int typeId);
+        IOldTypeReference Cast(ITypeRegistry types, IOldTypeReference value, int typeId);
 
         /// <summary>
         ///     create a new enum value
@@ -65,14 +65,14 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeId"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        ITypeReference MakeEnumValue(int typeId, ITypeReference value);
+        IOldTypeReference MakeEnumValue(int typeId, IOldTypeReference value);
 
         /// <summary>
         ///     format a constant expression
         /// </summary>
         /// <param name="values">input data</param>
         /// <returns></returns>
-        ITypeReference FormatExpression(ImmutableArray<ITypeReference> values);
+        IOldTypeReference FormatExpression(ImmutableArray<IOldTypeReference> values);
 
     }
 }

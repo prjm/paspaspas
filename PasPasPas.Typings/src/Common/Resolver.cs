@@ -38,7 +38,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="numberOfTypeArguments">number of generic type arguments</param>
         /// <param name="flags">flags</param>
         /// <returns></returns>
-        public ITypeReference ResolveTypeByName(ITypeReference baseTypeValue, string name, int numberOfTypeArguments = 0, ResolverFlags flags = ResolverFlags.None) {
+        public IOldTypeReference ResolveTypeByName(IOldTypeReference baseTypeValue, string name, int numberOfTypeArguments = 0, ResolverFlags flags = ResolverFlags.None) {
             var symbolReference = ResolveByName(baseTypeValue, name, numberOfTypeArguments, flags);
             return GetTypeReference(symbolReference);
         }
@@ -65,7 +65,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="numberOfTypeArguments">number of generic type arguments</param>
         /// <param name="flags">flags</param>
         /// <returns></returns>
-        public Reference ResolveByName(ITypeReference baseTypeValue, string name, int numberOfTypeArguments, ResolverFlags flags) {
+        public Reference ResolveByName(IOldTypeReference baseTypeValue, string name, int numberOfTypeArguments, ResolverFlags flags) {
 
             if (numberOfTypeArguments > 0)
                 name = string.Concat(name, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeArguments);
@@ -131,7 +131,7 @@ namespace PasPasPas.Typings.Common {
             return default;
         }
 
-        private ITypeReference GetTypeReference(Reference reference) {
+        private IOldTypeReference GetTypeReference(Reference reference) {
             if (reference == default || reference.Symbol == default)
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 
@@ -145,7 +145,7 @@ namespace PasPasPas.Typings.Common {
             if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
                 if (reference.Symbol is IRoutineGroup routine) {
                     var callableRoutines = new List<IRoutine>();
-                    var signature = new Signature(TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnspecifiedType), ImmutableArray<ITypeReference>.Empty);
+                    var signature = new Signature(TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnspecifiedType), ImmutableArray<IOldTypeReference>.Empty);
                     routine.ResolveCall(callableRoutines, signature);
                     if (callableRoutines.Count == 1)
                         return callableRoutines[0].ResultType;

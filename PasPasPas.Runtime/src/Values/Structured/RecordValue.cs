@@ -8,14 +8,14 @@ namespace PasPasPas.Runtime.Values.Structured {
     /// <summary>
     ///     constant record values
     /// </summary>
-    public class RecordValue : ITypeReference, IEquatable<RecordValue> {
+    public class RecordValue : IOldTypeReference, IEquatable<RecordValue> {
 
         /// <summary>
         ///     create a new record value
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="values"></param>
-        public RecordValue(int typeId, ImmutableArray<ITypeReference> values) {
+        public RecordValue(int typeId, ImmutableArray<IOldTypeReference> values) {
             TypeId = typeId;
             Values = values;
         }
@@ -28,7 +28,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <summary>
         ///    record value
         /// </summary>
-        public ImmutableArray<ITypeReference> Values { get; }
+        public ImmutableArray<IOldTypeReference> Values { get; }
 
         /// <summary>
         ///     internal type format

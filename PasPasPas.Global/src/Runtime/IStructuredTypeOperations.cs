@@ -11,7 +11,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     empty set
         /// </summary>
-        ITypeReference EmptySet { get; }
+        IOldTypeReference EmptySet { get; }
 
         /// <summary>
         ///     create an array value
@@ -20,7 +20,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="baseTypeId"></param>
         /// <param name="values">array values</param>
         /// <returns></returns>
-        IArrayValue CreateArrayValue(int registeredType, int baseTypeId, ImmutableArray<ITypeReference> values);
+        IArrayValue CreateArrayValue(int registeredType, int baseTypeId, ImmutableArray<IOldTypeReference> values);
 
         /// <summary>
         ///     create a record value
@@ -28,7 +28,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeId"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        ITypeReference CreateRecordValue(int typeId, ImmutableArray<ITypeReference> values);
+        IOldTypeReference CreateRecordValue(int typeId, ImmutableArray<IOldTypeReference> values);
 
         /// <summary>
         ///     create a set value
@@ -36,7 +36,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeId"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        ITypeReference CreateSetValue(int typeId, ImmutableArray<ITypeReference> values);
+        IOldTypeReference CreateSetValue(int typeId, ImmutableArray<IOldTypeReference> values);
 
         /// <summary>
         ///     compute a set union
@@ -45,7 +45,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="right"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        ITypeReference SetUnion(ITypeRegistry types, ITypeReference left, ITypeReference right);
+        IOldTypeReference SetUnion(ITypeRegistry types, IOldTypeReference left, IOldTypeReference right);
 
         /// <summary>
         ///     compute a set difference
@@ -54,7 +54,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="right"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        ITypeReference SetDifference(ITypeRegistry types, ITypeReference left, ITypeReference right);
+        IOldTypeReference SetDifference(ITypeRegistry types, IOldTypeReference left, IOldTypeReference right);
 
         /// <summary>
         ///     compute a set intersection
@@ -63,7 +63,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        ITypeReference SetIntersection(ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right);
+        IOldTypeReference SetIntersection(ITypeRegistry typeRegistry, IOldTypeReference left, IOldTypeReference right);
 
         /// <summary>
         ///     test if an element is contained in a set
@@ -72,6 +72,6 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        ITypeReference InSet(ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right);
+        IOldTypeReference InSet(ITypeRegistry typeRegistry, IOldTypeReference left, IOldTypeReference right);
     }
 }

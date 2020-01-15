@@ -164,7 +164,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="lowerBound"></param>
         /// <param name="upperBound"></param>
         /// <returns></returns>
-        public ISubrangeType CreateSubrangeType(int baseType, ITypeReference lowerBound, ITypeReference upperBound) {
+        public ISubrangeType CreateSubrangeType(int baseType, IOldTypeReference lowerBound, IOldTypeReference upperBound) {
             var typeId = RegisteredTypes.RequireUserTypeId();
             var result = new SubrangeType(typeId, baseType, lowerBound, upperBound);
             RegisteredTypes.RegisterType(result);

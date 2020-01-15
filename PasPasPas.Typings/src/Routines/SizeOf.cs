@@ -37,7 +37,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(ITypeReference parameter)
+        public bool CheckParameter(IOldTypeReference parameter)
             => true;
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ExecuteCall(ITypeReference parameter) {
+        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
             var type = TypeRegistry.GetTypeByIdOrUndefinedType(parameter.TypeId);
             return Integers.ToScaledIntegerValue(type.TypeSizeInBytes);
         }
@@ -55,7 +55,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ResolveCall(ITypeReference parameter)
+        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
             => ExecuteCall(parameter);
     }
 }

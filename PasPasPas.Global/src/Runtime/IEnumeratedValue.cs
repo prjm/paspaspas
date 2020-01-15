@@ -3,12 +3,12 @@
     /// <summary>
     ///     value of an enumeration
     /// </summary>
-    public interface IEnumeratedValue : ITypeReference {
+    public interface IEnumeratedValue : IOldTypeReference {
 
         /// <summary>
         ///     constant value
         /// </summary>
-        ITypeReference Value { get; }
+        IOldTypeReference Value { get; }
 
     }
 }

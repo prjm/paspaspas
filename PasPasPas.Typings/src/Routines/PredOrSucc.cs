@@ -95,7 +95,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(ITypeReference parameter)
+        public bool CheckParameter(IOldTypeReference parameter)
             => parameter.IsOrdinal();
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ExecuteCall(ITypeReference parameter)
+        public IOldTypeReference ExecuteCall(IOldTypeReference parameter)
             => StaticExecuteCall(TypeRegistry, parameter, Pred);
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="pred"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        public static ITypeReference StaticExecuteCall(ITypeRegistry types, ITypeReference parameter, bool pred) {
+        public static IOldTypeReference StaticExecuteCall(ITypeRegistry types, IOldTypeReference parameter, bool pred) {
 
             var ordinalType = types.GetTypeByIdOrUndefinedType(parameter.TypeId) as IOrdinalType;
 
@@ -170,7 +170,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ResolveCall(ITypeReference parameter)
+        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
             => MakeTypeInstanceReference(parameter.TypeId);
     }
 }

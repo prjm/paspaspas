@@ -58,7 +58,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override ITypeReference GetOrdinalValue(ITypeRegistry types)
+        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types)
             => types.Runtime.Integers.ToScaledIntegerValue(Value);
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public override ITypeReference CharAt(int index) {
+        public override IOldTypeReference CharAt(int index) {
             if (index < 0 || index >= 1)
                 return new SpecialValue(SpecialConstantKind.InvalidChar);
 

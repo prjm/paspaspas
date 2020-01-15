@@ -13,7 +13,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <param name="name">symbol name</param>
         /// <param name="value">symbol value</param>
-        public EnumValue(string name, ITypeReference value) {
+        public EnumValue(string name, IOldTypeReference value) {
             Name = name;
             Value = value;
         }
@@ -26,7 +26,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     value of the enumerated item
         /// </summary>
-        public ITypeReference Value { get; private set; }
+        public IOldTypeReference Value { get; private set; }
 
         /// <summary>
         ///     type id

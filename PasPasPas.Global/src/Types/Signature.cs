@@ -9,7 +9,7 @@ namespace PasPasPas.Globals.Types {
     /// </summary>
     public class Signature : IEquatable<Signature> {
 
-        private readonly ImmutableArray<ITypeReference> InputTypes;
+        private readonly ImmutableArray<IOldTypeReference> InputTypes;
 
         /// <summary>
         ///     get the number of parameters in this signature
@@ -32,14 +32,14 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     return type
         /// </summary>
-        public ITypeReference ReturnType { get; }
+        public IOldTypeReference ReturnType { get; }
 
         /// <summary>
         ///     create a new type signature
         /// </summary>
         /// <param name="returnType"></param>
         /// <param name="inputTypes">values</param>
-        public Signature(ITypeReference returnType, ImmutableArray<ITypeReference> inputTypes) {
+        public Signature(IOldTypeReference returnType, ImmutableArray<IOldTypeReference> inputTypes) {
             ReturnType = returnType;
             InputTypes = inputTypes;
         }
@@ -91,7 +91,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public ITypeReference this[int index]
+        public IOldTypeReference this[int index]
             => InputTypes[index];
 
     }

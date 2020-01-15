@@ -24,7 +24,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="typeId">type id</param>
         /// <returns>type reference</returns>
-        ITypeReference MakeTypeInstanceReference(int typeId);
+        IOldTypeReference MakeTypeInstanceReference(int typeId);
 
         /// <summary>
         ///     get a type by type id
@@ -72,7 +72,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        ITypeReference MakeTypeReference(int typeId);
+        IOldTypeReference MakeTypeReference(int typeId);
 
         /// <summary>
         ///     list pools

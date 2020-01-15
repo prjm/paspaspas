@@ -93,6 +93,6 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public abstract ITypeReference GetOrdinalValue(ITypeRegistry types);
+        public abstract IOldTypeReference GetOrdinalValue(ITypeRegistry types);
     }
 }

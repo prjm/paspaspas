@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     type value of this expression
         /// </summary>
-        public ITypeReference TypeInfo { get; set; }
+        public IOldTypeReference TypeInfo { get; set; }
 
     }
 }

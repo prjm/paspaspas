@@ -29,14 +29,14 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <summary>
         ///     invalid set
         /// </summary>
-        public ITypeReference InvalidSet { get; }
+        public IOldTypeReference InvalidSet { get; }
             = new SpecialValue(SpecialConstantKind.InvalidSet);
 
         /// <summary>
         ///     empty set
         /// </summary>
-        public ITypeReference EmptySet { get; }
-            = new SetValue(KnownTypeIds.GenericPointer, ImmutableArray<ITypeReference>.Empty);
+        public IOldTypeReference EmptySet { get; }
+            = new SetValue(KnownTypeIds.GenericPointer, ImmutableArray<IOldTypeReference>.Empty);
 
         /// <summary>
         ///     boolean operations
@@ -50,7 +50,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="baseTypeId"></param>
         /// <param name="values">array values</param>
         /// <returns></returns>
-        public IArrayValue CreateArrayValue(int registeredType, int baseTypeId, ImmutableArray<ITypeReference> values)
+        public IArrayValue CreateArrayValue(int registeredType, int baseTypeId, ImmutableArray<IOldTypeReference> values)
             => new ArrayValue(registeredType, baseTypeId, values);
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="typeId"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public ITypeReference CreateRecordValue(int typeId, ImmutableArray<ITypeReference> values)
+        public IOldTypeReference CreateRecordValue(int typeId, ImmutableArray<IOldTypeReference> values)
             => new RecordValue(typeId, values);
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="typeId"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public ITypeReference CreateSetValue(int typeId, ImmutableArray<ITypeReference> values)
+        public IOldTypeReference CreateSetValue(int typeId, ImmutableArray<IOldTypeReference> values)
             => new SetValue(typeId, values);
 
 
@@ -78,7 +78,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference Equal(ITypeReference left, ITypeReference right) {
+        public IOldTypeReference Equal(IOldTypeReference left, IOldTypeReference right) {
             if (left is SetValue leftSet && right is SetValue rightSet)
                 return Booleans.ToBoolean(SetValue.Equal(leftSet, rightSet), KnownTypeIds.BooleanType);
             else
@@ -91,7 +91,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference GreaterThen(ITypeReference left, ITypeReference right)
+        public IOldTypeReference GreaterThen(IOldTypeReference left, IOldTypeReference right)
             => InvalidSet;
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference GreaterThenEqual(ITypeReference left, ITypeReference right) {
+        public IOldTypeReference GreaterThenEqual(IOldTypeReference left, IOldTypeReference right) {
             if (left is SetValue leftSet && right is SetValue rightSet)
                 return Booleans.ToBoolean(SetValue.IsSuperset(leftSet, rightSet), KnownTypeIds.BooleanType);
             else
@@ -114,7 +114,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference InSet(ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right) {
+        public IOldTypeReference InSet(ITypeRegistry typeRegistry, IOldTypeReference left, IOldTypeReference right) {
             if (!(right is SetValue rightSet))
                 return InvalidSet;
 
@@ -138,7 +138,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference LessThen(ITypeReference left, ITypeReference right)
+        public IOldTypeReference LessThen(IOldTypeReference left, IOldTypeReference right)
             => InvalidSet;
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference LessThenOrEqual(ITypeReference left, ITypeReference right) {
+        public IOldTypeReference LessThenOrEqual(IOldTypeReference left, IOldTypeReference right) {
             if (left is SetValue leftSet && right is SetValue rightSet) {
                 return Booleans.ToBoolean(SetValue.IsSubset(leftSet, rightSet), KnownTypeIds.BooleanType);
             }
@@ -161,7 +161,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference NotEquals(ITypeReference left, ITypeReference right) {
+        public IOldTypeReference NotEquals(IOldTypeReference left, IOldTypeReference right) {
             if (left is SetValue leftSet && right is SetValue rightSet)
                 return Booleans.ToBoolean(!SetValue.Equal(leftSet, rightSet), KnownTypeIds.BooleanType);
             else
@@ -175,7 +175,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference SetDifference(ITypeRegistry types, ITypeReference left, ITypeReference right) {
+        public IOldTypeReference SetDifference(ITypeRegistry types, IOldTypeReference left, IOldTypeReference right) {
             if (!(left is SetValue leftSet))
                 return types.Runtime.Types.MakeErrorTypeReference();
 
@@ -191,7 +191,7 @@ namespace PasPasPas.Runtime.Values.Structured {
             if (!(types.ResolveAlias(right.TypeId) is ISetType rightType))
                 return types.Runtime.Types.MakeErrorTypeReference();
 
-            using (var list = ListPools.GetList<ITypeReference>()) {
+            using (var list = ListPools.GetList<IOldTypeReference>()) {
 
                 foreach (var value in leftSet.Values)
                     if (!rightSet.Values.Contains(types.Runtime.Cast(types, value, rightType.BaseTypeId)))
@@ -208,7 +208,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference SetIntersection(ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right) {
+        public IOldTypeReference SetIntersection(ITypeRegistry typeRegistry, IOldTypeReference left, IOldTypeReference right) {
             if (!(left is SetValue leftSet))
                 return typeRegistry.Runtime.Types.MakeErrorTypeReference();
 
@@ -230,7 +230,7 @@ namespace PasPasPas.Runtime.Values.Structured {
             else
                 typeId = left.TypeId;
 
-            using (var list = ListPools.GetList<ITypeReference>()) {
+            using (var list = ListPools.GetList<IOldTypeReference>()) {
 
                 foreach (var value in leftSet.Values)
                     if (rightSet.Values.Contains(value))
@@ -252,7 +252,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference SetUnion(ITypeRegistry types, ITypeReference left, ITypeReference right) {
+        public IOldTypeReference SetUnion(ITypeRegistry types, IOldTypeReference left, IOldTypeReference right) {
             if (!(left is SetValue leftSet))
                 return types.Runtime.Types.MakeErrorTypeReference();
 
@@ -276,7 +276,7 @@ namespace PasPasPas.Runtime.Values.Structured {
             else
                 typeId = left.TypeId;
 
-            using (var list = ListPools.GetList<ITypeReference>()) {
+            using (var list = ListPools.GetList<IOldTypeReference>()) {
 
                 foreach (var value in leftSet.Values)
                     list.Add(types.Runtime.Cast(types, value, baseType));

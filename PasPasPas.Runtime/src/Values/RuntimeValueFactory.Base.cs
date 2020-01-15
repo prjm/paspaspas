@@ -74,7 +74,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="values">values to format</param>
         /// <returns></returns>
-        public ITypeReference FormatExpression(ImmutableArray<ITypeReference> values)
+        public IOldTypeReference FormatExpression(ImmutableArray<IOldTypeReference> values)
             => formatter.Format(values);
 
     }

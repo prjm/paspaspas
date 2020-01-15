@@ -91,7 +91,7 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="typeId"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public ITypeReference MakeSubrangeValue(int typeId, ITypeReference value)
+        public IOldTypeReference MakeSubrangeValue(int typeId, IOldTypeReference value)
             => Runtime?.Types?.MakeSubrangeValue(typeId, value);
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        public ITypeReference MakeTypeInstanceReference(int typeId)
+        public IOldTypeReference MakeTypeInstanceReference(int typeId)
             => Runtime?.Types?.MakeTypeInstanceReference(typeId, TypeRegistry.GetTypeKindOf(typeId));
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace PasPasPas.Typings.Routines {
             if (!unaryRoutine.CheckParameter(parameter))
                 return;
 
-            var resultType = default(ITypeReference);
+            var resultType = default(IOldTypeReference);
 
             if (unaryRoutine.IsConstant && parameter.IsConstant())
                 resultType = unaryRoutine.ExecuteCall(parameter);
@@ -211,7 +211,7 @@ namespace PasPasPas.Typings.Routines {
             if (!variadicRoutine.CheckParameter(signature))
                 return;
 
-            var resultType = default(ITypeReference);
+            var resultType = default(IOldTypeReference);
 
             if (variadicRoutine.IsConstant && signature.IsConstant && variadicRoutine is IConstantVariadicRoutine cvr)
                 resultType = cvr.ExecuteCall(signature);
@@ -230,7 +230,7 @@ namespace PasPasPas.Typings.Routines {
         ///     stub: make an runtime exception
         /// </summary>
         /// <returns></returns>
-        protected ITypeReference RuntimeException()
+        protected IOldTypeReference RuntimeException()
             => Runtime.Types.MakeErrorTypeReference(); // ... to be changed
 
     }

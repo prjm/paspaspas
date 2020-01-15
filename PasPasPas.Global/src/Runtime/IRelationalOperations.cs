@@ -16,7 +16,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        ITypeReference Equal(ITypeReference left, ITypeReference right);
+        IOldTypeReference Equal(IOldTypeReference left, IOldTypeReference right);
 
         /// <summary>
         ///     <c>&lt;&gt;</c>
@@ -24,7 +24,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        ITypeReference NotEquals(ITypeReference left, ITypeReference right);
+        IOldTypeReference NotEquals(IOldTypeReference left, IOldTypeReference right);
 
         /// <summary>
         ///     <c>&lt;</c>
@@ -32,7 +32,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        ITypeReference LessThen(ITypeReference left, ITypeReference right);
+        IOldTypeReference LessThen(IOldTypeReference left, IOldTypeReference right);
 
         /// <summary>
         ///     <c>&gt;</c>
@@ -40,7 +40,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        ITypeReference GreaterThen(ITypeReference left, ITypeReference right);
+        IOldTypeReference GreaterThen(IOldTypeReference left, IOldTypeReference right);
 
         /// <summary>
         ///     <c>&lt;=</c>
@@ -48,7 +48,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        ITypeReference LessThenOrEqual(ITypeReference left, ITypeReference right);
+        IOldTypeReference LessThenOrEqual(IOldTypeReference left, IOldTypeReference right);
 
         /// <summary>
         ///     <c>&gt;=</c>
@@ -56,7 +56,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        ITypeReference GreaterThenEqual(ITypeReference left, ITypeReference right);
+        IOldTypeReference GreaterThenEqual(IOldTypeReference left, IOldTypeReference right);
 
     }
 }

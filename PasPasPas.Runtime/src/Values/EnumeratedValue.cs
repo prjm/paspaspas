@@ -16,7 +16,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="enumTypeId">base type id</param>
         /// <param name="value">constant value</param>
-        public EnumeratedValue(int enumTypeId, ITypeReference value) {
+        public EnumeratedValue(int enumTypeId, IOldTypeReference value) {
             TypeId = enumTypeId;
             Value = value;
         }
@@ -35,7 +35,7 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     enumerated value
         /// </summary>
-        public ITypeReference Value { get; }
+        public IOldTypeReference Value { get; }
 
         /// <summary>
         ///     test if this value negative
@@ -85,7 +85,7 @@ namespace PasPasPas.Runtime.Values {
         ///     invert bits
         /// </summary>
         /// <returns></returns>
-        public override ITypeReference InvertBits() {
+        public override IOldTypeReference InvertBits() {
             if (Value is IntegerValueBase intValue)
                 return intValue.InvertBits();
             return Value;
@@ -122,7 +122,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override ITypeReference GetOrdinalValue(ITypeRegistry types) {
+        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types) {
             if (Value is IOrdinalValue value)
                 return value.GetOrdinalValue(types);
 

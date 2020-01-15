@@ -8,7 +8,7 @@ namespace PasPasPas.Runtime.Values {
     /// </summary>
     public partial class RuntimeValueFactory : IRuntimeValueFactory {
 
-        private ITypeReference MakeSubrangeValue(int typeId, ITypeReference value)
+        private IOldTypeReference MakeSubrangeValue(int typeId, IOldTypeReference value)
             => Types.MakeSubrangeValue(typeId, value);
 
         /// <summary>
@@ -17,7 +17,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="typeId"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public ITypeReference MakeEnumValue(int typeId, ITypeReference value)
+        public IOldTypeReference MakeEnumValue(int typeId, IOldTypeReference value)
             => new EnumeratedValue(typeId, value);
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="baseValue"></param>
         /// <returns></returns>
-        public ITypeReference MakePointerValue(ITypeReference baseValue)
+        public IOldTypeReference MakePointerValue(IOldTypeReference baseValue)
             => new PointerValue(KnownTypeIds.GenericPointer, baseValue);
     }
 }

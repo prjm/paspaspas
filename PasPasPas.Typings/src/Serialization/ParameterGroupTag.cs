@@ -16,7 +16,7 @@ namespace PasPasPas.Typings.Serialization {
             => Constants.ParameterGroupTag;
 
         private RoutineKind procedureKind;
-        private ITypeReference resultType;
+        private IOldTypeReference resultType;
 
         internal override void ReadData(uint kind, TypeReader typeReader) {
             procedureKind = (RoutineKind)typeReader.ReadByte();

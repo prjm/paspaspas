@@ -61,7 +61,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override ITypeReference EvaluateBinaryOperator(Signature input) {
+        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
 
@@ -80,7 +80,7 @@ namespace PasPasPas.Typings.Operators {
             return GetErrorTypeReference();
         }
 
-        private ITypeReference EvaluateInSetOperator(ITypeReference left, ITypeReference right) {
+        private IOldTypeReference EvaluateInSetOperator(IOldTypeReference left, IOldTypeReference right) {
 
             if (!(TypeRegistry.ResolveAlias(right.TypeId) is ISetType setType))
                 return GetErrorTypeReference();
@@ -110,21 +110,21 @@ namespace PasPasPas.Typings.Operators {
             return GetErrorTypeReference();
         }
 
-        private ITypeReference EvaluateSetDiffOperator(ITypeReference left, ITypeReference right) {
+        private IOldTypeReference EvaluateSetDiffOperator(IOldTypeReference left, IOldTypeReference right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.Structured.SetDifference(TypeRegistry, left, right);
             else
                 return TypeRegistry.GetMatchingSetType(left, right);
         }
 
-        private ITypeReference EvaluateSetAddOperator(ITypeReference left, ITypeReference right) {
+        private IOldTypeReference EvaluateSetAddOperator(IOldTypeReference left, IOldTypeReference right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.Structured.SetUnion(TypeRegistry, left, right);
             else
                 return TypeRegistry.GetMatchingSetType(left, right);
         }
 
-        private ITypeReference EvaluateSetIntersectOperator(ITypeReference left, ITypeReference right) {
+        private IOldTypeReference EvaluateSetIntersectOperator(IOldTypeReference left, IOldTypeReference right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.Structured.SetIntersection(TypeRegistry, left, right);
             else

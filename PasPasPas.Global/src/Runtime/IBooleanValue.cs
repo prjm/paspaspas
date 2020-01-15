@@ -3,7 +3,7 @@
     /// <summary>
     ///     boolean runtime values
     /// </summary>
-    public interface IBooleanValue : ITypeReference {
+    public interface IBooleanValue : IOldTypeReference {
 
         /// <summary>
         ///     get the boolean value

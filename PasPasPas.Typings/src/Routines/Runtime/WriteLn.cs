@@ -49,7 +49,7 @@ namespace PasPasPas.Typings.Routines.Runtime {
             return true;
         }
 
-        private bool IsWriteLnType(ITypeReference typeReference) {
+        private bool IsWriteLnType(IOldTypeReference typeReference) {
             var typeKind = typeReference.TypeKind;
 
             if (typeKind.IsString())
@@ -71,7 +71,7 @@ namespace PasPasPas.Typings.Routines.Runtime {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public ITypeReference ResolveCall(Signature signature) {
+        public IOldTypeReference ResolveCall(Signature signature) {
             var kind = MakeTypeInstanceReference(KnownTypeIds.NoType);
             return Types.MakeInvocationResultFromIntrinsic(this, new Routine(this, RoutineKind.Procedure, kind));
         }

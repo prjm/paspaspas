@@ -19,7 +19,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="parent">parent routine group</param>
         /// <param name="procedureKind">procedure kind</param>
         /// <param name="resultType">result type</param>
-        public Routine(IRoutineGroup parent, RoutineKind procedureKind, ITypeReference resultType) {
+        public Routine(IRoutineGroup parent, RoutineKind procedureKind, IOldTypeReference resultType) {
             RoutineGroup = parent;
             Kind = procedureKind;
             ResultType = resultType;
@@ -47,7 +47,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     result type
         /// </summary>
-        public ITypeReference ResultType { get; set; }
+        public IOldTypeReference ResultType { get; set; }
 
         /// <summary>
         ///     symbols
@@ -137,10 +137,10 @@ namespace PasPasPas.Typings.Structured {
         /// <returns></returns>
         public Signature CreateSignature(ITypeRegistry runtime) {
             if (Parameters == default || Parameters.Count < 1)
-                return new Signature(ResultType, ImmutableArray<ITypeReference>.Empty);
+                return new Signature(ResultType, ImmutableArray<IOldTypeReference>.Empty);
 
-            using (var list = runtime.ListPools.GetList<ITypeReference>()) {
-                var values = new ITypeReference[Parameters.Count];
+            using (var list = runtime.ListPools.GetList<IOldTypeReference>()) {
+                var values = new IOldTypeReference[Parameters.Count];
                 for (var i = 0; i < Parameters.Count; i++)
                     values[i] = Parameters[i].SymbolType ?? runtime.Runtime.Types.MakeErrorTypeReference();
 

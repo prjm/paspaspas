@@ -26,7 +26,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override ITypeReference EvaluateUnaryOperator(Signature input) {
+        protected override IOldTypeReference EvaluateUnaryOperator(Signature input) {
             var operand = input[0];
             return Runtime.MakePointerValue(operand);
         }
@@ -54,7 +54,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override ITypeReference EvaluateBinaryOperator(Signature input) {
+        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
             if (!input[0].IsArrayValue(out var i0))
                 return TypeRegistry.Runtime.Types.MakeErrorTypeReference();
             if (!input[1].IsArrayValue(out var i1))
@@ -74,7 +74,7 @@ namespace PasPasPas.Typings.Operators {
 
             var leftValue = input[0] as IArrayValue;
             var rightValue = input[1] as IArrayValue;
-            using (var list = TypeRegistry.ListPools.GetList<ITypeReference>()) {
+            using (var list = TypeRegistry.ListPools.GetList<IOldTypeReference>()) {
                 list.Item.AddRange(leftValue.Values);
                 list.Item.AddRange(rightValue.Values);
                 var indexType = TypeRegistry.TypeCreator.CreateSubrangeType(KnownTypeIds.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(list.Item.Count - 1));

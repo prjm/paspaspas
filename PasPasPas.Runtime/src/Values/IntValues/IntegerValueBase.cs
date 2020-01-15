@@ -89,7 +89,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="overflow">value used for overflow</param>
         /// <param name="value">value to convert</param>
         /// <returns>converted value</returns>
-        public static ITypeReference ToIntValue(ITypeReference overflow, BigInteger value) {
+        public static IOldTypeReference ToIntValue(IOldTypeReference overflow, BigInteger value) {
             if (value < -9223372036854775808)
                 return overflow;
             else if (value < -2147483648)
@@ -118,47 +118,47 @@ namespace PasPasPas.Runtime.Values.IntValues {
             return overflow;
         }
 
-        internal static ITypeReference AddAndScale(ITypeReference overflow, IntegerValueBase intAugend, IntegerValueBase intAddend) {
+        internal static IOldTypeReference AddAndScale(IOldTypeReference overflow, IntegerValueBase intAugend, IntegerValueBase intAddend) {
             var s = intAugend.AsBigInteger + intAddend.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static ITypeReference AndAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static IOldTypeReference AndAndScale(IOldTypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             var s = firstOperator.AsBigInteger & secondOperator.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static ITypeReference DivideAndScale(ITypeReference overflow, IntegerValueBase dividend, IntegerValueBase divisor) {
+        internal static IOldTypeReference DivideAndScale(IOldTypeReference overflow, IntegerValueBase dividend, IntegerValueBase divisor) {
             var s = dividend.AsBigInteger / divisor.AsBigInteger;
             return ToIntValue(overflow, s);
 
         }
 
 
-        internal static ITypeReference ModuloAndScale(ITypeReference overflow, IntegerValueBase dividend, IntegerValueBase divisor) {
+        internal static IOldTypeReference ModuloAndScale(IOldTypeReference overflow, IntegerValueBase dividend, IntegerValueBase divisor) {
             var s = dividend.AsBigInteger % divisor.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static ITypeReference MultiplyAndScale(ITypeReference overflow, IntegerValueBase multiplicand, IntegerValueBase multiplier) {
+        internal static IOldTypeReference MultiplyAndScale(IOldTypeReference overflow, IntegerValueBase multiplicand, IntegerValueBase multiplier) {
             var s = multiplicand.AsBigInteger * multiplier.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static ITypeReference Negate(ITypeReference overflow, IntegerValueBase intNumber) {
+        internal static IOldTypeReference Negate(IOldTypeReference overflow, IntegerValueBase intNumber) {
             var s = -intNumber.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static ITypeReference Not(IntegerValueBase intNumber) => intNumber.InvertBits();
+        internal static IOldTypeReference Not(IntegerValueBase intNumber) => intNumber.InvertBits();
 
-        internal static ITypeReference OrAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static IOldTypeReference OrAndScale(IOldTypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             var s = firstOperator.AsBigInteger | secondOperator.AsBigInteger;
             return ToIntValue(overflow, s);
 
         }
 
-        internal static ITypeReference ShlAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static IOldTypeReference ShlAndScale(IOldTypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             BigInteger s;
             if (firstOperator.TypeId == KnownTypeIds.Int64Type || firstOperator.TypeId == KnownTypeIds.UInt64Type)
                 s = new BigInteger(firstOperator.SignedValue << (int)secondOperator.SignedValue);
@@ -168,7 +168,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
             return ToIntValue(overflow, s);
         }
 
-        internal static ITypeReference ShrAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static IOldTypeReference ShrAndScale(IOldTypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             BigInteger s;
             if (firstOperator.TypeId == KnownTypeIds.Int64Type || firstOperator.TypeId == KnownTypeIds.UInt64Type)
                 s = new BigInteger((ulong)firstOperator.SignedValue >> (int)secondOperator.SignedValue);
@@ -178,12 +178,12 @@ namespace PasPasPas.Runtime.Values.IntValues {
             return ToIntValue(overflow, s);
         }
 
-        internal static ITypeReference SubtractAndScale(ITypeReference overflow, IntegerValueBase intMinuend, IntegerValueBase intSubtrahend) {
+        internal static IOldTypeReference SubtractAndScale(IOldTypeReference overflow, IntegerValueBase intMinuend, IntegerValueBase intSubtrahend) {
             var s = intMinuend.AsBigInteger - intSubtrahend.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static ITypeReference XorAndScale(ITypeReference overflow, IntegerValueBase firstInt, IntegerValueBase secondInt) {
+        internal static IOldTypeReference XorAndScale(IOldTypeReference overflow, IntegerValueBase firstInt, IntegerValueBase secondInt) {
             var s = firstInt.AsBigInteger ^ secondInt.AsBigInteger;
             return ToIntValue(overflow, s);
         }
@@ -200,7 +200,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static ITypeReference ToScaledIntegerValue(sbyte number)
+        public static IOldTypeReference ToScaledIntegerValue(sbyte number)
             => new ShortIntValue(number);
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static ITypeReference ToScaledIntegerValue(byte number) {
+        public static IOldTypeReference ToScaledIntegerValue(byte number) {
             if (number < 128)
                 return new ShortIntValue((sbyte)number);
 
@@ -220,7 +220,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static ITypeReference ToScaledIntegerValue(int number) {
+        public static IOldTypeReference ToScaledIntegerValue(int number) {
             if (number < -32768)
                 return new IntegerValue(number);
             else if (number < -128)
@@ -242,7 +242,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static ITypeReference ToScaledIntegerValue(uint number) {
+        public static IOldTypeReference ToScaledIntegerValue(uint number) {
             if (number < 128)
                 return new ShortIntValue((sbyte)number);
             else if (number < 256)
@@ -262,7 +262,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static ITypeReference ToScaledIntegerValue(long number) {
+        public static IOldTypeReference ToScaledIntegerValue(long number) {
             if (number < -2147483648)
                 return new Int64Value(number);
             else if (number < -32768)
@@ -290,7 +290,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static ITypeReference ToScaledIntegerValue(ulong number) {
+        public static IOldTypeReference ToScaledIntegerValue(ulong number) {
             if (number < 128)
                 return new ShortIntValue((sbyte)number);
             else if (number < 256)
@@ -314,7 +314,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static ITypeReference ToScaledIntegerValue(short number) {
+        public static IOldTypeReference ToScaledIntegerValue(short number) {
             if (number < -128)
                 return new SmallIntValue(number);
             else if (number < 128)
@@ -330,7 +330,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static ITypeReference ToScaledIntegerValue(ushort number) {
+        public static IOldTypeReference ToScaledIntegerValue(ushort number) {
             if (number < 128)
                 return new ShortIntValue((sbyte)number);
             else if (number < 256)
@@ -362,7 +362,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <summary>
         ///     invert all bits of this integer
         /// </summary>
-        public abstract ITypeReference InvertBits();
+        public abstract IOldTypeReference InvertBits();
 
         /// <summary>
         ///     increment value
@@ -370,7 +370,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="overflow"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static ITypeReference Increment(ITypeReference overflow, IntegerValueBase value)
+        public static IOldTypeReference Increment(IOldTypeReference overflow, IntegerValueBase value)
             => ToIntValue(overflow, value.AsBigInteger + BigInteger.One);
 
         /// <summary>
@@ -387,7 +387,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="overflow"></param>
         /// <param name="integerValue"></param>
         /// <returns></returns>
-        public static ITypeReference AbsoluteValue(ITypeReference overflow, IntegerValueBase integerValue) {
+        public static IOldTypeReference AbsoluteValue(IOldTypeReference overflow, IntegerValueBase integerValue) {
             if (integerValue.IsNegative)
                 return ToIntValue(overflow, BigInteger.Abs(integerValue.AsBigInteger));
             return integerValue;
@@ -398,7 +398,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="integerValue"></param>
         /// <returns></returns>
-        public static ITypeReference ChrValue(IntegerValueBase integerValue) {
+        public static IOldTypeReference ChrValue(IntegerValueBase integerValue) {
             var b = integerValue.AsBigInteger;
             var value = b.ToByteArray();
             var negative = b < 0;
@@ -421,7 +421,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="integerValue"></param>
         /// <returns></returns>
-        public static ITypeReference HiValue(IntegerValueBase integerValue) {
+        public static IOldTypeReference HiValue(IntegerValueBase integerValue) {
             var b = integerValue.AsBigInteger;
             var value = b.ToByteArray();
 
@@ -437,7 +437,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="integerValue"></param>
         /// <returns></returns>
-        public static ITypeReference LoValue(IntegerValueBase integerValue) {
+        public static IOldTypeReference LoValue(IntegerValueBase integerValue) {
             var b = integerValue.AsBigInteger;
             var value = b.ToByteArray();
 
@@ -452,7 +452,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public abstract ITypeReference GetOrdinalValue(ITypeRegistry types);
+        public abstract IOldTypeReference GetOrdinalValue(ITypeRegistry types);
 
         /// <summary>
         ///     swap routine
@@ -462,7 +462,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="types"></param>
         /// <param name="invalid"></param>
         /// <returns></returns>
-        public static ITypeReference Swap(ITypeReference overflow, ITypeReference invalid, ITypeRegistry types, IntegerValueBase integerValue) {
+        public static IOldTypeReference Swap(IOldTypeReference overflow, IOldTypeReference invalid, ITypeRegistry types, IntegerValueBase integerValue) {
             var b = integerValue.AsBigInteger;
             var value = b.ToByteArray();
             var typeDef = types.GetTypeByIdOrUndefinedType(integerValue.TypeId);

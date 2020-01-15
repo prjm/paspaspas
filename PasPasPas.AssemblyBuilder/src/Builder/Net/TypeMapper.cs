@@ -27,7 +27,7 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         /// </summary>
         /// <param name="typeRef"></param>
         /// <returns></returns>
-        internal Type Map(ITypeReference typeRef) {
+        internal Type Map(IOldTypeReference typeRef) {
 
             var type = Types.GetTypeByIdOrUndefinedType(typeRef.TypeId);
             var baseType = TypeBase.ResolveAlias(type);

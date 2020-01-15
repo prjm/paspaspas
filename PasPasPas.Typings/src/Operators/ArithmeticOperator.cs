@@ -73,7 +73,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">operator input</param>
         /// <returns>operator result</returns>
-        protected override ITypeReference EvaluateUnaryOperator(Signature input) {
+        protected override IOldTypeReference EvaluateUnaryOperator(Signature input) {
             var operand = input[0];
             var operations = Runtime.GetArithmeticOperators(TypeRegistry, operand);
 
@@ -89,7 +89,7 @@ namespace PasPasPas.Typings.Operators {
             return GetErrorTypeReference();
         }
 
-        private static ITypeReference EvaluateUnaryOperand(bool negate, ITypeReference operand, IArithmeticOperations operations) {
+        private static IOldTypeReference EvaluateUnaryOperand(bool negate, IOldTypeReference operand, IArithmeticOperations operations) {
             if (operand.IsConstant()) {
                 if (negate)
                     return operations.Negate(operand);
@@ -105,7 +105,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input signature</param>
         /// <returns>operator result</returns>
-        protected override ITypeReference EvaluateBinaryOperator(Signature input) {
+        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
 
@@ -135,21 +135,21 @@ namespace PasPasPas.Typings.Operators {
             return GetErrorTypeReference();
         }
 
-        private ITypeReference EvaluateMultiplicationOperator(ITypeReference left, ITypeReference right, IArithmeticOperations operations) {
+        private IOldTypeReference EvaluateMultiplicationOperator(IOldTypeReference left, IOldTypeReference right, IArithmeticOperations operations) {
             if (left.IsConstant() && right.IsConstant())
                 return operations.Multiply(left, right);
             else
                 return GetSmallestRealOrIntegralType(left, right, 32);
         }
 
-        private ITypeReference EvaluateMinusOperator(ITypeReference left, ITypeReference right, IArithmeticOperations operations) {
+        private IOldTypeReference EvaluateMinusOperator(IOldTypeReference left, IOldTypeReference right, IArithmeticOperations operations) {
             if (left.IsConstant() && right.IsConstant())
                 return operations.Subtract(left, right);
             else
                 return GetSmallestRealOrIntegralType(left, right, 32);
         }
 
-        private ITypeReference EvaluatePlusOperator(ITypeReference left, ITypeReference right, IArithmeticOperations operations) {
+        private IOldTypeReference EvaluatePlusOperator(IOldTypeReference left, IOldTypeReference right, IArithmeticOperations operations) {
             if (left.IsConstant() && right.IsConstant())
                 return operations.Add(left, right);
             else
@@ -157,21 +157,21 @@ namespace PasPasPas.Typings.Operators {
         }
 
 
-        private ITypeReference EvaluateRealDivOperator(ITypeReference left, ITypeReference right) {
+        private IOldTypeReference EvaluateRealDivOperator(IOldTypeReference left, IOldTypeReference right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.RealNumbers.Divide(left, right);
             else
                 return GetExtendedType();
         }
 
-        private ITypeReference EvaluateModOperator(ITypeReference left, ITypeReference right) {
+        private IOldTypeReference EvaluateModOperator(IOldTypeReference left, IOldTypeReference right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.Integers.Modulo(left, right);
             else
                 return GetSmallestIntegralType(left, right, 32);
         }
 
-        private ITypeReference EvaluateDivOperator(ITypeReference left, ITypeReference right) {
+        private IOldTypeReference EvaluateDivOperator(IOldTypeReference left, IOldTypeReference right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.Integers.Divide(left, right);
             else

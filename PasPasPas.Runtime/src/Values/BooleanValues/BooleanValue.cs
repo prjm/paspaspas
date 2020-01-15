@@ -46,7 +46,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override ITypeReference GetOrdinalValue(ITypeRegistry types)
+        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types)
             => types.Runtime.Integers.ToScaledIntegerValue(Value ? 1 : 0);
     }
 }

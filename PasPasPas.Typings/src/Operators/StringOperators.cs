@@ -43,7 +43,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override ITypeReference EvaluateBinaryOperator(Signature input) {
+        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
             var operations = Runtime.GetStringOperators(left.TypeKind, right.TypeKind);
@@ -57,7 +57,7 @@ namespace PasPasPas.Typings.Operators {
             return GetErrorTypeReference();
         }
 
-        private ITypeReference EvaluateConcatOperator(ITypeReference left, ITypeReference right, IStringOperations operations) {
+        private IOldTypeReference EvaluateConcatOperator(IOldTypeReference left, IOldTypeReference right, IStringOperations operations) {
             if (left.IsConstant() && right.IsConstant())
                 return operations.Concat(left, right);
 

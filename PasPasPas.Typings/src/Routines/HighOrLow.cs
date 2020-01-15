@@ -86,7 +86,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(ITypeReference parameter) {
+        public bool CheckParameter(IOldTypeReference parameter) {
 
             var typeKind = parameter.TypeKind;
 
@@ -110,7 +110,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ExecuteCall(ITypeReference parameter) {
+        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
 
             if (IsOrdinalType(parameter.TypeId, out var ordinalType))
                 return Low ? ordinalType.LowestElement : ordinalType.HighestElement;
@@ -130,7 +130,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ResolveCall(ITypeReference parameter)
+        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
             => ExecuteCall(parameter);
     }
 }

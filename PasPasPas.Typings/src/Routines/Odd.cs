@@ -37,7 +37,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(ITypeReference parameter) {
+        public bool CheckParameter(IOldTypeReference parameter) {
             if (parameter.IsIntegral())
                 return true;
 
@@ -52,7 +52,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ExecuteCall(ITypeReference parameter) {
+        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
 
             if (!parameter.IsIntegralValue(out var value) && !(parameter.IsSubrangeValue(out var subrangeValue) && subrangeValue.Value.IsIntegralValue(out value)))
                 return RuntimeException();
@@ -68,7 +68,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ResolveCall(ITypeReference parameter)
+        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
             => MakeTypeInstanceReference(KnownTypeIds.BooleanType);
     }
 }

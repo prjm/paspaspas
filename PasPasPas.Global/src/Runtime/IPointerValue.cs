@@ -3,7 +3,7 @@
     /// <summary>
     ///     pointer value
     /// </summary>
-    public interface IPointerValue : ITypeReference {
+    public interface IPointerValue : IOldTypeReference {
 
     }
 }

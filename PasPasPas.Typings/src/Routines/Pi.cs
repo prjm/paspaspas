@@ -46,7 +46,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public ITypeReference ExecuteCall(Signature signature)
+        public IOldTypeReference ExecuteCall(Signature signature)
             => Runtime.RealNumbers.ToExtendedValue(KnownTypeIds.Extended, ExtF80.Pi);
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public ITypeReference ResolveCall(Signature signature)
+        public IOldTypeReference ResolveCall(Signature signature)
             => MakeTypeInstanceReference(KnownTypeIds.Extended);
     }
 }

@@ -14,7 +14,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="baseType"></param>
         /// <param name="value"></param>
-        public PointerValue(int baseType, ITypeReference value) {
+        public PointerValue(int baseType, IOldTypeReference value) {
             BaseType = baseType;
             Value = value;
         }
@@ -27,7 +27,7 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     pointer value
         /// </summary>
-        public ITypeReference Value { get; }
+        public IOldTypeReference Value { get; }
 
         /// <summary>
         ///     pointer type

@@ -59,7 +59,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public ITypeReference ExecuteCall(Signature signature) {
+        public IOldTypeReference ExecuteCall(Signature signature) {
             if (signature.Length < 1)
                 return RuntimeException();
 
@@ -88,7 +88,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public ITypeReference ResolveCall(Signature signature) {
+        public IOldTypeReference ResolveCall(Signature signature) {
             if (signature.Length == 1) {
                 if (IsSubrangeType(signature[0].TypeId, out var subrangeType))
                     return MakeTypeInstanceReference(subrangeType.BaseTypeId);

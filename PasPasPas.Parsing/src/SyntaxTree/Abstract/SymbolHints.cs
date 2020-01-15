@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     deprecated information
         /// </summary>
-        public ITypeReference DeprecatedInformation { get; set; }
+        public IOldTypeReference DeprecatedInformation { get; set; }
 
         /// <summary>
         ///     symbol in library

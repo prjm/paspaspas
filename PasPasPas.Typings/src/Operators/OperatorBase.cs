@@ -51,7 +51,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input signature</param>
         /// <returns>output type id</returns>
-        public ITypeReference EvaluateOperator(Signature input) {
+        public IOldTypeReference EvaluateOperator(Signature input) {
             switch (Arity) {
                 case 1:
                     return EvaluateUnaryOperator(input);
@@ -67,7 +67,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input parameters</param>
         /// <returns>operator result</returns>
-        protected virtual ITypeReference EvaluateBinaryOperator(Signature input)
+        protected virtual IOldTypeReference EvaluateBinaryOperator(Signature input)
             => GetErrorTypeReference();
 
         /// <summary>
@@ -75,14 +75,14 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">operator parameters</param>
         /// <returns></returns>
-        protected virtual ITypeReference EvaluateUnaryOperator(Signature input)
+        protected virtual IOldTypeReference EvaluateUnaryOperator(Signature input)
             => GetErrorTypeReference();
 
         /// <summary>
         ///     get a reference to the error type
         /// </summary>
         /// <returns></returns>
-        protected ITypeReference GetErrorTypeReference()
+        protected IOldTypeReference GetErrorTypeReference()
             => TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="right">right operand</param>
         /// <param name="minBitSize">minimal operator size</param>
         /// <returns>type reference</returns>
-        protected ITypeReference GetSmallestIntegralType(ITypeReference left, ITypeReference right, int minBitSize)
+        protected IOldTypeReference GetSmallestIntegralType(IOldTypeReference left, IOldTypeReference right, int minBitSize)
             => TypeRegistry.MakeTypeInstanceReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="right">right operand</param>
         /// <param name="minBitSize">minimal number of required bits</param>
         /// <returns>type reference</returns>
-        protected ITypeReference GetSmallestRealOrIntegralType(ITypeReference left, ITypeReference right, int minBitSize) {
+        protected IOldTypeReference GetSmallestRealOrIntegralType(IOldTypeReference left, IOldTypeReference right, int minBitSize) {
             if (left.TypeKind == CommonTypeKind.RealType || right.TypeKind == CommonTypeKind.RealType)
                 return GetExtendedType();
 
@@ -116,7 +116,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="right">right operand</param>
         /// <param name="minBitSize">minimal number of required bits</param>
         /// <returns>type reference</returns>
-        protected ITypeReference GetSmallestBoolOrIntegralType(ITypeReference left, ITypeReference right, int minBitSize) {
+        protected IOldTypeReference GetSmallestBoolOrIntegralType(IOldTypeReference left, IOldTypeReference right, int minBitSize) {
 
             if (TypeRegistry.IsSubrangeType(left.TypeId, out var subrangeType1))
                 return GetSmallestBoolOrIntegralType(TypeRegistry.MakeTypeInstanceReference(subrangeType1.BaseType.TypeId), right, minBitSize);
@@ -135,7 +135,7 @@ namespace PasPasPas.Typings.Operators {
         ///     get a reference to the extended type
         /// </summary>
         /// <returns>type reference</returns>
-        protected ITypeReference GetExtendedType()
+        protected IOldTypeReference GetExtendedType()
             => TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.Extended);
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace PasPasPas.Typings.Operators {
         ///     get a reference to the a specified type
         /// </summary>
         /// <returns>type reference</returns>
-        protected ITypeReference MakeTypeInstanceReference(int typeId)
+        protected IOldTypeReference MakeTypeInstanceReference(int typeId)
             => TypeRegistry.MakeTypeInstanceReference(typeId);
 
 

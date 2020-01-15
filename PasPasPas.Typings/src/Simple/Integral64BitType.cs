@@ -10,8 +10,8 @@ namespace PasPasPas.Typings.Simple {
     public class Integral64BitType : OrdinalTypeBase, IIntegralType {
 
         private readonly object lockObject = new object();
-        private ITypeReference highestElement;
-        private ITypeReference lowestElement;
+        private IOldTypeReference highestElement;
+        private IOldTypeReference lowestElement;
 
         /// <summary>
         ///     create a new int64 type
@@ -41,7 +41,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     highest element: <c>0xff</c>
         /// </summary>
-        public ITypeReference HighestElement {
+        public IOldTypeReference HighestElement {
             get {
                 lock (lockObject) {
                     if (highestElement == default) {
@@ -58,7 +58,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     lowest element: <c>0</c>
         /// </summary>
-        public ITypeReference LowestElement {
+        public IOldTypeReference LowestElement {
             get {
                 lock (lockObject) {
                     if (lowestElement == default) {

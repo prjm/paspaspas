@@ -14,7 +14,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="value"></param>
-        public SubrangeValue(int typeId, ITypeReference value) {
+        public SubrangeValue(int typeId, IOldTypeReference value) {
             TypeId = typeId;
             Value = value;
         }
@@ -22,7 +22,7 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     wrapped value
         /// </summary>
-        public ITypeReference Value { get; }
+        public IOldTypeReference Value { get; }
 
         /// <summary>
         ///     subrange type
@@ -88,7 +88,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public ITypeReference GetOrdinalValue(ITypeRegistry types) {
+        public IOldTypeReference GetOrdinalValue(ITypeRegistry types) {
             if (Value is IOrdinalValue ordinal)
                 return ordinal.GetOrdinalValue(types);
             return types.Runtime.Types.MakeErrorTypeReference();

@@ -53,7 +53,7 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="constant"></param>
         /// <param name="value"></param>
-        protected void AssertSerializedConstant(string constant, ITypeReference value) {
+        protected void AssertSerializedConstant(string constant, IOldTypeReference value) {
             var prg = $"unit a; interface const  B = {constant}; implementation end.";
             void tester(IUnitType t) {
                 var c = (t as UnitType).Symbols["B"].Symbol;

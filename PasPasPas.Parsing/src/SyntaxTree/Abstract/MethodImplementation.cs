@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     calculated type value
         /// </summary>
-        public ITypeReference TypeInfo { get; set; }
+        public IOldTypeReference TypeInfo { get; set; }
 
         /// <summary>
         ///     <c>true</c> for constant items
@@ -67,7 +67,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     literal value
         /// </summary>
-        public ITypeReference LiteralValue { get; set; }
+        public IOldTypeReference LiteralValue { get; set; }
 
         /// <summary>
         ///     if <c>true</c> then no parameters were declared for this

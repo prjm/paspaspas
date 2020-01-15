@@ -7,7 +7,7 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     base class for runtime values
     /// </summary>
-    public abstract class RuntimeValueBase : ITypeReference {
+    public abstract class RuntimeValueBase : IOldTypeReference {
 
         /// <summary>
         ///     create a new runtime value

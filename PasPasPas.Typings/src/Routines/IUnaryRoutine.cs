@@ -13,21 +13,21 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        ITypeReference ResolveCall(ITypeReference parameter);
+        IOldTypeReference ResolveCall(IOldTypeReference parameter);
 
         /// <summary>
         ///     execute a call
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        ITypeReference ExecuteCall(ITypeReference parameter);
+        IOldTypeReference ExecuteCall(IOldTypeReference parameter);
 
         /// <summary>
         ///     check if the parameter matches
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        bool CheckParameter(ITypeReference parameter);
+        bool CheckParameter(IOldTypeReference parameter);
 
         /// <summary>
         ///     <c>true</c> for constant routines

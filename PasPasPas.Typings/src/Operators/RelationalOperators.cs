@@ -67,7 +67,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">operator input</param>
         /// <returns>operator result - constant value or types</returns>
-        protected override ITypeReference EvaluateBinaryOperator(Signature input) {
+        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
 
@@ -102,7 +102,7 @@ namespace PasPasPas.Typings.Operators {
             return GetErrorTypeReference();
         }
 
-        private ITypeReference EvaluteGreaterThenOrEqualOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+        private IOldTypeReference EvaluteGreaterThenOrEqualOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
             if (left.IsSet() && right.IsSet() && !TypeRegistry.HaveSetsCommonBaseType(left, right))
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 
@@ -112,7 +112,7 @@ namespace PasPasPas.Typings.Operators {
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
         }
 
-        private ITypeReference EvaluateLessThenOrEqualOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+        private IOldTypeReference EvaluateLessThenOrEqualOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
             if (left.IsSet() && right.IsSet() && !TypeRegistry.HaveSetsCommonBaseType(left, right))
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 
@@ -122,21 +122,21 @@ namespace PasPasPas.Typings.Operators {
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
         }
 
-        private ITypeReference EvaluateGreaterThenOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+        private IOldTypeReference EvaluateGreaterThenOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
             if (left.IsConstant() && right.IsConstant())
                 return operations.GreaterThen(left, right);
             else
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
         }
 
-        private ITypeReference EvaluateLessThenOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+        private IOldTypeReference EvaluateLessThenOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
             if (left.IsConstant() && right.IsConstant())
                 return operations.LessThen(left, right);
             else
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
         }
 
-        private ITypeReference EvaluateNotEqualsOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+        private IOldTypeReference EvaluateNotEqualsOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
             if (left.IsSet() && right.IsSet() && !TypeRegistry.HaveSetsCommonBaseType(left, right))
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 
@@ -146,7 +146,7 @@ namespace PasPasPas.Typings.Operators {
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
         }
 
-        private ITypeReference EvaluateEqualsOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+        private IOldTypeReference EvaluateEqualsOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
             if (left.IsSet() && right.IsSet() && !TypeRegistry.HaveSetsCommonBaseType(left, right))
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 

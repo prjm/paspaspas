@@ -19,7 +19,7 @@
         /// <summary>
         ///     invalid <c>boolean</c> value
         /// </summary>
-        ITypeReference Invalid { get; }
+        IOldTypeReference Invalid { get; }
 
         /// <summary>
         ///     convert a boolean constant value to a value object
@@ -35,7 +35,7 @@
         /// <param name="bitSize"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        ITypeReference ToBoolean(uint bitSize, uint value);
+        IOldTypeReference ToBoolean(uint bitSize, uint value);
 
         /// <summary>
         ///     convert a byte constant value to a byte bool object

@@ -5,7 +5,7 @@ namespace PasPasPas.Globals.Runtime {
     /// <summary>
     ///     interface for array types
     /// </summary>
-    public interface IArrayValue : ITypeReference {
+    public interface IArrayValue : IOldTypeReference {
 
         /// <summary>
         ///     array base type
@@ -15,6 +15,6 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     constant values
         /// </summary>
-        ImmutableArray<ITypeReference> Values { get; }
+        ImmutableArray<IOldTypeReference> Values { get; }
     }
 }

@@ -18,7 +18,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="baseType">base type</param>
         /// <param name="low"></param>
         /// <param name="high"></param>
-        public SubrangeType(int withId, int baseType, ITypeReference low, ITypeReference high) : base(withId) {
+        public SubrangeType(int withId, int baseType, IOldTypeReference low, IOldTypeReference high) : base(withId) {
             BaseTypeId = baseType;
             LowestElement = low;
             HighestElement = high;
@@ -67,12 +67,12 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     highest element
         /// </summary>
-        public ITypeReference HighestElement { get; }
+        public IOldTypeReference HighestElement { get; }
 
         /// <summary>
         ///     lowest element
         /// </summary>
-        public ITypeReference LowestElement { get; }
+        public IOldTypeReference LowestElement { get; }
 
         /// <summary>
         ///     bit size

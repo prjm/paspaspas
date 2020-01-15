@@ -152,7 +152,7 @@ namespace PasPasPasTests.Types {
         /// <param name="typeId"></param>
         /// <param name="completeSource"></param>
         /// <param name="kind"></param>
-        protected void AssertStatementType(string statemnt, ITypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType, string completeSource = null, TypeReferenceKind kind = TypeReferenceKind.Undefined) {
+        protected void AssertStatementType(string statemnt, IOldTypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType, string completeSource = null, TypeReferenceKind kind = TypeReferenceKind.Undefined) {
             var file = "SimpleExpr";
             var program = completeSource ?? $"program {file};{decls} begin {statemnt}; end. ";
 
@@ -194,7 +194,7 @@ namespace PasPasPasTests.Types {
         /// <param name="isConstant"></param>
         /// <param name="completeSource"></param>
         /// <param name="decls">addition declarations</param>
-        protected void AssertExprValue(string expression, ITypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType, bool isConstant = true, string completeSource = null) {
+        protected void AssertExprValue(string expression, IOldTypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType, bool isConstant = true, string completeSource = null) {
             var file = "SimpleExpr";
             var program = completeSource ?? $"program {file};{decls} begin Writeln({expression}); end. ";
 

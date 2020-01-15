@@ -60,7 +60,7 @@ namespace PasPasPas.Typings.Common {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
-        private readonly Stack<ITypeReference> currentTypeDefinition;
+        private readonly Stack<IOldTypeReference> currentTypeDefinition;
         private readonly Stack<Routine> currentMethodParameters;
         private readonly Resolver resolver;
         private readonly List<(Routine, BlockOfStatements)> routines;
@@ -85,12 +85,12 @@ namespace PasPasPas.Typings.Common {
             visitor = new ChildVisitor(this);
             environment = env;
             resolver = new Resolver(new Scope(env.TypeRegistry));
-            currentTypeDefinition = new Stack<ITypeReference>();
+            currentTypeDefinition = new Stack<IOldTypeReference>();
             currentMethodParameters = new Stack<Routine>();
             routines = new List<(Routine, BlockOfStatements)>();
         }
 
-        private ITypeReference GetTypeRefence(ITypedSyntaxPart syntaxNode) {
+        private IOldTypeReference GetTypeRefence(ITypedSyntaxPart syntaxNode) {
             if (syntaxNode != default && syntaxNode.TypeInfo != null)
                 return syntaxNode.TypeInfo;
 
@@ -100,16 +100,16 @@ namespace PasPasPas.Typings.Common {
         private ITypeDefinition GetTypeByIdOrUndefinedType(int typeId)
             => environment.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
 
-        private ITypeReference GetInstanceTypeById(int typeId)
+        private IOldTypeReference GetInstanceTypeById(int typeId)
             => environment.TypeRegistry.MakeTypeInstanceReference(typeId);
 
-        private ITypeReference GetTypeReferenceById(int typeId)
+        private IOldTypeReference GetTypeReferenceById(int typeId)
             => environment.TypeRegistry.MakeTypeReference(typeId);
 
         private ITypeDefinition GetErrorType(ITypedSyntaxPart node)
             => environment.TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
 
-        private ITypeReference GetErrorTypeReference(ITypedSyntaxPart node)
+        private IOldTypeReference GetErrorTypeReference(ITypedSyntaxPart node)
             => environment.Runtime.Types.MakeErrorTypeReference();
 
         private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
@@ -300,7 +300,7 @@ namespace PasPasPas.Typings.Common {
         }
 
         private Signature CreateSignatureFromSymbolPart(SymbolReferencePart part) {
-            using (var list = environment.ListPools.GetList<ITypeReference>()) {
+            using (var list = environment.ListPools.GetList<IOldTypeReference>()) {
 
                 for (var i = 0; i < part.Expressions.Count; i++)
                     if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)
@@ -526,7 +526,7 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            var itemValue = default(ITypeReference);
+            var itemValue = default(IOldTypeReference);
             var enumRef = typeDef.DefineEnumValue(environment.Runtime, element.SymbolName, false, itemValue);
 
             if (enumRef == null) {
@@ -554,7 +554,7 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            var typeDef = default(ITypeReference);
+            var typeDef = default(IOldTypeReference);
 
             if (left == default)
                 typeDef = GetErrorTypeReference(element);
@@ -787,7 +787,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element">field definition</param>
         public void EndVisit(StructureFields element) {
-            var typeInfo = default(ITypeReference);
+            var typeInfo = default(IOldTypeReference);
 
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
                 typeInfo = element.TypeValue.TypeInfo;
@@ -819,8 +819,8 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element">item to visit</param>
         public void EndVisit(ConstantDeclaration element) {
-            var declaredType = default(ITypeReference);
-            var inferredType = default(ITypeReference);
+            var declaredType = default(IOldTypeReference);
+            var inferredType = default(IOldTypeReference);
 
             if (element.TypeValue is ITypedSyntaxPart typeRef && typeRef.TypeInfo != null && typeRef.TypeInfo.TypeId != KnownTypeIds.ErrorType)
                 declaredType = typeRef.TypeInfo;
@@ -869,7 +869,7 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            using (var values = environment.ListPools.GetList<ITypeReference>()) {
+            using (var values = environment.ListPools.GetList<IOldTypeReference>()) {
 
                 var baseType = GetBaseTypeForArrayConstant(element.Expressions, out var isConstant, values.Item, element, element.RequiresArray);
 
@@ -909,7 +909,7 @@ namespace PasPasPas.Typings.Common {
             }
         }
 
-        private bool ExpandRangeOperator(ITypedSyntaxPart part, bool requiresArray, List<ITypeReference> values, out int baseTypeId) {
+        private bool ExpandRangeOperator(ITypedSyntaxPart part, bool requiresArray, List<IOldTypeReference> values, out int baseTypeId) {
             if (!(GetTypeByIdOrUndefinedType(part.TypeInfo.TypeId) is ISubrangeType subrangeType) || requiresArray) {
                 baseTypeId = KnownTypeIds.ErrorType;
                 return false;
@@ -946,8 +946,8 @@ namespace PasPasPas.Typings.Common {
             return true;
         }
 
-        private ITypeReference GetBaseTypeForArrayConstant(IEnumerable<IExpression> items, out bool isConstant, List<ITypeReference> values, ITypedSyntaxPart element, bool requiresArray) {
-            var baseType = default(ITypeReference);
+        private IOldTypeReference GetBaseTypeForArrayConstant(IEnumerable<IExpression> items, out bool isConstant, List<IOldTypeReference> values, ITypedSyntaxPart element, bool requiresArray) {
+            var baseType = default(IOldTypeReference);
             isConstant = true;
 
             foreach (var part in items) {
@@ -992,7 +992,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(ArrayConstant element) {
-            using (var constantValues = environment.ListPools.GetList<ITypeReference>()) {
+            using (var constantValues = environment.ListPools.GetList<IOldTypeReference>()) {
 
                 var baseType = GetBaseTypeForArrayConstant(element.Items, out var isConstant, constantValues.Item, element, true);
                 var ints = TypeRegistry.Runtime.Integers;
@@ -1146,7 +1146,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(FormattedExpression element) {
             if (element.IsConstant) {
-                using (var list = environment.ListPools.GetList<ITypeReference>()) {
+                using (var list = environment.ListPools.GetList<IOldTypeReference>()) {
                     for (var i = 0; i < element.Expressions.Count; i++) {
                         list.Item.Add(element.Expressions[i].TypeInfo);
                     }

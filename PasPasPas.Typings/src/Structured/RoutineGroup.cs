@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     callable routine
     /// </summary>
-    public class RoutineGroup : IRoutineGroup, ITypeReference {
+    public class RoutineGroup : IRoutineGroup, IOldTypeReference {
 
         /// <summary>
         ///     create a new routine
@@ -79,7 +79,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="resultType">result type</param>
         /// <param name="kind">procedure kind</param>
-        public Routine AddParameterGroup(RoutineKind kind, ITypeReference resultType) {
+        public Routine AddParameterGroup(RoutineKind kind, IOldTypeReference resultType) {
             var result = new Routine(this, kind, resultType);
             Items.Add(result);
             return result;
@@ -93,7 +93,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="parameterName">parameter name</param>
         /// <param name="kind">procedure kind</param>
         /// <returns></returns>
-        public Routine AddParameterGroup(string parameterName, RoutineKind kind, ITypeReference firstParam, ITypeReference resultType) {
+        public Routine AddParameterGroup(string parameterName, RoutineKind kind, IOldTypeReference firstParam, IOldTypeReference resultType) {
             var result = new Routine(this, kind, resultType);
             result.AddParameter(parameterName).SymbolType = firstParam;
             Items.Add(result);

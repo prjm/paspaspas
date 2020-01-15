@@ -37,7 +37,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(ITypeReference parameter)
+        public bool CheckParameter(IOldTypeReference parameter)
             => parameter.IsNumerical();
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ExecuteCall(ITypeReference parameter) {
+        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
 
             if (parameter.IsIntegralValue(out var intValue))
                 return intValue;
@@ -61,7 +61,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ResolveCall(ITypeReference parameter)
+        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
             => MakeTypeInstanceReference(KnownTypeIds.Int64Type);
     }
 }

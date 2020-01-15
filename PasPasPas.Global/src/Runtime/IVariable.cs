@@ -10,7 +10,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     symbol type
         /// </summary>
-        ITypeReference SymbolType { get; }
+        IOldTypeReference SymbolType { get; }
 
         /// <summary>
         ///     visibility

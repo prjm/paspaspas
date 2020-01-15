@@ -5,7 +5,7 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///
     /// </summary>
-    public class TypeReference : ITypeReference {
+    public class TypeReference : IOldTypeReference {
 
         /// <summary>
         ///     reference to type

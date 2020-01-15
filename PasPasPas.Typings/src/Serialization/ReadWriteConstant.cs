@@ -10,7 +10,7 @@ namespace PasPasPas.Typings.Serialization {
         ///     read a constant value
         /// </summary>
         /// <returns></returns>
-        public ITypeReference ReadConstant() {
+        public IOldTypeReference ReadConstant() {
             var typeId = ReadInt();
             var typeDef = Types.GetTypeByIdOrUndefinedType(typeId);
 
@@ -31,7 +31,7 @@ namespace PasPasPas.Typings.Serialization {
         ///     write a constant value
         /// </summary>
         /// <param name="value"></param>
-        public void WriteConstant(ITypeReference value) {
+        public void WriteConstant(IOldTypeReference value) {
             WriteInt(value.TypeId);
 
             if (value is IIntegerValue intValue)

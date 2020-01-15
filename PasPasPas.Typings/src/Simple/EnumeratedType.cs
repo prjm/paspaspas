@@ -39,7 +39,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     highest element
         /// </summary>
-        public ITypeReference HighestElement {
+        public IOldTypeReference HighestElement {
             get {
                 if (values.Count < 1)
                     return default;
@@ -62,7 +62,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     lowest element
         /// </summary>
-        public ITypeReference LowestElement {
+        public IOldTypeReference LowestElement {
             get {
                 if (values.Count < 1)
                     return default;
@@ -148,8 +148,8 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="symbolName">symbol name</param>
         /// <param name="withValue">if <c>true</c> a value definition is used</param>
         /// <param name="enumValue">optional value definition</param>
-        public EnumValue DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, ITypeReference enumValue) {
-            ITypeReference newValue;
+        public EnumValue DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, IOldTypeReference enumValue) {
+            IOldTypeReference newValue;
 
             if (withValue)
                 newValue = enumValue;

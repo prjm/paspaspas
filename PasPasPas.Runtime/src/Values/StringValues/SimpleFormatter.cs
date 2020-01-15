@@ -8,7 +8,7 @@ using SharpFloat.FloatingPoint;
 namespace PasPasPas.Runtime.Values.StringValues {
 
     internal class FormatInfo {
-        internal ITypeReference Value { get; set; }
+        internal IOldTypeReference Value { get; set; }
         internal int Width { get; set; }
         internal int Precision { get; set; }
     }
@@ -30,7 +30,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         public IRuntimeValueFactory Runtime { get; }
 
-        private static FormatInfo GetFormat(ImmutableArray<ITypeReference> values) {
+        private static FormatInfo GetFormat(ImmutableArray<IOldTypeReference> values) {
             if (values.Length < 1 || values.Length > 3)
                 return default;
 
@@ -64,7 +64,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public ITypeReference Format(ImmutableArray<ITypeReference> values) {
+        public IOldTypeReference Format(ImmutableArray<IOldTypeReference> values) {
             var format = GetFormat(values);
 
             if (format == default)
@@ -93,7 +93,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
             return Runtime.Types.MakeErrorTypeReference();
         }
 
-        private ITypeReference FormatReal(IRealNumberValue r, int width, int precision) {
+        private IOldTypeReference FormatReal(IRealNumberValue r, int width, int precision) {
             var sb = new StringBuilder();
 
             if (precision < 0) {
@@ -114,7 +114,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
             return Runtime.Strings.ToUnicodeString(d + v);
         }
 
-        private ITypeReference FormatInteger(IIntegerValue i, int width) {
+        private IOldTypeReference FormatInteger(IIntegerValue i, int width) {
             var v = i.AsBigInteger.ToString(CultureInfo.InvariantCulture);
 
             if (width <= v.Length)
@@ -124,7 +124,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
             return Runtime.Strings.ToUnicodeString(d + v);
         }
 
-        private ITypeReference FormatString(IStringValue s, int width) {
+        private IOldTypeReference FormatString(IStringValue s, int width) {
             var v = s.AsUnicodeString;
 
             if (width <= v.Length)
@@ -134,7 +134,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
             return Runtime.Strings.ToUnicodeString(d + v);
         }
 
-        private ITypeReference FormatBoolean(IBooleanValue b, int width) {
+        private IOldTypeReference FormatBoolean(IBooleanValue b, int width) {
             var v = b.AsBoolean ? "TRUE" : "FALSE";
 
             if (width <= v.Length)
@@ -144,7 +144,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
             return Runtime.Strings.ToUnicodeString(s + v);
         }
 
-        private ITypeReference FormatChar(ICharValue c, int width) {
+        private IOldTypeReference FormatChar(ICharValue c, int width) {
             if (width < 0)
                 return Runtime.Strings.ToUnicodeString(c.AsUnicodeString);
 

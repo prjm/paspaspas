@@ -25,7 +25,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     invert all bits of this value (unary complement)
         /// </summary>
-        ITypeReference InvertBits();
+        IOldTypeReference InvertBits();
 
     }
 }

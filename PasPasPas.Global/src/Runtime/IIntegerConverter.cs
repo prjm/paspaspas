@@ -12,112 +12,112 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        ITypeReference ToScaledIntegerValue(sbyte number);
+        IOldTypeReference ToScaledIntegerValue(sbyte number);
 
         /// <summary>
         ///     get the value for a byte
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        ITypeReference ToScaledIntegerValue(byte number);
+        IOldTypeReference ToScaledIntegerValue(byte number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        ITypeReference ToScaledIntegerValue(short number);
+        IOldTypeReference ToScaledIntegerValue(short number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        ITypeReference ToScaledIntegerValue(ushort number);
+        IOldTypeReference ToScaledIntegerValue(ushort number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        ITypeReference ToScaledIntegerValue(int number);
+        IOldTypeReference ToScaledIntegerValue(int number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        ITypeReference ToScaledIntegerValue(uint number);
+        IOldTypeReference ToScaledIntegerValue(uint number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        ITypeReference ToScaledIntegerValue(long number);
+        IOldTypeReference ToScaledIntegerValue(long number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        ITypeReference ToScaledIntegerValue(ulong number);
+        IOldTypeReference ToScaledIntegerValue(ulong number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        ITypeReference ToIntegerValue(sbyte number);
+        IOldTypeReference ToIntegerValue(sbyte number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        ITypeReference ToIntegerValue(byte number);
+        IOldTypeReference ToIntegerValue(byte number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        ITypeReference ToIntegerValue(short number);
+        IOldTypeReference ToIntegerValue(short number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        ITypeReference ToIntegerValue(ushort number);
+        IOldTypeReference ToIntegerValue(ushort number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        ITypeReference ToIntegerValue(int number);
+        IOldTypeReference ToIntegerValue(int number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        ITypeReference ToIntegerValue(uint number);
+        IOldTypeReference ToIntegerValue(uint number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        ITypeReference ToIntegerValue(long number);
+        IOldTypeReference ToIntegerValue(long number);
 
         /// <summary>
         ///     get the fixed value type for a given number
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        ITypeReference ToIntegerValue(ulong number);
+        IOldTypeReference ToIntegerValue(ulong number);
 
         /// <summary>
         ///     get a native integer value for a given number
@@ -125,7 +125,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="number"></param>
         /// <param name="typeRegistry"></param>
         /// <returns></returns>
-        ITypeReference ToNativeInt(ITypeReference number, ITypeRegistry typeRegistry);
+        IOldTypeReference ToNativeInt(IOldTypeReference number, ITypeRegistry typeRegistry);
 
     }
 }

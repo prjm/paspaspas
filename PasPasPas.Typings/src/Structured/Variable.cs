@@ -11,7 +11,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     parameter type
         /// </summary>
-        public ITypeReference SymbolType { get; set; }
+        public IOldTypeReference SymbolType { get; set; }
 
         /// <summary>
         ///     parameter name

@@ -55,7 +55,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         ///     invert bits
         /// </summary>
         /// <returns></returns>
-        public override ITypeReference InvertBits()
+        public override IOldTypeReference InvertBits()
             => ToScaledIntegerValue(~value);
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override ITypeReference GetOrdinalValue(ITypeRegistry types)
+        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types)
             => ToScaledIntegerValue(value);
 
         /// <summary>

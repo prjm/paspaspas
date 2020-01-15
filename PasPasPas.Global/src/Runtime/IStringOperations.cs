@@ -11,34 +11,34 @@
         /// <param name="value1">first string</param>
         /// <param name="value2">second string</param>
         /// <returns>concatenated string</returns>
-        ITypeReference Concat(ITypeReference value1, ITypeReference value2);
+        IOldTypeReference Concat(IOldTypeReference value1, IOldTypeReference value2);
 
         /// <summary>
         ///     convert a string to a runtime value object
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        ITypeReference ToUnicodeString(string text);
+        IOldTypeReference ToUnicodeString(string text);
 
         /// <summary>
         ///     convert a string to a runtime value object
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        ITypeReference ToAnsiString(string text);
+        IOldTypeReference ToAnsiString(string text);
 
         /// <summary>
         ///     convert a string to a runtime value object
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        ITypeReference ToShortString(string text);
+        IOldTypeReference ToShortString(string text);
 
         /// <summary>
         ///     get an empty string
         /// </summary>
         /// <returns></returns>
-        ITypeReference EmptyString { get; }
+        IOldTypeReference EmptyString { get; }
 
     }
 }

@@ -59,7 +59,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public ITypeReference ExecuteCall(Signature signature) {
+        public IOldTypeReference ExecuteCall(Signature signature) {
             bool GetValue(int index, out IIntegerValue value) {
                 if (signature[index].IsIntegralValue(out value))
                     return true;
@@ -89,7 +89,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public ITypeReference ResolveCall(Signature signature)
+        public IOldTypeReference ResolveCall(Signature signature)
             => MakeTypeInstanceReference(KnownTypeIds.Int64Type);
     }
 }
