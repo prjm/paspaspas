@@ -16,13 +16,13 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     global routines
         /// </summary>
-        private readonly List<IRoutine> globalRoutines
-            = new List<IRoutine>();
+        private readonly List<IRoutineGroup> globalRoutines
+            = new List<IRoutineGroup>();
 
         /// <summary>
         ///     global routines
         /// </summary>
-        public List<IRoutine> GlobalRoutines
+        public List<IRoutineGroup> GlobalRoutines
             => globalRoutines;
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace PasPasPas.Typings.Structured {
         ///     add a global routine
         /// </summary>
         /// <param name="routine"></param>
-        public void AddGlobal(IRoutine routine) {
+        public void AddGlobal(IRoutineGroup routine) {
 
             if (routine is IntrinsicRoutine r) {
                 r.TypeRegistry = TypeRegistry;
@@ -123,7 +123,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="symbolName"></param>
         /// <param name="routineToImplement"></param>
         /// <returns></returns>
-        public bool AddGlobalImplementation(string symbolName, out IRoutine routineToImplement) {
+        public bool AddGlobalImplementation(string symbolName, out IRoutineGroup routineToImplement) {
             foreach (var routine in globalRoutines)
                 if (string.Equals(routine.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
                     routineToImplement = routine;

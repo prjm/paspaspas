@@ -14,7 +14,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="parameterGroup"></param>
         /// <param name="targetRoutine"></param>
-        public IntrinsicInvocationResult(IRoutine targetRoutine, IParameterGroup parameterGroup) {
+        public IntrinsicInvocationResult(IRoutineGroup targetRoutine, IRoutine parameterGroup) {
             Parameters = parameterGroup;
             Routine = targetRoutine;
         }
@@ -22,7 +22,7 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     parameters
         /// </summary>
-        public IParameterGroup Parameters { get; }
+        public IRoutine Parameters { get; }
 
         /// <summary>
         ///     registered type id
@@ -51,7 +51,7 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     target routine
         /// </summary>
-        public IRoutine Routine { get; }
+        public IRoutineGroup Routine { get; }
 
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(InvocationResult other)
-            => Routine.Equals(other.Routine) && Parameters.Equals(other.Routine.Parameters[other.RoutineIndex]);
+            => Routine.Equals(other.Routine) && Parameters.Equals(other.Routine.Items[other.RoutineIndex]);
 
         /// <summary>
         ///     check equality

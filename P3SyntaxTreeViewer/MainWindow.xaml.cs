@@ -60,7 +60,7 @@ namespace P3SyntaxTreeViewer {
             if (cst is ISymbolTableEntry symbol)
                 treeViewItem.Header += ": " + symbol.SymbolName;
 
-            if (cst is PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode typeInfo && typeInfo.TypeInfo != null) {
+            if (cst is ITypedSyntaxPart typeInfo && typeInfo.TypeInfo != null) {
 
                 var t = env.TypeRegistry.GetTypeByIdOrUndefinedType(typeInfo.TypeInfo.TypeId);
 
@@ -174,6 +174,7 @@ namespace P3SyntaxTreeViewer {
             var root = new TreeViewItem() { Header = unit.Name };
             tv.Items.Add(root);
             root.IsExpanded = true;
+            var enc = new PasPasPas.AssemblyBuilder.Builder.ConstantEncoder(env);
 
             foreach (var symbol in unit.Symbols) {
                 var rf = symbol.Value as Reference;
@@ -182,9 +183,9 @@ namespace P3SyntaxTreeViewer {
                 root.Items.Add(s);
                 s.IsExpanded = true;
 
-                if (rf?.Symbol is IRoutine r) {
+                if (rf?.Symbol is IRoutineGroup r) {
 
-                    foreach (var prm in r.Parameters) {
+                    foreach (var prm in r.Items) {
 
                         var p = new TreeViewItem() { Header = prm.ToString() };
                         s.Items.Add(p);
@@ -192,7 +193,7 @@ namespace P3SyntaxTreeViewer {
 
                         foreach (var code in prm.Code) {
 
-                            var c = new TreeViewItem() { Header = code.OpCodeText };
+                            var c = new TreeViewItem() { Header = code.ToOpCodeString(enc) };
                             p.Items.Add(c);
 
                         }

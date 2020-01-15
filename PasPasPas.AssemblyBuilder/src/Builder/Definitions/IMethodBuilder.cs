@@ -11,7 +11,7 @@ namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
         ///     set the return type
         /// </summary>
         int ReturnType { get; set; }
-        IParameterGroup Parameters { get; set; }
+        IRoutine Parameters { get; set; }
 
         /// <summary>
         ///     define a method body

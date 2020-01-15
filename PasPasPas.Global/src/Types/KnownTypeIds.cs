@@ -28,7 +28,8 @@
         /// <summary>
         ///     byte type (1 byte unsigned integer)
         /// </summary>
-        public const int ByteType = 1;
+        public const int ByteType
+            = 1;
 
         /// <summary>
         ///     word type (2 byte unsigned integer)

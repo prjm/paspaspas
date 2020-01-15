@@ -21,7 +21,7 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     methods
         /// </summary>
-        List<IRoutine> Methods { get; }
+        List<IRoutineGroup> Methods { get; }
 
         /// <summary>
         ///     find a method
@@ -29,6 +29,6 @@ namespace PasPasPas.Globals.Types {
         /// <param name="name"></param>
         /// <param name="classItem"></param>
         /// <returns></returns>
-        IRoutine FindMethod(string name, bool classItem);
+        IRoutineGroup FindMethod(string name, bool classItem);
     }
 }

@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Routines {
     /// <summary>
     ///     unary intrinsic routine
     /// </summary>
-    public interface IUnaryRoutine : IRoutine {
+    public interface IUnaryRoutine : IRoutineGroup {
 
         /// <summary>
         ///     resolve a call
@@ -37,6 +37,6 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     procedure kind
         /// </summary>
-        ProcedureKind Kind { get; }
+        RoutineKind Kind { get; }
     }
 }

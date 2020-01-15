@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     method implementation
     /// </summary>
-    public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression, IParameterTarget, ITypeTarget, IMethodImplementation {
+    public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression, IParameterTarget, ITypeTarget, IMethodImplementation, ITypedSyntaxPart {
 
         /// <summary>
         ///     calculated type value
@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     method kind
         /// </summary>
-        public ProcedureKind Kind { get; set; }
+        public RoutineKind Kind { get; set; }
 
         /// <summary>
         ///     create a new method implementation

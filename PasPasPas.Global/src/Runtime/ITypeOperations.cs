@@ -33,7 +33,7 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         /// <param name="routine">routine</param>
         /// <param name="routineIndex">routine index</param>
-        ITypeReference MakeInvocationResult(IRoutine routine, int routineIndex);
+        ITypeReference MakeInvocationResult(IRoutineGroup routine, int routineIndex);
 
         /// <summary>
         ///     make a pointer value
@@ -70,6 +70,6 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="parameterGroup"></param>
         /// <param name="targetRoutine"></param>
         /// <returns></returns>
-        IIntrinsicInvocationResult MakeInvocationResultFromIntrinsic(IRoutine targetRoutine, IParameterGroup parameterGroup);
+        IIntrinsicInvocationResult MakeInvocationResultFromIntrinsic(IRoutineGroup targetRoutine, IRoutine parameterGroup);
     }
 }

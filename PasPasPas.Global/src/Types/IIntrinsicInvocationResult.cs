@@ -10,7 +10,7 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     parameters
         /// </summary>
-        IParameterGroup Parameters { get; }
+        IRoutine Parameters { get; }
 
     }
 }

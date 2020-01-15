@@ -90,20 +90,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="methodKind"></param>
         /// <returns></returns>
-        public static ProcedureKind MapMethodKind(int methodKind) {
+        public static RoutineKind MapMethodKind(int methodKind) {
             switch (methodKind) {
                 case TokenKind.Function:
-                    return ProcedureKind.Function;
+                    return RoutineKind.Function;
                 case TokenKind.Procedure:
-                    return ProcedureKind.Procedure;
+                    return RoutineKind.Procedure;
                 case TokenKind.Constructor:
-                    return ProcedureKind.Constructor;
+                    return RoutineKind.Constructor;
                 case TokenKind.Destructor:
-                    return ProcedureKind.Destructor;
+                    return RoutineKind.Destructor;
                 case TokenKind.Operator:
-                    return ProcedureKind.Operator;
+                    return RoutineKind.Operator;
                 default:
-                    return ProcedureKind.Unknown;
+                    return RoutineKind.Unknown;
             }
         }
 

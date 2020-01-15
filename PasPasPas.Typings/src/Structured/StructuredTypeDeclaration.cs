@@ -168,7 +168,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="symbolName"></param>
         /// <param name="callables"></param>
         /// <param name="signature"></param>
-        public override void ResolveCall(string symbolName, IList<IParameterGroup> callables, Signature signature) {
+        public override void ResolveCall(string symbolName, IList<IRoutine> callables, Signature signature) {
             base.ResolveCall(symbolName, callables, signature);
 
             var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(BaseClassId);
@@ -256,12 +256,12 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="name"></param>
         /// <param name="classItem"></param>
         /// <returns></returns>
-        public IRoutine FindMethod(string name, bool classItem) {
+        public IRoutineGroup FindMethod(string name, bool classItem) {
             foreach (var method in Methods) {
                 if (!string.Equals(name, method.Name, StringComparison.OrdinalIgnoreCase))
                     continue;
 
-                foreach (var paramGroup in method.Parameters) {
+                foreach (var paramGroup in method.Items) {
                     if (paramGroup.IsClassItem != classItem)
                         continue;
 

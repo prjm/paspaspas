@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Routines {
     /// <summary>
     ///     intrinsic routine with a variable number of parameters
     /// </summary>
-    public interface IVariadicRoutine : IRoutine {
+    public interface IVariadicRoutine : IRoutineGroup {
 
         /// <summary>
         ///     check parameters
@@ -23,7 +23,7 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     procedure kind
         /// </summary>
-        ProcedureKind Kind { get; }
+        RoutineKind Kind { get; }
 
         /// <summary>
         ///     resolve a call

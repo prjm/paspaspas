@@ -1,14 +1,13 @@
 ﻿using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     declaration of a simple value type
     /// </summary>
-    public class EnumTypeCollection : SymbolTableBaseCollection<EnumTypeValue>, ITypeSpecification, ITypedSyntaxNode {
+    public class EnumTypeCollection : SymbolTableBaseCollection<EnumTypeValue>, ITypeSpecification, ITypedSyntaxPart {
 
         /// <summary>
         ///     type information

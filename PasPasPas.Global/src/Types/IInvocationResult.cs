@@ -10,7 +10,7 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     get the called routine
         /// </summary>
-        IRoutine Routine { get; }
+        IRoutineGroup Routine { get; }
 
     }
 }

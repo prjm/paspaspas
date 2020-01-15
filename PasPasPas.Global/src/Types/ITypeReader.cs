@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
 
@@ -12,5 +13,11 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <returns></returns>
         ITypeDefinition ReadUnit();
+
+        /// <summary>
+        ///     read a constant value
+        /// </summary>
+        /// <returns></returns>
+        ITypeReference ReadConstant();
     }
 }

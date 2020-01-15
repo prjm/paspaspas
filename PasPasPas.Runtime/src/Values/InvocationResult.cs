@@ -14,7 +14,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="routine"></param>
         /// <param name="routineIndex">routine index</param>
-        public InvocationResult(IRoutine routine, int routineIndex) {
+        public InvocationResult(IRoutineGroup routine, int routineIndex) {
             Routine = routine;
             RoutineIndex = routineIndex;
         }
@@ -26,7 +26,7 @@ namespace PasPasPas.Runtime.Values {
             get {
                 if (RoutineIndex < 0)
                     return KnownTypeIds.ErrorType;
-                return Routine.Parameters[RoutineIndex].ResultType.TypeId;
+                return Routine.Items[RoutineIndex].ResultType.TypeId;
             }
         }
 
@@ -38,7 +38,7 @@ namespace PasPasPas.Runtime.Values {
                 if (RoutineIndex < 0)
                     return "#??";
 
-                return $"#{Routine.Parameters[RoutineIndex].ResultType}";
+                return $"#{Routine.Items[RoutineIndex].ResultType}";
             }
         }
 
@@ -56,14 +56,14 @@ namespace PasPasPas.Runtime.Values {
                 if (RoutineIndex < 0)
                     return CommonTypeKind.UnknownType;
 
-                return Routine.Parameters[RoutineIndex].ResultType.TypeKind;
+                return Routine.Items[RoutineIndex].ResultType.TypeKind;
             }
         }
 
         /// <summary>
         ///     referenced routine
         /// </summary>
-        public IRoutine Routine { get; }
+        public IRoutineGroup Routine { get; }
 
         /// <summary>
         ///     routine index
@@ -78,7 +78,7 @@ namespace PasPasPas.Runtime.Values {
                 if (RoutineIndex < 0)
                     return false;
 
-                return Routine.Parameters[RoutineIndex].ResultType.IsConstant();
+                return Routine.Items[RoutineIndex].ResultType.IsConstant();
             }
         }
 
@@ -88,7 +88,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(InvocationResult other)
-            => Routine.Equals(other.Routine) && Routine.Parameters[RoutineIndex].Equals(other.Routine.Parameters[other.RoutineIndex]);
+            => Routine.Equals(other.Routine) && Routine.Items[RoutineIndex].Equals(other.Routine.Items[other.RoutineIndex]);
 
         /// <summary>
         ///     check equality
@@ -111,7 +111,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(IntrinsicInvocationResult other)
-            => Routine.Equals(other.Routine) && Routine.Parameters[RoutineIndex].Equals(other.Parameters);
+            => Routine.Equals(other.Routine) && Routine.Items[RoutineIndex].Equals(other.Parameters);
 
         /// <summary>
         ///     compute a hash code

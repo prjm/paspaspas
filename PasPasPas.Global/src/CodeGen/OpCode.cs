@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 
 namespace PasPasPas.Globals.CodeGen {
 
@@ -35,6 +36,24 @@ namespace PasPasPas.Globals.CodeGen {
         ///     parameters
         /// </summary>
         public ImmutableArray<byte> Params { get; }
+
+        /// <summary>
+        ///     display an op code string
+        /// </summary>
+        /// <param name="encoder">constant encoder</param>
+        /// <returns></returns>
+        public string ToOpCodeString(IConstantEncoder encoder) {
+            switch (Id) {
+                case OpCodeId.Call:
+                    return $"call";
+                case OpCodeId.Store:
+                    return $"st";
+                case OpCodeId.LoadConstant:
+                    return $"ldc {encoder.Decode(Params)}";
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
 
     }
 }

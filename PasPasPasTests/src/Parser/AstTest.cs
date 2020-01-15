@@ -328,13 +328,13 @@ namespace PasPasPasTests.Parser {
         public void TestProceduralType() {
             ProceduralType u(object t) => ((t as CompilationUnit)?.InterfaceSymbols["x"] as TypeDeclaration)?.TypeValue as ProceduralType;
 
-            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => u(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => u(t)?.Kind, RoutineKind.Procedure);
             RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => u(t)?.MethodDeclaration, false);
             RunAstTest("unit z.x; interface type x = procedure(x: string) of object; implementation end.", t => u(t)?.MethodDeclaration, true);
             RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => u(t)?.AllowAnonymousMethods, false);
             RunAstTest("unit z.x; interface type x = procedure(x: string) of object; implementation end.", t => u(t)?.AllowAnonymousMethods, false);
             RunAstTest("unit z.x; interface type x = reference to procedure(x: string); implementation end.", t => u(t)?.AllowAnonymousMethods, true);
-            RunAstTest("unit z.x; interface type x = function(x: string): string; implementation end.", t => u(t)?.Kind, ProcedureKind.Function);
+            RunAstTest("unit z.x; interface type x = function(x: string): string; implementation end.", t => u(t)?.Kind, RoutineKind.Function);
             RunAstTest("unit z.x; interface type x = function(x: string): string; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.StringType);
             RunAstTest("unit z.x; interface type x = function(x: string): [x] string; implementation end.", t => u(t)?.ReturnAttributes.FirstOrDefault()?.SymbolName, "x");
 
@@ -402,9 +402,9 @@ namespace PasPasPasTests.Parser {
             GlobalMethod f(object t) => (t as CompilationUnit)?.InterfaceSymbols["e"] as GlobalMethod;
 
             RunAstTest("unit z.x; interface procedure e(); implementation end.", t => f(t)?.Name?.CompleteName, "e");
-            RunAstTest("unit z.x; interface procedure e(); implementation end.", t => f(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface procedure e(); implementation end.", t => f(t)?.Kind, RoutineKind.Procedure);
             RunAstTest("unit z.x; interface function e(): string; implementation end.", t => f(t)?.Name?.CompleteName, "e");
-            RunAstTest("unit z.x; interface function e(): string; implementation end.", t => f(t)?.Kind, ProcedureKind.Function);
+            RunAstTest("unit z.x; interface function e(): string; implementation end.", t => f(t)?.Kind, RoutineKind.Function);
             RunAstTest("unit z.x; interface [a] procedure e(); implementation end.", t => f(t)?.Attributes[0]?.Name?.CompleteName, "a");
 
             RunAstTest("unit z.x; interface function e(): string; implementation end.", t => f(t)?.TypeValue?.GetType(), typeof(MetaType));
@@ -639,10 +639,10 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = class function m(q: string): integer; end; implementation end.", t => m(t)?.Parameters?.Items[0]?.TypeValue?.GetType(), typeof(MetaType));
             RunAstTest("unit z.x; interface type x = class function m(q: integer): string; end; implementation end.", t => m(t)?.TypeValue?.GetType(), typeof(MetaType));
 
-            RunAstTest("unit z.x; interface type x = class constructor m(q: string); end; implementation end.", t => m(t)?.Kind, ProcedureKind.Constructor);
-            RunAstTest("unit z.x; interface type x = class destructor m(q: string); end; implementation end.", t => m(t)?.Kind, ProcedureKind.Destructor);
-            RunAstTest("unit z.x; interface type x = class procedure m(q: string); end; implementation end.", t => m(t)?.Kind, ProcedureKind.Procedure);
-            RunAstTest("unit z.x; interface type x = class function m(q: string): integer; end; implementation end.", t => m(t)?.Kind, ProcedureKind.Function);
+            RunAstTest("unit z.x; interface type x = class constructor m(q: string); end; implementation end.", t => m(t)?.Kind, RoutineKind.Constructor);
+            RunAstTest("unit z.x; interface type x = class destructor m(q: string); end; implementation end.", t => m(t)?.Kind, RoutineKind.Destructor);
+            RunAstTest("unit z.x; interface type x = class procedure m(q: string); end; implementation end.", t => m(t)?.Kind, RoutineKind.Procedure);
+            RunAstTest("unit z.x; interface type x = class function m(q: string): integer; end; implementation end.", t => m(t)?.Kind, RoutineKind.Function);
 
             RunAstTest("unit z.x; interface type x = class procedure m(q: integer); reintroduce; end; implementation end.", t => m(t)?.Directives[0].Kind, MethodDirectiveKind.Reintroduce);
             RunAstTest("unit z.x; interface type x = class procedure m(q: integer); overload; end; implementation end.", t => m(t)?.Directives[0].Kind, MethodDirectiveKind.Overload);
@@ -728,8 +728,8 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type z = interface(q) [s] end; implementation end.", t => r(t)?.GuidName?.CompleteName, "s");
             RunAstTest("unit z.x; interface type z = interface(q) ['s'] end; implementation end.", t => r(t)?.GuidId, GetWideCharValue('s'));
 
-            RunAstTest("unit z.x; interface type z = interface procedure m(q: integer); end; implementation end.", t => m(t)?.Kind, ProcedureKind.Procedure);
-            RunAstTest("unit z.x; interface type z = interface function m(q: integer): string; end; implementation end.", t => m(t)?.Kind, ProcedureKind.Function);
+            RunAstTest("unit z.x; interface type z = interface procedure m(q: integer); end; implementation end.", t => m(t)?.Kind, RoutineKind.Procedure);
+            RunAstTest("unit z.x; interface type z = interface function m(q: integer): string; end; implementation end.", t => m(t)?.Kind, RoutineKind.Function);
 
             RunAstTest("unit z.x; interface type z = interface property n: integer; end; implementation end.", t => p(t)?.Visibility, MemberVisibility.Public);
             RunAstTest("unit z.x; interface type z = interface property n: integer; end; implementation end.", t => p(t)?.Name.CompleteName, "n");
@@ -870,10 +870,10 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Name?.Name, "m");
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Name?.NamespaceName, "Tx");
 
-            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Kind, ProcedureKind.Procedure);
-            RunAstTest("unit z.x; interface type Tx = class type Tz = class procedure m(); end; end; implementation procedure Tx.Tz.m; begin end; end.", t => j(t)?.Kind, ProcedureKind.Procedure);
-            RunAstTest("unit z.x; interface implementation type Tx = class procedure m(); end; procedure Tx.m; begin end; end.", t => i1(t)?.Kind, ProcedureKind.Procedure);
-            RunAstTest("unit z.x; interface implementation type Tx = class type Tz = class procedure m(); end; end; procedure Tx.Tz.m; begin end; end.", t => j1(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Kind, RoutineKind.Procedure);
+            RunAstTest("unit z.x; interface type Tx = class type Tz = class procedure m(); end; end; implementation procedure Tx.Tz.m; begin end; end.", t => j(t)?.Kind, RoutineKind.Procedure);
+            RunAstTest("unit z.x; interface implementation type Tx = class procedure m(); end; procedure Tx.m; begin end; end.", t => i1(t)?.Kind, RoutineKind.Procedure);
+            RunAstTest("unit z.x; interface implementation type Tx = class type Tz = class procedure m(); end; end; procedure Tx.Tz.m; begin end; end.", t => j1(t)?.Kind, RoutineKind.Procedure);
 
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; reintroduce; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Reintroduce);
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; overload; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Overload);
@@ -908,9 +908,9 @@ namespace PasPasPasTests.Parser {
             MethodImplementation r(object t) => (t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation;
             MethodImplementation i(object t) => r(t);
 
-            RunAstTest("unit z.x; interface implementation procedure p; begin end; end.", t => r(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface implementation procedure p; begin end; end.", t => r(t)?.Kind, RoutineKind.Procedure);
             RunAstTest("unit z.x; interface implementation procedure p(x: string); begin end; end.", t => r(t)?.Parameters[0]?.SymbolName, "x");
-            RunAstTest("unit z.x; interface implementation function p: string; begin end; end.", t => r(t)?.Kind, ProcedureKind.Function);
+            RunAstTest("unit z.x; interface implementation function p: string; begin end; end.", t => r(t)?.Kind, RoutineKind.Function);
             RunAstTest("unit z.x; interface implementation function p: string; begin end; end.", t => r(t)?.TypeValue?.GetType(), typeof(MetaType));
 
             RunAstTest("unit z.x; interface implementation procedure p; overload; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Overload);
@@ -1244,7 +1244,7 @@ namespace PasPasPasTests.Parser {
         public void TestGlobalMethod() {
             GlobalMethod r(object t) => (t as CompilationUnit)?.InterfaceSymbols["a"] as GlobalMethod;
 
-            RunAstTest("unit z.x; interface procedure a; implementation procedure a; begin end; end.", t => r(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface procedure a; implementation procedure a; begin end; end.", t => r(t)?.Kind, RoutineKind.Procedure);
         }
 
         /// <summary>

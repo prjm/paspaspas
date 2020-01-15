@@ -13,7 +13,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="routine"></param>
         /// <param name="index"></param>
-        public RoutineIndex(IRoutine routine, int index) {
+        public RoutineIndex(IRoutineGroup routine, int index) {
             Routine = routine;
             Index = index;
         }
@@ -21,7 +21,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     routine
         /// </summary>
-        public IRoutine Routine { get; }
+        public IRoutineGroup Routine { get; }
 
         /// <summary>
         ///     index
@@ -38,13 +38,13 @@ namespace PasPasPas.Typings.Common {
         ///     test if this a class routine
         /// </summary>
         public bool IsClassItem
-            => Routine.Parameters[Index].IsClassItem;
+            => Routine.Items[Index].IsClassItem;
 
         /// <summary>
         ///     parameters
         /// </summary>
-        public IParameterGroup Parameters
-            => Routine.Parameters[Index];
+        public IRoutine Parameters
+            => Routine.Items[Index];
 
         /// <summary>
         ///     create a signature
@@ -52,7 +52,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="registeredTypes"></param>
         /// <returns></returns>
         public Signature CreateSignature(ITypeRegistry registeredTypes)
-            => Routine.Parameters[Index].CreateSignature(registeredTypes);
+            => Routine.Items[Index].CreateSignature(registeredTypes);
 
         /// <summary>
         ///     routine name

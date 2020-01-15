@@ -84,7 +84,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="routineId">routine to find</param>
         /// <returns>found intrinsic routine</returns>
-        IRoutine GetIntrinsicRoutine(IntrinsicRoutineId routineId);
+        IRoutineGroup GetIntrinsicRoutine(IntrinsicRoutineId routineId);
 
         /// <summary>
         ///     type factory

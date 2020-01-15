@@ -2266,7 +2266,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         private void DefineResultVariables(MethodImplementation result) {
-            if (result.Kind == ProcedureKind.Function) {
+            if (result.Kind == RoutineKind.Function) {
                 var declaration = new VariableDeclaration();
                 var functionResult = new FunctionResult() {
                     Name = new SimpleSymbolName("Result"),

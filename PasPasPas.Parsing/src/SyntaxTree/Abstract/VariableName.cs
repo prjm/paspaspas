@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     variable name
     /// </summary>
-    public class VariableName : DeclaredSymbol, IRefSymbol {
+    public class VariableName : DeclaredSymbol, IRefSymbol, ITypedSyntaxPart {
 
         /// <summary>
         ///     get the type id for this variable

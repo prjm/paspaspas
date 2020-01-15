@@ -1,12 +1,12 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Globals.Parsing;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     base class for a type specification
     /// </summary>
-    public abstract class TypeSpecificationBase : AbstractSyntaxPartBase, ITypeSpecification, ITypedSyntaxNode {
+    public abstract class TypeSpecificationBase : AbstractSyntaxPartBase, ITypeSpecification, ITypedSyntaxPart {
 
         /// <summary>
         ///     type information

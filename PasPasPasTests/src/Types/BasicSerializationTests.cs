@@ -8,7 +8,7 @@ using PasPasPas.Typings.Serialization;
 using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
 using KTI = PasPasPas.Globals.Types.KnownTypeIds;
-using PK = PasPasPas.Globals.Types.ProcedureKind;
+using PK = PasPasPas.Globals.Types.RoutineKind;
 
 namespace PasPasPasTests.Types {
 
@@ -426,8 +426,8 @@ namespace PasPasPasTests.Types {
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
                 var nt = env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType);
-                var d = new Routine(env.TypeRegistry, "_");
-                var pg = new ParameterGroup(d, PK.Procedure, nt);
+                var d = new RoutineGroup(env.TypeRegistry, "_");
+                var pg = new Routine(d, PK.Procedure, nt);
                 var t = new ParameterGroupTag();
 
                 t.Initialize(pg);
@@ -435,12 +435,12 @@ namespace PasPasPasTests.Types {
 
                 stream.Seek(0, SeekOrigin.Begin);
                 t = new ParameterGroupTag();
-                d = new Routine(env.TypeRegistry, "_");
+                d = new RoutineGroup(env.TypeRegistry, "_");
                 r.ReadTag(t);
                 t.AddToRoutine(d);
 
-                pg = d.Parameters[0] as ParameterGroup;
-                Assert.AreEqual(pg.RoutineKind, PK.Procedure);
+                pg = d.Items[0] as Routine;
+                Assert.AreEqual(pg.Kind, PK.Procedure);
             }
         }
 
@@ -484,8 +484,8 @@ namespace PasPasPasTests.Types {
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
                 var u = env.TypeRegistry.GetTypeByIdOrUndefinedType(KTI.SystemUnit) as UnitType;
-                var rr = u.Symbols["writeln"].Symbol as IRoutine;
-                var parms = new ParameterGroup(rr, PK.Procedure, env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType));
+                var rr = u.Symbols["writeln"].Symbol as IRoutineGroup;
+                var parms = new Routine(rr, PK.Procedure, env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType));
                 var callInfo = new IntrinsicInvocationResult(rr, parms);
                 var op = new OpCode(OpCodeId.Call, parms.Encode());
                 var t = new OpCodeTag();
@@ -497,8 +497,8 @@ namespace PasPasPasTests.Types {
                 r.ReadTag(t);
 
                 Assert.AreEqual(t.OpCode.Id, OpCodeId.Call);
-                var c = new ParameterGroup(t.OpCode.Params, env.TypeRegistry);
-                Assert.AreEqual(c.Routine.RoutineId, IntrinsicRoutineId.WriteLn);
+                var c = new Routine(t.OpCode.Params, env.TypeRegistry);
+                Assert.AreEqual(c.RoutineGroup.RoutineId, IntrinsicRoutineId.WriteLn);
             }
         }
 

@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     procedure kind
         /// </summary>
-        public ProcedureKind Kind { get; set; }
+        public RoutineKind Kind { get; set; }
 
         /// <summary>
         ///     parameters

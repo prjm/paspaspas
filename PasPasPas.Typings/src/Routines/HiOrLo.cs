@@ -69,8 +69,8 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     procedure kind
         /// </summary>
-        public ProcedureKind Kind
-            => ProcedureKind.Function;
+        public RoutineKind Kind
+            => RoutineKind.Function;
 
         /// <summary>
         ///     routine id

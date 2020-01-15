@@ -2,14 +2,13 @@
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     declared constant
     /// </summary>
-    public class ConstantDeclaration : DeclaredSymbol, ITypedSyntaxNode, ISymbolWithAttributes, IExpressionTarget, ITypeTarget, IRefSymbol {
+    public class ConstantDeclaration : DeclaredSymbol, ITypedSyntaxPart, ISymbolWithAttributes, IExpressionTarget, ITypeTarget, IRefSymbol {
 
         /// <summary>
         ///     constant mode

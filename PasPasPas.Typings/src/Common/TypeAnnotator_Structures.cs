@@ -1,10 +1,17 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System.Collections.Generic;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
     public partial class TypeAnnotator {
+
+        /// <summary>
+        ///     registered routines
+        /// </summary>
+        public List<(Routine, BlockOfStatements)> Routines
+            => routines;
 
         /// <summary>
         ///     begin visit a unit
@@ -34,13 +41,19 @@ namespace PasPasPas.Typings.Common {
         public void StartVisit(BlockOfStatements element) {
             resolver.OpenScope();
             if (currentMethodImplementation.Count < 1) {
-                var mainRoutine = TypeCreator.CreateGlobalRoutine(KnownNames.MainMethod);
-                mainRoutine.Parameters.Add(new ParameterGroup(mainRoutine, ProcedureKind.Procedure, GetInstanceTypeById(KnownTypeIds.NoType)));
+                var mainRoutineGroup = TypeCreator.CreateGlobalRoutine(KnownNames.MainMethod);
+                var mainRoutine = new Routine(mainRoutineGroup, RoutineKind.Procedure, GetInstanceTypeById(KnownTypeIds.NoType));
+                mainRoutineGroup.Items.Add(mainRoutine);
                 var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as IUnitType;
-                unitType.Symbols.Add(mainRoutine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, mainRoutine));
-                currentMethodImplementation.Push(new RoutineIndex(mainRoutine, 0));
-                currentCodeBlock.Push(new CodeBlockBuilder(environment.ListPools));
+                unitType.Symbols.Add(mainRoutineGroup.Name, new Reference(ReferenceKind.RefToGlobalRoutine, mainRoutineGroup));
+                currentMethodImplementation.Push(new RoutineIndex(mainRoutineGroup, 0));
+                RegisterRoutine(mainRoutine, element);
             }
+        }
+
+        private void RegisterRoutine(Routine routine, BlockOfStatements block) {
+            var entry = (routine, block);
+            routines.Add(entry);
         }
 
         /// <summary>
@@ -54,9 +67,6 @@ namespace PasPasPas.Typings.Common {
 
             if (cmi != default && string.Equals(cmi.Name, KnownNames.MainMethod, System.StringComparison.OrdinalIgnoreCase)) {
                 var mi = currentMethodImplementation.Pop();
-                var cb = currentCodeBlock.Pop();
-                (mi.Parameters as ParameterGroup).Code = cb.CreateCodeArray();
-                cb.Dispose();
             }
         }
 

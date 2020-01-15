@@ -8,7 +8,7 @@ namespace PasPasPas.Typings.Routines {
     /// <summary>
     ///     base class for intrinsic routines
     /// </summary>
-    public abstract class IntrinsicRoutine : IRoutine {
+    public abstract class IntrinsicRoutine : IRoutineGroup {
 
         /// <summary>
         ///     routine name
@@ -77,8 +77,8 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     parameters
         /// </summary>
-        public List<IParameterGroup> Parameters { get; }
-            = new List<IParameterGroup>();
+        public List<IRoutine> Items { get; }
+            = new List<IRoutine>();
 
         /// <summary>
         ///     unique routine id
@@ -176,7 +176,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="callableRoutines"></param>
         /// <param name="signature"></param>
-        public virtual void ResolveCall(IList<IParameterGroup> callableRoutines, Signature signature) {
+        public virtual void ResolveCall(IList<IRoutine> callableRoutines, Signature signature) {
             if (this is IUnaryRoutine unaryRoutine)
                 ResolveCall(unaryRoutine, callableRoutines, signature);
 
@@ -184,7 +184,7 @@ namespace PasPasPas.Typings.Routines {
                 ResolveCall(variadicRoutine, callableRoutines, signature);
         }
 
-        private static void ResolveCall(IUnaryRoutine unaryRoutine, IList<IParameterGroup> callableRoutines, Signature signature) {
+        private static void ResolveCall(IUnaryRoutine unaryRoutine, IList<IRoutine> callableRoutines, Signature signature) {
             if (signature.Length != 1)
                 return;
 
@@ -200,13 +200,13 @@ namespace PasPasPas.Typings.Routines {
             else
                 resultType = unaryRoutine.ResolveCall(parameter);
 
-            var result = new ParameterGroup(unaryRoutine, unaryRoutine.Kind, resultType);
+            var result = new Routine(unaryRoutine, unaryRoutine.Kind, resultType);
             result.AddParameter("AValue").SymbolType = parameter;
             callableRoutines.Add(result);
         }
 
 
-        private static void ResolveCall(IVariadicRoutine variadicRoutine, IList<IParameterGroup> callableRoutines, Signature signature) {
+        private static void ResolveCall(IVariadicRoutine variadicRoutine, IList<IRoutine> callableRoutines, Signature signature) {
 
             if (!variadicRoutine.CheckParameter(signature))
                 return;
@@ -218,7 +218,7 @@ namespace PasPasPas.Typings.Routines {
             else
                 resultType = variadicRoutine.ResolveCall(signature);
 
-            var result = new ParameterGroup(variadicRoutine, variadicRoutine.Kind, resultType);
+            var result = new Routine(variadicRoutine, variadicRoutine.Kind, resultType);
 
             for (var i = 0; i < signature.Length; i++)
                 result.AddParameter($"AValue{signature}").SymbolType = signature[0];

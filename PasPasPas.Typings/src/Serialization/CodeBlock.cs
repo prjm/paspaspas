@@ -7,12 +7,12 @@ namespace PasPasPas.Typings.Serialization {
 
     internal static class ProcedureKindHelper {
 
-        public static byte ToByte(this ProcedureKind kind)
+        public static byte ToByte(this RoutineKind kind)
             => (byte)kind;
 
-        public static ProcedureKind ToProcedureKind(this byte kind) {
-            var result = (ProcedureKind)kind;
-            if (!Enum.IsDefined(typeof(ProcedureKind), result))
+        public static RoutineKind ToProcedureKind(this byte kind) {
+            var result = (RoutineKind)kind;
+            if (!Enum.IsDefined(typeof(RoutineKind), result))
                 throw new TypeReaderWriteException();
             return result;
         }
@@ -39,8 +39,8 @@ namespace PasPasPas.Typings.Serialization {
         public override uint Kind
             => Constants.CodeBlockTag;
 
-        private readonly List<IRoutine> routines
-            = new List<IRoutine>();
+        private readonly List<IRoutineGroup> routines
+            = new List<IRoutineGroup>();
 
         private readonly StringRegistry stringData;
 
@@ -70,11 +70,11 @@ namespace PasPasPas.Typings.Serialization {
                 var routine = routines[i];
                 n = stringData[routine.Name];
                 typeWriter.WriteUint(n);
-                n = (uint)routine.Parameters.Count;
+                n = (uint)routine.Items.Count;
                 typeWriter.WriteUint(n);
                 var paramTag = new ParameterGroupTag();
-                for (var j = 0; j < routine.Parameters.Count; j++) {
-                    paramTag.Initialize(routine.Parameters[j]);
+                for (var j = 0; j < routine.Items.Count; j++) {
+                    paramTag.Initialize(routine.Items[j]);
                     typeWriter.WriteTag(paramTag);
                 }
             }
@@ -84,7 +84,7 @@ namespace PasPasPas.Typings.Serialization {
             foreach (var symbol in unit.Symbols) {
                 var reference = symbol.Value as Globals.Types.Reference;
                 if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
-                    var routine = reference.Symbol as IRoutine;
+                    var routine = reference.Symbol as IRoutineGroup;
                     routines.Add(routine);
                     var _ = stringData[routine.Name];
                 }

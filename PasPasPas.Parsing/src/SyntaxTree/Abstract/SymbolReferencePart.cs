@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Parsing;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -6,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     part of complex symbol references
     /// </summary>
-    public class SymbolReferencePart : AbstractSyntaxPartBase, IExpressionTarget {
+    public class SymbolReferencePart : AbstractSyntaxPartBase, IExpressionTarget, ITypedSyntaxPart {
 
         /// <summary>
         ///     reference kind
@@ -41,6 +42,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get => Expressions.LastOrDefault();
             set => Expressions.Add(value);
         }
+
+        /// <summary>
+        ///     type info
+        /// </summary>
+        public ITypeReference TypeInfo { get; set; }
 
         /// <summary>
         ///     accept visitor

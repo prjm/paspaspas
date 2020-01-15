@@ -108,7 +108,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="name">procedure name</param>
         /// <returns></returns>
-        IRoutine CreateGlobalRoutine(string name);
+        IRoutineGroup CreateGlobalRoutine(string name);
 
         /// <summary>
         ///     meta class type

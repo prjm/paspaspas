@@ -44,9 +44,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public GenericTypeCollection GenericType { get; set; }
 
         /// <summary>
-        ///     parts
+        ///     parts of this reference
         /// </summary>
-        public SyntaxPartCollection<ISyntaxPart> SymbolParts { get; }
+        public SyntaxPartCollection<ITypedSyntaxPart> SymbolParts { get; }
 
         /// <summary>
         ///     name parameter
@@ -57,13 +57,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a a new symbol reference
         /// </summary>
         public SymbolReference()
-            => SymbolParts = new SyntaxPartCollection<ISyntaxPart>();
+            => SymbolParts = new SyntaxPartCollection<ITypedSyntaxPart>();
 
         /// <summary>
         ///     add a part
         /// </summary>
         /// <param name="part"></param>
-        public void AddPart(ISyntaxPart part)
+        public void AddPart(ITypedSyntaxPart part)
             => SymbolParts.Add(part);
 
         /// <summary>

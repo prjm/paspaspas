@@ -23,6 +23,11 @@ namespace PasPasPas.Globals.Runtime {
         string Name { get; }
 
         /// <summary>
+        ///     variable kind
+        /// </summary>
+        VariableKind Kind { get; }
+
+        /// <summary>
         ///     class fields
         /// </summary>
         bool ClassItem { get; }

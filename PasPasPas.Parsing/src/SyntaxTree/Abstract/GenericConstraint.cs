@@ -1,13 +1,12 @@
 ﻿using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     generic constraint
     /// </summary>
-    public class GenericConstraint : SymbolTableEntryBase, ITypedSyntaxNode {
+    public class GenericConstraint : SymbolTableEntryBase, ITypedSyntaxPart {
 
         /// <summary>
         ///     constraint kind

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
 
@@ -136,15 +136,15 @@ namespace PasPasPas.Typings.Common {
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 
             if (reference.Kind == ReferenceKind.RefToConstant)
-                return (reference.Symbol as ITypedSyntaxNode)?.TypeInfo;
+                return (reference.Symbol as ITypedSyntaxPart)?.TypeInfo;
 
             if (reference.Kind == ReferenceKind.RefToEnumMember) {
                 return (reference.Symbol as EnumValue)?.Value;
             }
 
             if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
-                if (reference.Symbol is IRoutine routine) {
-                    var callableRoutines = new List<IParameterGroup>();
+                if (reference.Symbol is IRoutineGroup routine) {
+                    var callableRoutines = new List<IRoutine>();
                     var signature = new Signature(TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnspecifiedType), ImmutableArray<ITypeReference>.Empty);
                     routine.ResolveCall(callableRoutines, signature);
                     if (callableRoutines.Count == 1)

@@ -15,24 +15,24 @@ namespace PasPasPas.Typings.Serialization {
         public override uint Kind
             => Constants.ParameterGroupTag;
 
-        private ProcedureKind procedureKind;
+        private RoutineKind procedureKind;
         private ITypeReference resultType;
 
         internal override void ReadData(uint kind, TypeReader typeReader) {
-            procedureKind = (ProcedureKind)typeReader.ReadByte();
+            procedureKind = (RoutineKind)typeReader.ReadByte();
         }
 
         internal override void WriteData(TypeWriter typeWriter) {
             typeWriter.WriteByte((byte)procedureKind);
         }
 
-        internal void AddToRoutine(IRoutine routine)
-            => routine.Parameters.Add(ToParameterGroup(routine));
+        internal void AddToRoutine(IRoutineGroup routine)
+            => routine.Items.Add(ToParameterGroup(routine));
 
-        internal IParameterGroup ToParameterGroup(IRoutine routine)
-            => new ParameterGroup(routine, procedureKind, resultType);
+        internal IRoutine ToParameterGroup(IRoutineGroup routine)
+            => new Routine(routine, procedureKind, resultType);
 
-        internal void Initialize(IParameterGroup parameterGroup)
-            => procedureKind = parameterGroup.RoutineKind;
+        internal void Initialize(IRoutine parameterGroup)
+            => procedureKind = parameterGroup.Kind;
     }
 }

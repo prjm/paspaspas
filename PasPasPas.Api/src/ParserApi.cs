@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Api;
+﻿using PasPasPas.AssemblyBuilder.Builder;
+using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options;
@@ -94,6 +95,9 @@ namespace PasPasPas.Api {
         public void AnnotateWithTypes(ISyntaxPart ast) {
             var typeVisitor = new TypeAnnotator(Environment);
             ast.Accept(typeVisitor.AsVisitor());
+
+            var pOpCodeBuilder = new POpCodeBuilder(Environment);
+            pOpCodeBuilder.Apply(typeVisitor.Routines);
         }
 
         /// <summary>

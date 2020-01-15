@@ -4,7 +4,6 @@ using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Routines;
 using PasPasPas.Typings.Simple;
@@ -43,7 +42,6 @@ namespace PasPasPas.Typings.Common {
         IStartVisitor<MethodDeclaration>, IEndVisitor<MethodDeclaration>,
         IEndVisitor<ParameterTypeDefinition>,
         IEndVisitor<StructureFields>,
-        IEndVisitor<StructuredStatement>,
         IEndVisitor<SetExpression>,
         IEndVisitor<ArrayConstant>,
         IStartVisitor<RecordConstant>, IEndVisitor<RecordConstant>,
@@ -57,14 +55,15 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<GenericTypeNameCollection>,
         IEndVisitor<DeclaredSymbolCollection>,
         IEndVisitor<RequiredUnitName>,
-        IStartVisitor<BlockOfStatements>, IEndVisitor<BlockOfStatements> {
+        IStartVisitor<BlockOfStatements>, IEndVisitor<BlockOfStatements>,
+        IEndVisitor<StructuredStatement> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
         private readonly Stack<ITypeReference> currentTypeDefinition;
-        private readonly Stack<ParameterGroup> currentMethodParameters;
-        private readonly Stack<CodeBlockBuilder> currentCodeBlock;
+        private readonly Stack<Routine> currentMethodParameters;
         private readonly Resolver resolver;
+        private readonly List<(Routine, BlockOfStatements)> routines;
 
         /// <summary>
         ///     current unit definition
@@ -87,11 +86,11 @@ namespace PasPasPas.Typings.Common {
             environment = env;
             resolver = new Resolver(new Scope(env.TypeRegistry));
             currentTypeDefinition = new Stack<ITypeReference>();
-            currentMethodParameters = new Stack<ParameterGroup>();
-            currentCodeBlock = new Stack<CodeBlockBuilder>();
+            currentMethodParameters = new Stack<Routine>();
+            routines = new List<(Routine, BlockOfStatements)>();
         }
 
-        private ITypeReference GetTypeRefence(ITypedSyntaxNode syntaxNode) {
+        private ITypeReference GetTypeRefence(ITypedSyntaxPart syntaxNode) {
             if (syntaxNode != default && syntaxNode.TypeInfo != null)
                 return syntaxNode.TypeInfo;
 
@@ -107,10 +106,10 @@ namespace PasPasPas.Typings.Common {
         private ITypeReference GetTypeReferenceById(int typeId)
             => environment.TypeRegistry.MakeTypeReference(typeId);
 
-        private ITypeDefinition GetErrorType(ITypedSyntaxNode node)
+        private ITypeDefinition GetErrorType(ITypedSyntaxPart node)
             => environment.TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
 
-        private ITypeReference GetErrorTypeReference(ITypedSyntaxNode node)
+        private ITypeReference GetErrorTypeReference(ITypedSyntaxPart node)
             => environment.Runtime.Types.MakeErrorTypeReference();
 
         private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
@@ -127,7 +126,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(VariableDeclaration element) {
-            if (element.TypeValue is ITypedSyntaxNode typeRef && typeRef.TypeInfo != null)
+            if (element.TypeValue is ITypedSyntaxPart typeRef && typeRef.TypeInfo != null)
                 element.TypeInfo = typeRef.TypeInfo;
             else
                 element.TypeInfo = GetErrorTypeReference(element);
@@ -143,10 +142,14 @@ namespace PasPasPas.Typings.Common {
                 var cmi = currentMethodImplementation.Count < 1 ? default : currentMethodImplementation.Peek();
                 variable.Name = varname;
 
-                if (cmi == default)
+                if (cmi == default) {
                     unitType.Symbols.Add(varname, new Reference(ReferenceKind.RefToVariable, variable));
-                else if (cmi.Index >= 0)
+                    variable.Kind = VariableKind.GlobalVariable;
+                }
+                else if (cmi.Index >= 0) {
                     cmi.Parameters.Symbols.Add(varname, new Reference(ReferenceKind.RefToVariable, variable));
+                    variable.Kind = VariableKind.LocalVariable;
+                }
 
                 resolver.AddToScope(varname, ReferenceKind.RefToVariable, variable);
 
@@ -315,19 +318,9 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element">symbol reference</param>
         public void EndVisit(SymbolReference element) {
-            DetermineSymbolTypes(element);
-
-            if (element.TypeInfo?.ReferenceKind == TypeReferenceKind.InvocationResult) {
-                var codeBuilder = currentCodeBlock.Peek();
-                var callInfo = element.TypeInfo as IInvocationResult;
-                codeBuilder.AddCall(callInfo);
-            }
-        }
-
-        private void DetermineSymbolTypes(SymbolReference element) {
             var baseTypeValue = GetInstanceTypeById(KnownTypeIds.UnspecifiedType);
 
-            if (element.TypeValue is ITypedSyntaxNode typeRef)
+            if (element.TypeValue is ITypedSyntaxPart typeRef)
                 baseTypeValue = typeRef.TypeInfo;
 
             if (element.Inherited) {
@@ -338,7 +331,7 @@ namespace PasPasPas.Typings.Common {
 
                     var classMethod = impl.IsClassItem;
                     var signature = impl.CreateSignature(TypeRegistry);
-                    var callableRoutines = new List<IParameterGroup>();
+                    var callableRoutines = new List<IRoutine>();
 
                     var bdef = GetTypeByIdOrUndefinedType(impl.DefiningType) as StructuredTypeDeclaration;
                     var idef = GetTypeByIdOrUndefinedType(bdef.BaseClassId) as StructuredTypeDeclaration;
@@ -403,7 +396,7 @@ namespace PasPasPas.Typings.Common {
                         baseTypeValue = symRef.Value.TypeInfo;
                     }
                     else if ((symRef.Kind == SymbolReferencePartKind.CallParameters || symRef.Kind == SymbolReferencePartKind.StringCast) && symRef.Name != null) {
-                        var callableRoutines = new List<IParameterGroup>();
+                        var callableRoutines = new List<IRoutine>();
                         var signature = CreateSignatureFromSymbolPart(symRef);
 
                         if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
@@ -413,7 +406,7 @@ namespace PasPasPas.Typings.Common {
                                 baseTypeValue = GetErrorTypeReference(element);
                             }
                             else if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
-                                if (reference.Symbol is IRoutine routine) {
+                                if (reference.Symbol is IRoutineGroup routine) {
                                     routine.ResolveCall(callableRoutines, signature);
                                 }
                             }
@@ -437,18 +430,22 @@ namespace PasPasPas.Typings.Common {
                             if (callableRoutines[0].ResultType.IsConstant()) {
                                 baseTypeValue = callableRoutines[0].ResultType;
                             }
-                            else if (callableRoutines[0].Routine is IntrinsicRoutine _) {
-                                baseTypeValue = Runtime.Types.MakeInvocationResultFromIntrinsic(callableRoutines[0].Routine, callableRoutines[0]);
+                            else if (callableRoutines[0].RoutineGroup is IntrinsicRoutine _) {
+                                baseTypeValue = Runtime.Types.MakeInvocationResultFromIntrinsic(callableRoutines[0].RoutineGroup, callableRoutines[0]);
                             }
                             else {
-                                var targetRoutine = callableRoutines[0].Routine;
+                                var targetRoutine = callableRoutines[0].RoutineGroup;
                                 var routineIndex = targetRoutine.GetIndexOfParameterGroup(callableRoutines[0]);
                                 baseTypeValue = Runtime.Types.MakeInvocationResult(targetRoutine, routineIndex);
                             }
                         }
                     }
 
+
                 }
+
+                part.TypeInfo = baseTypeValue;
+
             }
 
             element.TypeInfo = baseTypeValue;
@@ -591,7 +588,7 @@ namespace PasPasPas.Typings.Common {
                 var placeholderRef = currentTypeDefinition.Pop();
                 var placeholder = GetTypeByIdOrUndefinedType(placeholderRef.TypeId) as IExtensibleGenericType;
 
-                if (element.TypeValue is ITypedSyntaxNode type && type.TypeInfo != null) {
+                if (element.TypeValue is ITypedSyntaxPart type && type.TypeInfo != null) {
                     var typedef = GetTypeByIdOrUndefinedType(type.TypeInfo.TypeId) as IExtensibleGenericType;
 
                     if (typedef != default)
@@ -600,7 +597,7 @@ namespace PasPasPas.Typings.Common {
                 }
             }
 
-            if (element.TypeValue is ITypedSyntaxNode declaredType && declaredType.TypeInfo != null) {
+            if (element.TypeValue is ITypedSyntaxPart declaredType && declaredType.TypeInfo != null) {
                 element.TypeInfo = element.TypeValue.TypeInfo;
                 if (element.Name.CompleteName != default)
                     resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeInfo.TypeId), element.Generics?.Count ?? 0);
@@ -613,7 +610,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(SetTypeDeclaration element) {
 
-            if (element.TypeValue is ITypedSyntaxNode declaredEnum && declaredEnum.TypeInfo != null && declaredEnum.TypeInfo.TypeKind.IsOrdinal()) {
+            if (element.TypeValue is ITypedSyntaxPart declaredEnum && declaredEnum.TypeInfo != null && declaredEnum.TypeInfo.TypeKind.IsOrdinal()) {
                 var setType = TypeCreator.CreateSetType(declaredEnum.TypeInfo.TypeId);
                 element.TypeInfo = GetInstanceTypeById(setType.TypeId);
                 return;
@@ -701,13 +698,13 @@ namespace PasPasPas.Typings.Common {
             if (element.Name == null)
                 return;
 
-            var method = default(IRoutine);
+            var method = default(IRoutineGroup);
             var f = new RoutineFlags();
 
             if (element is GlobalMethod gm) {
                 if (CurrentUnit.InterfaceSymbols != default) {
                     var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
-                    method = new Routine(TypeRegistry, element.SymbolName);
+                    method = new RoutineGroup(TypeRegistry, element.SymbolName);
                     unitType.AddGlobal(method);
                 }
             }
@@ -734,8 +731,8 @@ namespace PasPasPas.Typings.Common {
                 method = typeDef.AddOrExtendMethod(element.Name.CompleteName, genericTypeId);
             }
 
-            currentTypeDefinition.Push((Routine)method);
-            var parameters = ((Routine)method).AddParameterGroup(element.Kind, GetInstanceTypeById(KnownTypeIds.NoType));
+            currentTypeDefinition.Push((RoutineGroup)method);
+            var parameters = ((RoutineGroup)method).AddParameterGroup(element.Kind, GetInstanceTypeById(KnownTypeIds.NoType));
             parameters.IsClassItem = f.IsClassItem;
             currentMethodParameters.Push(parameters);
         }
@@ -748,9 +745,9 @@ namespace PasPasPas.Typings.Common {
             if (element.Name == default)
                 return;
 
-            var method = currentTypeDefinition.Pop() as Routine;
+            var method = currentTypeDefinition.Pop() as RoutineGroup;
 
-            if (element.Kind == ProcedureKind.Function) {
+            if (element.Kind == RoutineKind.Function) {
 
                 if (currentTypeDefinition.Count < 1)
                     return;
@@ -818,24 +815,6 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     visit a statement
-        /// </summary>
-        /// <param name="element">statement to check</param>
-        public void EndVisit(StructuredStatement element) {
-            if (element.Kind == StructuredStatementKind.Assignment)
-                CheckAssigment(element);
-        }
-
-        private void CheckAssigment(StructuredStatement element) {
-            var left = element.Expressions.Count > 0 ? element.Expressions[0]?.TypeInfo : null;
-            var right = element.Expressions.Count > 1 ? element.Expressions[1]?.TypeInfo : null;
-            if (left != null && right != null) {
-
-                environment.TypeRegistry.GetTypeByIdOrUndefinedType(left.TypeId).CanBeAssignedFrom(environment.TypeRegistry.GetTypeByIdOrUndefinedType(right.TypeId));
-            }
-        }
-
-        /// <summary>
         ///     visit a constant declaration
         /// </summary>
         /// <param name="element">item to visit</param>
@@ -843,10 +822,10 @@ namespace PasPasPas.Typings.Common {
             var declaredType = default(ITypeReference);
             var inferredType = default(ITypeReference);
 
-            if (element.TypeValue is ITypedSyntaxNode typeRef && typeRef.TypeInfo != null && typeRef.TypeInfo.TypeId != KnownTypeIds.ErrorType)
+            if (element.TypeValue is ITypedSyntaxPart typeRef && typeRef.TypeInfo != null && typeRef.TypeInfo.TypeId != KnownTypeIds.ErrorType)
                 declaredType = typeRef.TypeInfo;
 
-            if (element.Value is ITypedSyntaxNode autType && autType.TypeInfo != null && autType.TypeInfo.TypeId != KnownTypeIds.ErrorType)
+            if (element.Value is ITypedSyntaxPart autType && autType.TypeInfo != null && autType.TypeInfo.TypeId != KnownTypeIds.ErrorType)
                 inferredType = autType.TypeInfo;
 
             if (inferredType == default)
@@ -930,7 +909,7 @@ namespace PasPasPas.Typings.Common {
             }
         }
 
-        private bool ExpandRangeOperator(ITypedSyntaxNode part, bool requiresArray, List<ITypeReference> values, out int baseTypeId) {
+        private bool ExpandRangeOperator(ITypedSyntaxPart part, bool requiresArray, List<ITypeReference> values, out int baseTypeId) {
             if (!(GetTypeByIdOrUndefinedType(part.TypeInfo.TypeId) is ISubrangeType subrangeType) || requiresArray) {
                 baseTypeId = KnownTypeIds.ErrorType;
                 return false;
@@ -967,7 +946,7 @@ namespace PasPasPas.Typings.Common {
             return true;
         }
 
-        private ITypeReference GetBaseTypeForArrayConstant(IEnumerable<IExpression> items, out bool isConstant, List<ITypeReference> values, ITypedSyntaxNode element, bool requiresArray) {
+        private ITypeReference GetBaseTypeForArrayConstant(IEnumerable<IExpression> items, out bool isConstant, List<ITypeReference> values, ITypedSyntaxPart element, bool requiresArray) {
             var baseType = default(ITypeReference);
             isConstant = true;
 
@@ -1058,22 +1037,22 @@ namespace PasPasPas.Typings.Common {
             var isClassMethod = element.Declaration?.DefiningType != default;
             var definingType = isClassMethod ? element.Declaration.DefiningType.TypeId : KnownTypeIds.ErrorType;
             var isForward = element.Flags.HasFlag(MethodImplementationFlags.ForwardDeclaration);
-            var routine = default(IRoutine);
+            var routine = default(IRoutineGroup);
 
             if (!isClassMethod) {
                 var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
 
                 if (unitType.HasGlobalRoutine(element.SymbolName)) {
                     if (!unitType.AddGlobalImplementation(element.SymbolName, out routine)) {
-                        routine = new Routine(TypeRegistry, element.SymbolName);
+                        routine = new RoutineGroup(TypeRegistry, element.SymbolName);
                     }
                 }
                 else {
-                    routine = new Routine(TypeRegistry, element.SymbolName);
+                    routine = new RoutineGroup(TypeRegistry, element.SymbolName);
                     unitType.AddGlobal(routine);
                     resolver.AddToScope(element.SymbolName, ReferenceKind.RefToGlobalRoutine, routine);
                 }
-                currentMethodParameters.Push((routine as Routine).AddParameterGroup(element.Kind, GetInstanceTypeById(KnownTypeIds.NoType)));
+                currentMethodParameters.Push((routine as RoutineGroup).AddParameterGroup(element.Kind, GetInstanceTypeById(KnownTypeIds.NoType)));
             }
             else if (isClassMethod) {
                 var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(definingType) as IStructuredType;
@@ -1086,7 +1065,6 @@ namespace PasPasPas.Typings.Common {
             if (routine != default) {
                 resolver.OpenScope();
                 currentMethodImplementation.Push(new RoutineIndex(routine, -1));
-                currentCodeBlock.Push(new CodeBlockBuilder(environment.ListPools));
             }
         }
 
@@ -1139,9 +1117,7 @@ namespace PasPasPas.Typings.Common {
 
             }
 
-            var implementation = currentMethodImplementation.Pop();
-            var code = currentCodeBlock.Pop();
-            (implementation.Parameters as ParameterGroup).Code = code.CreateCodeArray();
+            currentMethodImplementation.Pop();
         }
 
         /// <summary>

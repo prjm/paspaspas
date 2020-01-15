@@ -1,119 +1,158 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Serialization;
 
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
-    ///     callable routine
+    ///     class for a parameter group
     /// </summary>
-    public class Routine : IRoutine, ITypeReference {
+    public class Routine : IRoutine {
 
         /// <summary>
-        ///     create a new routine
+        ///     create a new parameter group
         /// </summary>
-        /// <param name="name">routine name</param>
-        /// <param name="types">type registry</param>
-        /// <param name="definingType">defining type</param>
-        /// <param name="genericTypeId">generic type id</param>
-        public Routine(ITypeRegistry types, string name, int genericTypeId = KnownTypeIds.ErrorType, int definingType = KnownTypeIds.ErrorType) {
-            Name = name;
-            TypeRegistry = types;
-            TypeId = genericTypeId;
-            DefiningType = definingType;
+        /// <param name="parent">parent routine group</param>
+        /// <param name="procedureKind">procedure kind</param>
+        /// <param name="resultType">result type</param>
+        public Routine(IRoutineGroup parent, RoutineKind procedureKind, ITypeReference resultType) {
+            RoutineGroup = parent;
+            Kind = procedureKind;
+            ResultType = resultType;
         }
+
+        /// <summary>
+        ///     read a parameter group from a byte array
+        /// </summary>
+        /// <param name="params"></param>
+        public Routine(ImmutableArray<byte> @params, ITypeRegistry types) {
+            Kind = @params[0].ToProcedureKind();
+
+            var iri = @params[1].ToIntrinsicRoutineId();
+
+            if (iri != IntrinsicRoutineId.Unknown) {
+                RoutineGroup = types.GetIntrinsicRoutine(iri);
+            }
+            else {
+                RoutineGroup = default;
+            }
+
+            ResultType = default;
+        }
+
+        /// <summary>
+        ///     result type
+        /// </summary>
+        public ITypeReference ResultType { get; set; }
+
+        /// <summary>
+        ///     symbols
+        /// </summary>
+        public IDictionary<string, Globals.Types.Reference> Symbols { get; }
+            = new Dictionary<string, Globals.Types.Reference>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         ///     routine parameters
         /// </summary>
-        public List<IParameterGroup> Parameters { get; }
-            = new List<IParameterGroup>();
+        public IList<IVariable> Parameters { get; private set; }
 
         /// <summary>
-        ///     routine name
+        ///     class item
         /// </summary>
-        public string Name { get; }
+        public bool IsClassItem { get; set; }
 
         /// <summary>
-        ///     used type registry
+        ///     parent routine
         /// </summary>
-        public ITypeRegistry TypeRegistry { get; }
+        public IRoutineGroup RoutineGroup { get; }
 
         /// <summary>
-        ///     type id
+        ///     code
         /// </summary>
-        public int TypeId { get; }
+        public ImmutableArray<OpCode> Code { get; set; }
 
         /// <summary>
-        ///     defining type
+        ///     routine kind
         /// </summary>
-        public int DefiningType { get; }
-            = KnownTypeIds.UnspecifiedType;
+        public RoutineKind Kind { get; }
 
         /// <summary>
-        ///     internal type format
+        ///     add a parameter definition
         /// </summary>
-        public string InternalTypeFormat
-            => "p";
-
-        /// <summary>
-        ///     reference kind
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.ConstantValue;
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public CommonTypeKind TypeKind
-            => CommonTypeKind.ProcedureType;
-
-        /// <summary>
-        ///     no intrinsic routine
-        /// </summary>
-        public IntrinsicRoutineId RoutineId
-            => IntrinsicRoutineId.Unknown;
-
-        /// <summary>
-        ///     add a parameter group
-        /// </summary>
-        /// <param name="resultType">result type</param>
-        /// <param name="kind">procedure kind</param>
-        public ParameterGroup AddParameterGroup(ProcedureKind kind, ITypeReference resultType) {
-            var result = new ParameterGroup(this, kind, resultType);
-            Parameters.Add(result);
-            return result;
-        }
-
-        /// <summary>
-        ///     add a parameter group
-        /// </summary>
-        /// <param name="firstParam">first parameter</param>
-        /// <param name="resultType">result type</param>
-        /// <param name="parameterName">parameter name</param>
-        /// <param name="kind">procedure kind</param>
+        /// <param name="completeName"></param>
         /// <returns></returns>
-        public ParameterGroup AddParameterGroup(string parameterName, ProcedureKind kind, ITypeReference firstParam, ITypeReference resultType) {
-            var result = new ParameterGroup(this, kind, resultType);
-            result.AddParameter(parameterName).SymbolType = firstParam;
+        public Variable AddParameter(string completeName) {
+            if (Parameters == null)
+                Parameters = new List<IVariable>();
+
+            var result = new Variable {
+                Name = completeName
+            };
+
             Parameters.Add(result);
             return result;
         }
 
         /// <summary>
-        ///     find a matching parameter group
+        ///     get a parameter by index
         /// </summary>
-        /// <param name="callableRoutines">list of callable routines</param>
-        /// <param name="signature">used signature</param>
-        public void ResolveCall(IList<IParameterGroup> callableRoutines, Signature signature) {
-            foreach (var paramGroup in Parameters) {
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public IVariable this[int index]
+            => Parameters[index];
 
-                if (!paramGroup.Matches(TypeRegistry, signature))
-                    continue;
+        /// <summary>
+        ///     check if this parameter group matches a signature
+        /// </summary>
+        /// <param name="signature"></param>
+        /// <param name="typeRegistry">type registry</param>
+        /// <returns></returns>
+        public bool Matches(ITypeRegistry typeRegistry, Signature signature) {
+            var paramCount = Parameters == null ? 0 : Parameters.Count;
 
-                callableRoutines.Add(paramGroup);
+            if (paramCount != signature.Length)
+                return false;
+
+            var match = true;
+
+            for (var i = 0; Parameters != null && i < Parameters.Count; i++) {
+                var parameter = Parameters[i];
+                var sourceType = typeRegistry.GetTypeByIdOrUndefinedType(signature[i].TypeId);
+                match = match && typeRegistry.GetTypeByIdOrUndefinedType(parameter.SymbolType.TypeId).CanBeAssignedFrom(sourceType);
+
+                if (!match)
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        ///     create the signature for this parameters
+        /// </summary>
+        /// <returns></returns>
+        public Signature CreateSignature(ITypeRegistry runtime) {
+            if (Parameters == default || Parameters.Count < 1)
+                return new Signature(ResultType, ImmutableArray<ITypeReference>.Empty);
+
+            using (var list = runtime.ListPools.GetList<ITypeReference>()) {
+                var values = new ITypeReference[Parameters.Count];
+                for (var i = 0; i < Parameters.Count; i++)
+                    values[i] = Parameters[i].SymbolType ?? runtime.Runtime.Types.MakeErrorTypeReference();
+
+                return new Signature(ResultType, runtime.ListPools.GetFixedArray(list));
             }
         }
 
+        public ImmutableArray<byte> Encode() {
+            var result = new byte[2];
+            result[0] = Kind.ToByte();
+            result[1] = RoutineGroup.RoutineId.ToByte();
+            return ImmutableArray.Create<byte>(result);
+        }
     }
 }

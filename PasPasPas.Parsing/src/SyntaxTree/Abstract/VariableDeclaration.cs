@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -9,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     variable declaration
     /// </summary>
-    public class VariableDeclaration : DeclaredSymbolGroup, ITypeTarget, IExpressionTarget, ITypedSyntaxNode {
+    public class VariableDeclaration : DeclaredSymbolGroup, ITypeTarget, IExpressionTarget, ITypedSyntaxPart {
 
         /// <summary>
         ///     declaration mode

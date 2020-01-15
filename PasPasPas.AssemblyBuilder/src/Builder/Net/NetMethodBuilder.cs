@@ -15,7 +15,7 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         /// <summary>
         ///     parameters
         /// </summary>
-        public IParameterGroup Parameters { get; set; }
+        public IRoutine Parameters { get; set; }
 
         /// <summary>
         ///     internal method builder

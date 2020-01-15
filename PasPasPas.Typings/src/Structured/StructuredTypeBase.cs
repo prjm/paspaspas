@@ -26,7 +26,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="symbolName">method name</param>
         /// <param name="callables">callable methods</param>
         /// <returns></returns>
-        public virtual void ResolveCall(string symbolName, IList<IParameterGroup> callables, Signature signature) {
+        public virtual void ResolveCall(string symbolName, IList<IRoutine> callables, Signature signature) {
 
             foreach (var method in Methods)
                 if (string.Equals(method.Name, symbolName, StringComparison.OrdinalIgnoreCase))
@@ -36,15 +36,15 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     list of routines
         /// </summary>
-        public List<IRoutine> Methods { get; }
-            = new List<IRoutine>();
+        public List<IRoutineGroup> Methods { get; }
+            = new List<IRoutineGroup>();
 
         /// <summary>
         ///     add a method definition
         /// </summary>
         /// <param name="completeName">method name</param>
         /// <param name="genericTypeId">generic type id</param>
-        public IRoutine AddOrExtendMethod(string completeName, int genericTypeId) {
+        public IRoutineGroup AddOrExtendMethod(string completeName, int genericTypeId) {
             foreach (var method in Methods)
                 if (string.Equals(method.Name, completeName, StringComparison.OrdinalIgnoreCase))
                     return method;
@@ -52,7 +52,7 @@ namespace PasPasPas.Typings.Structured {
             if (TypeRegistry == null)
                 throw new InvalidOperationException();
 
-            var newMethod = new Routine(TypeRegistry, completeName, genericTypeId, TypeId);
+            var newMethod = new RoutineGroup(TypeRegistry, completeName, genericTypeId, TypeId);
             Methods.Add(newMethod);
             return newMethod;
         }

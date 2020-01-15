@@ -18,8 +18,8 @@ namespace PasPasPas.Typings.Routines.Runtime {
         /// <summary>
         ///     procedure kind
         /// </summary>
-        public ProcedureKind Kind
-            => ProcedureKind.Procedure;
+        public RoutineKind Kind
+            => RoutineKind.Procedure;
 
         /// <summary>
         ///     dynamic routine
@@ -62,8 +62,8 @@ namespace PasPasPas.Typings.Routines.Runtime {
         }
 
         internal override void CreateParameters() {
-            var p = new ParameterGroup(this, ProcedureKind.Procedure, TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.NoType));
-            Parameters.Add(p);
+            var p = new Routine(this, RoutineKind.Procedure, TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.NoType));
+            Items.Add(p);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace PasPasPas.Typings.Routines.Runtime {
         /// <returns></returns>
         public ITypeReference ResolveCall(Signature signature) {
             var kind = MakeTypeInstanceReference(KnownTypeIds.NoType);
-            return Types.MakeInvocationResultFromIntrinsic(this, new ParameterGroup(this, ProcedureKind.Procedure, kind));
+            return Types.MakeInvocationResultFromIntrinsic(this, new Routine(this, RoutineKind.Procedure, kind));
         }
     }
 }

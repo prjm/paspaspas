@@ -13,4 +13,8 @@
         <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="src\SyntaxTree\Types\" />
+    </ItemGroup>
+
 </Project>

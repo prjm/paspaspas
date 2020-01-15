@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
-    ///     procedure kind
+    ///     routine kind
     /// </summary>
-    public enum ProcedureKind : byte {
+    public enum RoutineKind : byte {
 
         /// <summary>
         ///     unknown procedure kind
@@ -34,9 +34,6 @@
         ///     operator
         /// </summary>
         Operator = 5,
-
-
-
 
     }
 }

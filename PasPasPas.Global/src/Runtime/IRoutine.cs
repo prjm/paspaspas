@@ -1,65 +1,65 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
-    ///     generic interface for routine groups
+    ///     interface for parameter groups - describing a
+    ///     routine by its parameters and properties
     /// </summary>
-    public interface IRoutine : IRefSymbol {
+    public interface IRoutine {
 
         /// <summary>
-        ///     routine name
+        ///     routine kind
         /// </summary>
-        string Name { get; }
+        RoutineKind Kind { get; }
 
         /// <summary>
-        ///     defining type id
+        ///     result type
         /// </summary>
-        int DefiningType { get; }
-
-        /// <summary>
-        ///     resolve callable routines for a given signature
-        /// </summary>
-        /// <param name="callableRoutines">list to collect callable routines</param>
-        /// <param name="signature">used signature</param>
-        void ResolveCall(IList<IParameterGroup> callableRoutines, Signature signature);
+        ITypeReference ResultType { get; }
 
         /// <summary>
         ///     parameters
         /// </summary>
-        List<IParameterGroup> Parameters { get; }
+        IList<IVariable> Parameters { get; }
 
         /// <summary>
-        ///     <c>true</c> for intrinsic routines
+        ///     <c>true</c> if this routine is a class item
         /// </summary>
-        IntrinsicRoutineId RoutineId { get; }
-
-    }
-
-
-    /// <summary>
-    ///     helper methods
-    /// </summary>
-    public static class IRoutineHelpers {
+        bool IsClassItem { get; }
 
         /// <summary>
-        ///     get the index of a given parameter group
+        ///     parent routine
         /// </summary>
-        /// <param name="routine"></param>
-        /// <param name="group"></param>
+        IRoutineGroup RoutineGroup { get; }
+
+        /// <summary>
+        ///     check if the routine matches
+        /// </summary>
+        /// <param name="typeRegistry"></param>
+        /// <param name="signature"></param>
         /// <returns></returns>
-        public static int GetIndexOfParameterGroup(this IRoutine routine, IParameterGroup group) {
-            if (routine.Parameters == default)
-                return -1;
+        bool Matches(ITypeRegistry typeRegistry, Signature signature);
 
-            for (var i = 0; i < routine.Parameters.Count; i++)
-                if (routine.Parameters[i].Equals(group))
-                    return i;
+        ////
+        /// <summary>
+        ///     create a signature
+        /// </summary>
+        /// <returns></returns>
+        Signature CreateSignature(ITypeRegistry runtime);
 
-            return -1;
-        }
+        /// <summary>
+        ///     routine code
+        /// </summary>
+        ImmutableArray<OpCode> Code { get; }
+
+        /// <summary>
+        ///     other symbols of this routine
+        /// </summary>
+        IDictionary<string, Reference> Symbols { get; }
 
     }
-
 }

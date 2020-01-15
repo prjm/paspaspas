@@ -3,14 +3,13 @@ using System.Globalization;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     basic representation of a compilation unit
     /// </summary>
-    public class CompilationUnit : SymbolTableEntryBase, IBlockTarget, IDeclaredSymbolTarget, ITypedSyntaxNode {
+    public class CompilationUnit : SymbolTableEntryBase, IBlockTarget, IDeclaredSymbolTarget, ITypedSyntaxPart {
 
         /// <summary>
         ///     unit file type

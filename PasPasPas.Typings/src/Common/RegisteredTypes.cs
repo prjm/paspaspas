@@ -532,11 +532,11 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="routineId"></param>
         /// <returns></returns>
-        public IRoutine GetIntrinsicRoutine(IntrinsicRoutineId routineId) {
+        public IRoutineGroup GetIntrinsicRoutine(IntrinsicRoutineId routineId) {
             var system = SystemUnit as IUnitType;
 
             foreach (var reference in system.Symbols) {
-                if (!(reference.Value.Symbol is IRoutine routine))
+                if (!(reference.Value.Symbol is IRoutineGroup routine))
                     continue;
 
                 if (routine.RoutineId == routineId)

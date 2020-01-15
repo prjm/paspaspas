@@ -15,6 +15,16 @@
         ///     <c>call</c> operand code
         /// </summary>
         Call = 1,
+
+        /// <summary>
+        ///     store a value
+        /// </summary>
+        Store = 2,
+
+        /// <summary>
+        ///     load a constant
+        /// </summary>
+        LoadConstant = 3,
     }
 
 

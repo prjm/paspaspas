@@ -88,7 +88,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
             foreach (var symbol in unit.Symbols.Values) {
 
                 if (symbol.Kind == ReferenceKind.RefToGlobalRoutine) {
-                    PrepareGlobalMethod(symbol.Symbol as IRoutine);
+                    PrepareGlobalMethod(symbol.Symbol as IRoutineGroup);
                 }
                 else if (symbol.Kind == ReferenceKind.RefToVariable) {
                     PrepareVariable(symbol.Symbol as IVariable);
@@ -107,8 +107,8 @@ namespace PasPasPas.AssemblyBuilder.Builder {
             }
         }
 
-        private void PrepareGlobalMethod(IRoutine routine) {
-            foreach (var p in routine.Parameters) {
+        private void PrepareGlobalMethod(IRoutineGroup routine) {
+            foreach (var p in routine.Items) {
                 var globalMethod = UnitType.StartClassMethodDefinition(routine.Name);
                 globalMethod.Parameters = p;
                 globalMethod.ReturnType = KnownTypeIds.NoType;

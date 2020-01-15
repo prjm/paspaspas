@@ -1,11 +1,12 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Parsing;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     procedural type specification
     /// </summary>
-    public class ProceduralType : MethodDeclaration, ITypeSpecification, IParameterTarget, ITypeTarget {
+    public class ProceduralType : MethodDeclaration, ITypeSpecification, IParameterTarget, ITypeTarget, ITypedSyntaxPart {
 
         /// <summary>
         ///     true if this is a method declaration (... of object)

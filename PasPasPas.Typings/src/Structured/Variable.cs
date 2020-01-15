@@ -34,5 +34,11 @@ namespace PasPasPas.Typings.Structured {
         ///     class item
         /// </summary>
         public bool ClassItem { get; set; }
+
+        /// <summary>
+        ///     variable kind
+        /// </summary>
+        public VariableKind Kind { get; set; }
+
     }
 }
