@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
-    ///     boolean type kind
+    ///     string type kind
     /// </summary>
-    public enum BooleanTypeKind : byte {
+    public enum StringTypeKind {
 
         /// <summary>
         ///     undefined type kind
@@ -11,24 +11,23 @@
         Undefined = 0,
 
         /// <summary>
-        ///     standard boolean
+        ///     ANSI string
         /// </summary>
-        Boolean = 1,
+        AnsiString = 1,
 
         /// <summary>
-        ///     byte boolean
+        ///     wide string type
         /// </summary>
-        ByteBool = 2,
+        WideStringType = 2,
 
         /// <summary>
-        ///     word boolean
+        ///     UNICODE string type
         /// </summary>
-        WordBool = 3,
+        UnicodeString = 3,
 
         /// <summary>
-        ///     long boolean
+        ///     short string type
         /// </summary>
-        LongBool = 4
-
+        ShortString = 4,
     }
 }

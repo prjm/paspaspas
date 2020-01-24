@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     provides logical operations and relational operations for boolean
@@ -25,9 +27,9 @@
         ///     convert a boolean constant value to a value object
         /// </summary>
         /// <param name="value">boolean value</param>
-        /// <param name="typeId">type id</param>
+        /// <param name="typeDef">type id</param>
         /// <returns><c>TrueValue</c> or <c>FalseValue</c></returns>
-        IBooleanValue ToBoolean(bool value, int typeId);
+        IBooleanValue ToBoolean(bool value, ITypeDefinition typeDef);
 
         /// <summary>
         ///     convert a boolean constant value to a value object
@@ -41,23 +43,23 @@
         ///     convert a byte constant value to a byte bool object
         /// </summary>
         /// <param name="value">byte value</param>
-        /// <param name="typeId">type Id</param>
-        IBooleanValue ToByteBool(byte value, int typeId);
+        /// <param name="typeDef">type Id</param>
+        IBooleanValue ToByteBool(byte value, ITypeDefinition typeDef);
 
         /// <summary>
         ///     convert a word constant value to a word bool object
         /// </summary>
         /// <param name="value">word bool value</param>
-        /// <param name="typeId">type id</param>
-        IBooleanValue ToWordBool(ushort value, int typeId);
+        /// <param name="typeDef">type id</param>
+        IBooleanValue ToWordBool(ushort value, ITypeDefinition typeDef);
 
         /// <summary>
         ///     convert a int constant value to a long bool object
         /// </summary>
         /// <param name="value">long bool value</param>
-        /// <param name="typeId">type id</param>
+        /// <param name="typeDef">type id</param>
         /// <returns>long bool value</returns>
-        IBooleanValue ToLongBool(uint value, int typeId);
+        IBooleanValue ToLongBool(uint value, ITypeDefinition typeDef);
 
     }
 }

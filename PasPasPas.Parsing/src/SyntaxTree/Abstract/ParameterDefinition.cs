@@ -36,7 +36,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public int TypeId {
             get {
                 if (ParameterType == default || ParameterType.TypeValue == default || ParameterType.TypeValue.TypeInfo == default)
-                    return KnownTypeIds.ErrorType;
+                    return KnownTypeIds.Unused;
 
                 return ParameterType.TypeValue.TypeInfo.TypeId;
             }

@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -7,24 +6,15 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     pointer type definition
     /// </summary>
-    public class PointerType : TypeBase {
+    public class PointerType : TypeDefinitionBase, IFixedSizeType {
 
         /// <summary>
         ///     create a new pointer type definition
         /// </summary>
-        /// <param name="withId">type id</param>
-        /// <param name="baseType">base type id</param>
-        /// <param name="longTypeName">pointer type name</param>
-        public PointerType(int withId, int baseType, string longTypeName) : base(withId) {
-            BaseTypeId = baseType;
-            LongName = longTypeName;
+        public PointerType(IUnitType definingType, ITypeDefinition baseType, string longTypeName) : base(definingType) {
+            Name = longTypeName;
+            BaseTypeDefinition = baseType;
         }
-
-        /// <summary>
-        ///     get the type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.PointerType;
 
         /// <summary>
         ///     type size
@@ -33,25 +23,31 @@ namespace PasPasPas.Typings.Simple {
             => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
 
         /// <summary>
-        ///     base type id
-        /// </summary>
-        public int BaseTypeId { get; }
-
-        /// <summary>
         ///     long type name
         /// </summary>
-        public override string LongName { get; }
+        public override string Name { get; }
+
+        /// <summary>
+        ///     base type definition
+        /// </summary>
+        public ITypeDefinition BaseTypeDefinition { get; }
 
         /// <summary>
         ///     short type name
         /// </summary>
-        public override string ShortName {
+        public override string MangledName {
             get {
-                if (BaseTypeId == KnownTypeIds.UntypedPointer)
+                if (BaseTypeDefinition == default)
                     return KnownNames.PV;
-                var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(BaseTypeId);
-                return string.Concat(KnownNames.P, baseType.ShortName);
+                else
+                    return string.Concat(KnownNames.P, BaseTypeDefinition.MangledName);
             }
         }
+
+        /// <summary>
+        ///         pointer type
+        /// </summary>
+        public override BaseType BaseType
+            => BaseType.Pointer;
     }
 }

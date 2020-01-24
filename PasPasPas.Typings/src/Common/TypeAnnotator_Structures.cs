@@ -45,7 +45,7 @@ namespace PasPasPas.Typings.Common {
                 var mainRoutine = new Routine(mainRoutineGroup, RoutineKind.Procedure, GetInstanceTypeById(KnownTypeIds.NoType));
                 mainRoutineGroup.Items.Add(mainRoutine);
                 var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as IUnitType;
-                unitType.Symbols.Add(mainRoutineGroup.Name, new Reference(ReferenceKind.RefToGlobalRoutine, mainRoutineGroup));
+                unitType.Register(mainRoutineGroup.Name, new Reference(ReferenceKind.RefToGlobalRoutine, mainRoutineGroup));
                 currentMethodImplementation.Push(new RoutineIndex(mainRoutineGroup, 0));
                 RegisterRoutine(mainRoutine, element);
             }

@@ -13,26 +13,25 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="baseType">base type for the set (ordinal type)</param>
         /// <returns></returns>
-        ISetType CreateSetType(int baseType);
+        ISetType CreateSetType(IOrdinalType baseType);
 
         /// <summary>
         ///     create a subrange type
         /// </summary>
-        /// <param name="baseType">base type id</param>
+        /// <param name="baseType">base type</param>
         /// <param name="lowerBound">lower bound</param>
         /// <param name="upperBound">upper bound</param>
         /// <returns></returns>
-        ISubrangeType CreateSubrangeType(int baseType, IOldTypeReference lowerBound, IOldTypeReference upperBound);
+        ISubrangeType CreateSubrangeType(IOrdinalType baseType, IValue lowerBound, IValue upperBound);
 
         /// <summary>
         ///     create a new aliased type
         /// </summary>
         /// <param name="baseType">base type id</param>
-        /// <param name="newType"><c>true</c> if the type should be treated as a new tyüe</param>
-        /// <param name="systemTypeId">predefined type alias</param>
+        /// <param name="newType"><c>true</c> if the type should be treated as a new type</param>
         /// <param name="aliasName">alias name</param>
         /// <returns></returns>
-        IAliasedType CreateTypeAlias(int baseType, string aliasName, bool newType, int systemTypeId = -1);
+        IAliasedType CreateTypeAlias(ITypeDefinition baseType, string aliasName, bool newType);
 
         /// <summary>
         ///     create a new enumerated type
@@ -54,7 +53,7 @@ namespace PasPasPas.Globals.Types {
         /// <param name="indexType">index type</param>
         /// <param name="isPacked"></param>
         /// <returns></returns>
-        IArrayType CreateStaticArrayType(int baseType, int indexType, bool isPacked);
+        IArrayType CreateStaticArrayType(ITypeDefinition baseType, IOrdinalType indexType, bool isPacked);
 
         /// <summary>
         ///    create a new dynamic array type
@@ -80,9 +79,9 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     create a new file type
         /// </summary>
-        /// <param name="baseTypeId"></param>
+        /// <param name="baseType"></param>
         /// <returns></returns>
-        IFileType CreateFileType(int baseTypeId);
+        IFileType CreateFileType(ITypeDefinition baseType);
 
         /// <summary>
         ///     create a new generic type parameter
@@ -104,17 +103,10 @@ namespace PasPasPas.Globals.Types {
         IRoutineType CreateRoutineType();
 
         /// <summary>
-        ///     create a global routine
-        /// </summary>
-        /// <param name="name">procedure name</param>
-        /// <returns></returns>
-        IRoutineGroup CreateGlobalRoutine(string name);
-
-        /// <summary>
         ///     meta class type
         /// </summary>
-        /// <param name="baseTypeId"></param>
+        /// <param name="baseType"></param>
         /// <returns></returns>
-        IMetaClassType CreateMetaClassType(int baseTypeId);
+        IMetaClassType CreateMetaClassType(ITypeDefinition baseType);
     }
 }

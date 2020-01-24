@@ -112,19 +112,29 @@ namespace PasPasPas.Runtime.Values {
                 return MakeSubrangeValue(typeDef.TypeId, castedValue);
             }
 
+            if (typeDef is IIntegralType integralType) {
+                switch (integralType.BitSize) {
+                    case 8:
+                        return integralType.IsSigned ?
+                            Integers.ToIntegerValue((sbyte)integer.SignedValue) :
+                            Integers.ToIntegerValue((byte)integer.UnsignedValue);
+
+
+                    case 16:
+                        return integralType.IsSigned ?
+                            Integers.ToIntegerValue((short)integer.SignedValue) :
+                            Integers.ToIntegerValue((ushort)integer.UnsignedValue);
+
+                    case 32:
+                        return integralType.IsSigned ?
+                            Integers.ToIntegerValue((int)integer.SignedValue) :
+                            Integers.ToIntegerValue((uint)integer.UnsignedValue);
+
+
+                }
+            }
+
             switch (typeDef.TypeId) {
-                case KnownTypeIds.ShortInt:
-                    return Integers.ToIntegerValue((sbyte)integer.SignedValue);
-                case KnownTypeIds.ByteType:
-                    return Integers.ToIntegerValue((byte)integer.UnsignedValue);
-                case KnownTypeIds.SmallInt:
-                    return Integers.ToIntegerValue((short)integer.SignedValue);
-                case KnownTypeIds.WordType:
-                    return Integers.ToIntegerValue((ushort)integer.UnsignedValue);
-                case KnownTypeIds.IntegerType:
-                    return Integers.ToIntegerValue((int)integer.SignedValue);
-                case KnownTypeIds.CardinalType:
-                    return Integers.ToIntegerValue((uint)integer.UnsignedValue);
                 case KnownTypeIds.Int64Type:
                     return Integers.ToIntegerValue(integer.SignedValue);
                 case KnownTypeIds.UInt64Type:
@@ -312,7 +322,7 @@ namespace PasPasPas.Runtime.Values {
                 if (value is IArrayValue array) {
                     var newBaseType = Cast(types, types.MakeTypeReference(array.BaseType), arrayType.BaseTypeId);
 
-                    if (newBaseType.TypeId == KnownTypeIds.ErrorType)
+                    if (newBaseType.TypeId == KnownTypeIds.Unused)
                         return Types.MakeErrorTypeReference();
 
                     using (var values = ListPools.GetList<IOldTypeReference>()) {

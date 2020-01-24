@@ -6,9 +6,9 @@
     public interface IAliasedType : ITypeDefinition {
 
         /// <summary>
-        ///     base type id
+        ///     base type (aliased type)
         /// </summary>
-        int BaseTypeId { get; }
+        ITypeDefinition BaseTypeDefinition { get; }
 
     }
 }

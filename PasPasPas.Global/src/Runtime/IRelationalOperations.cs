@@ -32,7 +32,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        IOldTypeReference LessThen(IOldTypeReference left, IOldTypeReference right);
+        IValue LessThen(IValue left, IValue right);
 
         /// <summary>
         ///     <c>&gt;</c>
@@ -40,7 +40,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        IOldTypeReference GreaterThen(IOldTypeReference left, IOldTypeReference right);
+        IValue GreaterThen(IValue left, IValue right);
 
         /// <summary>
         ///     <c>&lt;=</c>

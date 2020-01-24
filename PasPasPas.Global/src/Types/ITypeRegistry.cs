@@ -5,7 +5,7 @@ using PasPasPas.Globals.Runtime;
 namespace PasPasPas.Globals.Types {
 
     /// <summary>
-    ///     type registry
+    ///     interface for the global type registry
     /// </summary>
     public interface ITypeRegistry : IEnvironmentItem {
 
@@ -17,7 +17,17 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     system unit
         /// </summary>
-        IRefSymbol SystemUnit { get; }
+        ISystemUnit SystemUnit { get; }
+
+        /// <summary>
+        ///     byte type
+        /// </summary>
+        IIntegralType ByteType { get; }
+
+        /// <summary>
+        ///     short int type
+        /// </summary>
+        IIntegralType ShortIntType { get; }
 
         /// <summary>
         ///     make a type reference

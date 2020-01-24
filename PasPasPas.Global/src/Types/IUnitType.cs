@@ -8,13 +8,19 @@ namespace PasPasPas.Globals.Types {
     public interface IUnitType : ITypeDefinition {
 
         /// <summary>
-        ///     unit name
+        ///     registered symbols
         /// </summary>
-        string Name { get; }
+        IEnumerable<ITypeSymbol> Symbols { get; }
 
         /// <summary>
-        ///     symbols
+        ///     provided types
         /// </summary>
-        IDictionary<string, Reference> Symbols { get; }
+        ITypeRegistry TypeRegistry { get; }
+
+        /// <summary>
+        ///     register a symbol
+        /// </summary>
+        /// <param name="symbol">symbol to register</param>
+        void Register(ITypeSymbol symbol);
     }
 }

@@ -57,7 +57,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeId">target type id</param>
         /// <param name="types"></param>
         /// <returns></returns>
-        IOldTypeReference Cast(ITypeRegistry types, IOldTypeReference value, int typeId);
+        IOldTypeReference Cast(ITypeRegistry types, IValue value, int typeId);
 
         /// <summary>
         ///     create a new enum value

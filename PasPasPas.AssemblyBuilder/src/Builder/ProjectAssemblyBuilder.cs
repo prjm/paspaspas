@@ -85,13 +85,13 @@ namespace PasPasPas.AssemblyBuilder.Builder {
             CurrentUnit = unit;
             UnitType = Builder.StartUnit(unit.Name);
 
-            foreach (var symbol in unit.Symbols.Values) {
+            foreach (var symbol in unit.Symbols) {
 
-                if (symbol.Kind == ReferenceKind.RefToGlobalRoutine) {
-                    PrepareGlobalMethod(symbol.Symbol as IRoutineGroup);
+                if (symbol is IRoutineGroup routineGroup) {
+                    PrepareGlobalMethod(routineGroup);
                 }
-                else if (symbol.Kind == ReferenceKind.RefToVariable) {
-                    PrepareVariable(symbol.Symbol as IVariable);
+                else if (symbol is IVariable variable) {
+                    PrepareVariable(variable);
                 }
 
             }

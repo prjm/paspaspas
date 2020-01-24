@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -11,33 +10,21 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     create a new array type
         /// </summary>
-        /// <param name="withId"></param>
+        /// <param name="definingUnit"></param>
         /// <param name="indexType">index types</param>
-        protected ArrayType(int withId, int indexType) : base(withId)
-            => IndexTypeId = indexType;
+        protected ArrayType(IUnitType definingUnit, IOrdinalType indexType) : base(definingUnit)
+            => IndexType = indexType;
 
         /// <summary>
         ///     array index types
         /// </summary>
-        public int IndexTypeId { get; }
-
-        /// <summary>
-        ///     index type
-        /// </summary>
-        public ITypeDefinition IndexType
-            => TypeRegistry.GetTypeByIdOrUndefinedType(IndexTypeId);
+        public IOrdinalType IndexType { get; }
 
         /// <summary>
         ///     base type id
         /// </summary>
-        public int BaseTypeId { get; set; }
-            = KnownTypeIds.ErrorType;
-
-        /// <summary>
-        ///     base type id
-        /// </summary>
-        public ITypeDefinition BaseType
-            => TypeRegistry.GetTypeByIdOrUndefinedType(BaseTypeId);
+        public ITypeDefinition BaseTypeDefinition { get; set; }
+            = default;
 
         /// <summary>
         ///     <c>true</c> if packed array
@@ -45,6 +32,7 @@ namespace PasPasPas.Typings.Structured {
         public bool Packed { get; set; }
             = false;
 
+        /*
         /// <summary>
         ///     check if the type can be assigned from another type
         /// </summary>
@@ -59,6 +47,6 @@ namespace PasPasPas.Typings.Structured {
 
             return base.CanBeAssignedFrom(otherType);
         }
-
+        */
     }
 }

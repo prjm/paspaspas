@@ -357,7 +357,10 @@
         /// </summary>
         public const string PAnsiString = "PAnsiString";
 
-
+        /// <summary>
+        ///     error type name
+        /// </summary>
+        public const string Error = "Error";
 
         #endregion
         #region Short Type names
@@ -468,6 +471,11 @@
         public const string P = "p";
 
         #endregion
+
+        /// <summary>
+        ///     at symbol
+        /// </summary>
+        public const string AtSymbol = "@";
 
     }
 }

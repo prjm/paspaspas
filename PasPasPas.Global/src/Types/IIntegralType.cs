@@ -5,6 +5,10 @@
     /// </summary>
     public interface IIntegralType : IOrdinalType {
 
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        IntegralTypeKind Kind { get; }
 
     }
 }

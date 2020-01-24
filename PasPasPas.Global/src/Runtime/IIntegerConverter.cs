@@ -67,57 +67,65 @@ namespace PasPasPas.Globals.Runtime {
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
+        /// <param name="typeDef">type definition</param>
         /// <returns></returns>
-        IOldTypeReference ToIntegerValue(sbyte number);
+        IValue ToIntegerValue(ITypeDefinition typeDef, sbyte number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
+        /// <param name="typeDef">type definition</param>
         /// <returns></returns>
-        IOldTypeReference ToIntegerValue(byte number);
+        IValue ToIntegerValue(ITypeDefinition typeDef, byte number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IOldTypeReference ToIntegerValue(short number);
+        IValue ToIntegerValue(ITypeDefinition typeDef, short number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IOldTypeReference ToIntegerValue(ushort number);
+        IValue ToIntegerValue(ITypeDefinition typeDef, ushort number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IOldTypeReference ToIntegerValue(int number);
+        IValue ToIntegerValue(ITypeDefinition typeDef, int number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IOldTypeReference ToIntegerValue(uint number);
+        IValue ToIntegerValue(ITypeDefinition typeDef, uint number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IOldTypeReference ToIntegerValue(long number);
+        IValue ToIntegerValue(ITypeDefinition typeDef, long number);
 
         /// <summary>
         ///     get the fixed value type for a given number
         /// </summary>
         /// <param name="number"></param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IOldTypeReference ToIntegerValue(ulong number);
+        IValue ToIntegerValue(ITypeDefinition typeDef, ulong number);
 
         /// <summary>
         ///     get a native integer value for a given number

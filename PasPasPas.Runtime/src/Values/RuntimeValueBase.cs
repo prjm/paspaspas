@@ -1,13 +1,14 @@
 ﻿using System.Diagnostics;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values {
 
     /// <summary>
-    ///     base class for runtime values
+    ///     base class for constant runtime values
     /// </summary>
-    public abstract class RuntimeValueBase : IOldTypeReference {
+    public abstract class RuntimeValueBase : ITypeSymbol {
 
         /// <summary>
         ///     create a new runtime value

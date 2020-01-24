@@ -8,14 +8,9 @@ namespace PasPasPas.Globals.Types {
     public interface ISubrangeType : IOrdinalType {
 
         /// <summary>
-        ///     base type id
-        /// </summary>
-        int BaseTypeId { get; }
-
-        /// <summary>
         ///     base type definition
         /// </summary>
-        IOrdinalType BaseType { get; }
+        IOrdinalType SubrangeOfType { get; }
 
         /// <summary>
         ///     test the validity of this subrange type

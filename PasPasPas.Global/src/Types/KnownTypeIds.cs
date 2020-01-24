@@ -20,26 +20,6 @@
         /// </summary>
         public const int UnspecifiedType = -2;
 
-        /// <summary>
-        ///      type error / invalid type
-        /// </summary>
-        public const int ErrorType = -1;
-
-        /// <summary>
-        ///     byte type (1 byte unsigned integer)
-        /// </summary>
-        public const int ByteType
-            = 1;
-
-        /// <summary>
-        ///     word type (2 byte unsigned integer)
-        /// </summary>
-        public const int WordType = 2;
-
-        /// <summary>
-        ///     cardinal type (4 byte unsigned integer)
-        /// </summary>
-        public const int CardinalType = 3;
 
         /// <summary>
         ///     unit64 type (8 byte unsigned integer)
@@ -66,10 +46,6 @@
         /// </summary>
         public const int Extended = 8;
 
-        /// <summary>
-        ///     integer type
-        /// </summary>
-        public const int IntegerType = 9;
 
         /// <summary>
         ///     Unicode string type
@@ -85,16 +61,6 @@
         ///     signed int64 type
         /// </summary>
         public const int Int64Type = 12;
-
-        /// <summary>
-        ///     short integer type (1 byte signed)
-        /// </summary>
-        public const int ShortInt = 13;
-
-        /// <summary>
-        ///     small int type (2 byte signed integer)
-        /// </summary>
-        public const int SmallInt = 14;
 
         /// <summary>
         ///     char type
@@ -451,5 +417,9 @@
         /// </summary>
         public const int UnconstrainedGenericTypeParameter = 147;
 
+        /// <summary>
+        ///     unused type id
+        /// </summary>
+        public const int Unused = -999;
     }
 }

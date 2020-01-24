@@ -22,7 +22,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     zero value
         /// </summary>
-        IOldTypeReference Zero { get; }
+        IValue Zero { get; }
 
         /// <summary>
         ///     one value
@@ -95,7 +95,7 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         /// <param name="value">value to increment</param>
         /// <returns>incremented value</returns>
-        IOldTypeReference Increment(IOldTypeReference value);
+        IValue Increment(IValue value);
 
         /// <summary>
         ///     absolute value of a value

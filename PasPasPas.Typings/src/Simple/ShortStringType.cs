@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Simple {
     /// <summary>
@@ -10,16 +9,22 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     create a new string type
         /// </summary>
-        /// <param name="withId">type id</param>
+        /// <param name="definingUnit">type id</param>
         /// <param name="size">string size</param>
-        public ShortStringType(int withId, byte size) : base(withId)
+        public ShortStringType(IUnitType definingUnit, byte size) : base(definingUnit)
             => Size = size;
 
         /// <summary>
-        ///     UNICODE string type
+        ///     short string type
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.ShortStringType;
+        public override BaseType BaseType
+            => BaseType.String;
+
+        /// <summary>
+        ///     string type
+        /// </summary>
+        public override StringTypeKind Kind
+            => StringTypeKind.ShortString;
 
         /// <summary>
         ///     string size
@@ -35,13 +40,13 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     long name
         /// </summary>
-        public override string LongName
+        public override string Name
             => Size == 0xff ? KnownNames.ShortString : $"string[{Size}]";
 
         /// <summary>
         ///     short type name
         /// </summary>
-        public override string ShortName
+        public override string MangledName
             => $"System@%SmallString$uc$i{Size}$%";
     }
 

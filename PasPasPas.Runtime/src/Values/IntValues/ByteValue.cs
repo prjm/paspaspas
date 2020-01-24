@@ -23,7 +23,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         ///     type id
         /// </summary>
         public override int TypeId
-            => KnownTypeIds.ByteType;
+            => KnownTypeIds.Unused;
 
         /// <summary>
         ///     byte value

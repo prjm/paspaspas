@@ -1,55 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Typings.Common;
-using PasPasPas.Typings.Routines;
 
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
     ///     virtual unit type definition
     /// </summary>
-    public class UnitType : TypeBase, IUnitType {
-
-        /// <summary>
-        ///     global routines
-        /// </summary>
-        private readonly List<IRoutineGroup> globalRoutines
-            = new List<IRoutineGroup>();
-
-        /// <summary>
-        ///     global routines
-        /// </summary>
-        public List<IRoutineGroup> GlobalRoutines
-            => globalRoutines;
+    public class UnitType : IUnitType {
 
         /// <summary>
         ///     symbols
         /// </summary>
-        public IDictionary<string, Reference> Symbols { get; }
-            = new Dictionary<string, Reference>(StringComparer.OrdinalIgnoreCase);
+        private readonly List<ITypeSymbol>
+            symbols = new List<ITypeSymbol>();
 
         /// <summary>
-        ///     unit type
-        /// </summary>
-        /// <param name="withId"></param>
+        ///     create a new unit type
+        /// </summary
         /// <param name="unitName">unit name</param>
-        public UnitType(int withId, string unitName) : base(withId)
-            => Name = unitName;
+        public UnitType(string unitName, ITypeRegistry typeRegistry) {
+            Name = unitName;
+            TypeRegistry = typeRegistry;
+        }
 
         /// <summary>
         ///     type kind
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.Unit;
-
-        /// <summary>
-        ///     untyped
-        /// </summary>
-        public override uint TypeSizeInBytes
-            => 0;
+        public BaseType BaseType
+            => BaseType.Unit;
 
         /// <summary>
         ///     unit name
@@ -57,81 +36,52 @@ namespace PasPasPas.Typings.Structured {
         public string Name { get; }
 
         /// <summary>
+        ///     mangled name
+        /// </summary>
+        public string MangledName
+            => Name;
+
+        /// <summary>
+        ///     defined symbols
+        /// </summary>
+        public IEnumerable<ITypeSymbol> Symbols
+            => symbols;
+
+        /// <summary>
+        ///     type registry
+        /// </summary>
+        public ITypeRegistry TypeRegistry { get; }
+
+        /// <summary>
+        ///     defining unit
+        /// </summary>
+        public IUnitType DefiningUnit
+            => this;
+
+        /// <summary>
+        ///     type size not supported
+        /// </summary>
+        public uint TypeSizeInBytes
+            => throw new InvalidOperationException();
+
+        /// <summary>
+        ///     type definition
+        /// </summary>
+        public ITypeDefinition TypeDefinition
+            => this;
+
+        /// <summary>
+        ///     type definition
+        /// </summary>
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.TypeDefinition;
+
+        /// <summary>
         ///     register a symbol
         /// </summary>
-        /// <param name="symbolName">symbol name</param>
-        /// <param name="entry">defined entry</param>
-        /// <param name="numberOfTypeParameters">number of generic type parameters</param>
-        public void RegisterSymbol(string symbolName, Reference entry, int numberOfTypeParameters = 0) {
-            if (numberOfTypeParameters < 1)
-                Symbols.Add(symbolName, entry);
-            else
-                Symbols.Add(string.Concat(symbolName, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters), entry);
-        }
-
-        /// <summary>
-        ///     resolve a symbol in this unit
-        /// </summary>
-        /// <param name="symbolName">symbol to resolve</param>
-        /// <param name="entry">resolved symbol</param>
-        /// <returns><c>true</c> if the symbol was resolved</returns>
-        public bool TryToResolve(string symbolName, out Reference entry) {
-            if (string.IsNullOrWhiteSpace(symbolName)) {
-                entry = default;
-                return false;
-            }
-
-            return Symbols.TryGetValue(symbolName, out entry);
-        }
-
-        /// <summary>
-        ///     add a global routine
-        /// </summary>
-        /// <param name="routine"></param>
-        public void AddGlobal(IRoutineGroup routine) {
-
-            if (routine is IntrinsicRoutine r) {
-                r.TypeRegistry = TypeRegistry;
-                r.CreateParameters();
-            }
-
-            globalRoutines.Add(routine);
-            if (Symbols.TryGetValue(routine.Name, out var reference))
-                if (reference.Kind == ReferenceKind.RefToGlobalRoutine)
-                    Symbols[routine.Name] = new Reference(ReferenceKind.RefToGlobalRoutine, routine);
-                else
-                    Symbols[routine.Name] = new Reference(ReferenceKind.RefToGlobalRoutine, routine);
-            else
-                Symbols.Add(routine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, routine));
-        }
-
-        /// <summary>
-        ///     test if a routine with a given name exists
-        /// </summary>
-        /// <param name="symbolName"></param>
+        /// <param name="symbol"></param>
         /// <returns></returns>
-        public bool HasGlobalRoutine(string symbolName) {
-            foreach (var routine in globalRoutines)
-                if (string.Equals(routine.Name, symbolName, StringComparison.OrdinalIgnoreCase))
-                    return true;
-            return false;
-        }
-
-        /// <summary>
-        ///     add a routine implementation
-        /// </summary>
-        /// <param name="symbolName"></param>
-        /// <param name="routineToImplement"></param>
-        /// <returns></returns>
-        public bool AddGlobalImplementation(string symbolName, out IRoutineGroup routineToImplement) {
-            foreach (var routine in globalRoutines)
-                if (string.Equals(routine.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
-                    routineToImplement = routine;
-                    return true;
-                }
-
-            routineToImplement = default;
-            return false;
-        }
+        public void Register(ITypeSymbol symbol)
+            => symbols.Add(symbol);
     }
 }

@@ -1,37 +1,29 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Common {
 
     /// <summary>
     ///     type alias
     /// </summary>
-    public class TypeAlias : TypeBase, IAliasedType {
+    public class TypeAlias : TypeDefinitionBase, IAliasedType {
 
         /// <summary>
         ///     create a new type alias
         /// </summary>
-        /// <param name="withId">own type id</param>
-        /// <param name="withBaseId">base id</param>
+        /// <param name="baseType">own type id</param>
         /// <param name="aliasName">alias name</param>
+        /// <param name="definingUnit">defining unit</param>
         /// <param name="newType">if <c>true</c>, this alias is treated as new, distinct type</param>
-        public TypeAlias(int withId, string aliasName, int withBaseId, bool newType = false) : base(withId) {
-            BaseTypeId = withBaseId;
+        public TypeAlias(IUnitType definingUnit, ITypeDefinition baseType, string aliasName, bool newType) : base(definingUnit) {
+            BaseTypeDefinition = baseType;
             IsNewType = newType;
             AliasName = aliasName;
         }
 
         /// <summary>
-        ///     get the type kind
+        ///     base type (aliased type)
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => TypeRegistry.GetTypeByIdOrUndefinedType(BaseTypeId).TypeKind;
-
-        /// <summary>
-        ///     base type / alias type
-        /// </summary>
-        public ITypeDefinition BaseType
-            => TypeRegistry.GetTypeByIdOrUndefinedType(BaseTypeId);
+        public ITypeDefinition BaseTypeDefinition { get; }
 
         /// <summary>
         ///     <c>true</c> if this is new, separate type
@@ -52,26 +44,25 @@ namespace PasPasPas.Typings.Common {
         ///     type size in bytes
         /// </summary>
         public override uint TypeSizeInBytes
-            => BaseType.TypeSizeInBytes;
+            => BaseTypeDefinition.TypeSizeInBytes;
 
         /// <summary>
         ///     alias name
         /// </summary>
-        public override string LongName
+        public override string Name
             => AliasName;
 
         /// <summary>
         ///     short name
         /// </summary>
-        public override string ShortName
-            => BaseType.ShortName;
+        public override string MangledName
+            => BaseTypeDefinition.MangledName;
 
         /// <summary>
-        ///     format this type as string
+        ///     base type: <c>type alias</c>
         /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => "$" + BaseType.ToString();
+        public override BaseType BaseType
+            => BaseType.TypeAlias;
 
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -9,27 +8,41 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     subrange type
     /// </summary>
-    public class SubrangeType : TypeBase, ISubrangeType {
+    public class SubrangeType : TypeDefinitionBase, ISubrangeType {
 
         /// <summary>
         ///     create a new subrange type
         /// </summary>
-        /// <param name="withId">type id</param>
-        /// <param name="baseType">base type</param>
+        /// <param name="definingUnit">defining unit</param>
+        /// <param name="subrangeOf">subrange of another type</param>
         /// <param name="low"></param>
         /// <param name="high"></param>
-        public SubrangeType(int withId, int baseType, IOldTypeReference low, IOldTypeReference high) : base(withId) {
-            BaseTypeId = baseType;
+        /// <param name="name">type name</param>
+        public SubrangeType(IUnitType definingUnit, string name, IOrdinalType subrangeOf, IValue low, IValue high) : base(definingUnit) {
+            SubrangeOfType = subrangeOf;
             LowestElement = low;
             HighestElement = high;
+            Name = name;
         }
+
+        /// <summary>
+        ///     mangled name
+        /// </summary>
+        public override string MangledName
+            => SubrangeOfType.MangledName;
+
+        /// <summary>
+        ///     type name
+        /// </summary>
+        public override string Name { get; }
 
         /// <summary>
         ///     get the type kind
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.SubrangeType;
+        public override BaseType BaseType
+            => BaseType.Subrange;
 
+        /*
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
@@ -48,49 +61,34 @@ namespace PasPasPas.Typings.Simple {
 
             return base.CanBeAssignedFrom(otherType);
         }
+        */
 
         /// <summary>
-        ///     base type id
+        ///     subrange of another type
         /// </summary>
-        public int BaseTypeId { get; }
-
-        /// <summary>
-        ///     base type
-        /// </summary>
-        public IOrdinalType BaseType {
-            get {
-                var result = TypeRegistry.GetTypeByIdOrUndefinedType(BaseTypeId) as IOrdinalType;
-                return result;
-            }
-        }
+        public IOrdinalType SubrangeOfType { get; }
 
         /// <summary>
         ///     highest element
         /// </summary>
-        public IOldTypeReference HighestElement { get; }
+        public IValue HighestElement { get; }
 
         /// <summary>
         ///     lowest element
         /// </summary>
-        public IOldTypeReference LowestElement { get; }
-
-        /// <summary>
-        ///     bit size
-        /// </summary>
-        public uint BitSize
-            => BaseType.BitSize;
+        public IValue LowestElement { get; }
 
         /// <summary>
         ///     test if this type is signed
         /// </summary>
         public bool IsSigned
-            => BaseType.IsSigned;
+            => SubrangeOfType.IsSigned;
 
         /// <summary>
         ///     type size
         /// </summary>
         public override uint TypeSizeInBytes
-            => BaseType.TypeSizeInBytes;
+            => SubrangeOfType.TypeSizeInBytes;
 
         /// <summary>
         ///     test if this type definition is valid
@@ -100,12 +98,11 @@ namespace PasPasPas.Typings.Simple {
                 if (LowestElement == default || HighestElement == default)
                     return false;
 
-                if (!LowestElement.IsOrdinalValue(out _))
+                if (!(LowestElement is IOrdinalType _))
                     return false;
 
-                if (!HighestElement.IsOrdinalValue(out _))
+                if (!(HighestElement is IOrdinalValue _))
                     return false;
-
 
                 return true;
             }
@@ -116,10 +113,10 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public BigInteger Cardinality {
             get {
-                if (!LowestElement.IsOrdinalValue(out var lowerValue))
+                if (!(LowestElement is IOrdinalValue lowerValue))
                     return BigInteger.Zero;
 
-                if (!HighestElement.IsOrdinalValue(out var highValue))
+                if (!(HighestElement is IOrdinalValue highValue))
                     return BigInteger.Zero;
 
                 var low = lowerValue.GetOrdinalValue(TypeRegistry);
@@ -134,13 +131,5 @@ namespace PasPasPas.Typings.Simple {
                 return BigInteger.Add(BigInteger.One, BigInteger.Subtract(h.AsBigInteger, l.AsBigInteger));
             }
         }
-
-        /// <summary>
-        ///     format this subrange type
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => StringUtils.Invariant($"Subrange {BaseType}");
-
     }
 }

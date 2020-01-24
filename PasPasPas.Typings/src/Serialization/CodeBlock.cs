@@ -82,9 +82,7 @@ namespace PasPasPas.Typings.Serialization {
 
         internal void PrepareRoutines(IUnitType unit) {
             foreach (var symbol in unit.Symbols) {
-                var reference = symbol.Value as Globals.Types.Reference;
-                if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
-                    var routine = reference.Symbol as IRoutineGroup;
+                if (symbol is IRoutineGroup routine) {
                     routines.Add(routine);
                     var _ = stringData[routine.Name];
                 }
@@ -93,8 +91,7 @@ namespace PasPasPas.Typings.Serialization {
 
         internal void AddToUnit(IUnitType unit) {
             foreach (var routine in routines) {
-                var reference = new Globals.Types.Reference(ReferenceKind.RefToGlobalRoutine, routine);
-                unit.Symbols.Add(routine.Name, reference);
+                unit.Register(routine.Name, routine);
             }
         }
     }

@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     type id
         /// </summary>
         public int TypeId
-            => TypeInfo != null ? TypeInfo.TypeId : KnownTypeIds.ErrorType;
+            => TypeInfo != null ? TypeInfo.TypeId : KnownTypeIds.Unused;
 
         /// <summary>
         ///     parent declaration

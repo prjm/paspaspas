@@ -1,21 +1,24 @@
-﻿using PasPasPas.Globals.Runtime;
-
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
-    ///     type definition
+    ///     interface for a type definition
     /// </summary>
-    public interface ITypeDefinition : IRefSymbol {
+    public interface ITypeDefinition : ITypeSymbol {
 
         /// <summary>
-        ///     get the common type kind
+        ///     get base type of this type definition
         /// </summary>
-        CommonTypeKind TypeKind { get; }
+        BaseType BaseType { get; }
 
         /// <summary>
-        ///     used type registry
+        ///     defining unit
         /// </summary>
-        ITypeRegistry TypeRegistry { get; }
+        IUnitType DefiningUnit { get; }
+
+        /// <summary>
+        ///     type name
+        /// </summary>
+        string Name { get; }
 
         /// <summary>
         ///     type size in bytes
@@ -23,20 +26,9 @@ namespace PasPasPas.Globals.Types {
         uint TypeSizeInBytes { get; }
 
         /// <summary>
-        ///     short type name
+        ///     mangled type name
         /// </summary>
-        string ShortName { get; }
+        string MangledName { get; }
 
-        /// <summary>
-        ///     long type name
-        /// </summary>
-        string LongName { get; }
-
-        /// <summary>
-        ///     check if this type can be assigned from another type
-        /// </summary>
-        /// <param name="otherType">type which will be assigned to this type</param>
-        /// <returns><c>true</c> if the types are assignment compatible</returns>
-        bool CanBeAssignedFrom(ITypeDefinition otherType);
     }
 }

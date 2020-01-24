@@ -7,59 +7,34 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     wide char type
     /// </summary>
-    public class WideCharType : OrdinalTypeBase, ICharType {
-
-        private readonly object lockObject = new object();
-        private IOldTypeReference highestElement;
-        private IOldTypeReference lowestElement;
+    public class WideCharType : TypeDefinitionBase, ICharType {
 
         /// <summary>
         ///     wide char type
         /// </summary>
-        /// <param name="withId"></param>
-        public WideCharType(int withId) : base(withId) {
-        }
+        /// <param name="definingUnit"></param>
+        public WideCharType(IUnitType definingUnit) : base(definingUnit) { }
 
         /// <summary>
         ///     wide char type
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.WideCharType;
+        public override BaseType BaseType
+            => BaseType.Char;
 
         /// <summary>
-        ///     highest element: <c>0xffff</c>
+        ///     highest element: <c>0xff</c>
         /// </summary>
-        public IOldTypeReference HighestElement {
-            get {
-                lock (lockObject) {
-                    if (highestElement == default)
-                        highestElement = TypeRegistry.Runtime.Chars.ToWideCharValue(TypeId, char.MaxValue);
-                    return highestElement;
-                }
-            }
-        }
+        public IValue HighestElement
+            => TypeRegistry.Runtime.Chars.ToWideCharValue(this, '\uffff');
 
         /// <summary>
         ///     lowest element: <c>0</c>
         /// </summary>
-        public IOldTypeReference LowestElement {
-            get {
-                lock (lockObject) {
-                    if (lowestElement == default)
-                        lowestElement = TypeRegistry.Runtime.Chars.ToWideCharValue(TypeId, char.MinValue);
-                    return lowestElement;
-                }
-            }
-        }
+        public IValue LowestElement
+            => TypeRegistry.Runtime.Chars.ToWideCharValue(this, '\u0000');
 
         /// <summary>
-        ///     bit size
-        /// </summary>
-        public uint BitSize
-            => 16;
-
-        /// <summary>
-        ///     unsigned data types
+        ///     unsigned data type
         /// </summary>
         public bool IsSigned
             => false;
@@ -70,6 +45,13 @@ namespace PasPasPas.Typings.Simple {
         public override uint TypeSizeInBytes
             => 2;
 
+        /// <summary>
+        ///     char kind
+        /// </summary>
+        public CharTypeKind Kind
+            => CharTypeKind.WideChar;
+
+        /*
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
@@ -84,17 +66,18 @@ namespace PasPasPas.Typings.Simple {
 
             return base.CanBeAssignedFrom(otherType);
         }
+        */
 
         /// <summary>
         ///     long type name
         /// </summary>
-        public override string LongName
+        public override string Name
             => KnownNames.WideChar;
 
         /// <summary>
         ///     short type name
         /// </summary>
-        public override string ShortName
+        public override string MangledName
             => KnownNames.B;
 
     }

@@ -6,17 +6,23 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     enumeration value declaration
     /// </summary>
-    public class EnumValue : IRefSymbol {
+    public class EnumValue : IEnumeratedValue {
 
         /// <summary>
         ///     create a new enumeration value
         /// </summary>
         /// <param name="name">symbol name</param>
         /// <param name="value">symbol value</param>
-        public EnumValue(string name, IOldTypeReference value) {
+        public EnumValue(string name, IValue value) {
             Name = name;
             Value = value;
         }
+
+        /// <summary>
+        ///     type definition
+        /// </summary>
+        public ITypeDefinition TypeDefinition
+            => Value.TypeDefinition;
 
         /// <summary>
         ///     name of the enumeration item
@@ -26,13 +32,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     value of the enumerated item
         /// </summary>
-        public IOldTypeReference Value { get; private set; }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public int TypeId
-            => Value.TypeId;
+        public IValue Value { get; private set; }
 
         /// <summary>
         ///     convert the value of this enumeration to an enumerated value

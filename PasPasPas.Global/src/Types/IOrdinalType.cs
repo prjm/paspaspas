@@ -10,12 +10,12 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     highest element
         /// </summary>
-        IOldTypeReference HighestElement { get; }
+        IValue HighestElement { get; }
 
         /// <summary>
         ///     lowest element
         /// </summary>
-        IOldTypeReference LowestElement { get; }
+        IValue LowestElement { get; }
 
         /// <summary>
         ///     test if this is a signed ordinal type

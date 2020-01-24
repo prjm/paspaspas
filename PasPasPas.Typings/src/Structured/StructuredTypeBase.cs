@@ -10,13 +10,13 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     base class for structured types
     /// </summary>
-    public abstract class StructuredTypeBase : TypeBase {
+    public abstract class StructuredTypeBase : TypeDefinitionBase {
 
         /// <summary>
         ///     create a new structured type
         /// </summary>
-        /// <param name="withId"></param>
-        protected StructuredTypeBase(int withId) : base(withId) {
+        /// <param name="defininingUnit"></param>
+        protected StructuredTypeBase(IUnitType defininingUnit) : base(defininingUnit) {
         }
 
         /// <summary>

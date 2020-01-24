@@ -5,10 +5,5 @@
     /// </summary>
     public interface IFixedSizeType : ITypeDefinition {
 
-        /// <summary>
-        ///     type size in bits
-        /// </summary>
-        uint BitSize { get; }
-
     }
 }

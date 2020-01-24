@@ -7,55 +7,25 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     ANSI char type (1 byte)
     /// </summary>
-    public class AnsiCharType : OrdinalTypeBase, ICharType {
-
-        private readonly object lockObject = new object();
-        private IOldTypeReference highestElement;
-        private IOldTypeReference lowestElement;
+    public class AnsiCharType : TypeDefinitionBase, ICharType {
 
         /// <summary>
         ///     create a new char type
         /// </summary>
-        /// <param name="withId">type id</param>
-        public AnsiCharType(int withId) : base(withId) { }
-
-        /// <summary>
-        ///     type kind: ANSI char type
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.AnsiCharType;
+        /// <param name="definingUnit">defining unit</param>
+        public AnsiCharType(IUnitType definingUnit) : base(definingUnit) { }
 
         /// <summary>
         ///     highest element: <c>0xff</c>
         /// </summary>
-        public IOldTypeReference HighestElement {
-            get {
-                lock (lockObject) {
-                    if (highestElement == default)
-                        highestElement = TypeRegistry.Runtime.Chars.ToAnsiCharValue(TypeId, 0xff);
-                    return highestElement;
-                }
-            }
-        }
+        public IValue HighestElement
+            => TypeRegistry.Runtime.Chars.ToAnsiCharValue(this, 0xff);
 
         /// <summary>
         ///     lowest element: <c>0</c>
         /// </summary>
-        public IOldTypeReference LowestElement {
-            get {
-                lock (lockObject) {
-                    if (lowestElement == default)
-                        lowestElement = TypeRegistry.Runtime.Chars.ToAnsiCharValue(TypeId, 0x00);
-                    return lowestElement;
-                }
-            }
-        }
-
-        /// <summary>
-        ///     bit size
-        /// </summary>
-        public uint BitSize
-            => 8;
+        public IValue LowestElement
+            => TypeRegistry.Runtime.Chars.ToAnsiCharValue(this, 0);
 
         /// <summary>
         ///     unsigned data type
@@ -70,6 +40,19 @@ namespace PasPasPas.Typings.Simple {
             => 1;
 
         /// <summary>
+        ///     base type
+        /// </summary>
+        public override BaseType BaseType
+            => BaseType.Char;
+
+        /// <summary>
+        ///     char type kind
+        /// </summary>
+        public CharTypeKind Kind
+            => CharTypeKind.AnsiChar;
+
+        /*
+        /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>
@@ -83,17 +66,18 @@ namespace PasPasPas.Typings.Simple {
 
             return base.CanBeAssignedFrom(otherType);
         }
+        */
 
         /// <summary>
         ///     long type name
         /// </summary>
-        public override string LongName
+        public override string Name
             => KnownNames.AnsiChar;
 
         /// <summary>
         ///     short type name
         /// </summary>
-        public override string ShortName
+        public override string MangledName
             => KnownNames.C;
 
     }

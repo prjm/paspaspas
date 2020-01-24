@@ -222,7 +222,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="minBitSize">minimal bit size</param>
         /// <param name="bothAreUnsigned">if <c>true</c> both types reference unsigned values</param>
         /// <returns>smallest type id</returns>
-        public static int GetSmallestIntegralTypeOrNext(this ITypeRegistry registry, int typeId1, int typeId2, int minBitSize = 0, bool bothAreUnsigned = false) {
+        public static int GetSmallestIntegralTypeOrNext(this ITypeRegistry registry, ITypeDefinition typeId1, ITypeDefinition typeId2, int minBitSize = 0, bool bothAreUnsigned = false) {
             if (KnownTypeIds.ErrorType.In(typeId1, typeId2))
                 return KnownTypeIds.ErrorType;
 

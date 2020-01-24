@@ -9,7 +9,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     enumerated type
     /// </summary>
-    public class EnumeratedType : OrdinalTypeBase, IEnumeratedType {
+    public class EnumeratedType : TypeDefinitionBase, IEnumeratedType {
 
         /// <summary>
         ///     list of possible values
@@ -20,15 +20,27 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     create an enumerated type
         /// </summary>
-        /// <param name="withId">type id</param>
-        public EnumeratedType(int withId) : base(withId) {
-        }
+        /// <param name="definingUnit">defining unit</param>
+        /// <param name="name"></param>
+        public EnumeratedType(IUnitType definingUnit, string name) : base(definingUnit)
+            => Name = name;
+
+        /// <summary>
+        ///     type name
+        /// </summary>
+        public override string Name { get; }
+
+        /// <summary>
+        ///     mangled type name
+        /// </summary>
+        public override string MangledName
+            => string.Format(DefiningUnit.Name, KnownNames.AtSymbol, Name);
 
         /// <summary>
         ///     enumerated type
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.EnumerationType;
+        public override BaseType BaseType
+            => BaseType.Enumeration;
 
         /// <summary>
         ///     get enumeration values
@@ -39,7 +51,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     highest element
         /// </summary>
-        public IOldTypeReference HighestElement {
+        public IValue HighestElement {
             get {
                 if (values.Count < 1)
                     return default;
@@ -62,7 +74,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     lowest element
         /// </summary>
-        public IOldTypeReference LowestElement {
+        public IValue LowestElement {
             get {
                 if (values.Count < 1)
                     return default;
@@ -79,20 +91,6 @@ namespace PasPasPas.Typings.Simple {
                 }
 
                 return lowestElement;
-            }
-        }
-
-        /// <summary>
-        ///     bit size
-        /// </summary>
-        public uint BitSize {
-            get {
-                var type = TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId) as IOrdinalType;
-
-                if (type != default)
-                    return type.BitSize;
-                else
-                    return default;
             }
         }
 
@@ -116,20 +114,19 @@ namespace PasPasPas.Typings.Simple {
         public int CommonTypeId {
             get {
                 var lowestElement = LowestElement;
-                var lowerBaseType = KnownTypeIds.ErrorType;
+                var lowerBaseType = TypeRegistry.SystemUnit.ErrorType;
                 var highestElement = HighestElement;
-                var higherBaseType = KnownTypeIds.ErrorType;
-
+                var higherBaseType = TypeRegistry.SystemUnit.ErrorType;
 
                 if (lowestElement is IEnumeratedValue lowestEnumValue)
-                    lowerBaseType = lowestEnumValue.Value.TypeId;
+                    lowerBaseType = lowestEnumValue.Value.TypeDefinition;
                 else if (lowestElement != default)
-                    lowerBaseType = lowestElement.TypeId;
+                    lowerBaseType = lowestElement.TypeDefinition;
 
                 if (highestElement is IEnumeratedValue highestEnumValue)
-                    higherBaseType = highestEnumValue.Value.TypeId;
+                    higherBaseType = highestEnumValue.Value.TypeDefinition;
                 else if (highestElement != default)
-                    higherBaseType = highestElement.TypeId;
+                    higherBaseType = highestElement.TypeDefinition;
 
                 return TypeRegistry.GetSmallestIntegralTypeOrNext(lowerBaseType, higherBaseType);
             }
@@ -148,8 +145,8 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="symbolName">symbol name</param>
         /// <param name="withValue">if <c>true</c> a value definition is used</param>
         /// <param name="enumValue">optional value definition</param>
-        public EnumValue DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, IOldTypeReference enumValue) {
-            IOldTypeReference newValue;
+        public EnumValue DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, IValue enumValue) {
+            IValue newValue;
 
             if (withValue)
                 newValue = enumValue;
@@ -158,14 +155,12 @@ namespace PasPasPas.Typings.Simple {
             else
                 newValue = runtimeValues.Integers.Zero;
 
-            if (!newValue.IsConstant())
-                return null;
-
             var enumValueDefinition = new EnumValue(symbolName, newValue);
             values.Add(enumValueDefinition);
             return enumValueDefinition;
         }
 
+        /*
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
@@ -180,12 +175,7 @@ namespace PasPasPas.Typings.Simple {
 
             return base.CanBeAssignedFrom(otherType);
         }
+        */
 
-        /// <summary>
-        ///     readable type name
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => $"Enum {TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId)}";
     }
 }

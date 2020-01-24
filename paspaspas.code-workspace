@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"breadcrumbs.enabled": false,
+		"files.exclude": {
+			"**/bin": true,
+			"**/obj": true
+		}
+	}
+}

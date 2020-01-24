@@ -26,7 +26,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="enumTypeId">type id of the enumerated type</param>
         /// <param name="value">constant value</param>
         /// <returns>enumerated type value</returns>
-        IOldTypeReference MakeEnumValue(int enumTypeId, IOldTypeReference value);
+        IValue MakeEnumValue(int enumTypeId, IOldTypeReference value);
 
         /// <summary>
         ///     make an invocation result

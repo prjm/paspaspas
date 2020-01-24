@@ -8,38 +8,21 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     boolean type
     /// </summary>
-    public class BooleanType : OrdinalTypeBase, IBooleanType {
+    public class BooleanType : TypeDefinitionBase, IBooleanType {
 
         /// <summary>
         ///     create a new boolean type
         /// </summary>
-        /// <param name="withId"></param>
-        /// <param name="bitSize">size in bits</param>
-        public BooleanType(int withId, uint bitSize) : base(withId)
-            => BitSize = bitSize;
+        /// <param name="definingUnit"></param>
+        /// <param name="kind">boolean kind</param>
+        public BooleanType(IUnitType definingUnit, BooleanTypeKind kind) : base(definingUnit)
+            => Kind = kind;
 
         /// <summary>
-        ///     enumerated type
+        ///     base type
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.BooleanType;
-
-        /// <summary>
-        ///     bit size
-        /// </summary>
-        public uint BitSize { get; }
-
-        /// <summary>
-        ///     true value
-        /// </summary>
-        public IOldTypeReference HighestElement
-            => TypeRegistry.Runtime.Booleans.TrueValue;
-
-        /// <summary>
-        ///     false value
-        /// </summary>
-        public IOldTypeReference LowestElement
-            => TypeRegistry.Runtime.Booleans.FalseValue;
+        public override BaseType BaseType
+            => BaseType.Boolean;
 
         /// <summary>
         ///     unsigned data type
@@ -50,15 +33,33 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     type size in bytes
         /// </summary>
-        public override uint TypeSizeInBytes
-            => (BitSize - 1) / 8u + 1u;
+        public override uint TypeSizeInBytes {
+            get {
+                switch (Kind) {
+                    case BooleanTypeKind.Boolean:
+                        return 1;
+
+                    case BooleanTypeKind.ByteBool:
+                        return 1;
+
+                    case BooleanTypeKind.WordBool:
+                        return 2;
+
+                    case BooleanTypeKind.LongBool:
+                        return 4;
+
+                    default:
+                        throw new InvalidOperationException();
+                }
+            }
+        }
 
         /// <summary>
         ///     type kind
         /// </summary>
-        public BooleanTypeKind Kind
-            => BooleanTypeKind.Boolean;
+        public BooleanTypeKind Kind { get; }
 
+        /*
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
@@ -73,20 +74,23 @@ namespace PasPasPas.Typings.Simple {
 
             return base.CanBeAssignedFrom(otherType);
         }
-
+        */
         /// <summary>
         ///     short type name
         /// </summary>
-        public override string ShortName {
+        public override string MangledName {
             get {
-                switch (BitSize) {
-                    case 1:
+                switch (Kind) {
+                    case BooleanTypeKind.Boolean:
                         return KnownNames.O;
-                    case 8:
+
+                    case BooleanTypeKind.ByteBool:
                         return KnownNames.UC;
-                    case 16:
+
+                    case BooleanTypeKind.WordBool:
                         return KnownNames.US;
-                    case 32:
+
+                    case BooleanTypeKind.LongBool:
                         return KnownNames.I;
                 }
 
@@ -98,20 +102,73 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     long type name
         /// </summary>
-        public override string LongName {
+        public override string Name {
             get {
-                switch (BitSize) {
-                    case 1:
+                switch (Kind) {
+                    case BooleanTypeKind.Boolean:
                         return KnownNames.Boolean;
-                    case 8:
+
+                    case BooleanTypeKind.ByteBool:
                         return KnownNames.ByteBool;
-                    case 16:
+
+                    case BooleanTypeKind.WordBool:
                         return KnownNames.WordBool;
-                    case 32:
+
+                    case BooleanTypeKind.LongBool:
                         return KnownNames.LongBool;
                 }
 
                 throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        ///     highest element
+        /// </summary>
+        public IValue HighestElement {
+            get {
+                var values = TypeRegistry.Runtime.Booleans;
+                switch (Kind) {
+                    case BooleanTypeKind.Boolean:
+                        return values.Booleans.TrueValue;
+
+                    case BooleanTypeKind.ByteBool:
+                        return values.ToByteBool(0xff, this);
+
+                    case BooleanTypeKind.WordBool:
+                        return values.ToWordBool(0xff_ff, this);
+
+                    case BooleanTypeKind.LongBool:
+                        return values.ToLongBool(0xff_ff_ff_ff, this);
+
+                    default:
+                        throw new InvalidOperationException();
+                }
+            }
+        }
+
+        /// <summary>
+        ///     smallest element
+        /// </summary>
+        public IValue LowestElement {
+            get {
+                var values = TypeRegistry.Runtime.Booleans;
+                switch (Kind) {
+                    case BooleanTypeKind.Boolean:
+                        return values.Booleans.FalseValue;
+
+                    case BooleanTypeKind.ByteBool:
+                        return values.ToByteBool(0, this);
+
+                    case BooleanTypeKind.WordBool:
+                        return values.ToWordBool(0, this);
+
+                    case BooleanTypeKind.LongBool:
+                        return values.ToLongBool(0, this);
+
+                    default:
+                        throw new InvalidOperationException();
+                }
             }
         }
     }

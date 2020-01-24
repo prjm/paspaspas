@@ -6,8 +6,6 @@ using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Hidden;
 using PasPasPas.Typings.Operators;
-using PasPasPas.Typings.Routines;
-using PasPasPas.Typings.Routines.Runtime;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
 
@@ -32,7 +30,6 @@ namespace PasPasPas.Typings.Common {
         private readonly IDictionary<int, IOperator> operators
             = new Dictionary<int, IOperator>();
 
-        private readonly UnitType systemUnit;
         private readonly object idLock = new object();
 
         /// <summary>
@@ -45,8 +42,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     system unit
         /// </summary>
-        public IRefSymbol SystemUnit
-            => systemUnit;
+        public ISystemUnit SystemUnit { get; }
 
         /// <summary>
         ///     number of types
@@ -100,42 +96,13 @@ namespace PasPasPas.Typings.Common {
             Runtime = runtime;
             ListPools = listPools;
             TypeCreator = new CommonTypeCreator(this);
-            systemUnit = new UnitType(Ids.SystemUnit, "System");
-            RegisterType(systemUnit);
+            SystemUnit = new SystemUnit();
+            RegisterType(SystemUnit);
 
             RegisterCommonTypes(intSize);
             RegisterCommonOperators();
             RegisterTObject();
-            RegisterCommonFunctions();
-        }
 
-        /// <summary>
-        ///     register common functions
-        /// </summary>
-        private void RegisterCommonFunctions() {
-            systemUnit.AddGlobal(new Abs());
-            systemUnit.AddGlobal(new Chr());
-            systemUnit.AddGlobal(new Concat());
-            systemUnit.AddGlobal(new HiOrLo(HiLoMode.Hi));
-            systemUnit.AddGlobal(new HighOrLow(HighOrLowMode.High));
-            systemUnit.AddGlobal(new Length());
-            systemUnit.AddGlobal(new HiOrLo(HiLoMode.Lo));
-            systemUnit.AddGlobal(new HighOrLow(HighOrLowMode.Low));
-            systemUnit.AddGlobal(new MulDivInt64());
-            systemUnit.AddGlobal(new Odd());
-            systemUnit.AddGlobal(new Ord());
-            systemUnit.AddGlobal(new Pi());
-            systemUnit.AddGlobal(new PredOrSucc(PredSuccMode.Pred));
-            systemUnit.AddGlobal(new PtrRoutine());
-            systemUnit.AddGlobal(new Round());
-            systemUnit.AddGlobal(new PredOrSucc(PredSuccMode.Succ));
-            systemUnit.AddGlobal(new SizeOf());
-            systemUnit.AddGlobal(new Sqr());
-            systemUnit.AddGlobal(new Swap());
-            systemUnit.AddGlobal(new Trunc());
-
-            // dynamic procedures
-            systemUnit.AddGlobal(new WriteLn());
         }
 
         /// <summary>
@@ -199,8 +166,6 @@ namespace PasPasPas.Typings.Common {
         ///     register built-in types
         /// </summary>
         private void RegisterCommonTypes(NativeIntSize intSize) {
-            RegisterType(new ErrorType(Ids.ErrorType));
-
             RegisterIntTypes();
             RegisterBoolTypes();
             RegisterStringTypes();
@@ -332,15 +297,14 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
+        ///     byte type
+        /// </summary>
+        public IIntegralType ByteType { get; private set; }
+
+        /// <summary>
         ///     register integer types
         /// </summary>
         private void RegisterIntTypes() {
-            RegisterSystemType(new IntegralType(Ids.ByteType, false, 8));
-            RegisterSystemType(new IntegralType(Ids.ShortInt, true, 8));
-            RegisterSystemType(new IntegralType(Ids.WordType, false, 16));
-            RegisterSystemType(new IntegralType(Ids.SmallInt, true, 16));
-            RegisterSystemType(new IntegralType(Ids.CardinalType, false, 32));
-            RegisterSystemType(new IntegralType(Ids.IntegerType, true, 32));
             RegisterSystemType(new Integral64BitType(Ids.UInt64Type, false));
             RegisterSystemType(new Integral64BitType(Ids.Int64Type, true));
 
@@ -455,7 +419,7 @@ namespace PasPasPas.Typings.Common {
             if (sourceTypeKind == CommonTypeKind.RecordType)
                 return CastRecordTo(sourceType, targetType);
 
-            return Ids.ErrorType;
+            return Ids.Unused;
         }
 
         private int CastIntTo(int targetType) {
@@ -476,14 +440,14 @@ namespace PasPasPas.Typings.Common {
             if (targetTypeKind == CommonTypeKind.SubrangeType)
                 return targetType;
 
-            return Ids.ErrorType;
+            return Ids.Unused;
         }
 
         private int CastRecordTo(int sourceType, int targetType) {
             if (this.AreRecordTypesCompatible(sourceType, targetType))
                 return targetType;
 
-            return Ids.ErrorType;
+            return Ids.Unused;
         }
 
         private int CastBooleanTo(int targetType) {
@@ -492,7 +456,7 @@ namespace PasPasPas.Typings.Common {
             if (targetTypeKind == CommonTypeKind.BooleanType)
                 return targetType;
 
-            return Ids.ErrorType;
+            return Ids.Unused;
         }
 
         private int CastCharTo(int targetType) {
@@ -516,7 +480,7 @@ namespace PasPasPas.Typings.Common {
             if (targetTypeKind == CommonTypeKind.SubrangeType)
                 return targetType;
 
-            return Ids.ErrorType;
+            return Ids.Unused;
         }
 
         /// <summary>
@@ -536,7 +500,7 @@ namespace PasPasPas.Typings.Common {
             var system = SystemUnit as IUnitType;
 
             foreach (var reference in system.Symbols) {
-                if (!(reference.Value.Symbol is IRoutineGroup routine))
+                if (!(reference is IRoutineGroup routine))
                     continue;
 
                 if (routine.RoutineId == routineId)

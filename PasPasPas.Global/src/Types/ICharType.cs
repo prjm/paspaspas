@@ -5,5 +5,10 @@
     /// </summary>
     public interface ICharType : IOrdinalType {
 
+        /// <summary>
+        ///     char type kind
+        /// </summary>
+        CharTypeKind Kind { get; }
+
     }
 }

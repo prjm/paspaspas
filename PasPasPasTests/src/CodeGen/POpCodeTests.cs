@@ -25,8 +25,8 @@ namespace PasPasPasTests.CodeGen {
             var ast = api.CreateAbstractSyntraxTree(cst);
             api.AnnotateWithTypes(ast);
             var pf = env.TypeRegistry.RegisteredTypeDefinitions.Where(t => t is IUnitType && t.TypeId != KnownTypeIds.SystemUnit).FirstOrDefault() as IUnitType;
-            var mr = pf.Symbols[KnownNames.MainMethod];
-            var r = mr.Symbol as IRoutineGroup;
+            var mr = pf.GetSymbol(KnownNames.MainMethod);
+            var r = mr as IRoutineGroup;
             var pr = r.Items[0];
             var c = pr.Code;
             var ce = new ConstantEncoder(env);

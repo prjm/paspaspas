@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     operations on characters
@@ -9,16 +11,16 @@
         ///     convert a Unicode char to a runtime value object
         /// </summary>
         /// <param name="character">Unicode character (16 bits)</param>
-        /// <param name="typeId">type id</param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IOldTypeReference ToWideCharValue(int typeId, char character);
+        IValue ToWideCharValue(ITypeDefinition typeDef, char character);
 
         /// <summary>
         ///     convert a ANSI char to a runtime value object
         /// </summary>
         /// <param name="character">ANSI character (8 bits)</param>
-        /// <param name="typeId">type id</param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IOldTypeReference ToAnsiCharValue(int typeId, byte character);
+        IValue ToAnsiCharValue(ITypeDefinition typeDef, byte character);
     }
 }

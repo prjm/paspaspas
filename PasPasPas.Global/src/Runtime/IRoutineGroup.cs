@@ -6,7 +6,7 @@ namespace PasPasPas.Globals.Runtime {
     /// <summary>
     ///     generic interface for routine groups
     /// </summary>
-    public interface IRoutineGroup : IRefSymbol {
+    public interface IRoutineGroup : IRefSymbol, ITypeSymbol {
 
         /// <summary>
         ///     routine name

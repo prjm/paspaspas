@@ -1,14 +1,16 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     value of an enumeration
     /// </summary>
-    public interface IEnumeratedValue : IOldTypeReference {
+    public interface IEnumeratedValue : ITypeSymbol {
 
         /// <summary>
         ///     constant value
         /// </summary>
-        IOldTypeReference Value { get; }
+        IValue Value { get; }
 
     }
 }
