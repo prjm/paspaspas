@@ -32,14 +32,14 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     return type
         /// </summary>
-        public IOldTypeReference ReturnType { get; }
+        public ITypeSymbol ReturnType { get; }
 
         /// <summary>
         ///     create a new type signature
         /// </summary>
         /// <param name="returnType"></param>
         /// <param name="inputTypes">values</param>
-        public Signature(IOldTypeReference returnType, ImmutableArray<IOldTypeReference> inputTypes) {
+        public Signature(ITypeSymbol returnType, ImmutableArray<IOldTypeReference> inputTypes) {
             ReturnType = returnType;
             InputTypes = inputTypes;
         }

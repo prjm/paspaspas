@@ -12,13 +12,24 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="definingUnit"></param>
         /// <param name="indexType">index types</param>
-        protected ArrayType(IUnitType definingUnit, IOrdinalType indexType) : base(definingUnit)
+        protected ArrayType(IUnitType definingUnit, ITypeDefinition indexType) : base(definingUnit)
             => IndexType = indexType;
+
+        /// <summary>
+        ///     base type kind
+        /// </summary>
+        public override BaseType BaseType
+            => BaseType.Array;
+
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        public abstract ArrayTypeKind Kind { get; }
 
         /// <summary>
         ///     array index types
         /// </summary>
-        public IOrdinalType IndexType { get; }
+        public ITypeDefinition IndexType { get; }
 
         /// <summary>
         ///     base type id
@@ -31,6 +42,12 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public bool Packed { get; set; }
             = false;
+
+        /// <summary>
+        ///     mangled name
+        /// </summary>
+        public override string MangledName
+            => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
 
         /*
         /// <summary>

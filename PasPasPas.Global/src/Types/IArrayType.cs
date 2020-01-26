@@ -6,9 +6,14 @@
     public interface IArrayType : ITypeDefinition {
 
         /// <summary>
+        ///     array kind
+        /// </summary>
+        ArrayTypeKind Kind { get; }
+
+        /// <summary>
         ///     index types
         /// </summary>
-        IOrdinalType IndexType { get; }
+        ITypeDefinition IndexType { get; }
 
         /// <summary>
         ///     base type id

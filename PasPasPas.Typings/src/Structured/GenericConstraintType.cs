@@ -1,4 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -6,25 +6,38 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     generic constraint type
     /// </summary>
-    public class GenericConstraintType : TypeBase {
+    public class GenericConstraintType : TypeDefinitionBase {
 
         /// <summary>
-        ///     create a new generic constraint typwe
+        ///     create a new generic constraint type
         /// </summary>
-        /// <param name="withId"></param>
-        public GenericConstraintType(int withId) : base(withId) {
+        /// <param name="definingUnit"></param>
+        public GenericConstraintType(IUnitType definingUnit) : base(definingUnit) {
         }
 
         /// <summary>
-        ///     type kind
+        ///     hidden type
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.HiddenType;
+        public override BaseType BaseType
+            => BaseType.Hidden;
+
 
         /// <summary>
         ///     invisible type
         /// </summary>
         public override uint TypeSizeInBytes
             => 0;
+
+        /// <summary>
+        ///     type name
+        /// </summary>
+        public override string Name
+            => string.Empty;
+
+        /// <summary>
+        ///     mangled type name
+        /// </summary>
+        public override string MangledName
+            => string.Empty;
     }
 }

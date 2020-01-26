@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -12,16 +11,19 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     create a new file type
         /// </summary>
-        /// <param name="newTypeId"></param>
-        /// <param name="baseTypeId"></param>
-        public FileType(int newTypeId, int baseTypeId) : base(newTypeId)
-            => BaseTypeId = baseTypeId;
+        /// <param name="definingUnit"></param>
+        /// <param name="name"></param>
+        /// <param name="baseTypeDef"></param>
+        public FileType(IUnitType definingUnit, string name, ITypeDefinition baseTypeDef) : base(definingUnit) {
+            Name = name;
+            BaseTypeDefinition = baseTypeDef;
+        }
 
         /// <summary>
         ///     get
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.FileType;
+        public override BaseType BaseType
+            => BaseType.File;
 
         /// <summary>
         ///     get byte size in bytes
@@ -30,8 +32,19 @@ namespace PasPasPas.Typings.Structured {
             => TypeRegistry.GetPointerSize();
 
         /// <summary>
+        ///     type name
+        /// </summary>
+        public override string Name { get; }
+
+        /// <summary>
+        ///     mangled name
+        /// </summary>
+        public override string MangledName
+            => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
+
+        /// <summary>
         ///     base type id
         /// </summary>
-        public int BaseTypeId { get; set; }
+        public ITypeDefinition BaseTypeDefinition { get; set; }
     }
 }

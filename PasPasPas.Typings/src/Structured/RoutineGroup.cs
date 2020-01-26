@@ -7,19 +7,13 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     callable routine
     /// </summary>
-    public class RoutineGroup : IRoutineGroup, IOldTypeReference {
+    public class RoutineGroup : IRoutineGroup {
 
         /// <summary>
         ///     create a new routine
         /// </summary>
-        /// <param name="name">routine name</param>
-        /// <param name="types">type registry</param>
-        /// <param name="definingType">defining type</param>
-        /// <param name="genericTypeId">generic type id</param>
-        public RoutineGroup(ITypeRegistry types, string name, int genericTypeId = KnownTypeIds.ErrorType, int definingType = KnownTypeIds.ErrorType) {
+        public RoutineGroup(ITypeDefinition definingType, string name, ITypeDefinition genericType = default) {
             Name = name;
-            TypeRegistry = types;
-            TypeId = genericTypeId;
             DefiningType = definingType;
         }
 
@@ -35,38 +29,9 @@ namespace PasPasPas.Typings.Structured {
         public string Name { get; }
 
         /// <summary>
-        ///     used type registry
-        /// </summary>
-        public ITypeRegistry TypeRegistry { get; }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public int TypeId { get; }
-
-        /// <summary>
         ///     defining type
         /// </summary>
-        public int DefiningType { get; }
-            = KnownTypeIds.UnspecifiedType;
-
-        /// <summary>
-        ///     internal type format
-        /// </summary>
-        public string InternalTypeFormat
-            => "p";
-
-        /// <summary>
-        ///     reference kind
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.ConstantValue;
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public CommonTypeKind TypeKind
-            => CommonTypeKind.ProcedureType;
+        public ITypeDefinition DefiningType { get; }
 
         /// <summary>
         ///     no intrinsic routine
@@ -75,11 +40,23 @@ namespace PasPasPas.Typings.Structured {
             => IntrinsicRoutineId.Unknown;
 
         /// <summary>
+        ///     type definition
+        /// </summary>
+        public ITypeDefinition TypeDefinition
+            => default;
+
+        /// <summary>
+        ///     symbol type kind
+        /// </summary>
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.RoutineGroup;
+
+        /// <summary>
         ///     add a parameter group
         /// </summary>
         /// <param name="resultType">result type</param>
         /// <param name="kind">procedure kind</param>
-        public Routine AddParameterGroup(RoutineKind kind, IOldTypeReference resultType) {
+        public Routine AddParameterGroup(RoutineKind kind, ITypeSymbol resultType) {
             var result = new Routine(this, kind, resultType);
             Items.Add(result);
             return result;
@@ -93,7 +70,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="parameterName">parameter name</param>
         /// <param name="kind">procedure kind</param>
         /// <returns></returns>
-        public Routine AddParameterGroup(string parameterName, RoutineKind kind, IOldTypeReference firstParam, IOldTypeReference resultType) {
+        public Routine AddParameterGroup(string parameterName, RoutineKind kind, ITypeSymbol firstParam, ITypeSymbol resultType) {
             var result = new Routine(this, kind, resultType);
             result.AddParameter(parameterName).SymbolType = firstParam;
             Items.Add(result);
@@ -108,7 +85,7 @@ namespace PasPasPas.Typings.Structured {
         public void ResolveCall(IList<IRoutine> callableRoutines, Signature signature) {
             foreach (var paramGroup in Items) {
 
-                if (!paramGroup.Matches(TypeRegistry, signature))
+                if (!paramGroup.Matches(default, signature))
                     continue;
 
                 callableRoutines.Add(paramGroup);

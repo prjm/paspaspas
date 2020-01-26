@@ -11,7 +11,7 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     base class
         /// </summary>
-        int BaseClassId { get; set; }
+        ITypeDefinition BaseClass { get; set; }
 
         /// <summary>
         ///     structured type kind

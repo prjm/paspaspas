@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Simple;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -12,22 +11,31 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     define a new set type
         /// </summary>
-        /// <param name="withId">type id</param>
+        /// <param name="definingType">type id</param>
         /// <param name="baseType">base type</param>
-        public SetType(int withId, int baseType) : base(withId)
-            => BaseTypeId = baseType;
+        /// <param name="name">type name</param>
+        public SetType(IUnitType definingType, string name, IOrdinalType baseType) : base(definingType) {
+            Name = name;
+            BaseTypeDefinition = baseType;
+        }
 
         /// <summary>
         ///     set type kind
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.SetType;
+        public override BaseType BaseType
+            => BaseType.Set;
 
         /// <summary>
-        ///     base type
+        ///     type name
         /// </summary>
-        public ITypeDefinition BaseType
-            => TypeRegistry.GetTypeByIdOrUndefinedType(BaseTypeId);
+        public override string Name { get; }
+
+        /// <summary>
+        ///     mangled name
+        /// </summary>
+        public override string MangledName
+            => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
+
 
         /// <summary>
         ///     type size in bytes
@@ -37,7 +45,7 @@ namespace PasPasPas.Typings.Structured {
                 IOldTypeReference div8(IOldTypeReference v)
                     => TypeRegistry.Runtime.Integers.Divide(v, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(8));
 
-                var enumType = BaseType as EnumeratedType;
+                var enumType = BaseTypeDefinition as IOrdinalType;
                 var lowest = enumType.LowestElement as IOrdinalValue;
                 var highest = enumType.HighestElement as IOrdinalValue;
                 var l = lowest.GetOrdinalValue(TypeRegistry);
@@ -52,8 +60,9 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     base type id
         /// </summary>
-        public int BaseTypeId { get; }
+        public IOrdinalType BaseTypeDefinition { get; }
 
+        /*
         /// <summary>
         ///     check if this type can be assigned from another type
         /// </summary>
@@ -67,13 +76,7 @@ namespace PasPasPas.Typings.Structured {
 
             return base.CanBeAssignedFrom(otherType);
         }
-
-        /// <summary>
-        ///     format this type as string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => $"set of {BaseType}";
+        */
 
     }
 }

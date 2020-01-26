@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -13,8 +12,11 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     create a new generic array type
         /// </summary>
-        /// <param name="withId"></param>
-        public GenericArrayType(int withId) : base(withId, KnownTypeIds.IntegerType) {
+        /// <param name="baseType"></param>
+        /// <param name="definingUnit"></param>
+        /// <param name="name"></param>
+        public GenericArrayType(string name, IUnitType definingUnit, ITypeDefinition baseType) : base(definingUnit, definingUnit.TypeRegistry.SystemUnit.IntegerType) {
+            Name = name;
         }
 
         /// <summary>
@@ -30,10 +32,15 @@ namespace PasPasPas.Typings.Structured {
             => 1;
 
         /// <summary>
-        ///     type kind
+        ///     type name
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.UnknownType;
+        public override string Name { get; }
+
+        /// <summary>
+        ///     generic array
+        /// </summary>
+        public override ArrayTypeKind Kind
+            => ArrayTypeKind.GenericArray;
 
         /// <summary>
         ///     bind to a generic type
@@ -45,7 +52,7 @@ namespace PasPasPas.Typings.Structured {
                 return default;
 
             var arrayType = TypeRegistry.TypeCreator.CreateDynamicArrayType(typeIds[0], false);
-            return new Reference(ReferenceKind.RefToBoundGeneric, arrayType);
+            return new Reference(ReferenceKind.RefToBoundGeneric, default);
         }
     }
 }

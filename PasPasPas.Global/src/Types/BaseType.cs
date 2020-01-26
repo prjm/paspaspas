@@ -11,59 +11,99 @@
         Unkown = 0,
 
         /// <summary>
+        ///     hidden type
+        /// </summary>
+        Hidden = 1,
+
+        /// <summary>
         ///     error type
         /// </summary>
-        Error = 1,
+        Error = 2,
 
         /// <summary>
         ///     type alias
         /// </summary>
-        TypeAlias = 2,
+        TypeAlias = 3,
 
         /// <summary>
         ///     subrange type
         /// </summary>
-        Subrange = 3,
+        Subrange = 4,
 
         /// <summary>
         ///     boolean type
         /// </summary>
-        Boolean = 4,
+        Boolean = 5,
 
         /// <summary>
         ///     ANSI char
         /// </summary>
-        Char = 5,
+        Char = 6,
 
         /// <summary>
         ///     string type
         /// </summary>
-        String = 6,
+        String = 7,
 
         /// <summary>
         ///     integer type
         /// </summary>
-        Integer = 7,
+        Integer = 8,
 
         /// <summary>
         ///     real type
         /// </summary>
-        Real = 8,
+        Real = 9,
 
         /// <summary>
         ///     pointer type
         /// </summary>
-        Pointer = 9,
+        Pointer = 10,
 
         /// <summary>
         ///     enumerated data type
         /// </summary>
-        Enumeration = 10,
+        Enumeration = 11,
 
         /// <summary>
         ///     unit type
         /// </summary>
-        Unit = 11,
+        Unit = 12,
+
+        /// <summary>
+        ///     array type
+        /// </summary>
+        Array = 13,
+
+        /// <summary>
+        ///     file type
+        /// </summary>
+        File = 14,
+
+        /// <summary>
+        ///     set type
+        /// </summary>
+        Set = 15,
+
+        /// <summary>
+        ///     meta class type
+        /// </summary>
+        MetaClass = 16,
+
+        /// <summary>
+        ///     generic type parameter
+        /// </summary>
+        GenericTypeParameter = 16,
+
+        /// <summary>
+        ///     routine type
+        /// </summary>
+        Routine = 17,
+
+        /// <summary>
+        ///     structured type
+        /// </summary>
+        Structured = 18,
 
     }
 }

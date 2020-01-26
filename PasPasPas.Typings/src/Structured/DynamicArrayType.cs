@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -12,32 +11,27 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     create a new dynamic array type
         /// </summary>
-        /// <param name="withId"></param>
-        public DynamicArrayType(int withId) : base(withId, KnownTypeIds.IntegerType) {
-        }
+        /// <param name="definingUnit"></param>
+        /// <param name="typeName"></param>
+        public DynamicArrayType(IUnitType definingUnit, string typeName) : base(definingUnit, definingUnit.TypeRegistry.SystemUnit.IntegerType)
+            => Name = typeName;
+
+        /// <summary>
+        ///     type name
+        /// </summary>
+        public override string Name { get; }
+
+        /// <summary>
+        ///     dynamic array
+        /// </summary>
+        public override ArrayTypeKind Kind
+            => ArrayTypeKind.DynamicArray;
 
         /// <summary>
         ///     type size
         /// </summary>
         public override uint TypeSizeInBytes
             => TypeRegistry.GetPointerSize();
-
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.DynamicArrayType;
-
-        /// <summary>
-        ///     convert this type to string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString() {
-            var result = $"[{IndexType}] ";
-            return $"dynamic array {result}of {BaseType}".Trim();
-        }
-
 
     }
 }

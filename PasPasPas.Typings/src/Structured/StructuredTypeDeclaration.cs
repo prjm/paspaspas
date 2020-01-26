@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
@@ -16,10 +15,19 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     create a new structured type declaration
         /// </summary>
-        /// <param name="withId"></param>
+        /// <param name="definingUnit"></param>
+        /// <param name="name"></param>
         /// <param name="kind"></param>
-        public StructuredTypeDeclaration(int withId, StructuredTypeKind kind) : base(withId)
-            => StructTypeKind = kind;
+        public StructuredTypeDeclaration(IUnitType definingUnit, string name, StructuredTypeKind kind) : base(definingUnit) {
+            Name = name;
+            StructTypeKind = kind;
+        }
+
+
+        /// <summary>
+        ///     type name
+        /// </summary>
+        public override string Name { get; }
 
         /// <summary>
         ///     structured type kind
@@ -27,43 +35,9 @@ namespace PasPasPas.Typings.Structured {
         public StructuredTypeKind StructTypeKind { get; }
 
         /// <summary>
-        ///     get the type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind {
-            get {
-                switch (StructTypeKind) {
-
-                    case StructuredTypeKind.Class:
-                        return CommonTypeKind.ClassType;
-
-                    case StructuredTypeKind.ClassHelper:
-                        return CommonTypeKind.ClassHelperType;
-
-                    case StructuredTypeKind.DispInterface:
-                        return CommonTypeKind.InterfaceType;
-
-                    case StructuredTypeKind.ObjectType:
-                        return CommonTypeKind.RecordType;
-
-                    case StructuredTypeKind.Record:
-                        return CommonTypeKind.RecordType;
-
-                    case StructuredTypeKind.RecordHelper:
-                        return CommonTypeKind.RecordHelperType;
-
-                    case StructuredTypeKind.Interface:
-                        return CommonTypeKind.InterfaceType;
-
-                    default:
-                        return CommonTypeKind.UnknownType;
-                }
-            }
-        }
-
-        /// <summary>
         ///     base class
         /// </summary>
-        public int BaseClassId { get; set; }
+        public ITypeDefinition BaseClass { get; set; }
 
         /// <summary>
         ///     list of fields
@@ -143,18 +117,20 @@ namespace PasPasPas.Typings.Structured {
                     continue;
 
                 if (string.Equals(field.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
-                    entry = new Reference(ReferenceKind.RefToField, field);
+                    //entry = new Reference(ReferenceKind.RefToField, field);
+                    entry = default;
                     return true;
                 }
             }
 
             foreach (var method in Methods)
                 if (string.Equals(method.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
-                    entry = new Reference(ReferenceKind.RefToMethod, method);
+                    //entry = new Reference(ReferenceKind.RefToMethod, method);
+                    entry = default;
                     return true;
                 }
 
-            var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(BaseClassId);
+            var baseClass = BaseClass;
             if (baseClass is StructuredTypeDeclaration baseType)
                 return baseType.TryToResolve(symbolName, out entry, flags | ResolverFlags.SkipPrivate);
 
@@ -171,7 +147,7 @@ namespace PasPasPas.Typings.Structured {
         public override void ResolveCall(string symbolName, IList<IRoutine> callables, Signature signature) {
             base.ResolveCall(symbolName, callables, signature);
 
-            var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(BaseClassId);
+            var baseClass = BaseClass;
             if (baseClass is StructuredTypeDeclaration baseType)
                 baseType.ResolveCall(symbolName, callables, signature);
         }
@@ -184,20 +160,37 @@ namespace PasPasPas.Typings.Structured {
                 if (StructTypeKind != StructuredTypeKind.Record)
                     return false;
 
+                return false;
+                /*
                 foreach (var field in Fields)
-                    if (!field.SymbolType.IsConstant())
+                    if (!field.IsConstant())
                         return false;
 
                 return true;
+                */
             }
         }
+
+        /// <summary>
+        ///     structured type
+        /// </summary>
+        public override BaseType BaseType
+            => BaseType.Structured;
+
+        /// <summary>
+        ///     mangled type name
+        /// </summary>
+        public override string MangledName
+            => string.Empty;
 
         /// <summary>
         ///     create a constant record value from this type declaration
         /// </summary>
         /// <returns></returns>
-        public IOldTypeReference MakeConstant() {
-            using (var list = GetList<IOldTypeReference>()) {
+        public ITypeSymbol MakeConstant() {
+            return default;
+            /*
+            using (var list = GetList<ITypeSymbol>()) {
                 foreach (var value in Fields) {
                     list.Add(value.SymbolType);
                     ((Variable)value).SymbolType = TypeRegistry.Runtime.Types.MakeTypeInstanceReference(value.SymbolType.TypeId, value.SymbolType.TypeKind);
@@ -205,31 +198,7 @@ namespace PasPasPas.Typings.Structured {
 
                 return TypeRegistry.Runtime.Structured.CreateRecordValue(TypeId, TypeRegistry.ListPools.GetFixedArray(list));
             }
-        }
-
-        /// <summary>
-        ///     format this type as string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString() {
-            switch (StructTypeKind) {
-                case StructuredTypeKind.Class:
-                    return $"class {TypeId}";
-                case StructuredTypeKind.ClassHelper:
-                    return $"class helper {TypeId}";
-                case StructuredTypeKind.DispInterface:
-                    return $"disp interface {TypeId}";
-                case StructuredTypeKind.Interface:
-                    return $"interface {TypeId}";
-                case StructuredTypeKind.ObjectType:
-                    return $"object {TypeId}";
-                case StructuredTypeKind.Record:
-                    return $"record {TypeId}";
-                case StructuredTypeKind.RecordHelper:
-                    return $"record helper {TypeId}";
-            }
-
-            return base.ToString();
+            */
         }
 
         /// <summary>
@@ -237,14 +206,15 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        public bool InheritsFrom(int typeId) {
+        public bool InheritsFrom(ITypeDefinition typeId) {
             var baseClass = this;
 
             while (baseClass != default) {
-                if (baseClass.TypeId == typeId)
+                if (baseClass == typeId)
                     return true;
 
-                baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(BaseClassId) as StructuredTypeDeclaration;
+                baseClass = default;
+                //baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(BaseClassId) as StructuredTypeDeclaration;
             }
 
             return false;

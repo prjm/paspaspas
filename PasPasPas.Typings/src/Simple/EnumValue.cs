@@ -35,6 +35,12 @@ namespace PasPasPas.Typings.Simple {
         public IValue Value { get; private set; }
 
         /// <summary>
+        ///     type definition
+        /// </summary>
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.TypeDefinition;
+
+        /// <summary>
         ///     convert the value of this enumeration to an enumerated value
         /// </summary>
         /// <param name="runtime">runtime values</param>

@@ -19,7 +19,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="parent">parent routine group</param>
         /// <param name="procedureKind">procedure kind</param>
         /// <param name="resultType">result type</param>
-        public Routine(IRoutineGroup parent, RoutineKind procedureKind, IOldTypeReference resultType) {
+        public Routine(IRoutineGroup parent, RoutineKind procedureKind, ITypeSymbol resultType) {
             RoutineGroup = parent;
             Kind = procedureKind;
             ResultType = resultType;
@@ -47,7 +47,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     result type
         /// </summary>
-        public IOldTypeReference ResultType { get; set; }
+        public ITypeSymbol ResultType { get; set; }
 
         /// <summary>
         ///     symbols
@@ -122,7 +122,7 @@ namespace PasPasPas.Typings.Structured {
             for (var i = 0; Parameters != null && i < Parameters.Count; i++) {
                 var parameter = Parameters[i];
                 var sourceType = typeRegistry.GetTypeByIdOrUndefinedType(signature[i].TypeId);
-                match = match && typeRegistry.GetTypeByIdOrUndefinedType(parameter.SymbolType.TypeId).CanBeAssignedFrom(sourceType);
+                //match = match && typeRegistry.GetTypeByIdOrUndefinedType(parameter.SymbolType.TypeId).CanBeAssignedFrom(sourceType);
 
                 if (!match)
                     return false;
@@ -141,8 +141,8 @@ namespace PasPasPas.Typings.Structured {
 
             using (var list = runtime.ListPools.GetList<IOldTypeReference>()) {
                 var values = new IOldTypeReference[Parameters.Count];
-                for (var i = 0; i < Parameters.Count; i++)
-                    values[i] = Parameters[i].SymbolType ?? runtime.Runtime.Types.MakeErrorTypeReference();
+                //for (var i = 0; i < Parameters.Count; i++)
+                //   values[i] = Parameters[i].SymbolType ?? runtime.Runtime.Types.MakeErrorTypeReference();
 
                 return new Signature(ResultType, runtime.ListPools.GetFixedArray(list));
             }

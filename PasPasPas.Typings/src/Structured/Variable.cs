@@ -9,20 +9,14 @@ namespace PasPasPas.Typings.Structured {
     public class Variable : IVariable {
 
         /// <summary>
-        ///     parameter type
+        ///     variable type
         /// </summary>
-        public IOldTypeReference SymbolType { get; set; }
+        public ITypeSymbol SymbolType { get; set; }
 
         /// <summary>
-        ///     parameter name
+        ///     variable name
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public int TypeId
-            => SymbolType != null ? SymbolType.TypeId : KnownTypeIds.ErrorType;
 
         /// <summary>
         ///     member visibility

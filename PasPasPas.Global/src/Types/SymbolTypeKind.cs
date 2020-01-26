@@ -14,5 +14,10 @@
         ///     type definition
         /// </summary>
         TypeDefinition = 1,
+
+        /// <summary>
+        ///     routine group
+        /// </summary>
+        RoutineGroup = 2,
     }
 }

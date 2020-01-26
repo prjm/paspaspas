@@ -6,7 +6,7 @@ namespace PasPasPas.Globals.Runtime {
     /// <summary>
     ///     generic interface for routine groups
     /// </summary>
-    public interface IRoutineGroup : IRefSymbol, ITypeSymbol {
+    public interface IRoutineGroup : ITypeSymbol {
 
         /// <summary>
         ///     routine name
@@ -16,7 +16,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     defining type id
         /// </summary>
-        int DefiningType { get; }
+        ITypeDefinition DefiningType { get; }
 
         /// <summary>
         ///     resolve callable routines for a given signature

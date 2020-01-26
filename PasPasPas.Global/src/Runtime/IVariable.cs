@@ -5,12 +5,7 @@ namespace PasPasPas.Globals.Runtime {
     /// <summary>
     ///     interface for variables
     /// </summary>
-    public interface IVariable : IRefSymbol {
-
-        /// <summary>
-        ///     symbol type
-        /// </summary>
-        IOldTypeReference SymbolType { get; }
+    public interface IVariable {
 
         /// <summary>
         ///     visibility

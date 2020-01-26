@@ -8,6 +8,6 @@
         /// <summary>
         ///     set base type id
         /// </summary>
-        int BaseTypeId { get; }
+        IOrdinalType BaseTypeDefinition { get; }
     }
 }

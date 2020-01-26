@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -9,25 +8,27 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     procedural type
     /// </summary>
-    public class RoutineType : TypeBase, IRoutineType {
+    public class RoutineType : TypeDefinitionBase, IRoutineType {
 
         /// <summary>
         ///     create a new routine type
         /// </summary>
-        /// <param name="typeId"></param>
-        public RoutineType(int typeId) : base(typeId) { }
+        /// <param name="definingType"></param>
+        /// <param name="name"></param>
+        public RoutineType(IUnitType definingType, string name) : base(definingType)
+            => Name = name;
 
         /// <summary>
-        ///     type kind
+        ///     base type kind
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.ProcedureType;
+        public override BaseType BaseType
+            => BaseType.Routine;
 
         /// <summary>
         ///     undefined type size
         /// </summary>
         public override uint TypeSizeInBytes
-            => 0;
+            => TypeRegistry.GetPointerSize();
 
         /// <summary>
         ///     generic parameters
@@ -40,6 +41,17 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public int NumberOfTypeParameters
             => GenericParameters.Count;
+
+        /// <summary>
+        ///     type name
+        /// </summary>
+        public override string Name { get; }
+
+        /// <summary>
+        ///     magled type name
+        /// </summary>
+        public override string MangledName
+            => string.Empty;
 
         /// <summary>
         ///     add a generic parameter

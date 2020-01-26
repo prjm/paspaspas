@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Types;
@@ -6,8 +7,7 @@ using PasPasPas.Globals.Types;
 namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
-    ///     interface for parameter groups - describing a
-    ///     routine by its parameters and properties
+    ///     interface for a routine definition
     /// </summary>
     public interface IRoutine {
 
@@ -19,7 +19,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     result type
         /// </summary>
-        IOldTypeReference ResultType { get; }
+        ITypeSymbol ResultType { get; }
 
         /// <summary>
         ///     parameters
@@ -29,6 +29,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     <c>true</c> if this routine is a class item
         /// </summary>
+        [Obsolete("to be replaced")]
         bool IsClassItem { get; }
 
         /// <summary>

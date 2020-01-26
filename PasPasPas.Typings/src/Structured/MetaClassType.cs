@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -7,65 +6,42 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     meta class type
     /// </summary>
-    public class MetaClassType : IMetaClassType {
+    public class MetaClassType : TypeDefinitionBase, IMetaClassType {
 
         /// <summary>
         ///     create a new meta class type
         /// </summary>
-        /// <param name="types"></param>
-        /// <param name="baseType"></param>
-        /// <param name="typeId">type id</param>
-        public MetaClassType(RegisteredTypes types, int typeId, int baseType) {
-            TypeRegistry = types;
-            BaseTypeId = baseType;
-            TypeId = typeId;
+        public MetaClassType(IUnitType definingUnit, string name, ITypeDefinition baseTypeDefinition) : base(definingUnit) {
+            Name = name;
+            BaseTypeDefinition = baseTypeDefinition;
         }
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public CommonTypeKind TypeKind
-            => CommonTypeKind.MetaClassType;
-
-        /// <summary>
-        ///     registered types
-        /// </summary>
-        public ITypeRegistry TypeRegistry { get; }
-
-        /// <summary>
-        ///     base type id
-        /// </summary>
-        public int BaseTypeId { get; }
 
         /// <summary>
         ///     type size in bytes
         /// </summary>
-        public uint TypeSizeInBytes
+        public override uint TypeSizeInBytes
             => TypeRegistry.GetPointerSize();
 
         /// <summary>
-        ///     type id
+        ///     type name
         /// </summary>
-        public int TypeId { get; }
+        public override string Name { get; }
 
         /// <summary>
-        ///     short type name
+        ///     base type definition
         /// </summary>
-        public string ShortName
-            => "";
+        public ITypeDefinition BaseTypeDefinition { get; }
 
         /// <summary>
-        ///     long type name
+        ///     base type kind
         /// </summary>
-        public string LongName
-            => "";
+        public override BaseType BaseType
+            => BaseType.MetaClass;
 
         /// <summary>
-        ///     test assignments
+        ///     mangled type name
         /// </summary>
-        /// <param name="otherType"></param>
-        /// <returns></returns>
-        public bool CanBeAssignedFrom(ITypeDefinition otherType)
-            => false;
+        public override string MangledName
+                        => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
     }
 }

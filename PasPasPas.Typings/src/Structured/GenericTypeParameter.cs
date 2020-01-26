@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
@@ -12,16 +11,19 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     create a new generic type parameter
         /// </summary>
-        /// <param name="typeId"></param>
+        /// <param name="definingUnit"></param>
+        /// <param name="name"></param>
         /// <param name="constraints"></param>
-        public GenericTypeParameter(int typeId, ImmutableArray<int> constraints) : base(typeId)
-            => Constraints = constraints;
+        public GenericTypeParameter(IUnitType definingUnit, string name, ImmutableArray<int> constraints) : base(definingUnit) {
+            Name = name;
+            Constraints = constraints;
+        }
 
         /// <summary>
-        ///     type kind
+        ///     base type kind
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.Type;
+        public override BaseType BaseType
+            => BaseType.GenericTypeParameter;
 
         /// <summary>
         ///     type size
@@ -30,8 +32,19 @@ namespace PasPasPas.Typings.Structured {
             => 0;
 
         /// <summary>
+        ///     parameter name
+        /// </summary>
+        public override string Name { get; }
+
+        /// <summary>
         ///     type constraints
         /// </summary>
         public ImmutableArray<int> Constraints { get; }
+
+        /// <summary>
+        ///     mangled name
+        /// </summary>
+        public override string MangledName
+            => string.Empty;
     }
 }
