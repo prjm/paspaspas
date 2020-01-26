@@ -21,7 +21,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     invalid <c>boolean</c> value
         /// </summary>
-        IOldTypeReference Invalid { get; }
+        IValue Invalid { get; }
 
         /// <summary>
         ///     convert a boolean constant value to a value object
@@ -37,7 +37,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="bitSize"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        IOldTypeReference ToBoolean(uint bitSize, uint value);
+        IValue ToBoolean(uint bitSize, uint value);
 
         /// <summary>
         ///     convert a byte constant value to a byte bool object

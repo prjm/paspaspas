@@ -11,7 +11,6 @@ using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
-    using Ids = KnownTypeIds;
     using Names = KnownNames;
 
     /// <summary>
@@ -24,20 +23,11 @@ namespace PasPasPas.Typings.Common {
     /// </remarks>
     public class RegisteredTypes : ITypeRegistry, IEnvironmentItem {
 
-        private readonly IDictionary<int, ITypeDefinition> types
-            = new Dictionary<int, ITypeDefinition>();
+        private readonly List<IUnitType> units
+            = new List<IUnitType>();
 
         private readonly IDictionary<int, IOperator> operators
             = new Dictionary<int, IOperator>();
-
-        private readonly object idLock = new object();
-
-        /// <summary>
-        ///     first used type id
-        /// </summary>
-        public const int SmallestUserTypeId = 1000;
-
-        private int userTypeIds = SmallestUserTypeId;
 
         /// <summary>
         ///     system unit

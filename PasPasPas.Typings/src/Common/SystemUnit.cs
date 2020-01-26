@@ -1,55 +1,57 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Hidden;
 using PasPasPas.Typings.Routines;
+using PasPasPas.Typings.Routines.Runtime;
 using PasPasPas.Typings.Simple;
+using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
     /// <summary>
     ///     system wide definitions
     /// </summary>
-    public class SystemUnit : ISystemUnit {
+    public class SystemUnit : UnitType, ISystemUnit {
 
         /// <summary>
         ///     create a new system unit
         /// </summary>
-        public SystemUnit() {
-            Symbols = new Dictionary<string, ITypeSymbol>();
-            ErrorType = new ErrorType();
+        /// <param name="types"></param>
+        public SystemUnit(ITypeRegistry types) : base(KnownNames.System, types) {
+            ErrorType = RegisterType(new ErrorType(this));
 
             // integral types
-            ByteType = Register(new IntegralType(false, 8));
-            ShortIntType = Register(new IntegralType(true, 8));
-            WordType = Register(new IntegralType(false, 16));
-            SmallIntType = Register(new IntegralType(true, 16));
-            CardinalType = Register(new IntegralType(false, 32));
-            IntegerType = Register(new IntegralType(true, 32));
+            ByteType = RegisterType(new IntegralType(this, IntegralTypeKind.Byte));
+            ShortIntType = RegisterType(new IntegralType(this, IntegralTypeKind.ShortInt));
+            WordType = RegisterType(new IntegralType(this, IntegralTypeKind.Word));
+            SmallIntType = RegisterType(new IntegralType(this, IntegralTypeKind.SmallInt));
+            CardinalType = RegisterType(new IntegralType(this, IntegralTypeKind.Cardinal));
+            IntegerType = RegisterType(new IntegralType(this, IntegralTypeKind.Integer));
 
             // intrinsic functions
-            Register(new Abs());
-            Register(new Chr());
-            Register(new Concat());
-            Register(new HiOrLo(HiLoMode.Hi));
-            Register(new HighOrLow(HighOrLowMode.High));
-            Register(new Length());
-            Register(new HiOrLo(HiLoMode.Lo));
-            Register(new HighOrLow(HighOrLowMode.Low));
-            Register(new MulDivInt64());
-            Register(new Odd());
-            Register(new Ord());
-            Register(new Pi());
-            Register(new PredOrSucc(PredSuccMode.Pred));
-            Register(new PtrRoutine());
-            Register(new Round());
-            Register(new PredOrSucc(PredSuccMode.Succ));
-            Register(new SizeOf());
-            Register(new Sqr());
-            Register(new Swap());
-            Register(new Trunc());
+            RegisterRoutine(new Abs());
+            RegisterRoutine(new Chr());
+            RegisterRoutine(new Concat());
+            RegisterRoutine(new HiOrLo(HiLoMode.Hi));
+            RegisterRoutine(new HighOrLow(HighOrLowMode.High));
+            RegisterRoutine(new Length());
+            RegisterRoutine(new HiOrLo(HiLoMode.Lo));
+            RegisterRoutine(new HighOrLow(HighOrLowMode.Low));
+            RegisterRoutine(new MulDivInt64());
+            RegisterRoutine(new Odd());
+            RegisterRoutine(new Ord());
+            RegisterRoutine(new Pi());
+            RegisterRoutine(new PredOrSucc(PredSuccMode.Pred));
+            RegisterRoutine(new PtrRoutine());
+            RegisterRoutine(new Round());
+            RegisterRoutine(new PredOrSucc(PredSuccMode.Succ));
+            RegisterRoutine(new SizeOf());
+            RegisterRoutine(new Sqr());
+            RegisterRoutine(new Swap());
+            RegisterRoutine(new Trunc());
 
             // dynamic procedures
-            systemUnit.AddGlobal(new WriteLn());
+            RegisterRoutine(new WriteLn());
         }
 
         /// <summary>
@@ -58,10 +60,22 @@ namespace PasPasPas.Typings.Common {
         /// <typeparam name="T"></typeparam>
         /// <param name="definition"></param>
         /// <returns></returns>
-        private T Register<T>(T definition) where T : ITypeSymbol {
-            Symbols.Add(definition.LongName, definition);
+        private T RegisterType<T>(T definition) where T : ITypeDefinition {
+            Register(definition);
             return definition;
         }
+
+        /// <summary>
+        ///     register a type definition
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="definition"></param>
+        /// <returns></returns>
+        private T RegisterRoutine<T>(T definition) where T : IRoutineGroup {
+            Register(definition);
+            return definition;
+        }
+
 
         /// <summary>
         ///     byte type
@@ -94,49 +108,9 @@ namespace PasPasPas.Typings.Common {
         public IIntegralType IntegerType { get; }
 
         /// <summary>
-        ///     type name
-        /// </summary>
-        public string Name
-            => KnownNames.System;
-
-        /// <summary>
-        ///     registered symbols
-        /// </summary>
-        private Dictionary<string, ITypeSymbol> Symbols { get; }
-
-        /// <summary>
         ///     error type
         /// </summary>
-        public ErrorType ErrorType { get; }
+        public ITypeDefinition ErrorType { get; }
 
-        public CommonTypeKind TypeKind => throw new System.NotImplementedException();
-
-        public ITypeRegistry TypeRegistry => throw new System.NotImplementedException();
-
-        public uint TypeSizeInBytes => throw new System.NotImplementedException();
-
-        public string ShortName => throw new System.NotImplementedException();
-
-        public string LongName => throw new System.NotImplementedException();
-
-        public int TypeId => throw new System.NotImplementedException();
-
-        public ITypeDefinition TypeDefinition => throw new System.NotImplementedException();
-
-        IEnumerable<ITypeSymbol> IUnitType.Symbols => throw new System.NotImplementedException();
-
-        public bool CanBeAssignedFrom(ITypeDefinition otherType) => throw new System.NotImplementedException();
-
-        /// <summary>
-        ///     get a known type definition
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public ITypeSymbol GetSymbol(string name) {
-            if (!Symbols.TryGetValue(name, out var result))
-                result = ErrorType;
-
-            return result;
-        }
     }
 }

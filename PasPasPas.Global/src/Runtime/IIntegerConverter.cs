@@ -12,56 +12,56 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IOldTypeReference ToScaledIntegerValue(sbyte number);
+        IValue ToScaledIntegerValue(sbyte number);
 
         /// <summary>
         ///     get the value for a byte
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IOldTypeReference ToScaledIntegerValue(byte number);
+        IValue ToScaledIntegerValue(byte number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IOldTypeReference ToScaledIntegerValue(short number);
+        IValue ToScaledIntegerValue(short number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IOldTypeReference ToScaledIntegerValue(ushort number);
+        IValue ToScaledIntegerValue(ushort number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IOldTypeReference ToScaledIntegerValue(int number);
+        IValue ToScaledIntegerValue(int number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IOldTypeReference ToScaledIntegerValue(uint number);
+        IValue ToScaledIntegerValue(uint number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IOldTypeReference ToScaledIntegerValue(long number);
+        IValue ToScaledIntegerValue(long number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IOldTypeReference ToScaledIntegerValue(ulong number);
+        IValue ToScaledIntegerValue(ulong number);
 
         /// <summary>
         ///     get the fixed value type for a give number
@@ -133,7 +133,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="number"></param>
         /// <param name="typeRegistry"></param>
         /// <returns></returns>
-        IOldTypeReference ToNativeInt(IOldTypeReference number, ITypeRegistry typeRegistry);
+        IValue ToNativeInt(IValue number, ITypeRegistry typeRegistry);
 
     }
 }

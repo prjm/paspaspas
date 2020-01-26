@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Immutable;
-using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
 
@@ -9,7 +8,7 @@ namespace PasPasPas.Globals.Types {
     /// </summary>
     public class Signature : IEquatable<Signature> {
 
-        private readonly ImmutableArray<IOldTypeReference> InputTypes;
+        private readonly ImmutableArray<ITypeSymbol> InputTypes;
 
         /// <summary>
         ///     get the number of parameters in this signature
@@ -22,10 +21,13 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         public bool IsConstant {
             get {
+                return false;
+                /*
                 for (var i = 0; i < InputTypes.Length; i++)
                     if (InputTypes[i] == null || !InputTypes[i].IsConstant())
                         return false;
                 return true;
+                */
             }
         }
 
@@ -39,7 +41,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="returnType"></param>
         /// <param name="inputTypes">values</param>
-        public Signature(ITypeSymbol returnType, ImmutableArray<IOldTypeReference> inputTypes) {
+        public Signature(ITypeSymbol returnType, ImmutableArray<ITypeSymbol> inputTypes) {
             ReturnType = returnType;
             InputTypes = inputTypes;
         }
@@ -91,7 +93,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public IOldTypeReference this[int index]
+        public ITypeSymbol this[int index]
             => InputTypes[index];
 
     }

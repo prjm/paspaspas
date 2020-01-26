@@ -20,30 +20,6 @@ namespace PasPasPas.Globals.Types {
         ISystemUnit SystemUnit { get; }
 
         /// <summary>
-        ///     byte type
-        /// </summary>
-        IIntegralType ByteType { get; }
-
-        /// <summary>
-        ///     short int type
-        /// </summary>
-        IIntegralType ShortIntType { get; }
-
-        /// <summary>
-        ///     make a type reference
-        /// </summary>
-        /// <param name="typeId">type id</param>
-        /// <returns>type reference</returns>
-        IOldTypeReference MakeTypeInstanceReference(int typeId);
-
-        /// <summary>
-        ///     get a type by type id
-        /// </summary>
-        /// <param name="typeId">given type id</param>
-        /// <returns>type definition or the undefined type if the type id is not found</returns>
-        ITypeDefinition GetTypeByIdOrUndefinedType(int typeId);
-
-        /// <summary>
         ///     get an operator by operator id
         /// </summary>
         /// <param name="operatorKind">operator id</param>
@@ -63,26 +39,12 @@ namespace PasPasPas.Globals.Types {
         IRuntimeValueFactory Runtime { get; }
 
         /// <summary>
-        ///     get the type kind of a type id
-        /// </summary>
-        /// <param name="typeId">given type id</param>
-        /// <returns>type kind</returns>
-        CommonTypeKind GetTypeKindOf(int typeId);
-
-        /// <summary>
         ///     cast a type into a another type, if possible
         /// </summary>
         /// <param name="sourceType"></param>
         /// <param name="targetType"></param>
         /// <returns></returns>
         int Cast(int sourceType, int targetType);
-
-        /// <summary>
-        ///     make a reference to a a type
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
-        IOldTypeReference MakeTypeReference(int typeId);
 
         /// <summary>
         ///     list pools

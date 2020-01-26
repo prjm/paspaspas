@@ -5,13 +5,13 @@ namespace PasPasPas.Globals.Runtime {
     /// <summary>
     ///     interface for ordinal values
     /// </summary>
-    public interface IOrdinalValue : IOldTypeReference {
+    public interface IOrdinalValue : IValue {
 
         /// <summary>
         ///     get the ordinal value of a given value
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        IOldTypeReference GetOrdinalValue(ITypeRegistry types);
+        IValue GetOrdinalValue(ITypeRegistry types);
     }
 }

@@ -10,14 +10,14 @@
         /// </summary>
         /// <param name="number">input number</param>
         /// <returns>negative number</returns>
-        IOldTypeReference Negate(IOldTypeReference number);
+        IValue Negate(IValue number);
 
         /// <summary>
         ///     provide an identity function
         /// </summary>
         /// <param name="number">input number</param>
         /// <returns>same number</returns>
-        IOldTypeReference Identity(IOldTypeReference number);
+        IValue Identity(IValue number);
 
         /// <summary>
         ///     add two numbers
@@ -25,7 +25,7 @@
         /// <param name="augend">number</param>
         /// <param name="addend">number to add</param>
         /// <returns>sum</returns>
-        IOldTypeReference Add(IOldTypeReference augend, IOldTypeReference addend);
+        IValue Add(IValue augend, IValue addend);
 
         /// <summary>
         ///     subtract two numbers
@@ -33,7 +33,7 @@
         /// <param name="minuend"></param>
         /// <param name="subtrahend"></param>
         /// <returns></returns>
-        IOldTypeReference Subtract(IOldTypeReference minuend, IOldTypeReference subtrahend);
+        IValue Subtract(IValue minuend, IValue subtrahend);
 
         /// <summary>
         ///     multiply two numbers
@@ -41,7 +41,7 @@
         /// <param name="multiplicand"></param>
         /// <param name="intMultiplier"></param>
         /// <returns></returns>
-        IOldTypeReference Multiply(IOldTypeReference multiplicand, IOldTypeReference intMultiplier);
+        IValue Multiply(IValue multiplicand, IValue intMultiplier);
 
     }
 }

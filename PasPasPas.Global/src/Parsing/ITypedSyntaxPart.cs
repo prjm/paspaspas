@@ -1,4 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Parsing {
 
@@ -10,7 +10,7 @@ namespace PasPasPas.Globals.Parsing {
         /// <summary>
         ///     type information
         /// </summary>
-        IOldTypeReference TypeInfo { get; set; }
+        ITypeSymbol TypeInfo { get; set; }
 
     }
 }

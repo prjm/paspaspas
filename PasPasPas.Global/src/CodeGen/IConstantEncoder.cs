@@ -13,14 +13,14 @@ namespace PasPasPas.Globals.CodeGen {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        ImmutableArray<byte> Encode(IOldTypeReference value);
+        ImmutableArray<byte> Encode(IValue value);
 
         /// <summary>
         ///     decode a constant
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        IOldTypeReference Decode(ImmutableArray<byte> value);
+        IValue Decode(ImmutableArray<byte> value);
 
     }
 }

@@ -14,7 +14,7 @@ namespace PasPasPas.Globals.Parsing {
         /// </summary>
         /// <param name="input">input value</param>
         /// <returns>parsed literal value as constant value</returns>
-        IOldTypeReference Parse(string input);
+        IValue Parse(string input);
 
     }
 }

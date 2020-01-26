@@ -5,7 +5,7 @@ using PasPasPas.Globals.Types;
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
-    ///     virtual unit type definition
+    ///     unit type definition
     /// </summary>
     public class UnitType : IUnitType {
 

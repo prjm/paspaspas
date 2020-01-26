@@ -13,6 +13,11 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="unitType"></param>
         void WriteUnit(IUnitType unitType);
-        void WriteConstant(IOldTypeReference value);
+
+        /// <summary>
+        ///     write a constant value
+        /// </summary>
+        /// <param name="value"></param>
+        void WriteConstant(IValue value);
     }
 }

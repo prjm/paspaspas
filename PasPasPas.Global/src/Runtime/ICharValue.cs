@@ -3,7 +3,7 @@
     /// <summary>
     ///     widechar runtime value (utf-16)
     /// </summary>
-    public interface ICharValue : IOldTypeReference, IOrdinalValue {
+    public interface ICharValue : IOrdinalValue {
 
         /// <summary>
         ///     get the wide char value

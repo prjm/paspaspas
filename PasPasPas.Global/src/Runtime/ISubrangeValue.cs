@@ -3,12 +3,12 @@
     /// <summary>
     ///     subrange value
     /// </summary>
-    public interface ISubrangeValue : IOldTypeReference, IOrdinalValue {
+    public interface ISubrangeValue : IValue, IOrdinalValue {
 
         /// <summary>
         ///     wrapped value
         /// </summary>
-        IOldTypeReference Value { get; }
+        IValue Value { get; }
 
     }
 }

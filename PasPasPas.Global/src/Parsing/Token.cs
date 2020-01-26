@@ -32,7 +32,7 @@ namespace PasPasPas.Globals.Parsing {
         /// <summary>
         ///     parsed token value (if any)
         /// </summary>
-        public IOldTypeReference ParsedValue { get; }
+        public IValue ParsedValue { get; }
 
         /// <summary>
         ///     token length
@@ -46,7 +46,7 @@ namespace PasPasPas.Globals.Parsing {
         /// <param name="tokenId">token id</param>
         /// <param name="value">value</param>
         /// <param name="parsedValue">parser literal value (optional)</param>
-        public Token(int tokenId, string value, IOldTypeReference parsedValue = null) : this() {
+        public Token(int tokenId, string value, IValue parsedValue = null) : this() {
             Kind = tokenId;
             Value = value ?? string.Empty;
             ParsedValue = parsedValue;

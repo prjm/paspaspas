@@ -16,7 +16,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        IOldTypeReference Equal(IOldTypeReference left, IOldTypeReference right);
+        IValue Equal(IValue left, IValue right);
 
         /// <summary>
         ///     <c>&lt;&gt;</c>
@@ -24,7 +24,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        IOldTypeReference NotEquals(IOldTypeReference left, IOldTypeReference right);
+        IValue NotEquals(IValue left, IValue right);
 
         /// <summary>
         ///     <c>&lt;</c>
@@ -48,7 +48,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        IOldTypeReference LessThenOrEqual(IOldTypeReference left, IOldTypeReference right);
+        IValue LessThenOrEqual(IValue left, IValue right);
 
         /// <summary>
         ///     <c>&gt;=</c>
@@ -56,7 +56,7 @@
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        IOldTypeReference GreaterThenEqual(IOldTypeReference left, IOldTypeReference right);
+        IValue GreaterThenEqual(IValue left, IValue right);
 
     }
 }

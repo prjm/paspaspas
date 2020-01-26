@@ -1,6 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     base interface for an operator
@@ -32,7 +30,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="input">operator input - type reference or constant</param>
         /// <returns>operator result - type reference or constant</returns>
-        IOldTypeReference EvaluateOperator(Signature input);
+        ITypeSymbol EvaluateOperator(Signature input);
 
     }
 }

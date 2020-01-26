@@ -12,12 +12,12 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     invalid integer
         /// </summary>
-        IOldTypeReference Invalid { get; }
+        IValue Invalid { get; }
 
         /// <summary>
         ///     integer overflow
         /// </summary>
-        IOldTypeReference Overflow { get; }
+        IValue Overflow { get; }
 
         /// <summary>
         ///     zero value
@@ -27,7 +27,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     one value
         /// </summary>
-        IOldTypeReference One { get; }
+        IValue One { get; }
 
         /// <summary>
         ///     integer division
@@ -35,7 +35,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="dividend"></param>
         /// <param name="divisor"></param>
         /// <returns></returns>
-        IOldTypeReference Divide(IOldTypeReference dividend, IOldTypeReference divisor);
+        IValue Divide(IValue dividend, IValue divisor);
 
         /// <summary>
         ///     integer remainder
@@ -43,7 +43,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="dividend"></param>
         /// <param name="divisor"></param>
         /// <returns></returns>
-        IOldTypeReference Modulo(IOldTypeReference dividend, IOldTypeReference divisor);
+        IValue Modulo(IValue dividend, IValue divisor);
 
         /// <summary>
         ///     swap high and low bit
@@ -51,28 +51,28 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="parameter"></param>
         /// <param name="types">type registry</param>
         /// <returns></returns>
-        IOldTypeReference Swap(IOldTypeReference parameter, ITypeRegistry types);
+        IValue Swap(IValue parameter, ITypeRegistry types);
 
         /// <summary>
         ///     <c>hi</c> function: return the upper byte from a 16 bit value
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>
-        IOldTypeReference Hi(IOldTypeReference typeReference);
+        IValue Hi(IValue typeReference);
 
         /// <summary>
         ///     <c>chr</c> function: return a character for a given integer value
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>
-        IOldTypeReference Chr(IOldTypeReference typeReference);
+        IValue Chr(IValue typeReference);
 
         /// <summary>
         ///     <c>ki</c> function
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>
-        IOldTypeReference Lo(IOldTypeReference typeReference);
+        IValue Lo(IValue typeReference);
 
         /// <summary>
         ///     shift left
@@ -80,7 +80,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="firstOperand"></param>
         /// <param name="secondOperand"></param>
         /// <returns></returns>
-        IOldTypeReference Shl(IOldTypeReference firstOperand, IOldTypeReference secondOperand);
+        IValue Shl(IValue firstOperand, IValue secondOperand);
 
         /// <summary>
         ///     shift right
@@ -88,7 +88,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="firstOperand"></param>
         /// <param name="secondOperand"></param>
         /// <returns></returns>
-        IOldTypeReference Shr(IOldTypeReference firstOperand, IOldTypeReference secondOperand);
+        IValue Shr(IValue firstOperand, IValue secondOperand);
 
         /// <summary>
         ///     increment a value
@@ -102,7 +102,7 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         /// <param name="value">value to increment</param>
         /// <returns>incremented value</returns>
-        IOldTypeReference Abs(IOldTypeReference value);
+        IValue Abs(IValue value);
 
     }
 }
