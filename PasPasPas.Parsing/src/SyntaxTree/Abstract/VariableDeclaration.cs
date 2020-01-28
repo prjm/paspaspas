@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     type definition
         /// </summary>
-        public IOldTypeReference TypeInfo { get; set; }
+        public ITypeSymbol TypeInfo { get; set; }
 
         /// <summary>
         ///     accept visitor

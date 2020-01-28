@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -8,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     declared constant
     /// </summary>
-    public class ConstantDeclaration : DeclaredSymbol, ITypedSyntaxPart, ISymbolWithAttributes, IExpressionTarget, ITypeTarget, IRefSymbol {
+    public class ConstantDeclaration : DeclaredSymbol, ITypedSyntaxPart, ISymbolWithAttributes, IExpressionTarget, ITypeTarget {
 
         /// <summary>
         ///     constant mode
@@ -39,7 +38,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     type information
         /// </summary>
-        public IOldTypeReference TypeInfo {
+        public ITypeSymbol TypeInfo {
             get; set;
         }
 

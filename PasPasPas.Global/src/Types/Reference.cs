@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="kind">reference kind</param>
         /// <param name="symbol">referenced symbol</param>
-        public Reference(ReferenceKind kind, IRefSymbol symbol) {
+        public Reference(ReferenceKind kind, ITypeSymbol symbol) {
             Kind = kind;
             Symbol = symbol;
         }
@@ -23,7 +23,7 @@
         /// <summary>
         ///     referenced symbol
         /// </summary>
-        public IRefSymbol Symbol { get; }
+        public ITypeSymbol Symbol { get; }
 
     }
 }

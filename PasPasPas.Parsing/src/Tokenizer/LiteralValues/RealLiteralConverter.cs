@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
 using SharpFloat.FloatingPoint;
 
@@ -10,15 +9,15 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     helper class to convert real literals
     /// </summary>
-    public class RealLiteralConverter : IILiteralParser, ILookupFunction<string, IOldTypeReference> {
+    public class RealLiteralConverter : IILiteralParser, ILookupFunction<string, IValue> {
 
         private readonly IRuntimeValueFactory constantsValues;
-        private readonly LookupTable<string, IOldTypeReference> data;
+        private readonly LookupTable<string, IValue> data;
 
         /// <summary>
         ///     table entries
         /// </summary>
-        public LookupTable<string, IOldTypeReference> Table
+        public LookupTable<string, IValue> Table
             => data;
 
         LookupTable ILookupFunction.Table
@@ -34,7 +33,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         ///     create a new real literal converter
         /// </summary>
         public RealLiteralConverter(IRuntimeValueFactory constValues) {
-            data = new LookupTable<string, IOldTypeReference>(ConvertLiterals);
+            data = new LookupTable<string, IValue>(ConvertLiterals);
             constantsValues = constValues;
         }
 
@@ -43,9 +42,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IOldTypeReference ConvertLiterals(string value) {
+        public IValue ConvertLiterals(string value) {
             if (ExtF80.TryParse(value, out var realValue))
-                return constantsValues.RealNumbers.ToExtendedValue(KnownTypeIds.Extended, realValue);
+                return constantsValues.RealNumbers.ToExtendedValue(realValue);
             return constantsValues.RealNumbers.Invalid;
         }
 
@@ -53,7 +52,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         ///     convert a parsed real number to a real literal
         /// </summary>
         /// <returns></returns>
-        public IOldTypeReference Parse(string input)
+        public IValue Parse(string input)
             => data.GetValue(input);
     }
 };

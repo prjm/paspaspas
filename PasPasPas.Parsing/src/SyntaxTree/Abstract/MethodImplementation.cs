@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
@@ -13,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     calculated type value
         /// </summary>
-        public IOldTypeReference TypeInfo { get; set; }
+        public ITypeSymbol TypeInfo { get; set; }
 
         /// <summary>
         ///     <c>true</c> for constant items
@@ -67,7 +66,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     literal value
         /// </summary>
-        public IOldTypeReference LiteralValue { get; set; }
+        public ITypeSymbol LiteralValue { get; set; }
 
         /// <summary>
         ///     if <c>true</c> then no parameters were declared for this

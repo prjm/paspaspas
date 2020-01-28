@@ -1,5 +1,5 @@
 ﻿using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     type inf
         /// </summary>
-        public IOldTypeReference TypeInfo { get; set; }
+        public ITypeSymbol TypeInfo { get; set; }
 
         /// <summary>
         ///     accept visitor

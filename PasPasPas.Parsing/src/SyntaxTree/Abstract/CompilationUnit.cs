@@ -2,7 +2,7 @@
 using System.Globalization;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -90,7 +90,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     unit type
         /// </summary>
-        public IOldTypeReference TypeInfo { get; set; }
+        public ITypeSymbol TypeInfo { get; set; }
 
         /// <summary>
         ///     add an assembly attribute

@@ -1,7 +1,6 @@
 ﻿using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
@@ -60,9 +59,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 if (!found)
                     state.Error(MessageNumbers.IncompleteString);
 
-                IOldTypeReference value;
+                IValue value;
                 if (resultBuilder.Item.Length == 1)
-                    value = state.RuntimeValues.Chars.ToWideCharValue(KnownTypeIds.WideCharType, resultBuilder.Item[0]);
+                    value = state.RuntimeValues.Chars.ToWideCharValue(resultBuilder.Item[0]);
                 else
                     value = state.RuntimeValues.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(resultBuilder.Item));
 

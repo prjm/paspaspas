@@ -27,39 +27,10 @@ namespace PasPasPas.Globals.Runtime {
         ///     convert a boolean constant value to a value object
         /// </summary>
         /// <param name="value">boolean value</param>
-        /// <param name="typeDef">type id</param>
+        /// <param name="typeDef">type def</param>
         /// <returns><c>TrueValue</c> or <c>FalseValue</c></returns>
         IBooleanValue ToBoolean(bool value, ITypeDefinition typeDef);
 
-        /// <summary>
-        ///     convert a boolean constant value to a value object
-        /// </summary>
-        /// <param name="bitSize"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        IValue ToBoolean(uint bitSize, uint value);
-
-        /// <summary>
-        ///     convert a byte constant value to a byte bool object
-        /// </summary>
-        /// <param name="value">byte value</param>
-        /// <param name="typeDef">type Id</param>
-        IBooleanValue ToByteBool(byte value, ITypeDefinition typeDef);
-
-        /// <summary>
-        ///     convert a word constant value to a word bool object
-        /// </summary>
-        /// <param name="value">word bool value</param>
-        /// <param name="typeDef">type id</param>
-        IBooleanValue ToWordBool(ushort value, ITypeDefinition typeDef);
-
-        /// <summary>
-        ///     convert a int constant value to a long bool object
-        /// </summary>
-        /// <param name="value">long bool value</param>
-        /// <param name="typeDef">type id</param>
-        /// <returns>long bool value</returns>
-        IBooleanValue ToLongBool(uint value, ITypeDefinition typeDef);
 
     }
 }

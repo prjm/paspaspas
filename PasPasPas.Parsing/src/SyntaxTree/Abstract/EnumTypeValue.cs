@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -7,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     enum type value
     /// </summary>
-    public class EnumTypeValue : SymbolTableEntryBase, IExpressionTarget, IRefSymbol, ITypedSyntaxPart {
+    public class EnumTypeValue : SymbolTableEntryBase, IExpressionTarget, ITypedSyntaxPart {
 
         /// <summary>
         ///     enum name
@@ -28,13 +27,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     type information
         /// </summary>
-        public IOldTypeReference TypeInfo { get; set; }
+        public ITypeSymbol TypeInfo { get; set; }
 
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public int TypeId
-            => TypeInfo != null ? TypeInfo.TypeId : KnownTypeIds.ErrorType;
 
         /// <summary>
         ///     accept visitor

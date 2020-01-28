@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -7,18 +6,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     variable name
     /// </summary>
-    public class VariableName : DeclaredSymbol, IRefSymbol, ITypedSyntaxPart {
+    public class VariableName : DeclaredSymbol, ITypedSyntaxPart {
 
         /// <summary>
         ///     get the type id for this variable
         /// </summary>
-        public IOldTypeReference TypeInfo { get; set; }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public int TypeId
-            => TypeInfo != null ? TypeInfo.TypeId : KnownTypeIds.Unused;
+        public ITypeSymbol TypeInfo { get; set; }
 
         /// <summary>
         ///     parent declaration

@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     formal parameter definition
     /// </summary>
-    public class ParameterDefinition : SymbolTableEntryBase, IRefSymbol {
+    public class ParameterDefinition : SymbolTableEntryBase {
 
         /// <summary>
         ///     attributes
@@ -29,18 +28,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     parameter type
         /// </summary>
         public ParameterTypeDefinition ParameterType { get; set; }
-
-        /// <summary>
-        ///     get the type id of the parameter
-        /// </summary>
-        public int TypeId {
-            get {
-                if (ParameterType == default || ParameterType.TypeValue == default || ParameterType.TypeValue.TypeInfo == default)
-                    return KnownTypeIds.Unused;
-
-                return ParameterType.TypeValue.TypeInfo.TypeId;
-            }
-        }
 
         /// <summary>
         ///     symbol name

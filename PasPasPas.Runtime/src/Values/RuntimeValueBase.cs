@@ -8,14 +8,14 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     base class for constant runtime values
     /// </summary>
-    public abstract class RuntimeValueBase : ITypeSymbol {
+    public abstract class RuntimeValueBase : IValue {
 
         /// <summary>
         ///     create a new runtime value
         /// </summary>
-        /// <param name="typeId"></param>
-        protected RuntimeValueBase(int typeId) {
-            TypeId = typeId;
+        /// <param name="typeDefinition"></param>
+        protected RuntimeValueBase(ITypeDefinition typeDefinition) {
+            TypeDefinition = typeDefinition;
             LogHistrogram();
         }
 
@@ -25,34 +25,21 @@ namespace PasPasPas.Runtime.Values {
                 Histograms.Value(HistogramKeys.RuntimeValues, GetType().Name);
         }
 
-
-        /// <summary>
-        ///     reference kind
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.ConstantValue;
-
-
-        /// <summary>
-        ///     internal type format
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => InternalTypeFormat;
-
         /// <summary>
         ///     type id
         /// </summary>
-        public int TypeId { get; }
+        public ITypeDefinition TypeDefinition { get; }
 
         /// <summary>
-        ///     type format
+        ///     base type
         /// </summary>
-        public abstract string InternalTypeFormat { get; }
+        public BaseType BaseType
+            => TypeDefinition.BaseType;
 
         /// <summary>
-        ///     type kind
+        ///     symbol type kind
         /// </summary>
-        public abstract CommonTypeKind TypeKind { get; }
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.Constant;
     }
 }

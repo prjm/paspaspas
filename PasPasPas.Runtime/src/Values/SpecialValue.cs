@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values {
@@ -7,7 +6,7 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     special constant values
     /// </summary>
-    public class SpecialValue : IOldTypeReference {
+    public class SpecialValue : IValue {
 
         private readonly SpecialConstantKind kind;
         private readonly int typeIdentifier;

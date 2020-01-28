@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     structured type definition
     /// </summary>
-    public class StructuredType : StructuredTypeBase, ITypeTarget, IRefSymbol {
+    public class StructuredType : StructuredTypeBase, ITypeTarget {
 
         /// <summary>
         ///     type kind
@@ -89,13 +89,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     guid name (for interfaces)
         /// </summary>
         public SymbolName GuidName { get; set; }
-
-        /// <summary>
-        ///     type id#
-        /// </summary>
-        public int TypeId
-            => TypeInfo?.TypeId ?? KnownTypeIds.ErrorType;
-
 
         /// <summary>
         ///     accept visitor

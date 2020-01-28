@@ -19,5 +19,10 @@
         ///     routine group
         /// </summary>
         RoutineGroup = 2,
+
+        /// <summary>
+        ///     constant value
+        /// </summary>
+        Constant = 3,
     }
 }

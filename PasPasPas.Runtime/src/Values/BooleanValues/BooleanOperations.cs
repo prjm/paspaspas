@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.BooleanValues {
@@ -9,22 +10,36 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
     public class BooleanOperations : IBooleanOperations {
 
         /// <summary>
+        ///     create a new boolean operation support class
+        /// </summary>
+        /// <param name="typeRegistryProvider"></param>
+        public BooleanOperations(ITypeRegistryProvider typeRegistryProvider) {
+            provider = typeRegistryProvider;
+            trueValue = new Lazy<IBooleanValue>(() => new BooleanValue(true, provider.GetBooleanType()), true);
+            falseValue = new Lazy<IBooleanValue>(() => new BooleanValue(true, provider.GetBooleanType()), true);
+        }
+
+        private readonly ITypeRegistryProvider provider;
+        private readonly Lazy<IBooleanValue> trueValue;
+        private readonly Lazy<IBooleanValue> falseValue;
+
+        /// <summary>
         ///     constant value: invalid boolean value
         /// </summary>
-        public IOldTypeReference Invalid { get; }
+        public IValue Invalid { get; }
             = new SpecialValue(SpecialConstantKind.InvalidBool);
 
         /// <summary>
         ///     constant value: <c>true</c>
         /// </summary>
-        public IBooleanValue TrueValue { get; }
-            = new BooleanValue(true, KnownTypeIds.BooleanType);
+        public IBooleanValue TrueValue
+            => trueValue.Value;
 
         /// <summary>
         ///     constant value: <c>false</c>
         /// </summary>
-        public IBooleanValue FalseValue { get; }
-            = new BooleanValue(false, KnownTypeIds.BooleanType);
+        public IBooleanValue FalseValue
+            => falseValue.Value;
 
         /// <summary>
         ///     boolean operations
@@ -33,13 +48,40 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
             => this;
 
         /// <summary>
-        ///     convert a simple bool to a boolean value
+        ///     convert a simple boolean to a boolean runtime value
         /// </summary>
         /// <param name="value">value to convert</param>
-        /// <param name="typeId"></param>
+        /// <param name="typeDef">type definition</param>
         /// <returns>boolean constant value</returns>
-        public IBooleanValue ToBoolean(bool value, int typeId)
-            => typeId == KnownTypeIds.BooleanType ? value ? TrueValue : FalseValue : new BooleanValue(value, typeId);
+        public IBooleanValue ToBoolean(bool value, ITypeDefinition typeDef) {
+            if (typeDef == provider.GetBooleanType())
+                return value ? TrueValue : FalseValue;
+
+            if (!(typeDef is IBooleanType boolean))
+                throw new ArgumentException(string.Empty, nameof(typeDef));
+
+            switch (boolean.Kind) {
+                case BooleanTypeKind.Boolean:
+                    return new BooleanValue(value, typeDef);
+
+                case BooleanTypeKind.ByteBool:
+                    return new ByteBooleanValue(value ? byte.MaxValue : (byte)0, typeDef);
+
+                case BooleanTypeKind.WordBool:
+                    return new LongBooleanValue(value ? ushort.MaxValue : (ushort)0, typeDef);
+
+                case BooleanTypeKind.LongBool:
+                    return new LongBooleanValue(value ? uint.MaxValue : 0, typeDef);
+
+                default:
+                    throw new ArgumentException(string.Empty, nameof(typeDef));
+            }
+        }
+
+        private ITypeDefinition EnlargeType(IBooleanValue t1, IBooleanValue t2)
+            => t2.TypeDefinition.TypeSizeInBytes > t1.TypeDefinition.TypeSizeInBytes ?
+            t2.TypeDefinition :
+            t1.TypeDefinition;
 
         /// <summary>
         ///     <c>and</c> operation
@@ -47,9 +89,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="firstOperand"></param>
         /// <param name="secondOperand"></param>
         /// <returns></returns>
-        public IOldTypeReference AndOperator(IOldTypeReference firstOperand, IOldTypeReference secondOperand) {
+        public IValue AndOperator(IValue firstOperand, IValue secondOperand) {
             if (firstOperand is IBooleanValue boolean1 && secondOperand is IBooleanValue boolean2)
-                return ToBoolean(BooleanValueBase.And(boolean1, boolean2), KnownTypeIds.BooleanType);
+                return ToBoolean(BooleanValueBase.And(boolean1, boolean2), EnlargeType(boolean1, boolean2));
             else
                 return Invalid;
         }
@@ -60,9 +102,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference Equal(IOldTypeReference left, IOldTypeReference right) {
+        public IValue Equal(IValue left, IValue right) {
             if (left is IBooleanValue boolean1 && right is IBooleanValue boolean2)
-                return ToBoolean(BooleanValueBase.Equal(boolean1, boolean2), KnownTypeIds.BooleanType);
+                return ToBoolean(BooleanValueBase.Equal(boolean1, boolean2), EnlargeType(boolean1, boolean2));
             else
                 return Invalid;
         }
@@ -73,9 +115,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference GreaterThen(IOldTypeReference left, IOldTypeReference right) {
+        public IValue GreaterThen(IValue left, IValue right) {
             if (left is IBooleanValue boolean1 && right is IBooleanValue boolean2)
-                return ToBoolean(BooleanValueBase.GreaterThen(boolean1, boolean2), KnownTypeIds.BooleanType);
+                return ToBoolean(BooleanValueBase.GreaterThen(boolean1, boolean2), EnlargeType(boolean1, boolean2));
             else
                 return Invalid;
         }
@@ -86,9 +128,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference GreaterThenEqual(IOldTypeReference left, IOldTypeReference right) {
+        public IValue GreaterThenEqual(IValue left, IValue right) {
             if (left is IBooleanValue boolean1 && right is IBooleanValue boolean2)
-                return ToBoolean(BooleanValueBase.GreaterThenEqual(boolean1, boolean2), KnownTypeIds.BooleanType);
+                return ToBoolean(BooleanValueBase.GreaterThenEqual(boolean1, boolean2), EnlargeType(boolean1, boolean2));
             else
                 return Invalid;
         }
@@ -99,9 +141,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference LessThen(IOldTypeReference left, IOldTypeReference right) {
+        public IValue LessThen(IValue left, IValue right) {
             if (left is IBooleanValue boolean1 && right is IBooleanValue boolean2)
-                return ToBoolean(BooleanValueBase.LessThen(boolean1, boolean2), KnownTypeIds.BooleanType);
+                return ToBoolean(BooleanValueBase.LessThen(boolean1, boolean2), EnlargeType(boolean1, boolean2));
             else
                 return Invalid;
         }
@@ -112,9 +154,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference LessThenOrEqual(IOldTypeReference left, IOldTypeReference right) {
+        public IValue LessThenOrEqual(IValue left, IValue right) {
             if (left is IBooleanValue boolean1 && right is IBooleanValue boolean2)
-                return ToBoolean(BooleanValueBase.LessThenOrEqual(boolean1, boolean2), KnownTypeIds.BooleanType);
+                return ToBoolean(BooleanValueBase.LessThenOrEqual(boolean1, boolean2), EnlargeType(boolean1, boolean2));
             else
                 return Invalid;
         }
@@ -124,9 +166,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IOldTypeReference NotOperator(IOldTypeReference value) {
+        public IValue NotOperator(IValue value) {
             if (value is IBooleanValue boolean)
-                return ToBoolean(BooleanValueBase.Not(boolean), KnownTypeIds.BooleanType);
+                return ToBoolean(BooleanValueBase.Not(boolean), value.TypeDefinition);
             else
                 return Invalid;
         }
@@ -137,9 +179,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference NotEquals(IOldTypeReference left, IOldTypeReference right) {
+        public IValue NotEquals(IValue left, IValue right) {
             if (left is IBooleanValue boolean1 && right is IBooleanValue boolean2)
-                return ToBoolean(BooleanValueBase.NotEquals(boolean1, boolean2), KnownTypeIds.BooleanType);
+                return ToBoolean(BooleanValueBase.NotEquals(boolean1, boolean2), EnlargeType(boolean1, boolean2));
             else
                 return Invalid;
         }
@@ -150,9 +192,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IOldTypeReference OrOperator(IOldTypeReference value1, IOldTypeReference value2) {
+        public IValue OrOperator(IValue value1, IValue value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
-                return ToBoolean(BooleanValueBase.Or(boolean1, boolean2), KnownTypeIds.BooleanType);
+                return ToBoolean(BooleanValueBase.Or(boolean1, boolean2), EnlargeType(boolean1, boolean2));
             else
                 return Invalid;
         }
@@ -163,65 +205,13 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IOldTypeReference XorOperator(IOldTypeReference value1, IOldTypeReference value2) {
+        public IValue XorOperator(IValue value1, IValue value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
-                return ToBoolean(BooleanValueBase.Xor(boolean1, boolean2), KnownTypeIds.BooleanType);
+                return ToBoolean(BooleanValueBase.Xor(boolean1, boolean2), EnlargeType(boolean1, boolean2));
             else
                 return Invalid;
 
         }
 
-        /// <summary>
-        ///     get a byte bool value
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
-        public IBooleanValue ToByteBool(byte value, int typeId)
-            => new ByteBooleanValue(value, typeId);
-
-        /// <summary>
-        ///     get a word bool value
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
-        public IBooleanValue ToWordBool(ushort value, int typeId)
-            => new WordBooleanValue(value, typeId);
-
-        /// <summary>
-        ///     get a word bool value
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
-        public IBooleanValue ToLongBool(uint value, int typeId)
-            => new LongBooleanValue(value, typeId);
-
-
-        /// <summary>
-        ///     get a new boolean value depending on the bit size
-        /// </summary>
-        /// <param name="bitSize"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public IOldTypeReference ToBoolean(uint bitSize, uint value) {
-            switch (bitSize) {
-                case 1:
-                    return value == 0 ? FalseValue : TrueValue;
-
-                case 8:
-                    return ToByteBool((byte)value, KnownTypeIds.BooleanType);
-
-                case 16:
-                    return ToWordBool((ushort)value, KnownTypeIds.WordBoolType);
-
-                case 32:
-                    return ToLongBool(value, KnownTypeIds.LongBoolType);
-
-                default:
-                    return Invalid;
-            }
-        }
     }
 }

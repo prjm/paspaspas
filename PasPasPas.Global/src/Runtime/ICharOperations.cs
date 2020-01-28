@@ -22,5 +22,13 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeDef"></param>
         /// <returns></returns>
         IValue ToAnsiCharValue(ITypeDefinition typeDef, byte character);
+
+
+        /// <summary>
+        ///     convert a Unicode char to a runtime value object
+        /// </summary>
+        /// <param name="character">Unicode character (16 bits)</param>
+        /// <returns></returns>
+        IValue ToWideCharValue(char character);
     }
 }

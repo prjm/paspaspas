@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values.BooleanValues {
 
@@ -13,8 +12,8 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         ///     create a new boolean value
         /// </summary>
         /// <param name="aValue">boolean value</param>
-        /// <param name="typeId">type id</param>
-        public BooleanValue(bool aValue, int typeId) : base(typeId)
+        /// <param name="typeDef">type definition</param>
+        public BooleanValue(bool aValue, ITypeDefinition typeDef) : base(typeDef)
             => Value = aValue;
 
         /// <summary>
@@ -22,13 +21,6 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         public override bool AsBoolean
             => Value;
-
-        /// <summary>
-        ///     format this boolean as string
-        /// </summary>
-        /// <returns></returns>
-        public override string InternalTypeFormat
-            => StringUtils.Invariant($"{Value}");
 
         /// <summary>
         ///     get the integral value of this boolean
@@ -46,7 +38,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types)
+        public override IValue GetOrdinalValue(ITypeRegistry types)
             => types.Runtime.Integers.ToScaledIntegerValue(Value ? 1 : 0);
     }
 }

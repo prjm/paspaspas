@@ -12,19 +12,13 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <summary>
         ///     create a new boolean value
         /// </summary>
-        /// <param name="typeId"></param>
-        protected BooleanValueBase(int typeId) : base(typeId) { }
+        /// <param name="typeDef"></param>
+        protected BooleanValueBase(ITypeDefinition typeDef) : base(typeDef) { }
 
         /// <summary>
         ///     get the boolean value
         /// </summary>
         public abstract bool AsBoolean { get; }
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.BooleanType;
 
         /// <summary>
         ///     format this value as unsigned integer
@@ -93,6 +87,6 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public abstract IOldTypeReference GetOrdinalValue(ITypeRegistry types);
+        public abstract IValue GetOrdinalValue(ITypeRegistry types);
     }
 }

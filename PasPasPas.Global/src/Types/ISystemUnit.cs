@@ -39,5 +39,10 @@
         ///     error type
         /// </summary>
         ITypeDefinition ErrorType { get; }
+
+        /// <summary>
+        /// s   boolean type definition
+        /// </summary>
+        ITypeDefinition BooleanType { get; }
     }
 }

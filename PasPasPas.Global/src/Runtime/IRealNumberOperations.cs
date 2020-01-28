@@ -1,4 +1,5 @@
-﻿using SharpFloat.FloatingPoint;
+﻿using PasPasPas.Globals.Types;
+using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Globals.Runtime {
 
@@ -30,9 +31,17 @@ namespace PasPasPas.Globals.Runtime {
         ///     convert a double to the appropriate runtime constant
         /// </summary>
         /// <param name="value">parsed value</param>
-        /// <param name="typeId">type id</param>
+        /// <param name="typeDefinition">type id</param>
         /// <returns>constant value</returns>
-        IValue ToExtendedValue(int typeId, in ExtF80 value);
+        IValue ToExtendedValue(ITypeDefinition typeDefinition, in ExtF80 value);
+
+        /// <summary>
+        ///     convert a double to the appropriate runtime constant
+        /// </summary>
+        /// <param name="realValue"></param>
+        /// <returns></returns>
+        IValue ToExtendedValue(ExtF80 realValue);
+
 
         /// <summary>
         ///     absolute value

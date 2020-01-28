@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     type information
         /// </summary>
-        public IOldTypeReference TypeInfo { get; set; }
+        public ITypeSymbol TypeInfo { get; set; }
 
         /// <summary>
         ///     log duplicate enumeration items
