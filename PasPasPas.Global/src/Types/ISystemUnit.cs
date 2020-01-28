@@ -44,5 +44,10 @@
         /// s   boolean type definition
         /// </summary>
         ITypeDefinition BooleanType { get; }
+
+        /// <summary>
+        ///     wide char type
+        /// </summary>
+        ITypeDefinition WideCharType { get; }
     }
 }

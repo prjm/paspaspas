@@ -12,8 +12,18 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <summary>
         ///     create a new char value
         /// </summary>
-        /// <param name="typeId"></param>
-        protected CharValueBase(int typeId) : base(typeId) { }
+        /// <param name="typeDef"></param>
+        /// <param name="kind"></param>
+        protected CharValueBase(ITypeDefinition typeDef, CharTypeKind kind) : base(typeDef) {
+            if (typeDef.BaseType != BaseType.Char)
+                throw new ArgumentException(string.Empty, nameof(typeDef));
+
+            if (!(typeDef is ICharType charType))
+                throw new ArgumentException(string.Empty, nameof(typeDef));
+
+            if (charType.Kind != kind)
+                throw new ArgumentException(string.Empty, nameof(typeDef));
+        }
 
         /// <summary>
         ///     get the boolean value
@@ -25,21 +35,13 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public abstract IOldTypeReference CharAt(int index);
+        public abstract IValue CharAt(int index);
 
         /// <summary>
         ///     convert this char to a string
         /// </summary>
         public string AsUnicodeString
             => new string(AsWideChar, 1);
-
-
-        /// <summary>
-        ///     format this as value as string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => InternalTypeFormat;
 
         /// <summary>
         ///     length (in characters)
@@ -96,6 +98,6 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public abstract IOldTypeReference GetOrdinalValue(ITypeRegistry types);
+        public abstract IValue GetOrdinalValue(ITypeRegistry types);
     }
 }

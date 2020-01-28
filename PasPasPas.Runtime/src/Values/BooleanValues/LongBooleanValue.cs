@@ -13,7 +13,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         /// <param name="value"></param>
         /// <param name="typeDef"></param>
-        public LongBooleanValue(uint value, ITypeDefinition typeDef) : base(typeDef)
+        public LongBooleanValue(uint value, ITypeDefinition typeDef) : base(typeDef, BooleanTypeKind.LongBool)
             => Value = value;
 
         /// <summary>

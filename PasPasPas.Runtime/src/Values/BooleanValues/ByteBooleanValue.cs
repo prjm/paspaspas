@@ -13,7 +13,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         /// <param name="byteBoolValue">boolean value</param>
         /// <param name="typeDefinition">type def</param>
-        public ByteBooleanValue(byte byteBoolValue, ITypeDefinition typeDefinition) : base(typeDefinition)
+        public ByteBooleanValue(byte byteBoolValue, ITypeDefinition typeDefinition) : base(typeDefinition, BooleanTypeKind.ByteBool)
             => Value = byteBoolValue;
 
         /// <summary>

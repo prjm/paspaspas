@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values.CharValues {
 
@@ -13,8 +12,8 @@ namespace PasPasPas.Runtime.Values.CharValues {
         ///     crate a new char value
         /// </summary>
         /// <param name="charValue"></param>
-        /// <param name="typeId">type id</param>
-        public AnsiCharValue(int typeId, byte charValue) : base(typeId)
+        /// <param name="typeDef">type id</param>
+        public AnsiCharValue(ITypeDefinition typeDef, byte charValue) : base(typeDef, CharTypeKind.AnsiChar)
             => Value = charValue;
 
         /// <summary>
@@ -22,12 +21,6 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         public override char AsWideChar
             => (char)Value;
-
-        /// <summary>
-        ///     fixed type kind <see cref="CommonTypeKind.AnsiCharType"/>
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.AnsiCharType;
 
         /// <summary>
         ///     compute a hash code
@@ -41,7 +34,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types)
+        public override IValue GetOrdinalValue(ITypeRegistry types)
             => types.Runtime.Integers.ToScaledIntegerValue(Value);
 
         /// <summary>
@@ -49,19 +42,12 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public override IOldTypeReference CharAt(int index) {
+        public override IValue CharAt(int index) {
             if (index < 0 || index >= 1)
                 return new SpecialValue(SpecialConstantKind.InvalidChar);
 
             return this;
         }
-
-        /// <summary>
-        ///     convert this value to a string value
-        /// </summary>
-        /// <returns></returns>
-        public override string InternalTypeFormat
-            => StringUtils.Invariant($@"{new string((char)Value, 1)}");
 
         /// <summary>
         ///     char value

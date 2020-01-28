@@ -1,7 +1,6 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values.CharValues {
 
@@ -14,8 +13,8 @@ namespace PasPasPas.Runtime.Values.CharValues {
         ///     create a new wide char value
         /// </summary>
         /// <param name="character"></param>
-        /// <param name="typeId">type id</param>
-        public WideCharValue(int typeId, char character) : base(typeId)
+        /// <param name="typeDef">type id</param>
+        public WideCharValue(ITypeDefinition typeDef, char character) : base(typeDef, CharTypeKind.WideChar)
             => Value = character;
 
         /// <summary>
@@ -23,12 +22,6 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         public override char AsWideChar
             => Value;
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.WideCharType;
 
         /// <summary>
         ///     check for equality
@@ -58,7 +51,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types)
+        public override IValue GetOrdinalValue(ITypeRegistry types)
             => types.Runtime.Integers.ToScaledIntegerValue(Value);
 
         /// <summary>
@@ -66,19 +59,12 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public override IOldTypeReference CharAt(int index) {
+        public override IValue CharAt(int index) {
             if (index < 0 || index >= 1)
                 return new SpecialValue(SpecialConstantKind.InvalidChar);
 
             return this;
         }
-
-        /// <summary>
-        ///     convert this value to a string
-        /// </summary>
-        /// <returns></returns>
-        public override string InternalTypeFormat
-            => StringUtils.Invariant($"'{Value}'");
 
         /// <summary>
         ///     char value

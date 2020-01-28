@@ -13,7 +13,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         /// <param name="wordBoolValue"></param>
         /// <param name="typeDef">type id</param>
-        public WordBooleanValue(ushort wordBoolValue, ITypeDefinition typeDef) : base(typeDef)
+        public WordBooleanValue(ushort wordBoolValue, ITypeDefinition typeDef) : base(typeDef, BooleanTypeKind.WordBool)
             => Value = wordBoolValue;
 
         /// <summary>

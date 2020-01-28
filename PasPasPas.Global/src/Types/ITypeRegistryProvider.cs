@@ -20,10 +20,21 @@
         /// <summary>
         ///     resolve the boolean type
         /// </summary>
-        /// <param name="provder"></param>
+        /// <param name="provider"></param>
         /// <returns></returns>
-        public static ITypeDefinition GetBooleanType(this ITypeRegistryProvider provder)
-            => provder.RegisteredTypes.SystemUnit.BooleanType;
+        public static ITypeDefinition GetBooleanType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.BooleanType;
+
+
+        /// <summary>
+        ///     resolve the boolean type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static ITypeDefinition GetWideCharType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.WideCharType;
+
+
 
     }
 
