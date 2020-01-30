@@ -31,6 +31,11 @@ namespace PasPasPas.Globals.Runtime {
         /// <returns><c>TrueValue</c> or <c>FalseValue</c></returns>
         IBooleanValue ToBoolean(bool value, ITypeDefinition typeDef);
 
-
+        /// <summary>
+        ///     convert a boolean constant value to an value object
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        IBooleanValue ToBoolean(bool value);
     }
 }

@@ -213,5 +213,12 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
 
         }
 
+        /// <summary>
+        ///     create a standard boolean value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public IBooleanValue ToBoolean(bool value)
+            => ToBoolean(value, provider.GetBooleanType());
     }
 }

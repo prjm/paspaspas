@@ -16,8 +16,18 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <summary>
         ///     create a new string value
         /// </summary>
-        /// <param name="typeId"></param>
-        protected StringValueBase(int typeId) : base(typeId) { }
+        /// <param name="typeDef"></param>
+        /// <param name="kind"></param>
+        protected StringValueBase(ITypeDefinition typeDef, StringTypeKind kind) : base(typeDef) {
+            if (typeDef.BaseType != BaseType.String)
+                throw new ArgumentException(string.Empty, nameof(typeDef));
+
+            if (!(typeDef is IStringType stringType))
+                throw new ArgumentException(string.Empty, nameof(typeDef));
+
+            if (stringType.Kind != kind)
+                throw new ArgumentException(string.Empty, nameof(typeDef));
+        }
 
         /// <summary>
         ///     get the boolean value
@@ -25,19 +35,14 @@ namespace PasPasPas.Runtime.Values.StringValues {
         public abstract string AsUnicodeString { get; }
 
         /// <summary>
-        ///     convert this value to a string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => InternalTypeFormat;
-
-        /// <summary>
         ///     number of characters
         /// </summary>
         public abstract int NumberOfCharElements { get; }
 
-        internal static IOldTypeReference Concat(IStringValue string1, IStringValue string2)
-            => new UnicodeStringValue(KnownTypeIds.UnicodeStringType, string.Concat(string1.AsUnicodeString, string2.AsUnicodeString));
+        internal IValue Concat(IStringValue string1, IStringValue string2) {
+            var typeDef = TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit.UnicodeStringType;
+            return new UnicodeStringValue(typeDef, string.Concat(string1.AsUnicodeString, string2.AsUnicodeString));
+        }
 
         internal static bool Equal(IStringValue string1, IStringValue string2)
             => string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) == 0;
@@ -79,7 +84,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public abstract IOldTypeReference CharAt(int index);
+        public abstract IValue CharAt(int index);
 
         /// <summary>
         ///     compute a hash code

@@ -22,19 +22,37 @@
         /// </summary>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static ITypeDefinition GetBooleanType(this ITypeRegistryProvider provider)
+        public static IBooleanType GetBooleanType(this ITypeRegistryProvider provider)
             => provider.RegisteredTypes.SystemUnit.BooleanType;
-
 
         /// <summary>
         ///     resolve the boolean type
         /// </summary>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static ITypeDefinition GetWideCharType(this ITypeRegistryProvider provider)
+        public static ICharType GetWideCharType(this ITypeRegistryProvider provider)
             => provider.RegisteredTypes.SystemUnit.WideCharType;
 
 
+        /// <summary>
+        ///     resolve the UNICODE string type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IStringType GetUnicodeStringType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.UnicodeStringType;
+
+        /// <summary>
+        ///     ANSI string type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IStringType GetAnsiStringType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.AnsiStringType;
+
+
+        public static IStringType GetShortStringType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.ShortStringType;
 
     }
 

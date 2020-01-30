@@ -16,8 +16,8 @@ namespace PasPasPas.Runtime.Values.StringValues {
         ///     get the Unicode string value
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="typeId">type id</param>
-        public UnicodeStringValue(int typeId, string text) : base(typeId)
+        /// <param name="typeDef">type id</param>
+        public UnicodeStringValue(ITypeDefinition typeDef, string text) : base(typeDef, StringTypeKind.UnicodeString)
             => data = text;
 
         /// <summary>
@@ -25,12 +25,6 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         public override string AsUnicodeString
             => data;
-
-        /// <summary>
-        ///     fixed type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.UnicodeStringType;
 
         /// <summary>test for equality</summary>
         /// <param name="obj"></param>
@@ -59,34 +53,22 @@ namespace PasPasPas.Runtime.Values.StringValues {
         }
 
         /// <summary>
-        ///     convert this value to in internal string format
-        /// </summary>
-        public override string InternalTypeFormat
-            => $"'{data}'";
-
-        /// <summary>
         ///     number of characters
         /// </summary>
         public override int NumberOfCharElements
             => data.Length;
 
         /// <summary>
-        ///     get the content of this string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => InternalTypeFormat;
-
-        /// <summary>
         ///     char at index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public override IOldTypeReference CharAt(int index) {
+        public override IValue CharAt(int index) {
             if (index < 0 || index >= data.Length)
                 return new SpecialValue(SpecialConstantKind.InvalidChar);
 
-            return new WideCharValue(KnownTypeIds.WideCharType, data[index]);
+            var wideCharType = TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit.WideCharType;
+            return new WideCharValue(wideCharType, data[index]);
         }
     }
 }

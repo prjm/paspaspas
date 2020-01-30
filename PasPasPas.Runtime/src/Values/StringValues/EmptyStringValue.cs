@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.StringValues {
 
@@ -10,8 +11,8 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <summary>
         ///     create a new empty string value
         /// </summary>
-        /// <param name="typeId"></param>
-        public EmptyStringValue(int typeId) : base(typeId) { }
+        /// <param name="typeDef"></param>
+        public EmptyStringValue(ITypeDefinition typeDef) : base(typeDef, StringTypeKind.ShortString) { }
 
         /// <summary>
         ///     get the empty string
@@ -19,17 +20,6 @@ namespace PasPasPas.Runtime.Values.StringValues {
         public override string AsUnicodeString
             => string.Empty;
 
-        /// <summary>
-        ///     type kind <c>short string</c>
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.ShortStringType;
-
-        /// <summary>
-        ///     format this string to a internal format
-        /// </summary>
-        public override string InternalTypeFormat
-            => "''";
 
         /// <summary>
         ///     number of chars
@@ -42,7 +32,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public override IOldTypeReference CharAt(int index)
+        public override IValue CharAt(int index)
             => new SpecialValue(SpecialConstantKind.InvalidChar);
     }
 }

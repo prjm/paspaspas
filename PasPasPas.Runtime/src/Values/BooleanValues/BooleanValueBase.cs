@@ -13,6 +13,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         ///     create a new boolean value
         /// </summary>
         /// <param name="typeDef"></param>
+        /// <param name="kind"></param>
         protected BooleanValueBase(ITypeDefinition typeDef, BooleanTypeKind kind) : base(typeDef) {
             if (typeDef.BaseType != BaseType.Boolean)
                 throw new ArgumentException(string.Empty, nameof(typeDef));

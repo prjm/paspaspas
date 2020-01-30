@@ -43,11 +43,31 @@
         /// <summary>
         /// s   boolean type definition
         /// </summary>
-        ITypeDefinition BooleanType { get; }
+        IBooleanType BooleanType { get; }
 
         /// <summary>
         ///     wide char type
         /// </summary>
-        ITypeDefinition WideCharType { get; }
+        ICharType WideCharType { get; }
+
+        /// <summary>
+        ///     ANSI char type
+        /// </summary>
+        ICharType AnsiCharType { get; }
+
+        /// <summary>
+        ///     UNICODE string type
+        /// </summary>
+        IStringType UnicodeStringType { get; }
+
+        /// <summary>
+        ///     ANSI string type
+        /// </summary>
+        IStringType AnsiStringType { get; }
+
+        /// <summary>
+        ///     short string type
+        /// </summary>
+        IStringType ShortStringType { get; }
     }
 }

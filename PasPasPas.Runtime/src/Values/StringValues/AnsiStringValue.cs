@@ -17,7 +17,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <param name="text"></param>
         /// <param name="typeId">type id</param>
-        public AnsiStringValue(int typeId, string text) : base(typeId) {
+        public AnsiStringValue(ITypeDefinition typeId, string text) : base(typeId, StringTypeKind.AnsiString) {
             var buffer = new StringBuilder(text.Length);
             for (var i = 0; i < text.Length; i++) {
                 var c = text[i];
@@ -33,35 +33,17 @@ namespace PasPasPas.Runtime.Values.StringValues {
             => data;
 
         /// <summary>
-        ///     ANSI string type
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.LongStringType;
-
-        /// <summary>
-        ///     get the content of this string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => InternalTypeFormat;
-
-        /// <summary>
         ///    get a char at
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public override IOldTypeReference CharAt(int index) {
+        public override IValue CharAt(int index) {
             if (index < 0 || index >= data.Length)
                 return new SpecialValue(SpecialConstantKind.InvalidChar);
 
-            return new AnsiCharValue(KnownTypeIds.AnsiCharType, unchecked((byte)data[index]));
+            var typeDef = TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit.AnsiCharType;
+            return new AnsiCharValue(typeDef, unchecked((byte)data[index]));
         }
-
-        /// <summary>
-        ///     convert this value to in internal string format
-        /// </summary>
-        public override string InternalTypeFormat
-            => $"'{data}'";
 
         /// <summary>
         ///     number of char elements
