@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using SharpFloat.FloatingPoint;
 
@@ -9,22 +10,21 @@ namespace PasPasPas.Runtime.Values.FloatValues {
     /// </summary>
     public abstract class FloatValueBase : RuntimeValueBase, IRealNumberValue {
 
-        private static int GetCommonTypeId(INumericalValue left, INumericalValue right = default) {
-
-            if (left.TypeKind == CommonTypeKind.RealType)
-                return left.TypeId;
-
-            if (right != default && right.TypeKind == CommonTypeKind.RealType)
-                return right.TypeId;
-
-            return KnownTypeIds.Extended;
-        }
-
         /// <summary>
         ///     generate a new float value
         /// </summary>
-        /// <param name="typeId"></param>
-        protected FloatValueBase(int typeId) : base(typeId) { }
+        /// <param name="typeDef"></param>
+        /// <param name="kind"></param>
+        protected FloatValueBase(ITypeDefinition typeDef, RealTypeKind kind) : base(typeDef) {
+            if (typeDef.BaseType != BaseType.Boolean)
+                throw new ArgumentException(string.Empty, nameof(typeDef));
+
+            if (!(typeDef is IRealType realType))
+                throw new ArgumentException(string.Empty, nameof(typeDef));
+
+            if (realType.Kind != kind)
+                throw new ArgumentException(string.Empty, nameof(typeDef));
+        }
 
         /// <summary>
         ///     test if the number is negative
@@ -49,20 +49,20 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <returns></returns>
         public abstract override int GetHashCode();
 
-        internal static IOldTypeReference Multiply(INumericalValue first, INumericalValue second)
-            => new ExtendedValue(GetCommonTypeId(first, second), first.AsExtended * second.AsExtended);
+        internal static IValue Multiply(ITypeDefinition typeDef, INumericalValue first, INumericalValue second)
+            => new ExtendedValue(typeDef, first.AsExtended * second.AsExtended);
 
-        internal static IOldTypeReference Divide(INumericalValue numberDividend, INumericalValue numberDivisor)
-            => new ExtendedValue(GetCommonTypeId(numberDividend, numberDivisor), numberDividend.AsExtended / numberDivisor.AsExtended);
+        internal static IValue Divide(ITypeDefinition typeDef, INumericalValue numberDividend, INumericalValue numberDivisor)
+            => new ExtendedValue(typeDef, numberDividend.AsExtended / numberDivisor.AsExtended);
 
-        internal static IOldTypeReference Add(INumericalValue first, INumericalValue second)
-            => new ExtendedValue(GetCommonTypeId(first, second), first.AsExtended + second.AsExtended);
+        internal static IValue Add(ITypeDefinition typeDef, INumericalValue first, INumericalValue second)
+            => new ExtendedValue(typeDef, first.AsExtended + second.AsExtended);
 
-        internal static IOldTypeReference Subtract(INumericalValue first, INumericalValue second)
-            => new ExtendedValue(GetCommonTypeId(first, second), first.AsExtended - second.AsExtended);
+        internal static IValue Subtract(ITypeDefinition typeDef, INumericalValue first, INumericalValue second)
+            => new ExtendedValue(typeDef, first.AsExtended - second.AsExtended);
 
-        internal static IOldTypeReference Negate(INumericalValue value)
-            => new ExtendedValue(GetCommonTypeId(value), -value.AsExtended);
+        internal static IValue Negate(ITypeDefinition typeDef, INumericalValue value)
+            => new ExtendedValue(typeDef, -value.AsExtended);
 
         internal static bool Equal(INumericalValue floatLeft, INumericalValue floatRight)
             => floatLeft == floatRight;
@@ -86,20 +86,14 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         ///     absolute value
         /// </summary>
         /// <param name="floatValue"></param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        public static IOldTypeReference Abs(INumericalValue floatValue) {
+        public static IValue Abs(ITypeDefinition typeDef, INumericalValue floatValue) {
             if (floatValue.IsNegative)
-                return new ExtendedValue(GetCommonTypeId(floatValue), -floatValue.AsExtended);
+                return new ExtendedValue(typeDef, -floatValue.AsExtended);
 
             return floatValue;
         }
-
-        /// <summary>
-        ///     format value as string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => InternalTypeFormat;
 
     }
 }

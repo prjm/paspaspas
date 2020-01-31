@@ -50,9 +50,21 @@
         public static IStringType GetAnsiStringType(this ITypeRegistryProvider provider)
             => provider.RegisteredTypes.SystemUnit.AnsiStringType;
 
-
+        /// <summary>
+        ///     short string type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         public static IStringType GetShortStringType(this ITypeRegistryProvider provider)
             => provider.RegisteredTypes.SystemUnit.ShortStringType;
+
+        /// <summary>
+        ///     extended floating point precision type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IRealType GetExtendedType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.ExtendedType;
 
     }
 

@@ -12,11 +12,13 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <summary>
         ///     create a new real number operations helper
         /// </summary>
+        /// <param name="typeProvider"></param>
         /// <param name="booleans">boolean operations</param>
         /// <param name="ints"></param>
-        public RealNumberOperations(IBooleanOperations booleans, IIntegerOperations ints) {
+        public RealNumberOperations(ITypeRegistryProvider typeProvider, IBooleanOperations booleans, IIntegerOperations ints) {
             Booleans = booleans;
             Ints = ints;
+            provider = typeProvider;
         }
 
         /// <summary>
@@ -29,20 +31,31 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         public IIntegerOperations Ints { get; }
 
+        private readonly ITypeRegistryProvider provider;
+
         /// <summary>
         ///     get a constant real value
         /// </summary>
         /// <param name="value"></param>
-        /// <param name="typeId">type id</param>
+        /// <param name="typeDefinition"></param>
         /// <returns></returns>
-        public IOldTypeReference ToExtendedValue(int typeId, in ExtF80 value)
-            => new ExtendedValue(typeId, value);
+        public IRealNumberValue ToExtendedValue(ITypeDefinition typeDefinition, in ExtF80 value)
+            => new ExtendedValue(typeDefinition, value);
+
+        /// <summary>
+        ///     get a constant real value
+        /// </summary>
+        /// <param name="realValue"></param>
+        /// <returns></returns>
+        public IRealNumberValue ToExtendedValue(in ExtF80 realValue)
+            => new ExtendedValue(provider.GetExtendedType(), realValue);
+
 
 
         /// <summary>
         ///     invalid real number
         /// </summary>
-        public IOldTypeReference Invalid { get; }
+        public IValue Invalid { get; }
             = new SpecialValue(SpecialConstantKind.InvalidReal);
 
         /// <summary>
@@ -57,9 +70,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="augend"></param>
         /// <param name="addend"></param>
         /// <returns></returns>
-        public IOldTypeReference Add(IOldTypeReference augend, IOldTypeReference addend) {
+        public IValue Add(IValue augend, IValue addend) {
             if (augend is INumericalValue first && addend is INumericalValue second)
-                return FloatValueBase.Add(first, second);
+                return FloatValueBase.Add(provider.GetExtendedType(), first, second);
 
             return Invalid;
         }
@@ -70,9 +83,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="minuend"></param>
         /// <param name="subtrahend"></param>
         /// <returns></returns>
-        public IOldTypeReference Subtract(IOldTypeReference minuend, IOldTypeReference subtrahend) {
+        public IValue Subtract(IValue minuend, IValue subtrahend) {
             if (minuend is INumericalValue first && subtrahend is INumericalValue second)
-                return FloatValueBase.Subtract(first, second);
+                return FloatValueBase.Subtract(provider.GetExtendedType(), first, second);
 
             return Invalid;
         }
@@ -83,9 +96,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="multiplicand"></param>
         /// <param name="intMultiplier"></param>
         /// <returns></returns>
-        public IOldTypeReference Multiply(IOldTypeReference multiplicand, IOldTypeReference intMultiplier) {
+        public IValue Multiply(IValue multiplicand, IValue intMultiplier) {
             if (multiplicand is INumericalValue first && intMultiplier is INumericalValue second)
-                return FloatValueBase.Multiply(first, second);
+                return FloatValueBase.Multiply(provider.GetExtendedType(), first, second);
 
             return Invalid;
         }
@@ -96,12 +109,12 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="dividend"></param>
         /// <param name="divisor"></param>
         /// <returns></returns>
-        public IOldTypeReference Divide(IOldTypeReference dividend, IOldTypeReference divisor) {
+        public IValue Divide(IValue dividend, IValue divisor) {
             if (dividend is INumericalValue numberDividend && divisor is INumericalValue numberDivisor)
                 if (numberDivisor.AsExtended == 0)
                     return new SpecialValue(SpecialConstantKind.DivisionByZero);
                 else
-                    return FloatValueBase.Divide(numberDividend, numberDivisor);
+                    return FloatValueBase.Divide(provider.GetExtendedType(), numberDividend, numberDivisor);
 
             return Invalid;
         }
@@ -111,9 +124,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         /// <param name="number">value to negate</param>
         /// <returns></returns>
-        public IOldTypeReference Negate(IOldTypeReference number) {
+        public IValue Negate(IValue number) {
             if (number is INumericalValue floatValue)
-                return FloatValueBase.Negate(floatValue);
+                return FloatValueBase.Negate(provider.GetExtendedType(), floatValue);
             return Invalid;
         }
 
@@ -122,9 +135,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         /// <param name="typeReference">value to negate</param>
         /// <returns></returns>
-        public IOldTypeReference Abs(IOldTypeReference typeReference) {
+        public IValue Abs(IValue typeReference) {
             if (typeReference is INumericalValue floatValue)
-                return FloatValueBase.Abs(floatValue);
+                return FloatValueBase.Abs(provider.GetExtendedType(), floatValue);
             return Invalid;
         }
 
@@ -134,7 +147,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public IOldTypeReference Identity(IOldTypeReference number)
+        public IValue Identity(IValue number)
             => number;
 
         /// <summary>
@@ -143,9 +156,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference Equal(IOldTypeReference left, IOldTypeReference right) {
+        public IValue Equal(IValue left, IValue right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.Equal(floatLeft, floatRight), KnownTypeIds.BooleanType);
+                return Booleans.ToBoolean(FloatValueBase.Equal(floatLeft, floatRight));
             else
                 return Invalid;
         }
@@ -156,9 +169,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference NotEquals(IOldTypeReference left, IOldTypeReference right) {
+        public IValue NotEquals(IValue left, IValue right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.NotEqual(floatLeft, floatRight), KnownTypeIds.BooleanType);
+                return Booleans.ToBoolean(FloatValueBase.NotEqual(floatLeft, floatRight));
             else
                 return Invalid;
         }
@@ -169,9 +182,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference LessThen(IOldTypeReference left, IOldTypeReference right) {
+        public IValue LessThen(IValue left, IValue right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.LessThen(floatLeft, floatRight), KnownTypeIds.BooleanType);
+                return Booleans.ToBoolean(FloatValueBase.LessThen(floatLeft, floatRight));
             else
                 return Invalid;
         }
@@ -182,9 +195,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference GreaterThenEqual(IOldTypeReference left, IOldTypeReference right) {
+        public IValue GreaterThenEqual(IValue left, IValue right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.GreaterThenEqual(floatLeft, floatRight), KnownTypeIds.BooleanType);
+                return Booleans.ToBoolean(FloatValueBase.GreaterThenEqual(floatLeft, floatRight));
             else
                 return Invalid;
         }
@@ -195,9 +208,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference GreaterThen(IOldTypeReference left, IOldTypeReference right) {
+        public IValue GreaterThen(IValue left, IValue right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.GreaterThen(floatLeft, floatRight), KnownTypeIds.BooleanType);
+                return Booleans.ToBoolean(FloatValueBase.GreaterThen(floatLeft, floatRight));
             else
                 return Invalid;
         }
@@ -208,9 +221,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IOldTypeReference LessThenOrEqual(IOldTypeReference left, IOldTypeReference right) {
+        public IValue LessThenOrEqual(IValue left, IValue right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.LessThenOrEqual(floatLeft, floatRight), KnownTypeIds.BooleanType);
+                return Booleans.ToBoolean(FloatValueBase.LessThenOrEqual(floatLeft, floatRight));
             else
                 return Invalid;
         }
@@ -220,15 +233,15 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         /// <param name="realValue"></param>
         /// <returns></returns>
-        public IOldTypeReference Round(IOldTypeReference realValue) {
-            if (realValue.IsIntegralValue(out var intValue))
-                return intValue;
+        public IValue Round(IValue realValue) {
+            if (realValue is IIntegerValue)
+                return realValue;
 
-            if (!realValue.IsRealValue(out var value))
+            if (!(realValue is IRealNumberValue value))
                 return Invalid;
 
             var originalValue = value.AsExtended;
-            var roundedValue = default(ExtF80);
+            ExtF80 roundedValue;
 
             switch (RoundingMode) {
 
@@ -265,11 +278,11 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         /// <param name="realNumberValue"></param>
         /// <returns></returns>
-        public IOldTypeReference Trunc(IRealNumberValue realNumberValue) {
-            if (realNumberValue.IsIntegralValue(out var intValue))
-                return intValue;
+        public IValue Trunc(IRealNumberValue realNumberValue) {
+            if (realNumberValue is IIntegerValue)
+                return realNumberValue;
 
-            if (!realNumberValue.IsRealValue(out var value))
+            if (!(realNumberValue is IRealNumberValue value))
                 return Invalid;
 
             var originalValue = value.AsExtended;

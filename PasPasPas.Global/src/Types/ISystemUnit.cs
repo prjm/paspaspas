@@ -69,5 +69,10 @@
         ///     short string type
         /// </summary>
         IStringType ShortStringType { get; }
+
+        /// <summary>
+        ///     extended type
+        /// </summary>
+        IRealType ExtendedType { get; }
     }
 }

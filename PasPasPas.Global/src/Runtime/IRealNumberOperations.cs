@@ -33,14 +33,14 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="value">parsed value</param>
         /// <param name="typeDefinition">type id</param>
         /// <returns>constant value</returns>
-        IValue ToExtendedValue(ITypeDefinition typeDefinition, in ExtF80 value);
+        IRealNumberValue ToExtendedValue(ITypeDefinition typeDefinition, in ExtF80 value);
 
         /// <summary>
         ///     convert a double to the appropriate runtime constant
         /// </summary>
         /// <param name="realValue"></param>
         /// <returns></returns>
-        IValue ToExtendedValue(ExtF80 realValue);
+        IRealNumberValue ToExtendedValue(in ExtF80 realValue);
 
 
         /// <summary>

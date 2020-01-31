@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.FloatValues {
@@ -14,10 +15,10 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <summary>
         ///     create a new extend value
         /// </summary>
-        /// <param name="typeId"></param>
-        /// <param name="extended"></param>
-        public ExtendedValue(int typeId, in ExtF80 extended) : base(typeId)
-            => value = extended;
+        /// <param name="typeDef"></param>
+        /// <param name="extendedValue"></param>
+        public ExtendedValue(ITypeDefinition typeDef, in ExtF80 extendedValue) : base(typeDef, RealTypeKind.Extended)
+            => value = extendedValue;
 
         /// <summary>
         ///     test if the value is negative
@@ -30,12 +31,6 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         public override ExtF80 AsExtended
             => value;
-
-        /// <summary>
-        ///     common type kind: real type
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.RealType;
 
         /// <summary>
         ///     compare equality
@@ -56,10 +51,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
             => ExtF80.GetHashCode(value);
 
         /// <summary>
-        ///     format this floating point value as string
+        ///     get a formatted string of this value
         /// </summary>
-        /// <returns></returns>
-        public override string InternalTypeFormat {
+        public string ToFormattedString {
             get {
                 var builder = new StringBuilder();
                 var _ = ExtF80.PrintFloat80(builder, value, PrintFloatFormat.PositionalFormat, 20);
