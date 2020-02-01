@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values.IntValues {
 
@@ -16,14 +15,9 @@ namespace PasPasPas.Runtime.Values.IntValues {
         ///     new int value
         /// </summary>
         /// <param name="value"></param>
-        public IntegerValue(int value)
+        /// <param name="typeDef"></param>
+        public IntegerValue(ITypeDefinition typeDef, int value) : base(typeDef, IntegralTypeKind.Integer)
             => this.value = value;
-
-        /// <summary>
-        ///     type id: integer
-        /// </summary>
-        public override int TypeId
-            => KnownTypeIds.IntegerType;
 
         /// <summary>
         ///     value
@@ -50,19 +44,6 @@ namespace PasPasPas.Runtime.Values.IntValues {
             => (uint)value;
 
         /// <summary>
-        ///     type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.IntegerType;
-
-        /// <summary>
-        ///     format this number
-        /// </summary>
-        /// <returns></returns>
-        public override string InternalTypeFormat
-            => StringUtils.Invariant($"{value}");
-
-        /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
@@ -74,14 +55,14 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types)
+        public override IValue GetOrdinalValue(ITypeRegistry types)
             => ToScaledIntegerValue(value);
 
         /// <summary>
         ///     invert bits
         /// </summary>
         /// <returns></returns>
-        public override IOldTypeReference InvertBits()
+        public override IValue InvertBits()
             => ToScaledIntegerValue(~value);
 
     }

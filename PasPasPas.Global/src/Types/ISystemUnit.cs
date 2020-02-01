@@ -74,5 +74,15 @@
         ///     extended type
         /// </summary>
         IRealType ExtendedType { get; }
+
+        /// <summary>
+        ///     int64 type definition
+        /// </summary>
+        IIntegralType Int64Type { get; }
+
+        /// <summary>
+        ///     uint64 type definition
+        /// </summary>
+        IIntegralType UInt64Type { get; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values.IntValues {
 
@@ -16,14 +15,9 @@ namespace PasPasPas.Runtime.Values.IntValues {
         ///     create a new word value
         /// </summary>
         /// <param name="value"></param>
-        public WordValue(ushort value)
+        /// <param name="typeDef"></param>
+        public WordValue(ITypeDefinition typeDef, ushort value) : base(typeDef, IntegralTypeKind.Word)
             => this.value = value;
-
-        /// <summary>
-        ///     type id: word
-        /// </summary>
-        public override int TypeId
-            => KnownTypeIds.WordType;
 
         /// <summary>
         ///     word value
@@ -38,13 +32,6 @@ namespace PasPasPas.Runtime.Values.IntValues {
             => new BigInteger(value);
 
         /// <summary>
-        ///     format this number
-        /// </summary>
-        /// <returns></returns>
-        public override string InternalTypeFormat
-            => StringUtils.Invariant($"{value}");
-
-        /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
@@ -55,7 +42,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         ///     invert bits
         /// </summary>
         /// <returns></returns>
-        public override IOldTypeReference InvertBits()
+        public override IValue InvertBits()
             => ToScaledIntegerValue(~value);
 
         /// <summary>
@@ -63,7 +50,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types)
+        public override IValue GetOrdinalValue(ITypeRegistry types)
             => ToScaledIntegerValue(value);
 
         /// <summary>
@@ -78,10 +65,5 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public override ulong UnsignedValue
             => value;
 
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.IntegerType;
     }
 }

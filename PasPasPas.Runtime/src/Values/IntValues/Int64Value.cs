@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values.IntValues {
 
@@ -16,14 +15,10 @@ namespace PasPasPas.Runtime.Values.IntValues {
         ///     creates a new int64 value
         /// </summary>
         /// <param name="withValue"></param>
-        public Int64Value(long withValue)
+        /// <param name="typeDefinition"></param>
+        public Int64Value(ITypeDefinition typeDefinition, long withValue) : base(typeDefinition, IntegralTypeKind.Int64)
             => value = withValue;
 
-        /// <summary>
-        ///     type id: int64
-        /// </summary>
-        public override int TypeId
-            => KnownTypeIds.Int64Type;
 
         /// <summary>
         ///     value
@@ -38,13 +33,6 @@ namespace PasPasPas.Runtime.Values.IntValues {
             => new BigInteger(value);
 
         /// <summary>
-        ///     format this number
-        /// </summary>
-        /// <returns></returns>
-        public override string InternalTypeFormat
-            => StringUtils.Invariant($"{value}");
-
-        /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
@@ -55,7 +43,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         ///     invert all bits
         /// </summary>
         /// <returns></returns>
-        public override IOldTypeReference InvertBits()
+        public override IValue InvertBits()
             => ToScaledIntegerValue(~value);
 
         /// <summary>
@@ -63,7 +51,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types)
+        public override IValue GetOrdinalValue(ITypeRegistry types)
             => ToScaledIntegerValue(value);
 
         /// <summary>
@@ -78,10 +66,5 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public override ulong UnsignedValue
             => (uint)value;
 
-        /// <summary>
-        ///     type kind: int64
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.Int64Type;
     }
 }
