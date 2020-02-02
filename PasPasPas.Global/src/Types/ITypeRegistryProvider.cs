@@ -59,12 +59,80 @@
             => provider.RegisteredTypes.SystemUnit.ShortStringType;
 
         /// <summary>
+        ///     short integer type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IIntegralType GetShortIntType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.ShortIntType;
+
+        /// <summary>
         ///     extended floating point precision type
         /// </summary>
         /// <param name="provider"></param>
         /// <returns></returns>
         public static IRealType GetExtendedType(this ITypeRegistryProvider provider)
             => provider.RegisteredTypes.SystemUnit.ExtendedType;
+
+        /// <summary>
+        ///     byte type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IIntegralType GetByteType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.ByteType;
+
+
+        /// <summary>
+        ///     small int type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IIntegralType GetSmallIntType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.SmallIntType;
+
+        /// <summary>
+        ///     word type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IIntegralType GetWordType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.WordType;
+
+
+        /// <summary>
+        ///     integer type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IIntegralType GetIntegerType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.IntegerType;
+
+
+        /// <summary>
+        ///     cardinal type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IIntegralType GetCardinalType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.CardinalType;
+
+
+        /// <summary>
+        ///     int64 type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IIntegralType GetInt64Type(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.Int64Type;
+
+        /// <summary>
+        ///     uint64 type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IIntegralType GetUInt64Type(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.UInt64Type;
 
     }
 

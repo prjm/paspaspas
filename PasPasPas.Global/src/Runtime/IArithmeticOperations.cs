@@ -39,9 +39,9 @@
         ///     multiply two numbers
         /// </summary>
         /// <param name="multiplicand"></param>
-        /// <param name="intMultiplier"></param>
+        /// <param name="multiplier"></param>
         /// <returns></returns>
-        IValue Multiply(IValue multiplicand, IValue intMultiplier);
+        IValue Multiply(IValue multiplicand, IValue multiplier);
 
     }
 }

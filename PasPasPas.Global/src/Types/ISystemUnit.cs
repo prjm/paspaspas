@@ -84,5 +84,6 @@
         ///     uint64 type definition
         /// </summary>
         IIntegralType UInt64Type { get; }
+        IAliasedType NativeIntType { get; }
     }
 }

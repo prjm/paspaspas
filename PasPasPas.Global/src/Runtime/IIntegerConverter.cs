@@ -67,65 +67,57 @@ namespace PasPasPas.Globals.Runtime {
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="typeDef">type definition</param>
         /// <returns></returns>
-        IValue ToIntegerValue(ITypeDefinition typeDef, sbyte number);
+        IValue ToIntegerValue(sbyte number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="typeDef">type definition</param>
         /// <returns></returns>
-        IValue ToIntegerValue(ITypeDefinition typeDef, byte number);
+        IValue ToIntegerValue(byte number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IValue ToIntegerValue(ITypeDefinition typeDef, short number);
+        IValue ToIntegerValue(short number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IValue ToIntegerValue(ITypeDefinition typeDef, ushort number);
+        IValue ToIntegerValue(ushort number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IValue ToIntegerValue(ITypeDefinition typeDef, int number);
+        IValue ToIntegerValue(int number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IValue ToIntegerValue(ITypeDefinition typeDef, uint number);
+        IValue ToIntegerValue(uint number);
 
         /// <summary>
         ///     get the fixed value type for a give number
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IValue ToIntegerValue(ITypeDefinition typeDef, long number);
+        IValue ToIntegerValue(long number);
 
         /// <summary>
         ///     get the fixed value type for a given number
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="typeDef"></param>
         /// <returns></returns>
-        IValue ToIntegerValue(ITypeDefinition typeDef, ulong number);
+        IValue ToIntegerValue(ulong number);
 
         /// <summary>
         ///     get a native integer value for a given number
