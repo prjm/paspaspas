@@ -27,7 +27,7 @@ namespace PasPasPas.Runtime.Values {
         ///     nil pointer constant
         /// </summary>
         public IOldTypeReference Nil { get; }
-            = new SpecialValue(SpecialConstantKind.Nil, KnownTypeIds.GenericPointer);
+            = new ErrorValue(SpecialConstantKind.Nil, KnownTypeIds.GenericPointer);
 
         private IOldTypeReference MakeIndeterminedValue((int typeId, CommonTypeKind typeKind) data)
             => new IndeterminedRuntimeValue(data.typeId, data.typeKind);

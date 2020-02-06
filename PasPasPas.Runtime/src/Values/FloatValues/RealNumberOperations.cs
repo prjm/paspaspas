@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using SharpFloat.FloatingPoint;
 
@@ -19,6 +20,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
             Booleans = booleans;
             Ints = ints;
             provider = typeProvider;
+            invalid = new Lazy<IValue>(() => new ErrorValue(provider.GetErrorType(), SpecialConstantKind.InvalidReal));
         }
 
         /// <summary>
@@ -51,12 +53,14 @@ namespace PasPasPas.Runtime.Values.FloatValues {
             => new ExtendedValue(provider.GetExtendedType(), realValue);
 
 
+        private readonly Lazy<IValue> invalid;
+
 
         /// <summary>
         ///     invalid real number
         /// </summary>
-        public IValue Invalid { get; }
-            = new SpecialValue(SpecialConstantKind.InvalidReal);
+        public IValue Invalid
+            => invalid.Value;
 
         /// <summary>
         ///     rounding mode
@@ -94,10 +98,10 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         ///     floating point multiplication
         /// </summary>
         /// <param name="multiplicand"></param>
-        /// <param name="intMultiplier"></param>
+        /// <param name="multiplier"></param>
         /// <returns></returns>
-        public IValue Multiply(IValue multiplicand, IValue intMultiplier) {
-            if (multiplicand is INumericalValue first && intMultiplier is INumericalValue second)
+        public IValue Multiply(IValue multiplicand, IValue multiplier) {
+            if (multiplicand is INumericalValue first && multiplier is INumericalValue second)
                 return FloatValueBase.Multiply(provider.GetExtendedType(), first, second);
 
             return Invalid;
@@ -112,7 +116,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         public IValue Divide(IValue dividend, IValue divisor) {
             if (dividend is INumericalValue numberDividend && divisor is INumericalValue numberDivisor)
                 if (numberDivisor.AsExtended == 0)
-                    return new SpecialValue(SpecialConstantKind.DivisionByZero);
+                    return new ErrorValue(provider.GetErrorType(), SpecialConstantKind.DivisionByZero);
                 else
                     return FloatValueBase.Divide(provider.GetExtendedType(), numberDividend, numberDivisor);
 

@@ -11,7 +11,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     array base type
         /// </summary>
-        ITypeDefinition BaseType { get; }
+        ITypeDefinition BaseTypeDefinition { get; }
 
         /// <summary>
         ///     constant values

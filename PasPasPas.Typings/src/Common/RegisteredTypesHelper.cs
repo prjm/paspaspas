@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Operators;
@@ -44,8 +43,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeRegistry"></param>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        public static ITypeDefinition ResolveAlias(this ITypeRegistry typeRegistry, int typeId) {
-            var typeDef = typeRegistry.GetTypeByIdOrUndefinedType(typeId);
+        public static ITypeDefinition ResolveAlias(this ITypeRegistry typeRegistry, ITypeDefinition typeId) {
             return TypeBase.ResolveAlias(typeDef);
         }
 
@@ -505,7 +503,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeRegistry"></param>
         /// <param name="requireNewType"></param>
         /// <returns></returns>
-        public static int GetMatchingSetBaseType(this ITypeRegistry typeRegistry, IOldTypeReference left, IOldTypeReference right, out bool requireNewType) {
+        public static IOrdinalType GetMatchingSetBaseType(this ITypeRegistry typeRegistry, ITypeDefinition left, ITypeDefinition right, out bool requireNewType) {
             requireNewType = false;
 
             if (!(typeRegistry.GetTypeByIdOrUndefinedType(left.TypeId) is ISetType leftType))

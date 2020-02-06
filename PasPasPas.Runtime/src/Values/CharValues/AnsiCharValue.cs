@@ -44,7 +44,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <returns></returns>
         public override IValue CharAt(int index) {
             if (index < 0 || index >= 1)
-                return new SpecialValue(SpecialConstantKind.InvalidChar);
+                return new ErrorValue(SystemUnit.ErrorType, SpecialConstantKind.InvalidChar);
 
             return this;
         }

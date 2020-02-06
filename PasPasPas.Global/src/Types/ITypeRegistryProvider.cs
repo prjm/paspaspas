@@ -134,6 +134,23 @@
         public static IIntegralType GetUInt64Type(this ITypeRegistryProvider provider)
             => provider.RegisteredTypes.SystemUnit.UInt64Type;
 
+        /// <summary>
+        ///     uint64 type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static ITypeDefinition GetErrorType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.ErrorType;
+
+        /// <summary>
+        ///     generic pointer type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static ITypeDefinition GetGenericPointerType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.GenericPointerType;
+
+
     }
 
 }

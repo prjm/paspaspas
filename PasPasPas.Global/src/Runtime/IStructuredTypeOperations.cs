@@ -20,7 +20,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="baseTypeId"></param>
         /// <param name="values">array values</param>
         /// <returns></returns>
-        IArrayValue CreateArrayValue(int registeredType, int baseTypeId, ImmutableArray<IValue> values);
+        IArrayValue CreateArrayValue(ITypeDefinition registeredType, ITypeDefinition baseTypeId, ImmutableArray<IValue> values);
 
         /// <summary>
         ///     create a record value
@@ -28,7 +28,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeId"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        IValue CreateRecordValue(int typeId, ImmutableArray<IValue> values);
+        IValue CreateRecordValue(ITypeDefinition typeId, ImmutableArray<IValue> values);
 
         /// <summary>
         ///     create a set value
@@ -36,7 +36,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeId"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        IValue CreateSetValue(int typeId, ImmutableArray<IValue> values);
+        IValue CreateSetValue(ITypeDefinition typeId, ImmutableArray<IValue> values);
 
         /// <summary>
         ///     compute a set union

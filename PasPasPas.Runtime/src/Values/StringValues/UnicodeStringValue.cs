@@ -65,7 +65,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <returns></returns>
         public override IValue CharAt(int index) {
             if (index < 0 || index >= data.Length)
-                return new SpecialValue(SpecialConstantKind.InvalidChar);
+                return new ErrorValue(SystemUnit.ErrorType, SpecialConstantKind.InvalidChar);
 
             var wideCharType = TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit.WideCharType;
             return new WideCharValue(wideCharType, data[index]);

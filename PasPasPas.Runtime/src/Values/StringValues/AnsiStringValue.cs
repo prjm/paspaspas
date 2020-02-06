@@ -39,7 +39,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <returns></returns>
         public override IValue CharAt(int index) {
             if (index < 0 || index >= data.Length)
-                return new SpecialValue(SpecialConstantKind.InvalidChar);
+                return new ErrorValue(SystemUnit.ErrorType, SpecialConstantKind.InvalidChar);
 
             var typeDef = TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit.AnsiCharType;
             return new AnsiCharValue(typeDef, unchecked((byte)data[index]));

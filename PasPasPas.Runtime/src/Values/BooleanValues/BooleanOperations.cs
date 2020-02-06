@@ -17,17 +17,19 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
             provider = typeRegistryProvider;
             trueValue = new Lazy<IBooleanValue>(() => new BooleanValue(true, provider.GetBooleanType()), true);
             falseValue = new Lazy<IBooleanValue>(() => new BooleanValue(true, provider.GetBooleanType()), true);
+            invalid = new Lazy<IValue>(() => new ErrorValue(provider.GetErrorType(), SpecialConstantKind.InvalidBool));
         }
 
         private readonly ITypeRegistryProvider provider;
         private readonly Lazy<IBooleanValue> trueValue;
         private readonly Lazy<IBooleanValue> falseValue;
+        private readonly Lazy<IValue> invalid;
 
         /// <summary>
         ///     constant value: invalid boolean value
         /// </summary>
-        public IValue Invalid { get; }
-            = new SpecialValue(SpecialConstantKind.InvalidBool);
+        public IValue Invalid
+            => invalid.Value;
 
         /// <summary>
         ///     constant value: <c>true</c>

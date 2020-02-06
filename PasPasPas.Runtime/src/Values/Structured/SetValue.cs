@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.Structured {
 
@@ -13,27 +14,15 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <summary>
         ///     create a new set value
         /// </summary>
-        /// <param name="typeId"></param>
+        /// <param name="typeDef"></param>
         /// <param name="values"></param>
-        public SetValue(int typeId, ImmutableArray<IOldTypeReference> values) : base(typeId)
+        public SetValue(ITypeDefinition typeDef, ImmutableArray<IValue> values) : base(typeDef)
             => Values = values.ToImmutableHashSet();
 
         /// <summary>
         ///     set values
         /// </summary>
-        public IImmutableSet<IOldTypeReference> Values { get; }
-
-        /// <summary>
-        ///     internal type format
-        /// </summary>
-        public override string InternalTypeFormat
-            => $"set of {TypeId} [({string.Join(", ", Values)})]";
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.SetType;
+        public IImmutableSet<IValue> Values { get; }
 
         /// <summary>
         ///     test if the set is empty
@@ -49,7 +38,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         public bool Equals(SetValue other)
             => //
             other != default &&
-            other.TypeId == TypeId &&
+            other.TypeDefinition.Equals(TypeDefinition) &&
             Values.ToHashSet().SetEquals(other.Values);
 
         /// <summary>
@@ -69,7 +58,7 @@ namespace PasPasPas.Runtime.Values.Structured {
 
             unchecked {
 
-                result = result * 31 + TypeId;
+                result = result * 31 + TypeDefinition.GetHashCode();
 
                 foreach (var value in Values)
                     result = result * 31 + value.GetHashCode();

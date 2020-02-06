@@ -20,7 +20,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="typeRegistryProvider"></param>
         public StringOperations(ITypeRegistryProvider typeRegistryProvider) {
             provider = typeRegistryProvider;
-            invalidString = new Lazy<IValue>(() => new SpecialValue(SpecialConstantKind.InvalidString), true);
+            invalidString = new Lazy<IValue>(() => new ErrorValue(provider.GetErrorType(), SpecialConstantKind.InvalidString), true);
             emptyString = new Lazy<IValue>(() => new EmptyStringValue(provider.GetShortStringType()));
         }
 

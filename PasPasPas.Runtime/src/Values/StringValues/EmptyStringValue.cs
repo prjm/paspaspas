@@ -33,6 +33,6 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="index"></param>
         /// <returns></returns>
         public override IValue CharAt(int index)
-            => new SpecialValue(SpecialConstantKind.InvalidChar);
+            => new ErrorValue(SystemUnit.ErrorType, SpecialConstantKind.InvalidChar);
     }
 }

@@ -2,46 +2,27 @@
 using System.Collections.Immutable;
 using System.Linq;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.Structured {
 
     /// <summary>
     ///     constant record values
     /// </summary>
-    public class RecordValue : IOldTypeReference, IEquatable<RecordValue> {
+    public class RecordValue : RuntimeValueBase, IEquatable<RecordValue> {
 
         /// <summary>
         ///     create a new record value
         /// </summary>
-        /// <param name="typeId"></param>
+        /// <param name="typeDef"></param>
         /// <param name="values"></param>
-        public RecordValue(int typeId, ImmutableArray<IOldTypeReference> values) {
-            TypeId = typeId;
-            Values = values;
-        }
-
-        /// <summary>
-        ///     record type id
-        /// </summary>
-        public int TypeId { get; }
+        public RecordValue(ITypeDefinition typeDef, ImmutableArray<IValue> values) : base(typeDef)
+            => Values = values;
 
         /// <summary>
         ///    record value
         /// </summary>
-        public ImmutableArray<IOldTypeReference> Values { get; }
-
-        /// <summary>
-        ///     internal type format
-        /// </summary>
-        public string InternalTypeFormat
-            => $"record of {TypeId}";
-
-        /// <summary>
-        ///     format this value as a string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => InternalTypeFormat;
+        public ImmutableArray<IValue> Values { get; }
 
         /// <summary>
         ///     check for equality
@@ -49,19 +30,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(RecordValue other)
-            => other != default && TypeId == other.TypeId && Enumerable.SequenceEqual(Values, other.Values);
-
-        /// <summary>
-        ///     constant value
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.ConstantValue;
-
-        /// <summary>
-        ///     record type
-        /// </summary>
-        public CommonTypeKind TypeKind
-            => CommonTypeKind.RecordType;
+            => other != default && TypeDefinition.Equals(other.TypeDefinition) && Enumerable.SequenceEqual(Values, other.Values);
 
         /// <summary>
         ///     check for equality
@@ -78,7 +47,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         public override int GetHashCode() {
             unchecked {
                 var result = 17;
-                result = result * 31 + TypeId;
+                result = result * 31 + GetHashCode();
                 foreach (var value in Values)
                     result = result * 31 + value.GetHashCode();
                 return result;

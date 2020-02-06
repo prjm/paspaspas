@@ -14,14 +14,18 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <summary>
         ///     invalid integer
         /// </summary>
-        public IValue Invalid { get; }
-            = new SpecialValue(SpecialConstantKind.InvalidInteger);
+        public IValue Invalid
+            => invalid.Value;
+
+        private readonly Lazy<IValue> invalid;
 
         /// <summary>
         ///     integer overflow
         /// </summary>
-        public IValue Overflow { get; }
-            = new SpecialValue(SpecialConstantKind.IntegerOverflow);
+        public IValue Overflow
+            => overflow.Value;
+
+        private readonly Lazy<IValue> overflow;
 
         /// <summary>
         ///     boolean operations
@@ -61,6 +65,8 @@ namespace PasPasPas.Runtime.Values.IntValues {
             provider = typeProvider;
             zero = new Lazy<ShortIntValue>(() => new ShortIntValue(provider.GetShortIntType(), 0));
             one = new Lazy<ShortIntValue>(() => new ShortIntValue(provider.GetShortIntType(), 1));
+            invalid = new Lazy<IValue>(() => new ErrorValue(provider.GetErrorType(), SpecialConstantKind.InvalidInteger));
+            overflow = new Lazy<IValue>(() => new ErrorValue(provider.GetErrorType(), SpecialConstantKind.IntegerOverflow));
         }
 
         /// <summary>1
@@ -98,7 +104,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public IValue Divide(IValue dividend, IValue divisor) {
             if (dividend is IntegerValueBase intDividend && divisor is IntegerValueBase intDivisor)
                 if (intDivisor.SignedValue == 0)
-                    return new SpecialValue(SpecialConstantKind.DivisionByZero);
+                    return new ErrorValue(provider.GetErrorType(), SpecialConstantKind.DivisionByZero);
                 else
                     return intDividend.DivideAndScale(Overflow, intDividend, intDivisor);
             else
@@ -193,7 +199,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public IValue Modulo(IValue dividend, IValue divisor) {
             if (dividend is IntegerValueBase intDividend && divisor is IntegerValueBase intDivisor)
                 if (intDivisor.SignedValue == 0)
-                    return new SpecialValue(SpecialConstantKind.DivisionByZero);
+                    return new ErrorValue(provider.GetErrorType(), SpecialConstantKind.DivisionByZero);
                 else
                     return intDivisor.ModuloAndScale(Overflow, intDividend, intDivisor);
             else

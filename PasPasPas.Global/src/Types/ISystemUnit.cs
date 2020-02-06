@@ -84,6 +84,15 @@
         ///     uint64 type definition
         /// </summary>
         IIntegralType UInt64Type { get; }
+
+        /// <summary>
+        ///     native integer type
+        /// </summary>
         IAliasedType NativeIntType { get; }
+
+        /// <summary>
+        ///     generic pointer type
+        /// </summary>
+        ITypeDefinition GenericPointerType { get; }
     }
 }

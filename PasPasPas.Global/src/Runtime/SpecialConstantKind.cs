@@ -41,18 +41,13 @@
         InvalidString = 8,
 
         /// <summary>
-        ///     nil pointer
-        /// </summary>
-        Nil = 9,
-
-        /// <summary>
         ///     invalid char
         /// </summary>
-        InvalidChar = 10,
+        InvalidChar = 9,
 
         /// <summary>
         ///     invalid set
         /// </summary>
-        InvalidSet = 11
+        InvalidSet = 10
     }
 }

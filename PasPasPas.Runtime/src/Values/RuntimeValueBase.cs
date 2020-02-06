@@ -31,6 +31,12 @@ namespace PasPasPas.Runtime.Values {
         public ITypeDefinition TypeDefinition { get; }
 
         /// <summary>
+        ///     system unit
+        /// </summary>
+        public ISystemUnit SystemUnit
+            => TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit;
+
+        /// <summary>
         ///     base type
         /// </summary>
         public BaseType BaseType
