@@ -80,12 +80,6 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public abstract override int GetHashCode();
 
         /// <summary>
-        ///     system unit
-        /// </summary>
-        protected ISystemUnit SystemUnit
-            => TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit;
-
-        /// <summary>
         ///     convert a big integer value to an integer value
         /// </summary>
         /// <param name="overflow">value used for overflow</param>

@@ -14,28 +14,15 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     create a new enumerated value
         /// </summary>
-        /// <param name="enumTypeId">base type id</param>
+        /// <param name="typeDef">base type id</param>
         /// <param name="value">constant value</param>
-        public EnumeratedValue(int enumTypeId, IOldTypeReference value) {
-            TypeId = enumTypeId;
-            Value = value;
-        }
-
-        /// <summary>
-        ///     enumerated type id
-        /// </summary>
-        public override int TypeId { get; }
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.EnumerationType;
+        public EnumeratedValue(ITypeDefinition typeDef, IIntegerValue value) : base(typeDef, ((IIntegralType)value.TypeDefinition).Kind)
+            => Value = value;
 
         /// <summary>
         ///     enumerated value
         /// </summary>
-        public IOldTypeReference Value { get; }
+        public IIntegerValue Value { get; }
 
         /// <summary>
         ///     test if this value negative
@@ -85,7 +72,7 @@ namespace PasPasPas.Runtime.Values {
         ///     invert bits
         /// </summary>
         /// <returns></returns>
-        public override IOldTypeReference InvertBits() {
+        public override IValue InvertBits() {
             if (Value is IntegerValueBase intValue)
                 return intValue.InvertBits();
             return Value;
@@ -107,7 +94,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => unchecked(17 + 23 * TypeId + 11 * Value.GetHashCode());
+            => unchecked(17 + 23 * TypeDefinition.GetHashCode() + 11 * Value.GetHashCode());
 
         /// <summary>
         ///     check for equality
@@ -115,26 +102,19 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(IEnumeratedValue other)
-            => other.TypeId == TypeId && Value.Equals(other.Value);
+            => other.TypeDefinition.Equals(TypeDefinition) && Value.Equals(other.Value);
 
         /// <summary>
         ///     get the ordinal value
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public override IOldTypeReference GetOrdinalValue(ITypeRegistry types) {
+        public override IValue GetOrdinalValue(ITypeRegistry types) {
             if (Value is IOrdinalValue value)
                 return value.GetOrdinalValue(types);
 
             return types.Runtime.Integers.Invalid;
         }
-
-        /// <summary>
-        ///     convert this type to a short string
-        /// </summary>
-        /// <returns></returns>
-        public override string InternalTypeFormat
-            => Value.ToString();
 
     }
 }

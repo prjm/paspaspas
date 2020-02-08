@@ -60,12 +60,12 @@ namespace PasPasPas.Globals.Runtime {
         IValue Cast(ITypeRegistry types, IValue value, ITypeDefinition typeId);
 
         /// <summary>
-        ///     create a new enum value
+        ///     create a new enumeration value
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        IValue MakeEnumValue(int typeId, IValue value);
+        IValue MakeEnumValue(ITypeDefinition typeId, IIntegerValue value);
 
         /// <summary>
         ///     format a constant expression

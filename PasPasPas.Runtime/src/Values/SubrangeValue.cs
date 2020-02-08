@@ -7,52 +7,20 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     subrange value
     /// </summary>
-    public class SubrangeValue : ISubrangeValue, IEquatable<SubrangeValue> {
+    public class SubrangeValue : RuntimeValueBase, ISubrangeValue, IEquatable<SubrangeValue> {
 
         /// <summary>
         ///     create a new subrange value
         /// </summary>
         /// <param name="typeId"></param>
-        /// <param name="value"></param>
-        public SubrangeValue(int typeId, IOldTypeReference value) {
-            TypeId = typeId;
-            Value = value;
-        }
+        /// <param name="wrappedValue"></param>
+        public SubrangeValue(ITypeDefinition typeId, IValue wrappedValue) : base(typeId)
+            => WrappedValue = wrappedValue;
 
         /// <summary>
         ///     wrapped value
         /// </summary>
-        public IOldTypeReference Value { get; }
-
-        /// <summary>
-        ///     subrange type
-        /// </summary>
-        public int TypeId { get; }
-
-        /// <summary>
-        ///     format this type as string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => InternalTypeFormat;
-
-        /// <summary>
-        ///     type format
-        /// </summary>
-        public string InternalTypeFormat
-            => $"subrange {Value}";
-
-        /// <summary>
-        ///     type reference kind
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => Value.ReferenceKind;
-
-        /// <summary>
-        ///     subrange type
-        /// </summary>
-        public CommonTypeKind TypeKind
-            => CommonTypeKind.SubrangeType;
+        public IValue WrappedValue { get; }
 
         /// <summary>
         ///     check for equality
@@ -68,7 +36,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(SubrangeValue other)
-            => other.TypeId == TypeId && other.Value.Equals(Value);
+            => other.TypeDefinition.Equals(TypeDefinition) && other.WrappedValue.Equals(WrappedValue);
 
         /// <summary>
         ///     compute a hash code
@@ -77,8 +45,8 @@ namespace PasPasPas.Runtime.Values {
         public override int GetHashCode() {
             var result = 17;
             unchecked {
-                result += 31 * TypeId;
-                result += 31 * Value.GetHashCode();
+                result += 31 * TypeDefinition.GetHashCode();
+                result += 31 * WrappedValue.GetHashCode();
                 return result;
             }
         }
@@ -88,8 +56,8 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public IOldTypeReference GetOrdinalValue(ITypeRegistry types) {
-            if (Value is IOrdinalValue ordinal)
+        public IValue GetOrdinalValue(ITypeRegistry types) {
+            if (WrappedValue is IOrdinalValue ordinal)
                 return ordinal.GetOrdinalValue(types);
             return types.Runtime.Types.MakeErrorTypeReference();
         }

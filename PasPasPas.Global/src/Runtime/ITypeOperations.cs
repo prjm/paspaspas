@@ -54,7 +54,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeId">subrange type id</param>
         /// <param name="typeReference">wrapped value</param>
         /// <returns></returns>
-        IValue MakeSubrangeValue(int typeId, IValue typeReference);
+        IValue MakeSubrangeValue(ITypeDefinition typeId, IValue typeReference);
 
         /// <summary>
         ///     create a new invocation result from an intrinsic routine

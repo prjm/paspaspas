@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.BooleanValues;
 using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.FloatValues;
@@ -15,14 +16,17 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     create a new runtime value factory
         /// </summary>
-        public RuntimeValueFactory(IListPools listPools) {
+        /// <param name="listPools"></param>
+        /// <param name="provider"></param>
+        public RuntimeValueFactory(IListPools listPools, ITypeRegistryProvider provider) {
             ListPools = listPools;
+            typeRegistryProvider = provider;
             Types = new TypeOperations();
-            Booleans = new BooleanOperations();
-            Chars = new CharOperations();
-            Structured = new StructuredTypeOperations(ListPools, Booleans);
-            Integers = new IntegerOperations(Booleans, Types);
-            RealNumbers = new RealNumberOperations(Booleans, Integers);
+            Booleans = new BooleanOperations(provider);
+            Chars = new CharOperations(provider);
+            Structured = new StructuredTypeOperations(provider, ListPools, Booleans);
+            Integers = new IntegerOperations(provider, Booleans, Types);
+            RealNumbers = new RealNumberOperations(provider, Booleans, Integers);
             Strings = new StringOperations(Booleans);
             formatter = new SimpleFormatter(this);
         }
@@ -69,12 +73,14 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         public IListPools ListPools { get; }
 
+        private readonly ITypeRegistryProvider typeRegistryProvider;
+
         /// <summary>
         ///     format a simple type
         /// </summary>
         /// <param name="values">values to format</param>
         /// <returns></returns>
-        public IOldTypeReference FormatExpression(ImmutableArray<IOldTypeReference> values)
+        public IValue FormatExpression(ImmutableArray<IValue> values)
             => formatter.Format(values);
 
     }

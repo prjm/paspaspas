@@ -1,45 +1,18 @@
 ﻿using System;
-using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values {
 
     /// <summary>
-    ///     indetermined value
+    ///     undetermined value
     /// </summary>
-    public class IndeterminedRuntimeValue : IOldTypeReference, IEquatable<IndeterminedRuntimeValue> {
+    public class IndeterminedRuntimeValue : RuntimeValueBase, IEquatable<IndeterminedRuntimeValue> {
 
         /// <summary>
-        ///     create a new indetermined runtime value
+        ///     create a new undetermined runtime value
         /// </summary>
-        /// <param name="typeId">type id</param>
-        /// <param name="typeKind">type kind</param>
-        public IndeterminedRuntimeValue(int typeId, CommonTypeKind typeKind) {
-            TypeId = typeId;
-            TypeKind = typeKind;
-        }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public int TypeId { get; }
-
-        /// <summary>
-        ///     fixed type kind
-        /// </summary>
-        public CommonTypeKind TypeKind { get; }
-
-        /// <summary>
-        ///     reference kind
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.DynamicValue;
-
-        /// <summary>
-        ///     short string for this runtime value
-        /// </summary>
-        /// <returns></returns>
-        public string InternalTypeFormat
-            => "*";
+        /// <param name="typeDef">type id</param>
+        public IndeterminedRuntimeValue(ITypeDefinition typeDef) : base(typeDef) { }
 
         /// <summary>
         ///     check for equality
@@ -47,7 +20,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(IndeterminedRuntimeValue other)
-            => other != default && other.TypeId == TypeId && other.TypeKind == TypeKind;
+            => other != default && other.TypeDefinition.Equals(TypeDefinition);
 
         /// <summary>
         ///     check for equality
@@ -62,6 +35,6 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => unchecked(17 + 31 * TypeId + 31 * (int)TypeKind);
+            => unchecked(17 + 31 * TypeDefinition.GetHashCode());
     }
 }
