@@ -18,14 +18,14 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="enumTypeId">type id of the enumerated type</param>
         /// <param name="value">constant value</param>
         /// <returns>enumerated type value</returns>
-        IValue MakeEnumValue(int enumTypeId, IValue value);
+        IValue MakeEnumValue(ITypeDefinition enumTypeId, IIntegerValue value);
 
         /// <summary>
         ///     make an invocation result
         /// </summary>
         /// <param name="routine">routine</param>
         /// <param name="routineIndex">routine index</param>
-        IValue MakeInvocationResult(IRoutineGroup routine, int routineIndex);
+        IInvocationResult MakeInvocationResult(IRoutineGroup routine, int routineIndex);
 
         /// <summary>
         ///     make a pointer value
@@ -33,28 +33,15 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="baseType"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        IValue MakePointerValue(int baseType, IValue value);
-
-        /// <summary>
-        ///     make a type reference
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
-        IValue MakeTypeReference(int typeId);
-
-        /// <summary>
-        ///     make a reference to the error type
-        /// </summary>
-        /// <returns></returns>
-        IValue MakeErrorTypeReference();
+        IValue MakePointerValue(ITypeDefinition baseType, IValue value);
 
         /// <summary>
         ///     create a new subrange value from a simple value
         /// </summary>
         /// <param name="typeId">subrange type id</param>
-        /// <param name="typeReference">wrapped value</param>
+        /// <param name="wrappedValue">wrapped value</param>
         /// <returns></returns>
-        IValue MakeSubrangeValue(ITypeDefinition typeId, IValue typeReference);
+        IValue MakeSubrangeValue(ITypeDefinition typeId, IValue wrappedValue);
 
         /// <summary>
         ///     create a new invocation result from an intrinsic routine

@@ -2,7 +2,7 @@
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
-namespace PasPasPas.Runtime.Values {
+namespace PasPasPas.Runtime.Values.Dynamic {
 
     /// <summary>
     ///     make a new invocation result
@@ -22,43 +22,15 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     result type
         /// </summary>
-        public int TypeId {
+        public ITypeDefinition TypeDefinition {
             get {
-                if (RoutineIndex < 0)
-                    return KnownTypeIds.ErrorType;
-                return Routine.Items[RoutineIndex].ResultType.TypeId;
+                if (RoutineIndex < 0 || RoutineIndex >= Routine.Items.Count)
+                    return Routine.TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit.ErrorType;
+
+                return Routine.Items[RoutineIndex].ResultType.TypeDefinition;
             }
         }
 
-        /// <summary>
-        ///     internal type format
-        /// </summary>
-        public string InternalTypeFormat {
-            get {
-                if (RoutineIndex < 0)
-                    return "#??";
-
-                return $"#{Routine.Items[RoutineIndex].ResultType}";
-            }
-        }
-
-        /// <summary>
-        ///     invocation result
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.InvocationResult;
-
-        /// <summary>
-        ///     result type kind
-        /// </summary>
-        public CommonTypeKind TypeKind {
-            get {
-                if (RoutineIndex < 0)
-                    return CommonTypeKind.UnknownType;
-
-                return Routine.Items[RoutineIndex].ResultType.TypeKind;
-            }
-        }
 
         /// <summary>
         ///     referenced routine
@@ -81,6 +53,12 @@ namespace PasPasPas.Runtime.Values {
                 return Routine.Items[RoutineIndex].ResultType.IsConstant();
             }
         }
+
+        /// <summary>
+        ///     symbol kind
+        /// </summary>
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.InvocationResult;
 
         /// <summary>
         ///     compare

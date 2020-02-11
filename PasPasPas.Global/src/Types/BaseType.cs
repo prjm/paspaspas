@@ -93,17 +93,17 @@
         /// <summary>
         ///     generic type parameter
         /// </summary>
-        GenericTypeParameter = 16,
+        GenericTypeParameter = 17,
 
         /// <summary>
         ///     routine type
         /// </summary>
-        Routine = 17,
+        Routine = 18,
 
         /// <summary>
         ///     structured type
         /// </summary>
-        Structured = 18,
+        Structured = 19,
 
     }
 }

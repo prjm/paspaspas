@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Runtime.Values.Other;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Runtime.Values.Structured {
@@ -129,7 +130,7 @@ namespace PasPasPas.Runtime.Values.Structured {
             if (!(right is SetValue rightSet))
                 return InvalidSet;
 
-            if (!(typeRegistry.ResolveAlias(right.TypeDefinition) is ISetType setType))
+            if (!(right.TypeDefinition.ResolveAlias() is ISetType setType))
                 return InvalidSet;
 
             if (!(left is IOrdinalValue ordinalValue))
@@ -188,19 +189,19 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <returns></returns>
         public IValue SetDifference(ITypeRegistry types, IValue left, IValue right) {
             if (!(left is SetValue leftSet))
-                return types.Runtime.Types.MakeErrorTypeReference();
+                return InvalidSet;
 
             if (!(right is SetValue rightSet))
-                return types.Runtime.Types.MakeErrorTypeReference();
+                return InvalidSet;
 
             if (leftSet.IsEmpty || rightSet.IsEmpty)
                 return left;
 
-            if (!(types.ResolveAlias(left.TypeDefinition) is ISetType leftType))
-                return types.Runtime.Types.MakeErrorTypeReference();
+            if (!(left.TypeDefinition.ResolveAlias() is ISetType leftType))
+                return InvalidSet;
 
-            if (!(types.ResolveAlias(right.TypeDefinition) is ISetType rightType))
-                return types.Runtime.Types.MakeErrorTypeReference();
+            if (!(right.TypeDefinition.ResolveAlias() is ISetType rightType))
+                return InvalidSet;
 
             using (var list = ListPools.GetList<IValue>()) {
 
@@ -221,10 +222,10 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <returns></returns>
         public IValue SetIntersection(ITypeRegistry typeRegistry, IValue left, IValue right) {
             if (!(left is SetValue leftSet))
-                return typeRegistry.Runtime.Types.MakeErrorTypeReference();
+                return InvalidSet;
 
             if (!(right is SetValue rightSet))
-                return typeRegistry.Runtime.Types.MakeErrorTypeReference();
+                return InvalidSet;
 
             if (leftSet.IsEmpty || rightSet.IsEmpty)
                 return EmptySet;
@@ -232,7 +233,7 @@ namespace PasPasPas.Runtime.Values.Structured {
             var baseType = typeRegistry.GetMatchingSetBaseType(left.TypeDefinition, right.TypeDefinition, out var newType);
 
             if (baseType.BaseType == BaseType.Error)
-                return typeRegistry.Runtime.Types.MakeErrorTypeReference();
+                return InvalidSet;
 
             var typeId = default(ITypeDefinition);
             if (newType) {
@@ -265,10 +266,10 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <returns></returns>
         public IValue SetUnion(ITypeRegistry types, IValue left, IValue right) {
             if (!(left is SetValue leftSet))
-                return types.Runtime.Types.MakeErrorTypeReference();
+                return InvalidSet;
 
             if (!(right is SetValue rightSet))
-                return types.Runtime.Types.MakeErrorTypeReference();
+                return InvalidSet;
 
             if (leftSet.IsEmpty)
                 return right;
@@ -279,7 +280,7 @@ namespace PasPasPas.Runtime.Values.Structured {
             var baseType = types.GetMatchingSetBaseType(left.TypeDefinition, right.TypeDefinition, out var newType);
 
             if (baseType.BaseType == BaseType.Error)
-                return types.Runtime.Types.MakeErrorTypeReference();
+                return InvalidSet;
 
             var typeId = default(ITypeDefinition);
             if (newType)

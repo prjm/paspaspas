@@ -68,7 +68,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
             var format = GetFormat(values);
 
             if (format == default)
-                return Runtime.Types.MakeErrorTypeReference();
+                return Runtime.Strings.Invalid;
 
             if (format.Width == 0)
                 return Runtime.Strings.EmptyString;
@@ -90,7 +90,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
                     return FormatReal(r, format.Width, format.Precision);
             }
 
-            return Runtime.Types.MakeErrorTypeReference();
+            return Runtime.Strings.Invalid;
         }
 
         private IValue FormatReal(IRealNumberValue r, int width, int precision) {

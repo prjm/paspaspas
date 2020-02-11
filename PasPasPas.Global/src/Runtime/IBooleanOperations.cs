@@ -37,5 +37,29 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="value"></param>
         /// <returns></returns>
         IBooleanValue ToBoolean(bool value);
+
+        /// <summary>
+        ///     convert a byte value to a boolean value object
+        /// </summary>
+        /// <param name="unsignedValue"></param>
+        /// <param name="typeDef"></param>
+        /// <returns></returns>
+        IBooleanValue ToByteBool(byte unsignedValue, ITypeDefinition typeDef);
+
+        /// <summary>
+        ///     convert a short value to a boolean value object
+        /// </summary>
+        /// <param name="unsignedValue"></param>
+        /// <param name="typeDef"></param>
+        /// <returns></returns>
+        IBooleanValue ToWordBool(ushort unsignedValue, ITypeDefinition typeDef);
+
+        /// <summary>
+        ///     convert a integer value to a boolean value object
+        /// </summary>
+        /// <param name="unsignedValue"></param>
+        /// <param name="typeDef"></param>
+        /// <returns></returns>
+        IBooleanValue ToLongBool(uint unsignedValue, ITypeDefinition typeDef);
     }
 }

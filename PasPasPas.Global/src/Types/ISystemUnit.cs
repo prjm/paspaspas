@@ -94,5 +94,15 @@
         ///     generic pointer type
         /// </summary>
         ITypeDefinition GenericPointerType { get; }
+
+        /// <summary>
+        ///     nil type
+        /// </summary>
+        ITypeDefinition NilType { get; }
+
+        /// <summary>
+        ///     wide string type
+        /// </summary>
+        IStringType WideStringType { get; }
     }
 }

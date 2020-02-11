@@ -1,6 +1,7 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Runtime.Values.Other;
 
 namespace PasPasPas.Runtime.Values.StringValues {
 
@@ -161,10 +162,25 @@ namespace PasPasPas.Runtime.Values.StringValues {
             => new ShortStringValue(provider.GetShortStringType(), text);
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="tdd"></param>
+        /// <returns></returns>
+        public IValue ToWideString(string text)
+            => new ShortStringValue(provider.GetWideSrtingType(), text);
+
+        /// <summary>
         ///     get the empty string value
         /// </summary>
         /// <returns></returns>
         public IValue EmptyString
             => emptyString.Value;
+
+        /// <summary>
+        ///     invalid string
+        /// </summary>
+        public IValue Invalid
+            => invalidString.Value;
     }
 }

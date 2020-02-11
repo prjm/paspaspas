@@ -6,6 +6,7 @@ using PasPasPas.Runtime.Values.BooleanValues;
 using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.FloatValues;
 using PasPasPas.Runtime.Values.IntValues;
+using PasPasPas.Runtime.Values.Other;
 using PasPasPas.Runtime.Values.StringValues;
 using PasPasPas.Runtime.Values.Structured;
 
@@ -21,7 +22,8 @@ namespace PasPasPas.Runtime.Values {
         public RuntimeValueFactory(IListPools listPools, ITypeRegistryProvider provider) {
             ListPools = listPools;
             typeRegistryProvider = provider;
-            Types = new TypeOperations();
+            invalidCast = new System.Lazy<IValue>(() => new ErrorValue(provider.GetErrorType(), SpecialConstantKind.InvalidCast));
+            Types = new TypeOperations(provider);
             Booleans = new BooleanOperations(provider);
             Chars = new CharOperations(provider);
             Structured = new StructuredTypeOperations(provider, ListPools, Booleans);

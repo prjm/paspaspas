@@ -1,6 +1,8 @@
-﻿using PasPasPas.Globals.Environment;
+﻿using System;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Runtime.Values.Other;
 using PasPasPas.Runtime.Values.Structured;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Simple;
@@ -10,6 +12,8 @@ namespace PasPasPas.Runtime.Values {
 
     public partial class RuntimeValueFactory {
 
+        private Lazy<IValue> invalidCast;
+
         /// <summary>
         ///     cast values
         /// </summary>
@@ -17,177 +21,192 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="value"></param>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        public IOldTypeReference Cast(ITypeRegistry types, IOldTypeReference value, int typeId) {
-            var typeKind = CommonTypeKind.UnknownType;
+        public IValue Cast(ITypeRegistry types, IValue value, ITypeDefinition typeId) {
 
-            if (value.TypeId == typeId)
+            if (value.TypeDefinition.Equals(typeId))
                 return value;
 
-            if (value.IsType())
-                typeKind = types.GetTypeByIdOrUndefinedType(value.TypeId).TypeKind;
-            else
-                typeKind = value.TypeKind;
+            switch (value.TypeDefinition.BaseType) {
 
-            if (!value.IsConstant())
-                return Types.MakeTypeInstanceReference(types.Cast(value.TypeId, typeId), types.GetTypeKindOf(typeId));
+                case BaseType.Subrange:
+                    return Cast(types, value, typeId);
 
-            if (typeKind.IsIntegral())
-                return CastInteger(types, value, typeId);
+                case BaseType.Boolean:
+                    return CastBoolean(types, value, typeId);
 
-            if (typeKind.IsChar())
-                return CastChar(types, value, typeId);
+                case BaseType.Char:
+                    return CastChar(types, value, typeId);
 
-            if (typeKind.IsString())
-                return CastString(types, value, typeId);
+                case BaseType.String:
+                    return CastString(types, value, typeId);
 
-            if (typeKind.IsArray())
-                return CastArray(types, value, typeId);
+                case BaseType.Integer:
+                    return CastInteger(types, value, typeId);
 
-            if (typeKind.IsEnum())
-                return CastEnum(types, value, typeId);
+                case BaseType.Enumeration:
+                    return CastEnum(types, value, typeId);
 
-            if (typeKind.IsSubrange() && types.GetTypeByIdOrUndefinedType(typeId) is ISubrangeType subrangeType)
-                return Cast(types, value, subrangeType.BaseTypeId);
+                case BaseType.Array:
+                    return CastArray(types, value, typeId);
 
-            if (typeKind == CommonTypeKind.BooleanType)
-                return CastBoolean(types, value, typeId);
+                case BaseType.Set:
+                    return CastSet(types, value, typeId);
 
-            if (typeKind == CommonTypeKind.SetType)
-                return CastSet(types, value, typeId);
+                case BaseType.Structured:
+                    return CastRecord(types, value, typeId);
 
-            if (typeKind == CommonTypeKind.RecordType)
-                return CastRecord(types, value, typeId);
+                case BaseType.Unkown:
+                case BaseType.Hidden:
+                case BaseType.Error:
+                case BaseType.Real:
+                case BaseType.Pointer:
+                case BaseType.Unit:
+                case BaseType.File:
+                case BaseType.MetaClass:
+                case BaseType.GenericTypeParameter:
+                case BaseType.Routine:
+                    return invalidCast.Value;
 
-            return Types.MakeErrorTypeReference();
+                default:
+                    return invalidCast.Value;
+            }
         }
 
-        private IOldTypeReference CastSet(ITypeRegistry types, IOldTypeReference value, int typeId) {
-            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
-            typeDef = TypeBase.ResolveAlias(typeDef);
+        private IValue CastSet(ITypeRegistry types, IValue value, ITypeDefinition typeDef) {
+            typeDef = typeDef.ResolveAlias();
 
             if (typeDef is ISetType setType && value is SetValue setValue) {
 
-                using (var list = ListPools.GetList<IOldTypeReference>()) {
+                using (var list = ListPools.GetList<IValue>()) {
                     foreach (var sourceValue in setValue.Values) {
-                        var targetValue = Cast(types, sourceValue, setType.BaseTypeId);
+                        var targetValue = Cast(types, sourceValue, setType.BaseTypeDefinition);
 
-                        if (targetValue.TypeId != setType.BaseTypeId)
-                            return Types.MakeErrorTypeReference();
+                        if (!targetValue.TypeDefinition.Equals(setType.BaseTypeDefinition))
+                            return invalidCast.Value;
 
                         list.Add(targetValue);
                     }
 
-                    return new SetValue(setType.TypeId, ListPools.GetFixedArray(list));
+                    return new SetValue(setType.TypeDefinition, ListPools.GetFixedArray(list));
                 }
             }
 
-            return Types.MakeErrorTypeReference();
+            return invalidCast.Value;
         }
 
-        private IOldTypeReference CastEnum(ITypeRegistry types, IOldTypeReference value, int typeId) {
-            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
-            typeDef = TypeBase.ResolveAlias(typeDef);
+        private IValue CastEnum(ITypeRegistry types, IValue value, ITypeDefinition typeDef) {
+            typeDef = typeDef.ResolveAlias();
 
-            if (typeDef is SubrangeType subrangeType) {
-                var castedValue = Cast(types, value, subrangeType.BaseType.TypeId);
-                return MakeSubrangeValue(typeDef.TypeId, castedValue);
+            if (typeDef is ISubrangeType subrangeType) {
+                var castedValue = Cast(types, value, subrangeType.SubrangeOfType);
+                return MakeSubrangeValue(typeDef, castedValue);
             }
 
-            return Types.MakeErrorTypeReference();
+            return invalidCast.Value;
         }
 
-        private IOldTypeReference CastInteger(ITypeRegistry types, IOldTypeReference value, int typeId) {
-
-            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
-            typeDef = TypeBase.ResolveAlias(typeDef);
+        private IValue CastInteger(ITypeRegistry types, IValue value, ITypeDefinition typeDef) {
+            typeDef = typeDef.ResolveAlias();
 
             if (!(value is IIntegerValue integer))
-                return Types.MakeErrorTypeReference();
+                return invalidCast.Value;
 
             if (typeDef is EnumeratedType enumType)
-                return new EnumeratedValue(enumType.TypeId, CastInteger(types, value, enumType.CommonTypeId));
+                return new EnumeratedValue(enumType.TypeDefinition, CastInteger(types, value, enumType.CommonTypeId) as IIntegerValue);
 
             if (typeDef is SubrangeType subrangeType) {
-                var castedValue = CastInteger(types, value, subrangeType.BaseType.TypeId);
-                return MakeSubrangeValue(typeDef.TypeId, castedValue);
+                var castedValue = CastInteger(types, value, subrangeType.SubrangeOfType);
+                return MakeSubrangeValue(typeDef, castedValue);
             }
 
             if (typeDef is IIntegralType integralType) {
-                switch (integralType.BitSize) {
-                    case 8:
-                        return integralType.IsSigned ?
-                            Integers.ToIntegerValue((sbyte)integer.SignedValue) :
-                            Integers.ToIntegerValue((byte)integer.UnsignedValue);
+                switch (integralType.Kind) {
 
+                    case IntegralTypeKind.ShortInt:
+                        return Integers.ToIntegerValue((sbyte)integer.SignedValue);
 
-                    case 16:
-                        return integralType.IsSigned ?
-                            Integers.ToIntegerValue((short)integer.SignedValue) :
-                            Integers.ToIntegerValue((ushort)integer.UnsignedValue);
+                    case IntegralTypeKind.Byte:
+                        return Integers.ToIntegerValue((byte)integer.UnsignedValue);
 
-                    case 32:
-                        return integralType.IsSigned ?
-                            Integers.ToIntegerValue((int)integer.SignedValue) :
-                            Integers.ToIntegerValue((uint)integer.UnsignedValue);
+                    case IntegralTypeKind.Word:
+                        return Integers.ToIntegerValue((short)integer.SignedValue);
 
+                    case IntegralTypeKind.SmallInt:
+                        return Integers.ToIntegerValue((ushort)integer.UnsignedValue);
+
+                    case IntegralTypeKind.Cardinal:
+                        return Integers.ToIntegerValue((uint)integer.UnsignedValue);
+
+                    case IntegralTypeKind.Integer:
+                        return Integers.ToIntegerValue((int)integer.SignedValue);
+
+                    case IntegralTypeKind.Int64:
+                        return Integers.ToIntegerValue(integer.SignedValue);
+
+                    case IntegralTypeKind.UInt64:
+                        return Integers.ToIntegerValue(integer.UnsignedValue);
 
                 }
             }
 
-            switch (typeDef.TypeId) {
-                case KnownTypeIds.Int64Type:
-                    return Integers.ToIntegerValue(integer.SignedValue);
-                case KnownTypeIds.UInt64Type:
-                    return Integers.ToIntegerValue(integer.UnsignedValue);
-                case KnownTypeIds.WideCharType:
-                    return Chars.ToWideCharValue(typeId, (char)integer.UnsignedValue);
-                case KnownTypeIds.AnsiCharType:
-                    return Chars.ToAnsiCharValue(typeId, (byte)integer.UnsignedValue);
-                case KnownTypeIds.BooleanType:
-                    return Booleans.ToBoolean(integer.UnsignedValue != 0, KnownTypeIds.BooleanType);
-                case KnownTypeIds.ByteBoolType:
-                    return Booleans.ToByteBool((byte)integer.UnsignedValue, KnownTypeIds.ByteBoolType);
-                case KnownTypeIds.WordBoolType:
-                    return Booleans.ToWordBool((ushort)integer.UnsignedValue, KnownTypeIds.WordBoolType);
+            if (typeDef is ICharType charType) {
+                switch (charType.Kind) {
+                    case CharTypeKind.AnsiChar:
+                        return Chars.ToAnsiCharValue(typeDef, (byte)integer.UnsignedValue);
+                    case CharTypeKind.WideChar:
+                        return Chars.ToWideCharValue(typeDef, (char)integer.UnsignedValue);
+                }
             }
 
-            return Types.MakeErrorTypeReference();
+            if (typeDef is IBooleanType booleanType) {
+                switch (booleanType.Kind) {
+                    case BooleanTypeKind.Boolean:
+                        return Booleans.ToBoolean(integer.UnsignedValue != 0, typeDef);
+
+                    case BooleanTypeKind.ByteBool:
+                        return Booleans.ToByteBool((byte)integer.UnsignedValue, typeDef);
+
+                    case BooleanTypeKind.WordBool:
+                        return Booleans.ToWordBool((ushort)integer.UnsignedValue, typeDef);
+
+                    case BooleanTypeKind.LongBool:
+                        return Booleans.ToLongBool((uint)integer.UnsignedValue, typeDef);
+                }
+            }
+
+            return invalidCast.Value;
         }
 
-        private IOldTypeReference CastString(ITypeRegistry types, IOldTypeReference value, int typeId) {
-            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
-            typeDef = TypeBase.ResolveAlias(typeDef);
-
-            if (!value.IsConstant()) {
-                // TODO: add some type checking here
-                if (value.IsType())
-                    return types.MakeTypeReference(typeId);
-                return types.MakeTypeInstanceReference(typeId);
-            }
+        private IValue CastString(ITypeRegistry types, IValue value, ITypeDefinition typeDef) {
+            typeDef = typeDef.ResolveAlias();
 
             if (value is IStringValue stringValue) {
 
                 if (typeDef is IStringType stringType) {
 
-                    if (typeDef.TypeKind == CommonTypeKind.ShortStringType)
-                        return Strings.ToShortString(stringValue.AsUnicodeString);
+                    switch (stringType.Kind) {
+                        case StringTypeKind.AnsiString:
+                            return Strings.ToAnsiString(stringValue.AsUnicodeString);
 
-                    if (typeDef.TypeKind == CommonTypeKind.LongStringType)
-                        return Strings.ToShortString(stringValue.AsUnicodeString);
+                        case StringTypeKind.WideStringType:
+                            return Strings.ToWideString(stringValue.AsUnicodeString);
 
-                    if (typeDef.TypeKind == CommonTypeKind.UnicodeStringType)
-                        return Strings.ToUnicodeString(stringValue.AsUnicodeString);
+                        case StringTypeKind.UnicodeString:
+                            return Strings.ToUnicodeString(stringValue.AsUnicodeString);
 
+                        case StringTypeKind.ShortString:
+                            return Strings.ToShortString(stringValue.AsUnicodeString);
+                    }
                 }
 
-                if (typeDef is IArrayType arrayType && types.GetTypeByIdOrUndefinedType(arrayType.BaseTypeId).TypeKind.IsChar()) {
+                if (typeDef is IArrayType arrayType && arrayType.BaseTypeDefinition.BaseType == BaseType.Char) {
 
-                    using (var values = ListPools.GetList<IOldTypeReference>()) {
+                    using (var values = ListPools.GetList<IValue>()) {
 
                         for (var index = 0; index < stringValue.NumberOfCharElements; index++)
-                            values.Item.Add(Cast(types, stringValue.CharAt(index), arrayType.BaseTypeId));
+                            values.Item.Add(Cast(types, stringValue.CharAt(index), arrayType.BaseTypeDefinition));
 
-                        return Structured.CreateArrayValue(typeDef.TypeId, arrayType.BaseTypeId, ListPools.GetFixedArray(values));
+                        return Structured.CreateArrayValue(typeDef, arrayType.BaseTypeDefinition, ListPools.GetFixedArray(values));
 
                     }
 
@@ -195,82 +214,98 @@ namespace PasPasPas.Runtime.Values {
 
             }
 
-            if (value is ICharValue charValue) {
-
-            }
-
-            return Types.MakeErrorTypeReference();
+            return invalidCast.Value;
         }
 
 
-        private IOldTypeReference CastChar(ITypeRegistry types, IOldTypeReference value, int typeId) {
-
-            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
-            typeDef = TypeBase.ResolveAlias(typeDef);
-
-            if (!value.IsConstant()) {
-                // TODO: add some type checking here
-                if (value.IsType())
-                    return types.MakeTypeReference(typeId);
-                return types.MakeTypeInstanceReference(typeId);
-            }
+        private IValue CastChar(ITypeRegistry types, IValue value, ITypeDefinition typeDef) {
+            typeDef = typeDef.ResolveAlias();
 
             if (!(value is ICharValue charValue))
-                return Types.MakeErrorTypeReference();
+                return invalidCast.Value;
 
-            if (typeDef is EnumeratedType enumType)
-                return new EnumeratedValue(enumType.TypeId, CastChar(types, value, enumType.CommonTypeId));
+            if (typeDef is IEnumeratedType enumType)
+                return new EnumeratedValue(enumType, CastChar(types, value, enumType.CommonTypeId) as IIntegerValue);
 
             if (typeDef is SubrangeType subrangeType) {
-                var castedValue = CastChar(types, value, subrangeType.BaseType.TypeId);
-                return MakeSubrangeValue(typeDef.TypeId, castedValue);
+                var castedValue = CastChar(types, value, subrangeType.SubrangeOfType);
+                return MakeSubrangeValue(typeDef, castedValue);
             }
 
             if (typeDef is IStringType stringType) {
 
+                switch (stringType.Kind) {
+                    case StringTypeKind.AnsiString:
+                        return Strings.ToAnsiString(charValue.AsUnicodeString);
 
-                if (typeDef.TypeKind == CommonTypeKind.ShortStringType)
-                    return Strings.ToShortString(charValue.AsUnicodeString);
+                    case StringTypeKind.WideStringType:
+                        return Strings.ToWideString(charValue.AsUnicodeString);
 
-                if (typeDef.TypeKind == CommonTypeKind.LongStringType)
-                    return Strings.ToAnsiString(charValue.AsUnicodeString);
+                    case StringTypeKind.UnicodeString:
+                        return Strings.ToUnicodeString(charValue.AsUnicodeString);
 
-                if (typeDef.TypeKind == CommonTypeKind.UnicodeStringType)
-                    return Strings.ToUnicodeString(charValue.AsUnicodeString);
+                    case StringTypeKind.ShortString:
+                        return Strings.ToShortString(charValue.AsUnicodeString);
+                }
 
-            }
-
-            switch (typeDef.TypeId) {
-                case KnownTypeIds.ShortInt:
-                    return Integers.ToIntegerValue((sbyte)charValue.AsWideChar);
-                case KnownTypeIds.ByteType:
-                    return Integers.ToIntegerValue((byte)charValue.AsWideChar);
-                case KnownTypeIds.SmallInt:
-                    return Integers.ToIntegerValue((short)charValue.AsWideChar);
-                case KnownTypeIds.WordType:
-                    return Integers.ToIntegerValue(charValue.AsWideChar);
-                case KnownTypeIds.IntegerType:
-                    return Integers.ToIntegerValue((int)charValue.AsWideChar);
-                case KnownTypeIds.CardinalType:
-                    return Integers.ToIntegerValue((uint)charValue.AsWideChar);
-                case KnownTypeIds.Int64Type:
-                    return Integers.ToIntegerValue((long)charValue.AsWideChar);
-                case KnownTypeIds.UInt64Type:
-                    return Integers.ToIntegerValue((ulong)charValue.AsWideChar);
-                case KnownTypeIds.WideCharType:
-                    return Chars.ToWideCharValue(typeId, charValue.AsWideChar);
-                case KnownTypeIds.AnsiCharType:
-                    return Chars.ToAnsiCharValue(typeId, (byte)charValue.AsWideChar);
-                case KnownTypeIds.BooleanType:
-                    return Booleans.ToBoolean(charValue.AsWideChar != 0, KnownTypeIds.BooleanType);
-                case KnownTypeIds.ByteBoolType:
-                    return Booleans.ToByteBool((byte)charValue.AsWideChar, KnownTypeIds.ByteBoolType);
-                case KnownTypeIds.WordBoolType:
-                    return Booleans.ToWordBool(charValue.AsWideChar, KnownTypeIds.WordBoolType);
 
             }
 
-            return Types.MakeErrorTypeReference();
+            if (typeDef is IIntegralType intType) {
+
+                switch (intType.Kind) {
+
+                    case IntegralTypeKind.Byte:
+                        return Integers.ToIntegerValue((byte)charValue.AsWideChar);
+
+                    case IntegralTypeKind.ShortInt:
+                        return Integers.ToIntegerValue((sbyte)charValue.AsWideChar);
+
+                    case IntegralTypeKind.Word:
+                        return Integers.ToIntegerValue(charValue.AsWideChar);
+
+                    case IntegralTypeKind.SmallInt:
+                        return Integers.ToIntegerValue((short)charValue.AsWideChar);
+
+                    case IntegralTypeKind.Cardinal:
+                        return Integers.ToIntegerValue((uint)charValue.AsWideChar);
+
+                    case IntegralTypeKind.Integer:
+                        return Integers.ToIntegerValue((int)charValue.AsWideChar);
+
+                    case IntegralTypeKind.UInt64:
+                        return Integers.ToIntegerValue((ulong)charValue.AsWideChar);
+
+                    case IntegralTypeKind.Int64:
+                        return Integers.ToIntegerValue((long)charValue.AsWideChar);
+                }
+            }
+
+            if (typeDef is ICharType charType) {
+                switch (charType.Kind) {
+                    case CharTypeKind.AnsiChar:
+                        return Chars.ToAnsiCharValue(typeDef, (byte)charValue.AsWideChar);
+                    case CharTypeKind.WideChar:
+                        return Chars.ToWideCharValue(typeDef, charValue.AsWideChar);
+                }
+            }
+
+            if (typeDef is IBooleanType booleanType) {
+
+                switch (booleanType.Kind) {
+                    case BooleanTypeKind.Boolean:
+                        return Booleans.ToBoolean(charValue.AsWideChar != 0, typeDef);
+                    case BooleanTypeKind.ByteBool:
+                        return Booleans.ToByteBool((byte)charValue.AsWideChar, typeDef);
+                    case BooleanTypeKind.WordBool:
+                        return Booleans.ToWordBool(charValue.AsWideChar, typeDef);
+                    case BooleanTypeKind.LongBool:
+                        return Booleans.ToLongBool(charValue.AsWideChar, typeDef);
+                }
+
+            }
+
+            return invalidCast.Value;
         }
 
         /// <summary>
@@ -278,30 +313,31 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="types"></param>
         /// <param name="value"></param>
-        /// <param name="typeId"></param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        private IOldTypeReference CastBoolean(ITypeRegistry types, IOldTypeReference value, int typeId) {
-            var type = TypeBase.ResolveAlias(types.GetTypeByIdOrUndefinedType(typeId));
+        private IValue CastBoolean(ITypeRegistry types, IValue value, ITypeDefinition typeDef) {
+            typeDef = typeDef.ResolveAlias();
 
-            if (type is ISubrangeType subrangeType) {
-                var castedValue = CastBoolean(types, value, subrangeType.BaseType.TypeId);
-                return MakeSubrangeValue(type.TypeId, castedValue);
+            if (typeDef is ISubrangeType subrangeType) {
+                var castedValue = CastBoolean(types, value, subrangeType.SubrangeOfType);
+                return MakeSubrangeValue(typeDef, castedValue);
             }
 
-            if (value.IsBooleanValue(out var boolValue) && type is IBooleanType booleanType) {
-                switch (booleanType.BitSize) {
-                    case 1:
-                        return boolValue.AsBoolean ? Booleans.TrueValue : Booleans.FalseValue;
-                    case 8:
-                        return Booleans.ToByteBool((byte)boolValue.AsUint, KnownTypeIds.ByteBoolType);
-                    case 16:
-                        return Booleans.ToWordBool((ushort)boolValue.AsUint, KnownTypeIds.WordBoolType);
-                    case 32:
-                        return Booleans.ToLongBool(boolValue.AsUint, KnownTypeIds.LongBoolType);
+            if (value is IBooleanValue b && typeDef is IBooleanType booleanType) {
+
+                switch (booleanType.Kind) {
+                    case BooleanTypeKind.Boolean:
+                        return Booleans.ToBoolean(b.AsBoolean, typeDef);
+                    case BooleanTypeKind.ByteBool:
+                        return Booleans.ToByteBool((byte)b.AsUint, typeDef);
+                    case BooleanTypeKind.WordBool:
+                        return Booleans.ToWordBool((ushort)b.AsUint, typeDef);
+                    case BooleanTypeKind.LongBool:
+                        return Booleans.ToLongBool(b.AsUint, typeDef);
                 }
             }
 
-            return Types.MakeErrorTypeReference();
+            return invalidCast.Value;
         }
 
         /// <summary>
@@ -309,51 +345,48 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="types"></param>
         /// <param name="value"></param>
-        /// <param name="typeId"></param>
+        /// <param name="typeDef"></param>
         /// <returns></returns>
-        private IOldTypeReference CastArray(ITypeRegistry types, IOldTypeReference value, int typeId) {
-            var type = TypeBase.ResolveAlias(types.GetTypeByIdOrUndefinedType(typeId));
+        private IValue CastArray(ITypeRegistry types, IValue value, ITypeDefinition typeDef) {
+            typeDef = typeDef.ResolveAlias();
 
-            if (!value.IsConstant())
-                return Types.MakeErrorTypeReference();
-
-            if (type is ArrayType arrayType) {
+            if (typeDef is ArrayType arrayType) {
 
                 if (value is IArrayValue array) {
-                    var newBaseType = Cast(types, types.MakeTypeReference(array.BaseType), arrayType.BaseTypeId);
+                    var newBaseType = default(ITypeDefinition); // Cast(types, array.BaseTypeDefinition, arrayType.BaseTypeDefinition);
 
-                    if (newBaseType.TypeId == KnownTypeIds.Unused)
-                        return Types.MakeErrorTypeReference();
+                    if (newBaseType.TypeDefinition.BaseType == BaseType.Error)
+                        return invalidCast.Value;
 
-                    using (var values = ListPools.GetList<IOldTypeReference>()) {
+                    using (var values = ListPools.GetList<IValue>()) {
 
                         foreach (var itemValue in array.Values) {
-                            values.Item.Add(Cast(types, itemValue, newBaseType.TypeId));
+                            values.Item.Add(Cast(types, itemValue, newBaseType));
                         }
 
-                        var castedValue = new ArrayValue(typeId, newBaseType.TypeId, ListPools.GetFixedArray(values));
+                        var castedValue = new ArrayValue(typeDef, newBaseType, ListPools.GetFixedArray(values));
                         return castedValue;
                     }
                 }
 
             }
 
-            return Types.MakeErrorTypeReference();
+            return invalidCast.Value;
         }
 
-        private IOldTypeReference CastRecord(ITypeRegistry types, IOldTypeReference value, int typeId) {
-            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
-            typeDef = TypeBase.ResolveAlias(typeDef);
+        private IValue CastRecord(ITypeRegistry types, IValue value, ITypeDefinition typeDef) {
+            typeDef = typeDef.ResolveAlias();
 
-            if (!(typeDef is StructuredTypeDeclaration structType) || !types.AreRecordTypesCompatible(value.TypeId, typeId) || !(value is RecordValue record))
-                return types.Runtime.Types.MakeErrorTypeReference();
+            if (!(typeDef is StructuredTypeDeclaration structType) || !types.AreRecordTypesCompatible(value.TypeDefinition, typeDef) || !(value is RecordValue record))
+                return invalidCast.Value;
 
-            using (var list = ListPools.GetList<IOldTypeReference>()) {
 
-                for (var i = 0; i < record.Values.Length; i++)
-                    list.Add(Cast(types, record.Values[i], structType.Fields[i].TypeId));
+            using (var list = ListPools.GetList<IValue>()) {
 
-                return types.Runtime.Structured.CreateRecordValue(typeId, ListPools.GetFixedArray(list));
+                //for (var i = 0; i < record.Values.Length; i++)
+                //list.Add(Cast(types, record.Values[i], structType.Fields[i].TypeDefinition));
+
+                return types.Runtime.Structured.CreateRecordValue(typeDef, ListPools.GetFixedArray(list));
             }
         }
 

@@ -48,6 +48,11 @@
         /// <summary>
         ///     invalid set
         /// </summary>
-        InvalidSet = 10
+        InvalidSet = 10,
+
+        /// <summary>
+        ///     invalid cast result
+        /// </summary>
+        InvalidCast = 11
     }
 }

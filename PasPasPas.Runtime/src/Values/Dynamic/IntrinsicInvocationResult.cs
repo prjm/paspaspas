@@ -2,7 +2,7 @@
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
-namespace PasPasPas.Runtime.Values {
+namespace PasPasPas.Runtime.Values.Dynamic {
 
     /// <summary>
     ///     result from an intrinsic routine call
@@ -27,32 +27,19 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     registered type id
         /// </summary>
-        public int TypeId
-            => Parameters.ResultType.TypeId;
-
-        /// <summary>
-        ///     internal type format
-        /// </summary>
-        public string InternalTypeFormat
-            => "i#" + Parameters.ResultType.InternalTypeFormat;
-
-        /// <summary>
-        ///     reference kind: invocation result
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.InvocationResult;
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public CommonTypeKind TypeKind
-            => Parameters.ResultType.TypeKind;
+        public ITypeDefinition TypeDefinition
+            => Parameters.ResultType.TypeDefinition;
 
         /// <summary>
         ///     target routine
         /// </summary>
         public IRoutineGroup Routine { get; }
 
+        /// <summary>
+        ///     invocation result
+        /// </summary>
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.InvocationResult;
 
         /// <summary>
         ///     check equality

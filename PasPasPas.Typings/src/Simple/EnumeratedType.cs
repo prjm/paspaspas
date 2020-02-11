@@ -111,7 +111,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     base type id
         /// </summary>
-        public int CommonTypeId {
+        public ITypeDefinition CommonTypeId {
             get {
                 var lowestElement = LowestElement;
                 var lowerBaseType = TypeRegistry.SystemUnit.ErrorType;

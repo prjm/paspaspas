@@ -40,6 +40,17 @@
         /// <returns></returns>
         IValue EmptyString { get; }
 
+        /// <summary>
+        ///     invalid string
+        /// </summary>
+        IValue Invalid { get; }
+
+        /// <summary>
+        ///     convert string value to a wide string
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        IValue ToWideString(string text);
     }
 }
 

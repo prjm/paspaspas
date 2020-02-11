@@ -5,5 +5,9 @@
     /// </summary>
     public interface IEnumeratedType : IOrdinalType {
 
+        /// <summary>
+        ///     enumerated type definition
+        /// </summary>
+        ITypeDefinition CommonTypeId { get; }
     }
 }

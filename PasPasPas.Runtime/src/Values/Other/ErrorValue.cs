@@ -1,7 +1,7 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
-namespace PasPasPas.Runtime.Values {
+namespace PasPasPas.Runtime.Values.Other {
 
     /// <summary>
     ///     special constant values

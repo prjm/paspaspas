@@ -24,5 +24,10 @@
         ///     constant value
         /// </summary>
         Constant = 3,
+
+        /// <summary>
+        ///     invocation result
+        /// </summary>
+        InvocationResult = 4,
     }
 }

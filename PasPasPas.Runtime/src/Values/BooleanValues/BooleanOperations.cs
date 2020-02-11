@@ -1,6 +1,7 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Runtime.Values.Other;
 
 namespace PasPasPas.Runtime.Values.BooleanValues {
 
@@ -222,5 +223,32 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <returns></returns>
         public IBooleanValue ToBoolean(bool value)
             => ToBoolean(value, provider.GetBooleanType());
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="unsignedValue"></param>
+        /// <param name="typeDef"></param>
+        /// <returns></returns>
+        public IBooleanValue ToByteBool(byte unsignedValue, ITypeDefinition typeDef)
+            => new ByteBooleanValue(unsignedValue, typeDef);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="unsignedValue"></param>
+        /// <param name="typeDef"></param>
+        /// <returns></returns>
+        public IBooleanValue ToWordBool(ushort unsignedValue, ITypeDefinition typeDef)
+            => new WordBooleanValue(unsignedValue, typeDef);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="unsignedValue"></param>
+        /// <param name="typeDef"></param>
+        /// <returns></returns>
+        public IBooleanValue ToLongBool(uint unsignedValue, ITypeDefinition typeDef)
+            => new LongBooleanValue(unsignedValue, typeDef);
     }
 }

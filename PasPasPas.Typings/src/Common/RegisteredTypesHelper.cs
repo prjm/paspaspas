@@ -40,11 +40,13 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     resolve a type alias
         /// </summary>
-        /// <param name="typeRegistry"></param>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        public static ITypeDefinition ResolveAlias(this ITypeRegistry typeRegistry, ITypeDefinition typeId) {
-            return TypeBase.ResolveAlias(typeDef);
+        public static ITypeDefinition ResolveAlias(this ITypeDefinition typeId) {
+            if (typeId.BaseType == BaseType.TypeAlias)
+                return ((IAliasedType)typeId).BaseTypeDefinition.ResolveAlias();
+            else
+                return typeId;
         }
 
         /// <summary>
@@ -136,7 +138,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeId1"></param>
         /// <param name="typeId2"></param>
         /// <returns></returns>
-        public static bool AreRecordTypesCompatible(this ITypeRegistry registry, int typeId1, int typeId2) {
+        public static bool AreRecordTypesCompatible(this ITypeRegistry registry, ITypeDefinition typeId1, ITypeDefinition typeId2) {
             var leftType = registry.ResolveAlias(typeId1);
             var rightType = registry.ResolveAlias(typeId2);
 

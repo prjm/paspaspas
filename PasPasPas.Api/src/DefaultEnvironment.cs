@@ -27,7 +27,7 @@ namespace PasPasPas.Api {
     ///     default environment: contains all registries and
     ///     factories needed
     /// </summary>
-    internal class DefaultEnvironment : IAssemblyBuilderEnvironment {
+    internal class DefaultEnvironment : IAssemblyBuilderEnvironment, ITypeRegistryProvider {
 
         /// <summary>
         ///     runtime values: constants and type references
@@ -95,7 +95,7 @@ namespace PasPasPas.Api {
         /// <param name="intSize">integer size</param>
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
             Patterns = new PatternFactory(StringPool);
-            Runtime = new RuntimeValueFactory(ListPools);
+            Runtime = new RuntimeValueFactory(ListPools, this);
             TypeRegistry = new RegisteredTypes(Runtime, ListPools, intSize);
             IntegerParser = new IntegerParser(Runtime, false);
             HexNumberParser = new IntegerParser(Runtime, true);
@@ -144,6 +144,9 @@ namespace PasPasPas.Api {
         /// </summary>
         public IEnvironmentItem TokenArrays { get; }
             = new TokenArrays();
+
+        public ITypeRegistry RegisteredTypes
+            => TypeRegistry;
 
         public IFileReference CreateFileReference(string path)
             => new FileReference(path);

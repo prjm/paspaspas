@@ -59,6 +59,15 @@
             => provider.RegisteredTypes.SystemUnit.ShortStringType;
 
         /// <summary>
+        ///     short string type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IStringType GetWideStringType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.WideStringType;
+
+
+        /// <summary>
         ///     short integer type
         /// </summary>
         /// <param name="provider"></param>
@@ -141,6 +150,14 @@
         /// <returns></returns>
         public static ITypeDefinition GetErrorType(this ITypeRegistryProvider provider)
             => provider.RegisteredTypes.SystemUnit.ErrorType;
+
+        /// <summary>
+        ///     get the nil type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static ITypeDefinition GetNilType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.NilType;
 
         /// <summary>
         ///     generic pointer type
