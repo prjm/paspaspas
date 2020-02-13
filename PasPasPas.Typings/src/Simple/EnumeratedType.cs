@@ -34,7 +34,7 @@ namespace PasPasPas.Typings.Simple {
         ///     mangled type name
         /// </summary>
         public override string MangledName
-            => string.Format(DefiningUnit.Name, KnownNames.AtSymbol, Name);
+            => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
 
         /// <summary>
         ///     enumerated type
@@ -99,7 +99,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public bool IsSigned {
             get {
-                var type = TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId) as IOrdinalType;
+                var type = CommonTypeId as IOrdinalType;
 
                 if (type != default)
                     return type.IsSigned;
@@ -136,7 +136,7 @@ namespace PasPasPas.Typings.Simple {
         ///     type size in bytes
         /// </summary>
         public override uint TypeSizeInBytes
-            => TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId).TypeSizeInBytes;
+            => CommonTypeId.TypeSizeInBytes;
 
         /// <summary>
         ///     define a new enumeration value
@@ -145,7 +145,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="symbolName">symbol name</param>
         /// <param name="withValue">if <c>true</c> a value definition is used</param>
         /// <param name="enumValue">optional value definition</param>
-        public EnumValue DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, IValue enumValue) {
+        public IValue DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, IValue enumValue) {
             IValue newValue;
 
             if (withValue)
@@ -155,9 +155,13 @@ namespace PasPasPas.Typings.Simple {
             else
                 newValue = runtimeValues.Integers.Zero;
 
-            var enumValueDefinition = new EnumValue(symbolName, newValue);
-            values.Add(enumValueDefinition);
-            return enumValueDefinition;
+            if (newValue is IIntegerValue integerValue) {
+                var enumValueDefinition = new EnumValue(symbolName, integerValue);
+                values.Add(enumValueDefinition);
+                return enumValueDefinition;
+            }
+
+            return runtimeValues.Integers.Invalid;
         }
 
         /*

@@ -122,10 +122,10 @@ namespace PasPasPas.Typings.Simple {
                 var low = lowerValue.GetOrdinalValue(TypeRegistry);
                 var high = highValue.GetOrdinalValue(TypeRegistry);
 
-                if (!low.IsIntegralValue(out var l))
+                if (!(low is IIntegerValue l))
                     return BigInteger.Zero;
 
-                if (!high.IsIntegralValue(out var h))
+                if (!(high is IIntegerValue h))
                     return BigInteger.Zero;
 
                 return BigInteger.Add(BigInteger.One, BigInteger.Subtract(h.AsBigInteger, l.AsBigInteger));

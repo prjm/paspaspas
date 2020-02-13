@@ -29,6 +29,7 @@ namespace PasPasPas.Typings.Structured {
         ///     read a parameter group from a byte array
         /// </summary>
         /// <param name="params"></param>
+        /// <param name="types"></param>
         public Routine(ImmutableArray<byte> @params, ITypeRegistry types) {
             Kind = @params[0].ToProcedureKind();
 
@@ -121,7 +122,7 @@ namespace PasPasPas.Typings.Structured {
 
             for (var i = 0; Parameters != null && i < Parameters.Count; i++) {
                 var parameter = Parameters[i];
-                var sourceType = typeRegistry.GetTypeByIdOrUndefinedType(signature[i].TypeId);
+                var sourceType = signature[i].TypeDefinition;
                 //match = match && typeRegistry.GetTypeByIdOrUndefinedType(parameter.SymbolType.TypeId).CanBeAssignedFrom(sourceType);
 
                 if (!match)
@@ -137,10 +138,10 @@ namespace PasPasPas.Typings.Structured {
         /// <returns></returns>
         public Signature CreateSignature(ITypeRegistry runtime) {
             if (Parameters == default || Parameters.Count < 1)
-                return new Signature(ResultType, ImmutableArray<IOldTypeReference>.Empty);
+                return new Signature(ResultType, ImmutableArray<ITypeSymbol>.Empty);
 
-            using (var list = runtime.ListPools.GetList<IOldTypeReference>()) {
-                var values = new IOldTypeReference[Parameters.Count];
+            using (var list = runtime.ListPools.GetList<ITypeSymbol>()) {
+                var values = new ITypeSymbol[Parameters.Count];
                 //for (var i = 0; i < Parameters.Count; i++)
                 //   values[i] = Parameters[i].SymbolType ?? runtime.Runtime.Types.MakeErrorTypeReference();
 

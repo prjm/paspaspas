@@ -20,7 +20,7 @@ namespace PasPasPas.Typings.Simple {
         ///     type size
         /// </summary>
         public override uint TypeSizeInBytes
-            => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
+            => TypeRegistry.SystemUnit.NativeIntType.TypeSizeInBytes;
 
         /// <summary>
         ///     long type name

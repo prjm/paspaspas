@@ -22,7 +22,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     zero value
         /// </summary>
-        IValue Zero { get; }
+        IIntegerValue Zero { get; }
 
         /// <summary>
         ///     one value

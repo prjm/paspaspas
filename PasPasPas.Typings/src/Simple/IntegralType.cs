@@ -62,28 +62,28 @@ namespace PasPasPas.Typings.Simple {
 
                 switch (Kind) {
                     case IntegralTypeKind.Byte:
-                        return f.ToIntegerValue(this, byte.MinValue);
+                        return f.ToIntegerValue(byte.MinValue);
 
                     case IntegralTypeKind.ShortInt:
-                        return f.ToIntegerValue(this, sbyte.MinValue);
+                        return f.ToIntegerValue(sbyte.MinValue);
 
                     case IntegralTypeKind.Word:
-                        return f.ToIntegerValue(this, ushort.MinValue);
+                        return f.ToIntegerValue(ushort.MinValue);
 
                     case IntegralTypeKind.SmallInt:
-                        return f.ToIntegerValue(this, short.MinValue);
+                        return f.ToIntegerValue(short.MinValue);
 
                     case IntegralTypeKind.Cardinal:
-                        return f.ToIntegerValue(this, uint.MinValue);
+                        return f.ToIntegerValue(uint.MinValue);
 
                     case IntegralTypeKind.Integer:
-                        return f.ToIntegerValue(this, int.MinValue);
+                        return f.ToIntegerValue(int.MinValue);
 
                     case IntegralTypeKind.UInt64:
-                        return f.ToIntegerValue(this, ulong.MinValue);
+                        return f.ToIntegerValue(ulong.MinValue);
 
                     case IntegralTypeKind.Int64:
-                        return f.ToIntegerValue(this, long.MinValue);
+                        return f.ToIntegerValue(long.MinValue);
 
                     default:
                         throw new InvalidOperationException();
@@ -100,28 +100,28 @@ namespace PasPasPas.Typings.Simple {
 
                 switch (Kind) {
                     case IntegralTypeKind.Byte:
-                        return f.ToIntegerValue(this, byte.MaxValue);
+                        return f.ToIntegerValue(byte.MaxValue);
 
                     case IntegralTypeKind.ShortInt:
-                        return f.ToIntegerValue(this, sbyte.MaxValue);
+                        return f.ToIntegerValue(sbyte.MaxValue);
 
                     case IntegralTypeKind.Word:
-                        return f.ToIntegerValue(this, ushort.MaxValue);
+                        return f.ToIntegerValue(ushort.MaxValue);
 
                     case IntegralTypeKind.SmallInt:
-                        return f.ToIntegerValue(this, short.MaxValue);
+                        return f.ToIntegerValue(short.MaxValue);
 
                     case IntegralTypeKind.Cardinal:
-                        return f.ToIntegerValue(this, uint.MaxValue);
+                        return f.ToIntegerValue(uint.MaxValue);
 
                     case IntegralTypeKind.Integer:
-                        return f.ToIntegerValue(this, int.MaxValue);
+                        return f.ToIntegerValue(int.MaxValue);
 
                     case IntegralTypeKind.UInt64:
-                        return f.ToIntegerValue(this, ulong.MaxValue);
+                        return f.ToIntegerValue(ulong.MaxValue);
 
                     case IntegralTypeKind.Int64:
-                        return f.ToIntegerValue(this, long.MaxValue);
+                        return f.ToIntegerValue(long.MaxValue);
 
                     default:
                         throw new InvalidOperationException();

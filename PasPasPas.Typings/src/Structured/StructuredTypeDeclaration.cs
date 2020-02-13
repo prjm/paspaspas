@@ -57,7 +57,7 @@ namespace PasPasPas.Typings.Structured {
                     case StructuredTypeKind.RecordHelper:
                     case StructuredTypeKind.DispInterface:
                     case StructuredTypeKind.Interface:
-                        return TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
+                        return TypeRegistry.SystemUnit.NativeIntType.TypeSizeInBytes;
 
                     case StructuredTypeKind.Record:
                     case StructuredTypeKind.ObjectType:

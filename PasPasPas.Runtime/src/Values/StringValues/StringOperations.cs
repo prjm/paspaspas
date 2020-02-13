@@ -168,7 +168,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="tdd"></param>
         /// <returns></returns>
         public IValue ToWideString(string text)
-            => new ShortStringValue(provider.GetWideSrtingType(), text);
+            => new ShortStringValue(provider.GetWideStringType(), text);
 
         /// <summary>
         ///     get the empty string value

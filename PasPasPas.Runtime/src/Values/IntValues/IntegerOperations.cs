@@ -43,7 +43,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <summary>
         ///     zero / default value
         /// </summary>
-        public IValue Zero
+        public IIntegerValue Zero
             => zero.Value;
 
         private readonly Lazy<ShortIntValue> one;

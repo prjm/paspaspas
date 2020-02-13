@@ -35,7 +35,7 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <param name="enumTypeId">enumerated type id</param>
         /// <param name="value">type value</param>
         /// <returns></returns>
-        public IValue MakeEnumValue(ITypeDefinition enumTypeId, IIntegerValue value)
+        public IIntegerValue MakeEnumValue(ITypeDefinition enumTypeId, IIntegerValue value)
             => new EnumeratedValue(enumTypeId, value);
 
         /// <summary>

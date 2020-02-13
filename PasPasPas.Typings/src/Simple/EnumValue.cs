@@ -13,7 +13,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <param name="name">symbol name</param>
         /// <param name="value">symbol value</param>
-        public EnumValue(string name, IValue value) {
+        public EnumValue(string name, IIntegerValue value) {
             Name = name;
             Value = value;
         }
@@ -32,7 +32,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     value of the enumerated item
         /// </summary>
-        public IValue Value { get; private set; }
+        public IIntegerValue Value { get; private set; }
 
         /// <summary>
         ///     type definition
@@ -47,7 +47,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="typeId">given type id</param>
         /// <param name="types">type registry</param>
         /// <param name="enumTypeId"></param>
-        public void MakeEnumValue(IRuntimeValueFactory runtime, ITypeRegistry types, int typeId, int enumTypeId)
-            => Value = runtime.Types.MakeEnumValue(enumTypeId, runtime.Cast(types, Value, typeId));
+        public void MakeEnumValue(IRuntimeValueFactory runtime, ITypeRegistry types, ITypeDefinition typeId, ITypeDefinition enumTypeId)
+            => Value = runtime.Types.MakeEnumValue(enumTypeId, runtime.Cast(types, Value, typeId) as IIntegerValue);
     }
 }
