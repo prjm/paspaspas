@@ -53,6 +53,11 @@
         /// <summary>
         ///     invalid cast result
         /// </summary>
-        InvalidCast = 11
+        InvalidCast = 11,
+
+        /// <summary>
+        ///     invalid other resul
+        /// </summary>
+        InvalidResult = 12
     }
 }

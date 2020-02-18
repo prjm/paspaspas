@@ -21,6 +21,13 @@ namespace PasPasPas.Globals.Runtime {
         IIntegerValue MakeEnumValue(ITypeDefinition enumTypeId, IIntegerValue value);
 
         /// <summary>
+        ///     invalid value
+        /// </summary>
+        /// <param name="invalidResult"></param>
+        /// <returns></returns>
+        IValue MakeInvalidValue(SpecialConstantKind invalidResult);
+
+        /// <summary>
         ///     make an invocation result
         /// </summary>
         /// <param name="routine">routine</param>

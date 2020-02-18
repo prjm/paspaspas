@@ -61,7 +61,7 @@ namespace PasPasPas.Globals.Types {
         /// <param name="baseType"></param>
         /// <param name="isPacked"><c>true</c> is the array is packed</param>
         /// <returns></returns>
-        IArrayType CreateDynamicArrayType(int baseType, bool isPacked);
+        IArrayType CreateDynamicArrayType(ITypeDefinition baseType, bool isPacked);
 
         /// <summary>
         ///     create a short string type

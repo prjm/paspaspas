@@ -62,12 +62,12 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input</param>
         /// <returns></returns>
-        protected override IOldTypeReference EvaluateUnaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateUnaryOperator(Signature input) {
             var operand = input[0];
             var operations = Runtime.GetLogicalOperators(TypeRegistry, operand);
 
             if (operations == null)
-                return GetErrorTypeReference();
+                return Invalid;
 
             if (Kind == DefinedOperators.NotOperator)
                 if (operand.IsConstant())
@@ -75,7 +75,7 @@ namespace PasPasPas.Typings.Operators {
                 else
                     return operand;
 
-            return GetErrorTypeReference();
+            return Invalid;
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
 
@@ -96,7 +96,7 @@ namespace PasPasPas.Typings.Operators {
             var operations = Runtime.GetLogicalOperators(TypeRegistry, left, right);
 
             if (operations == null)
-                return GetErrorTypeReference();
+                return Invalid;
 
             if (Kind == DefinedOperators.AndOperator)
                 return EvaluateAndOperator(left, right, operations);
@@ -107,51 +107,51 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.XorOperator)
                 return EvaluateXorOperator(left, right, operations);
 
-            return GetErrorTypeReference();
+            return Invalid;
         }
 
-        private IOldTypeReference EvaluateShiftOperator(bool toLeft, IOldTypeReference left, IOldTypeReference right) {
+        private ITypeSymbol EvaluateShiftOperator(bool toLeft, ITypeSymbol left, ITypeSymbol right) {
             if (left.IsConstant() && right.IsConstant())
                 if (toLeft)
                     return Runtime.Integers.Shl(left, right);
                 else
                     return Runtime.Integers.Shr(left, right);
 
-            var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(left.TypeId);
+            var baseType = left.TypeDefinition;
 
-            if (TypeRegistry.IsSubrangeType(left.TypeId, out var subrangeType))
-                baseType = subrangeType.BaseType;
+            if (TypeRegistry.IsSubrangeType(left.TypeDefinition, out var subrangeType))
+                baseType = subrangeType.SubrangeOfType;
 
             if (!(baseType is IIntegralType intType))
-                return GetErrorTypeReference();
+                return Invalid;
 
             if (right.IsConstant()) {
                 if (right is IIntegerValue intValue && intValue.SignedValue >= 0) {
-                    if (intValue.SignedValue <= 32 && intType.BitSize < 32)
-                        return Runtime.Types.MakeTypeInstanceReference(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType);
-                    if (intValue.SignedValue <= 32 && intType.BitSize == 32)
-                        return Runtime.Types.MakeTypeInstanceReference(baseType.TypeId, baseType.TypeKind);
-                    if (intType.BitSize == 64)
-                        return Runtime.Types.MakeTypeInstanceReference(baseType.TypeId, baseType.TypeKind);
-
+                    if (intValue.SignedValue <= 32 && intType.TypeSizeInBytes < 4)
+                        return SystemUnit.IntegerType;
+                    if (intValue.SignedValue <= 32 && intType.TypeSizeInBytes == 4)
+                        return baseType;
+                    if (intType.TypeSizeInBytes == 8)
+                        return baseType;
                 }
-                return GetErrorTypeReference();
+
+                return Invalid;
             }
 
-            if (intType.BitSize < 32)
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.IntegerType);
+            if (intType.TypeSizeInBytes < 4)
+                return SystemUnit.IntegerType;
 
-            return TypeRegistry.MakeTypeInstanceReference(intType.TypeId);
+            return intType;
         }
 
-        private IOldTypeReference EvaluateXorOperator(IOldTypeReference left, IOldTypeReference right, ILogicalOperations operations) {
+        private ITypeSymbol EvaluateXorOperator(ITypeSymbol left, ITypeSymbol right, ILogicalOperations operations) {
             if (left.IsConstant() && right.IsConstant())
                 return operations.XorOperator(left, right);
             else
                 return GetSmallestBoolOrIntegralType(left, right, 1);
         }
 
-        private IOldTypeReference EvaluateOrOperator(IOldTypeReference left, IOldTypeReference right, ILogicalOperations operations) {
+        private ITypeSymbol EvaluateOrOperator(ITypeSymbol left, ITypeSymbol right, ILogicalOperations operations) {
             if (left.IsConstant() && right.IsConstant())
                 return operations.OrOperator(left, right);
             else if (left.IsConstant() && Runtime.Booleans.TrueValue.Equals(left))
@@ -162,7 +162,7 @@ namespace PasPasPas.Typings.Operators {
                 return GetSmallestBoolOrIntegralType(left, right, 1);
         }
 
-        private IOldTypeReference EvaluateAndOperator(IOldTypeReference left, IOldTypeReference right, ILogicalOperations operations) {
+        private ITypeSymbol EvaluateAndOperator(ITypeSymbol left, ITypeSymbol right, ILogicalOperations operations) {
             if (left.IsConstant() && right.IsConstant())
                 return operations.AndOperator(left, right);
             else if (left.IsConstant() && Runtime.Booleans.FalseValue.Equals(left))

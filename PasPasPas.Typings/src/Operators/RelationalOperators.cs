@@ -67,7 +67,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">operator input</param>
         /// <returns>operator result - constant value or types</returns>
-        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
 
@@ -79,7 +79,7 @@ namespace PasPasPas.Typings.Operators {
 
             var operations = Runtime.GetRelationalOperators(TypeRegistry, left, right);
             if (operations == null)
-                return GetErrorTypeReference();
+                return Invalid;
 
             if (Kind == DefinedOperators.EqualsOperator)
                 return EvaluateEqualsOperator(left, right, operations);
@@ -99,7 +99,7 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.GreaterThenEqual)
                 return EvaluteGreaterThenOrEqualOperator(left, right, operations);
 
-            return GetErrorTypeReference();
+            return Invalid;
         }
 
         private IOldTypeReference EvaluteGreaterThenOrEqualOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
@@ -136,9 +136,9 @@ namespace PasPasPas.Typings.Operators {
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
         }
 
-        private IOldTypeReference EvaluateNotEqualsOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
+        private IOldTypeReference EvaluateNotEqualsOperator(ITypeSymbol left, ITypeSymbol right, IRelationalOperations operations) {
             if (left.IsSet() && right.IsSet() && !TypeRegistry.HaveSetsCommonBaseType(left, right))
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
+                return Invalid;
 
             if (left.IsConstant() && right.IsConstant())
                 return operations.NotEquals(left, right);
@@ -146,7 +146,7 @@ namespace PasPasPas.Typings.Operators {
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
         }
 
-        private IOldTypeReference EvaluateEqualsOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
+        private IOldTypeReference EvaluateEqualsOperator(ITypeSymbol left, ITypeSymbol right, IRelationalOperations operations) {
             if (left.IsSet() && right.IsSet() && !TypeRegistry.HaveSetsCommonBaseType(left, right))
                 return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
 

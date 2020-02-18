@@ -26,7 +26,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override IOldTypeReference EvaluateUnaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateUnaryOperator(Signature input) {
             var operand = input[0];
             return Runtime.MakePointerValue(operand);
         }
@@ -54,32 +54,32 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
-            if (!input[0].IsArrayValue(out var i0))
-                return TypeRegistry.Runtime.Types.MakeErrorTypeReference();
-            if (!input[1].IsArrayValue(out var i1))
-                return TypeRegistry.Runtime.Types.MakeErrorTypeReference();
+        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
+            if (!(input[0] is IArrayValue i0))
+                return Invalid;
+            if (!(input[1] is IArrayValue i1))
+                return Invalid;
 
-            var b0 = TypeRegistry.MakeTypeInstanceReference(i0.BaseType);
-            var b1 = TypeRegistry.MakeTypeInstanceReference(i1.BaseType);
+            var b0 = i0.BaseTypeDefinition;
+            var b1 = i1.BaseTypeDefinition;
             var baseType = TypeRegistry.GetBaseTypeForArrayOrSet(b0, b1);
 
-            if (baseType.TypeId == KnownTypeIds.ErrorType)
+            if (baseType.TypeDefinition.BaseType == BaseType.Error)
                 return baseType;
 
             if (!input.IsConstant) {
-                var arrayType = TypeRegistry.TypeCreator.CreateDynamicArrayType(baseType.TypeId, false);
-                return TypeRegistry.MakeTypeInstanceReference(arrayType.TypeId);
+                var arrayType = TypeRegistry.TypeCreator.CreateDynamicArrayType(baseType.TypeDefinition, false);
+                return arrayType;
             }
 
             var leftValue = input[0] as IArrayValue;
             var rightValue = input[1] as IArrayValue;
-            using (var list = TypeRegistry.ListPools.GetList<IOldTypeReference>()) {
+            using (var list = TypeRegistry.ListPools.GetList<IValue>()) {
                 list.Item.AddRange(leftValue.Values);
                 list.Item.AddRange(rightValue.Values);
-                var indexType = TypeRegistry.TypeCreator.CreateSubrangeType(KnownTypeIds.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(list.Item.Count - 1));
-                var arrayType = TypeRegistry.TypeCreator.CreateStaticArrayType(baseType.TypeId, indexType.TypeId, false);
-                return TypeRegistry.Runtime.Structured.CreateArrayValue(arrayType.TypeId, baseType.TypeId, TypeRegistry.ListPools.GetFixedArray(list));
+                var indexType = TypeRegistry.TypeCreator.CreateSubrangeType(SystemUnit.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(list.Item.Count - 1));
+                var arrayType = TypeRegistry.TypeCreator.CreateStaticArrayType(baseType.TypeDefinition, indexType, false);
+                return TypeRegistry.Runtime.Structured.CreateArrayValue(arrayType, baseType.TypeDefinition, TypeRegistry.ListPools.GetFixedArray(list));
             }
         }
     }

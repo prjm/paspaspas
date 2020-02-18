@@ -1,5 +1,4 @@
 ﻿using System;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -61,7 +60,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
 
@@ -77,24 +76,24 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.InSetOperator)
                 return EvaluateInSetOperator(left, right);
 
-            return GetErrorTypeReference();
+            return Invalid;
         }
 
-        private IOldTypeReference EvaluateInSetOperator(IOldTypeReference left, IOldTypeReference right) {
+        private ITypeSymbol EvaluateInSetOperator(ITypeSymbol left, ITypeSymbol right) {
 
-            if (!(TypeRegistry.ResolveAlias(right.TypeId) is ISetType setType))
-                return GetErrorTypeReference();
+            if (!(right.TypeDefinition.ResolveAlias() is ISetType setType))
+                return Invalid;
 
-            if (!(TypeRegistry.ResolveAlias(left.TypeId) is IOrdinalType ordinalType))
-                return GetErrorTypeReference();
+            if (!(left.TypeDefinition.ResolveAlias() is IOrdinalType ordinalType))
+                return Invalid;
 
             if (left is ISubrangeType subrangeType)
-                if (TypeRegistry.ResolveAlias(subrangeType.BaseTypeId) is IOrdinalType subRangeBase)
+                if (subrangeType.TypeDefinition.ResolveAlias() is IOrdinalType subRangeBase)
                     ordinalType = subrangeType;
                 else
-                    return GetErrorTypeReference();
+                    return Invalid;
 
-            var setBaseType = TypeRegistry.ResolveAlias(setType.BaseTypeId);
+            var setBaseType = setType.BaseTypeDefinition.ResolveAlias();
 
             if (ordinalType.TypeKind.IsChar() && setBaseType.TypeKind.IsChar() ||
                 ordinalType.TypeKind == CommonTypeKind.BooleanType && setBaseType.TypeKind == CommonTypeKind.BooleanType ||
@@ -110,21 +109,21 @@ namespace PasPasPas.Typings.Operators {
             return GetErrorTypeReference();
         }
 
-        private IOldTypeReference EvaluateSetDiffOperator(IOldTypeReference left, IOldTypeReference right) {
+        private ITypeSymbol EvaluateSetDiffOperator(ITypeSymbol left, ITypeSymbol right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.Structured.SetDifference(TypeRegistry, left, right);
             else
                 return TypeRegistry.GetMatchingSetType(left, right);
         }
 
-        private IOldTypeReference EvaluateSetAddOperator(IOldTypeReference left, IOldTypeReference right) {
+        private ITypeSymbol ference EvaluateSetAddOperator(ITypeSymbol left, ITypeSymbol right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.Structured.SetUnion(TypeRegistry, left, right);
             else
                 return TypeRegistry.GetMatchingSetType(left, right);
         }
 
-        private IOldTypeReference EvaluateSetIntersectOperator(IOldTypeReference left, IOldTypeReference right) {
+        private ITypeSymbol EvaluateSetIntersectOperator(ITypeSymbol left, ITypeSymbol right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.Structured.SetIntersection(TypeRegistry, left, right);
             else

@@ -27,7 +27,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="subrangeType"></param>
         /// <param name="typeRegistry"></param>
         /// <returns></returns>
-        public static bool IsSubrangeType(this ITypeRegistry typeRegistry, int typeId, out ISubrangeType subrangeType) {
+        public static bool IsSubrangeType(this ITypeRegistry typeRegistry, ITypeDefinition typeId, out ISubrangeType subrangeType) {
             subrangeType = typeRegistry.GetTypeByIdOrUndefinedType(typeId) as ISubrangeType;
 
             if (subrangeType != default && subrangeType.TypeKind == CommonTypeKind.SubrangeType)
@@ -174,7 +174,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeId2">second type id</param>
         /// <param name="minBitSize">minimal bit size</param>
         /// <returns>smallest type id</returns>
-        public static int GetSmallestBooleanTypeOrNext(this ITypeRegistry registry, int typeId1, int typeId2, int minBitSize = 0) {
+        public static ITypeDefinition GetSmallestBooleanTypeOrNext(this ITypeRegistry registry, ITypeDefinition typeId1, ITypeDefinition typeId2, int minBitSize = 0) {
             if (KnownTypeIds.ErrorType.In(typeId1, typeId2))
                 return KnownTypeIds.ErrorType;
 
@@ -446,13 +446,13 @@ namespace PasPasPas.Typings.Common {
         /// <param name="baseType"></param>
         /// <param name="elementType"></param>
         /// <returns></returns>
-        public static IOldTypeReference GetBaseTypeForArrayOrSet(this ITypeRegistry types, IOldTypeReference baseType, IOldTypeReference elementType) {
+        public static ITypeSymbol GetBaseTypeForArrayOrSet(this ITypeRegistry types, ITypeSymbol baseType, ITypeSymbol elementType) {
             if (elementType == default)
                 baseType = types.Runtime.Types.MakeErrorTypeReference();
             else if (baseType == default)
                 baseType = types.MakeTypeInstanceReference(elementType.TypeId);
             else if (baseType.TypeKind.IsIntegral() && elementType.TypeKind.IsIntegral())
-                baseType = types.MakeTypeInstanceReference(types.GetSmallestIntegralTypeOrNext(baseType.TypeId, elementType.TypeId));
+                baseType = types.MakeTypeInstanceReference(types.GetSmallestIntegralTypeOrNext(baseType.TypeDefinition, elementType.TypeDefinition));
             else if (baseType.TypeKind.IsTextual() && elementType.TypeKind.IsTextual())
                 baseType = types.MakeTypeInstanceReference(types.GetSmallestTextTypeOrNext(baseType.TypeId, elementType.TypeId));
             else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == elementType.TypeId)
@@ -567,18 +567,18 @@ namespace PasPasPas.Typings.Common {
         /// <param name="leftTypeId"></param>
         /// <param name="rightTypeId"></param>
         /// <returns></returns>
-        public static bool AreCommonBaseClasses(this ITypeRegistry typeRegistry, int leftTypeId, int rightTypeId) {
-            var leftClass = typeRegistry.GetTypeByIdOrUndefinedType(leftTypeId) as IStructuredType;
-            var rightClass = typeRegistry.GetTypeByIdOrUndefinedType(rightTypeId) as IStructuredType;
+        public static bool AreCommonBaseClasses(this ITypeRegistry typeRegistry, ITypeDefinition leftTypeId, ITypeDefinition rightTypeId) {
+            var leftClass = leftTypeId as IStructuredType;
+            var rightClass = rightTypeId as IStructuredType;
 
-            if (leftClass.TypeId == rightClass.TypeId)
+            if (leftClass.Equals(rightClass))
                 return true;
 
-            var baseClass = typeRegistry.GetTypeByIdOrUndefinedType(leftClass.BaseClassId) as IStructuredType;
+            var baseClass = leftClass.BaseClass as IStructuredType;
             while (baseClass != default) {
-                if (baseClass.TypeId == rightClass.TypeId)
+                if (baseClass.Equals(rightClass))
                     return true;
-                baseClass = typeRegistry.GetTypeByIdOrUndefinedType(baseClass.BaseClassId) as IStructuredType;
+                baseClass = baseClass.BaseClass as IStructuredType;
             }
 
             baseClass = typeRegistry.GetTypeByIdOrUndefinedType(rightClass.BaseClassId) as IStructuredType;

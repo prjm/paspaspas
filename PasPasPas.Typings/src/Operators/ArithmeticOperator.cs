@@ -73,12 +73,12 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">operator input</param>
         /// <returns>operator result</returns>
-        protected override IOldTypeReference EvaluateUnaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateUnaryOperator(Signature input) {
             var operand = input[0];
             var operations = Runtime.GetArithmeticOperators(TypeRegistry, operand);
 
             if (operations == null)
-                return GetErrorTypeReference();
+                return Invalid;
 
             if (Kind == DefinedOperators.UnaryPlus)
                 return EvaluateUnaryOperand(negate: false, operand, operations);
@@ -86,13 +86,13 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.UnaryMinus)
                 return EvaluateUnaryOperand(negate: true, operand, operations);
 
-            return GetErrorTypeReference();
+            return Invalid;
         }
 
-        private static IOldTypeReference EvaluateUnaryOperand(bool negate, IOldTypeReference operand, IArithmeticOperations operations) {
-            if (operand.IsConstant()) {
+        private static ITypeSymbol EvaluateUnaryOperand(bool negate, ITypeSymbol operand, IArithmeticOperations operations) {
+            if (operand.IsConstant(out var constantOperand)) {
                 if (negate)
-                    return operations.Negate(operand);
+                    return operations.Negate(constantOperand);
                 else
                     return operand;
             }
@@ -105,7 +105,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input signature</param>
         /// <returns>operator result</returns>
-        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
 
@@ -121,7 +121,7 @@ namespace PasPasPas.Typings.Operators {
             var operations = Runtime.GetArithmeticOperators(TypeRegistry, left, right);
 
             if (operations == null)
-                return GetErrorTypeReference();
+                return Invalid;
 
             if (Kind == DefinedOperators.PlusOperator)
                 return EvaluatePlusOperator(left, right, operations);
@@ -132,48 +132,48 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.TimesOperator)
                 return EvaluateMultiplicationOperator(left, right, operations);
 
-            return GetErrorTypeReference();
+            return Invalid;
         }
 
-        private IOldTypeReference EvaluateMultiplicationOperator(IOldTypeReference left, IOldTypeReference right, IArithmeticOperations operations) {
-            if (left.IsConstant() && right.IsConstant())
-                return operations.Multiply(left, right);
+        private ITypeSymbol EvaluateMultiplicationOperator(ITypeSymbol left, ITypeSymbol right, IArithmeticOperations operations) {
+            if (left.IsConstant(out var l) && right.IsConstant(out var r))
+                return operations.Multiply(l, r);
             else
                 return GetSmallestRealOrIntegralType(left, right, 32);
         }
 
-        private IOldTypeReference EvaluateMinusOperator(IOldTypeReference left, IOldTypeReference right, IArithmeticOperations operations) {
-            if (left.IsConstant() && right.IsConstant())
-                return operations.Subtract(left, right);
+        private ITypeSymbol EvaluateMinusOperator(ITypeSymbol left, ITypeSymbol right, IArithmeticOperations operations) {
+            if (left.IsConstant(out var l) && right.IsConstant(out var r))
+                return operations.Subtract(l, r);
             else
                 return GetSmallestRealOrIntegralType(left, right, 32);
         }
 
-        private IOldTypeReference EvaluatePlusOperator(IOldTypeReference left, IOldTypeReference right, IArithmeticOperations operations) {
-            if (left.IsConstant() && right.IsConstant())
-                return operations.Add(left, right);
+        private ITypeSymbol EvaluatePlusOperator(ITypeSymbol left, ITypeSymbol right, IArithmeticOperations operations) {
+            if (left.IsConstant(out var l) && right.IsConstant(out var r))
+                return operations.Add(l, r);
             else
                 return GetSmallestRealOrIntegralType(left, right, 32);
         }
 
 
-        private IOldTypeReference EvaluateRealDivOperator(IOldTypeReference left, IOldTypeReference right) {
-            if (left.IsConstant() && right.IsConstant())
-                return Runtime.RealNumbers.Divide(left, right);
+        private ITypeSymbol EvaluateRealDivOperator(ITypeSymbol left, ITypeSymbol right) {
+            if (left.IsConstant(out var l) && right.IsConstant(out var r))
+                return Runtime.RealNumbers.Divide(l, r);
             else
-                return GetExtendedType();
+                return ExtendedType;
         }
 
-        private IOldTypeReference EvaluateModOperator(IOldTypeReference left, IOldTypeReference right) {
-            if (left.IsConstant() && right.IsConstant())
-                return Runtime.Integers.Modulo(left, right);
+        private ITypeSymbol EvaluateModOperator(ITypeSymbol left, ITypeSymbol right) {
+            if (left.IsConstant(out var l) && right.IsConstant(out var r))
+                return Runtime.Integers.Modulo(l, r);
             else
                 return GetSmallestIntegralType(left, right, 32);
         }
 
-        private IOldTypeReference EvaluateDivOperator(IOldTypeReference left, IOldTypeReference right) {
-            if (left.IsConstant() && right.IsConstant())
-                return Runtime.Integers.Divide(left, right);
+        private ITypeSymbol EvaluateDivOperator(ITypeSymbol left, ITypeSymbol right) {
+            if (left.IsConstant(out var l) && right.IsConstant(out var r))
+                return Runtime.Integers.Divide(l, r);
             else
                 return GetSmallestIntegralType(left, right, 32);
         }

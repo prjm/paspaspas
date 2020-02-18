@@ -1,5 +1,4 @@
 ﻿using System;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -54,7 +53,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
 
             if (Kind == DefinedOperators.IsOperator)
                 return EvaluateIsOperator(input);
@@ -62,36 +61,36 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.AsOperator)
                 return EvaluateAsOperator(input);
 
-            return GetErrorTypeReference();
+            return Invalid;
         }
 
-        private IOldTypeReference EvaluateIsOperator(Signature input) {
-            var classObject = GetTypeByIdOrUndefinedType(input[0].TypeId) as IStructuredType;
-            var classType = GetTypeByIdOrUndefinedType(input[1].TypeId) as IStructuredType;
+        private ITypeSymbol EvaluateIsOperator(Signature input) {
+            var classObject = input[0].TypeDefinition as IStructuredType;
+            var classType = input[1].TypeDefinition as IStructuredType;
 
             if (classObject == default || classType == default)
-                return GetErrorTypeReference();
+                return Invalid;
 
             if (classObject.StructTypeKind == StructuredTypeKind.Interface)
-                return MakeTypeInstanceReference(KnownTypeIds.BooleanType);
+                return SystemUnit.BooleanType;
 
-            if (!TypeRegistry.AreCommonBaseClasses(classObject.TypeId, classType.TypeId))
-                return GetErrorTypeReference();
+            if (!TypeRegistry.AreCommonBaseClasses(classObject, classType))
+                return Invalid;
 
-            return MakeTypeInstanceReference(KnownTypeIds.BooleanType);
+            return Invalid;
         }
 
-        private IOldTypeReference EvaluateAsOperator(Signature input) {
-            var classObject = GetTypeByIdOrUndefinedType(input[0].TypeId) as IStructuredType;
-            var classType = GetTypeByIdOrUndefinedType(input[1].TypeId) as IStructuredType;
+        private ITypeSymbol EvaluateAsOperator(Signature input) {
+            var classObject = input[0].TypeDefinition as IStructuredType;
+            var classType = input[1].TypeDefinition as IStructuredType;
 
             if (classObject == default || classType == default)
-                return GetErrorTypeReference();
+                return Invalid;
 
-            if (!TypeRegistry.AreCommonBaseClasses(classObject.TypeId, classType.TypeId))
-                return GetErrorTypeReference();
+            if (!TypeRegistry.AreCommonBaseClasses(classObject, classType))
+                return Invalid;
 
-            return MakeTypeInstanceReference(classType.TypeId);
+            return classType;
         }
 
     }

@@ -72,5 +72,14 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <returns></returns>
         public IIntrinsicInvocationResult MakeInvocationResultFromIntrinsic(IRoutineGroup targetRoutine, IRoutine parameterGroup)
             => new IntrinsicInvocationResult(targetRoutine, parameterGroup);
+
+        /// <summary>
+        ///     create an invalid / error value
+        /// </summary>
+        /// <param name="invalidResult"></param>
+        /// <returns></returns>
+        public IValue MakeInvalidValue(SpecialConstantKind invalidResult)
+            => new ErrorValue(provider.GetErrorType(), invalidResult);
+
     }
 }

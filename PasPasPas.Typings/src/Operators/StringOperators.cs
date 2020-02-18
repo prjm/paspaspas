@@ -43,34 +43,40 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override IOldTypeReference EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
-            var operations = Runtime.GetStringOperators(left.TypeKind, right.TypeKind);
+            var operations = Runtime.GetStringOperators(left.TypeDefinition, right.TypeDefinition);
 
             if (operations == null)
-                return GetErrorTypeReference();
+                return Invalid;
 
             if (Kind == DefinedOperators.ConcatOperator)
                 return EvaluateConcatOperator(left, right, operations);
 
-            return GetErrorTypeReference();
+            return Invalid;
         }
 
-        private IOldTypeReference EvaluateConcatOperator(IOldTypeReference left, IOldTypeReference right, IStringOperations operations) {
-            if (left.IsConstant() && right.IsConstant())
-                return operations.Concat(left, right);
+        private ITypeSymbol EvaluateConcatOperator(ITypeSymbol left, ITypeSymbol right, IStringOperations operations) {
+            if (left.IsConstant(out var leftValue) && right.IsConstant(out var rightValue))
+                return operations.Concat(leftValue, rightValue);
 
-            var leftType = TypeRegistry.GetTypeByIdOrUndefinedType(left.TypeId);
-            var rightType = TypeRegistry.GetTypeByIdOrUndefinedType(right.TypeId);
+            var leftType = left.TypeDefinition;
+            var rightType = right.TypeDefinition;
 
-            if (leftType.TypeKind == CommonTypeKind.UnicodeStringType || right.TypeKind == CommonTypeKind.UnicodeStringType)
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnicodeStringType);
+            if (leftType is IStringType leftString && leftString.Kind == StringTypeKind.UnicodeString)
+                return leftType;
 
-            if (leftType.TypeKind == CommonTypeKind.WideCharType || rightType.TypeKind == CommonTypeKind.WideCharType)
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnicodeStringType);
+            if (rightType is IStringType rightString && rightString.Kind == StringTypeKind.UnicodeString)
+                return rightType;
 
-            return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.AnsiStringType);
+            if (leftType is ICharType leftChar && leftChar.Kind == CharTypeKind.WideChar)
+                return SystemUnit.UnicodeStringType;
+
+            if (rightType is ICharType rightChar && rightChar.Kind == CharTypeKind.WideChar)
+                return SystemUnit.UnicodeStringType;
+
+            return SystemUnit.AnsiStringType;
         }
     }
 }
