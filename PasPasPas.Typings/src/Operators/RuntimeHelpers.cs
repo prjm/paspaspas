@@ -69,13 +69,13 @@ namespace PasPasPas.Typings.Operators {
             var left = leftType.TypeDefinition.BaseType;
             var right = rightType.TypeDefinition.BaseType;
 
-            if (left == BaseType.Real && leftType.IsNumerical())
+            if (left == BaseType.Real && (right == BaseType.Real || right == BaseType.Integer))
                 return runtime.RealNumbers;
 
-            if (right == BaseType.Real && left.IsNumerical())
+            if (right == BaseType.Real && (left == BaseType.Real || left == BaseType.Integer))
                 return runtime.RealNumbers;
 
-            if (right.IsNumerical() && left.IsNumerical())
+            if (right == BaseType.Integer && left == BaseType.Integer)
                 return runtime.Integers;
 
             if (types.IsSubrangeType(leftType.TypeDefinition, out var subrangeType1)) {
@@ -134,10 +134,10 @@ namespace PasPasPas.Typings.Operators {
             var left = leftType.TypeDefinition.BaseType;
             var right = rightType.TypeDefinition.BaseType;
 
-            if (left == BaseType.Real && right.IsNumerical())
+            if (left == BaseType.Real && (right == BaseType.Real || right == BaseType.Integer))
                 return runtime.RealNumbers;
 
-            if (right == BaseType.Real && left.IsNumerical())
+            if (right == BaseType.Real && (left == BaseType.Real || left == BaseType.Integer))
                 return runtime.RealNumbers;
 
             if (right == BaseType.Integer && left == BaseType.Integer)
@@ -146,7 +146,7 @@ namespace PasPasPas.Typings.Operators {
             if (left == BaseType.Boolean && right == BaseType.Boolean)
                 return runtime.Booleans;
 
-            if (left.IsTextual() && right.IsTextual())
+            if ((left == BaseType.Char || left == BaseType.String) && (right == BaseType.Char || right == BaseType.String))
                 return runtime.Strings;
 
             if (types.IsSubrangeType(leftType.TypeDefinition, out var subrangeType1)) {
@@ -169,12 +169,14 @@ namespace PasPasPas.Typings.Operators {
         ///     simple helper: get string operations for a binary operator
         /// </summary>
         /// <param name="runtime">runtime to use</param>
-        /// <param name="left">left operand</param>
-        /// <param name="right">right operand</param>
+        /// <param name="leftType">left operand</param>
+        /// <param name="rightType">right operand</param>
         /// <returns></returns>
-        public static IStringOperations GetStringOperators(this IRuntimeValueFactory runtime, ITypeSymbol left, ITypeSymbol right) {
+        public static IStringOperations GetStringOperators(this IRuntimeValueFactory runtime, ITypeSymbol leftType, ITypeSymbol rightType) {
+            var left = leftType.TypeDefinition.BaseType;
+            var right = rightType.TypeDefinition.BaseType;
 
-            if (left.IsTextual() && right.IsTextual())
+            if ((left == BaseType.Char || left == BaseType.String) && (right == BaseType.Char || right == BaseType.String))
                 return runtime.Strings;
 
             return default;

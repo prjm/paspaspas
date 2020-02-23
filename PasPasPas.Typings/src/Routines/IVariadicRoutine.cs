@@ -30,7 +30,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        IOldTypeReference ResolveCall(Signature signature);
+        ITypeSymbol ResolveCall(Signature signature);
 
     }
 }

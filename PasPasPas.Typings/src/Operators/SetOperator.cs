@@ -95,39 +95,39 @@ namespace PasPasPas.Typings.Operators {
 
             var setBaseType = setType.BaseTypeDefinition.ResolveAlias();
 
-            if (ordinalType.TypeKind.IsChar() && setBaseType.TypeKind.IsChar() ||
-                ordinalType.TypeKind == CommonTypeKind.BooleanType && setBaseType.TypeKind == CommonTypeKind.BooleanType ||
-                ordinalType.TypeKind.IsNumerical() && setBaseType.TypeKind.IsNumerical() ||
-                ordinalType.TypeKind == CommonTypeKind.EnumerationType && setBaseType.TypeId == ordinalType.TypeId) {
+            if (ordinalType.BaseType == BaseType.Char && setBaseType.BaseType == BaseType.Char ||
+                ordinalType.BaseType == BaseType.Boolean && setBaseType.BaseType == BaseType.Boolean ||
+                ordinalType.BaseType == BaseType.Integer && setBaseType.BaseType == BaseType.Integer ||
+                ordinalType.BaseType == BaseType.Enumeration && setBaseType.Equals(ordinalType)) {
 
-                if (left.IsConstant() && right.IsConstant())
-                    return Runtime.Structured.InSet(TypeRegistry, left, right);
+                if (left.IsConstant(out var leftValue) && right.IsConstant(out var rightSet))
+                    return Runtime.Structured.InSet(TypeRegistry, leftValue, rightSet);
 
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
+                return TypeRegistry.SystemUnit.BooleanType;
             }
 
-            return GetErrorTypeReference();
+            return Invalid;
         }
 
         private ITypeSymbol EvaluateSetDiffOperator(ITypeSymbol left, ITypeSymbol right) {
-            if (left.IsConstant() && right.IsConstant())
-                return Runtime.Structured.SetDifference(TypeRegistry, left, right);
+            if (left.IsConstant(out var l) && right.IsConstant(out var r))
+                return Runtime.Structured.SetDifference(TypeRegistry, l, r);
             else
-                return TypeRegistry.GetMatchingSetType(left, right);
+                return TypeRegistry.GetMatchingSetType(left.TypeDefinition, right.TypeDefinition);
         }
 
-        private ITypeSymbol ference EvaluateSetAddOperator(ITypeSymbol left, ITypeSymbol right) {
-            if (left.IsConstant() && right.IsConstant())
-                return Runtime.Structured.SetUnion(TypeRegistry, left, right);
+        private ITypeSymbol EvaluateSetAddOperator(ITypeSymbol left, ITypeSymbol right) {
+            if (left.IsConstant(out var leftSet) && right.IsConstant(out var rightSet))
+                return Runtime.Structured.SetUnion(TypeRegistry, leftSet, rightSet);
             else
-                return TypeRegistry.GetMatchingSetType(left, right);
+                return TypeRegistry.GetMatchingSetType(left.TypeDefinition, right.TypeDefinition);
         }
 
         private ITypeSymbol EvaluateSetIntersectOperator(ITypeSymbol left, ITypeSymbol right) {
-            if (left.IsConstant() && right.IsConstant())
-                return Runtime.Structured.SetIntersection(TypeRegistry, left, right);
+            if (left.IsConstant(out var leftSet) && right.IsConstant(out var rightSet))
+                return Runtime.Structured.SetIntersection(TypeRegistry, leftSet, rightSet);
             else
-                return TypeRegistry.GetMatchingSetType(left, right);
+                return TypeRegistry.GetMatchingSetType(left.TypeDefinition, right.TypeDefinition);
         }
     }
 }

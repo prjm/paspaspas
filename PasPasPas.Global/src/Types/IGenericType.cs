@@ -18,7 +18,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="typeIds"></param>
         /// <returns></returns>
-        Reference Bind(ImmutableArray<int> typeIds);
+        ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds);
 
     }
 }

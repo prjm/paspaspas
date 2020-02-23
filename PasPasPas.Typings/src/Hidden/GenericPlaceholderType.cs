@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -9,13 +8,15 @@ namespace PasPasPas.Typings.Hidden {
     /// <summary>
     ///     generic placeholder type
     /// </summary>
-    public class GenericPlaceholderType : TypeBase, IExtensibleGenericType {
+    public class GenericPlaceholderType : TypeDefinitionBase, IExtensibleGenericType {
 
         /// <summary>
         ///     create a new generic placeholder type
         /// </summary>
-        /// <param name="typeId"></param>
-        public GenericPlaceholderType(int typeId) : base(typeId) { }
+        /// <param name="definingUnit"></param>
+        /// <param name="name"></param>
+        public GenericPlaceholderType(string name, IUnitType definingUnit) : base(definingUnit)
+            => Name = name;
 
         /// <summary>
         ///     parameters
@@ -30,16 +31,27 @@ namespace PasPasPas.Typings.Hidden {
             => GenericParameters.Count;
 
         /// <summary>
-        ///     common type
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.HiddenType;
-
-        /// <summary>
         ///     undefined type size
         /// </summary>
         public override uint TypeSizeInBytes
             => 0;
+
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        public override BaseType BaseType
+            => BaseType.Error;
+
+        /// <summary>
+        ///     type name
+        /// </summary>
+        public override string Name { get; }
+
+        /// <summary>
+        ///     mangled name
+        /// </summary>
+        public override string MangledName
+            => string.Empty;
 
         /// <summary>
         ///     add a parameter
@@ -53,7 +65,7 @@ namespace PasPasPas.Typings.Hidden {
         /// </summary>
         /// <param name="typeIds"></param>
         /// <returns></returns>
-        public Reference Bind(ImmutableArray<int> typeIds)
+        public ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds)
             => default;
 
     }

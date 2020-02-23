@@ -31,7 +31,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     defining type
         /// </summary>
-        public int DefiningType
+        public ITypeDefinition DefiningType
             => Routine.DefiningType;
 
         /// <summary>

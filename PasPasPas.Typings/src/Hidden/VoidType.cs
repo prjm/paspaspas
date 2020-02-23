@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Typings.Hidden {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Typings.Hidden {
 
     /// <summary>
     ///     create a new void type
@@ -8,8 +10,8 @@
         /// <summary>
         ///     create a new void type
         /// </summary>
-        /// <param name="withId"></param>
-        public VoidType(int withId) : base(withId) {
+        /// <param name="definingUnit"></param>
+        public VoidType(IUnitType definingUnit) : base(definingUnit) {
         }
     }
 }

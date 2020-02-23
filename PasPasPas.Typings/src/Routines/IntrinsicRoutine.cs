@@ -16,12 +16,6 @@ namespace PasPasPas.Typings.Routines {
         public abstract string Name { get; }
 
         /// <summary>
-        ///     type id
-        /// </summary>
-        public int TypeId
-            => KnownTypeIds.IntrinsicRoutine;
-
-        /// <summary>
         ///     type registry
         /// </summary>
         public ITypeRegistry TypeRegistry { get; set; }

@@ -12,8 +12,9 @@ namespace PasPasPas.Globals.Types {
         ///     create a new set type
         /// </summary>
         /// <param name="baseType">base type for the set (ordinal type)</param>
+        /// <param name="name">set name</param>
         /// <returns></returns>
-        ISetType CreateSetType(IOrdinalType baseType);
+        ISetType CreateSetType(IOrdinalType baseType, string name);
 
         /// <summary>
         ///     create a subrange type
@@ -21,8 +22,9 @@ namespace PasPasPas.Globals.Types {
         /// <param name="baseType">base type</param>
         /// <param name="lowerBound">lower bound</param>
         /// <param name="upperBound">upper bound</param>
+        /// <param name="name">type name</param>
         /// <returns></returns>
-        ISubrangeType CreateSubrangeType(IOrdinalType baseType, IValue lowerBound, IValue upperBound);
+        ISubrangeType CreateSubrangeType(string name, IOrdinalType baseType, IValue lowerBound, IValue upperBound);
 
         /// <summary>
         ///     create a new aliased type
@@ -36,15 +38,17 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     create a new enumerated type
         /// </summary>
+        /// <param name="name">enumerated type name</param>
         /// <returns></returns>
-        IEnumeratedType CreateEnumType();
+        IEnumeratedType CreateEnumType(string name);
 
         /// <summary>
         ///     create a new structured type
         /// </summary>
-        /// <param name="typeKind"></param>
+        /// <param name="name">type name</param>
+        /// <param name="typeKind">type kind</param>
         /// <returns></returns>
-        IStructuredType CreateStructuredType(StructuredTypeKind typeKind);
+        IStructuredType CreateStructuredType(string name, StructuredTypeKind typeKind);
 
         /// <summary>
         ///     create a static array type
@@ -52,16 +56,18 @@ namespace PasPasPas.Globals.Types {
         /// <param name="baseType"></param>
         /// <param name="indexType">index type</param>
         /// <param name="isPacked"></param>
+        /// <param name="name">type name</param>
         /// <returns></returns>
-        IArrayType CreateStaticArrayType(ITypeDefinition baseType, IOrdinalType indexType, bool isPacked);
+        IArrayType CreateStaticArrayType(ITypeDefinition baseType, string name, IOrdinalType indexType, bool isPacked);
 
         /// <summary>
         ///    create a new dynamic array type
         /// </summary>
         /// <param name="baseType"></param>
+        /// <param name="typeName">type name</param>
         /// <param name="isPacked"><c>true</c> is the array is packed</param>
         /// <returns></returns>
-        IArrayType CreateDynamicArrayType(ITypeDefinition baseType, bool isPacked);
+        IArrayType CreateDynamicArrayType(ITypeDefinition baseType, string typeName, bool isPacked);
 
         /// <summary>
         ///     create a short string type
@@ -79,34 +85,37 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     create a new file type
         /// </summary>
-        /// <param name="baseType"></param>
+        /// <param name="typeName"></param>
+        /// <param name="baseTypeDefinition"></param>
         /// <returns></returns>
-        IFileType CreateFileType(ITypeDefinition baseType);
+        IFileType CreateFileType(string typeName, ITypeDefinition baseTypeDefinition);
 
         /// <summary>
         ///     create a new generic type parameter
         /// </summary>
         /// <param name="constraints">type constraints</param>
+        /// <param name="name">type name</param>
         /// <returns></returns>
-        IGenericTypeParameter CreateUnboundGenericTypeParameter(ImmutableArray<int> constraints);
+        IGenericTypeParameter CreateUnboundGenericTypeParameter(string name, ImmutableArray<int> constraints);
 
         /// <summary>
         ///     create a new generic type placeholder
         /// </summary>
+        /// <param name="name">type name</param>
         /// <returns></returns>
-        IExtensibleGenericType CreateGenericPlaceholder();
+        IExtensibleGenericType CreateGenericPlaceholder(string name);
 
         /// <summary>
         ///     create a routine type
         /// </summary>
         /// <returns></returns>
-        IRoutineType CreateRoutineType();
+        IRoutineType CreateRoutineType(string name);
 
         /// <summary>
         ///     meta class type
         /// </summary>
         /// <param name="baseType"></param>
         /// <returns></returns>
-        IMetaClassType CreateMetaClassType(ITypeDefinition baseType);
+        IMetaClassType CreateMetaClassType(string name, ITypeDefinition baseType);
     }
 }

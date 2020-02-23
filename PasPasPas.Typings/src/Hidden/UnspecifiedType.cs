@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Typings.Hidden {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Typings.Hidden {
 
     /// <summary>
     ///     unspecified type (placeholder)
@@ -8,8 +10,8 @@
         /// <summary>
         ///     create a new unspecified type
         /// </summary>
-        /// <param name="withId"></param>
-        public UnspecifiedType(int withId) : base(withId) {
+        /// <param name="deifningUnit"></param>
+        public UnspecifiedType(IUnitType deifningUnit) : base(deifningUnit) {
         }
     }
 }

@@ -44,8 +44,9 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <param name="types"></param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns></returns>
-        IValue SetUnion(ITypeRegistry types, IValue left, IValue right);
+        IValue SetUnion(IUnitType currentUnit, ITypeRegistry types, IValue left, IValue right);
 
         /// <summary>
         ///     compute a set difference
@@ -62,8 +63,9 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeRegistry"></param>
         /// <param name="left"></param>
         /// <param name="right"></param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns></returns>
-        IValue SetIntersection(ITypeRegistry typeRegistry, IValue left, IValue right);
+        IValue SetIntersection(IUnitType currentUnit, ITypeRegistry typeRegistry, IValue left, IValue right);
 
         /// <summary>
         ///     test if an element is contained in a set

@@ -17,6 +17,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="name"></param>
         public GenericArrayType(string name, IUnitType definingUnit, ITypeDefinition baseType) : base(definingUnit, definingUnit.TypeRegistry.SystemUnit.IntegerType) {
             Name = name;
+            BaseTypeDefinition = baseType;
         }
 
         /// <summary>
@@ -47,12 +48,12 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="typeIds"></param>
         /// <returns></returns>
-        public override Reference Bind(ImmutableArray<int> typeIds) {
+        public ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds) {
             if (typeIds.Length != 1)
                 return default;
 
             var arrayType = TypeRegistry.TypeCreator.CreateDynamicArrayType(typeIds[0], false);
-            return new Reference(ReferenceKind.RefToBoundGeneric, default);
+            return arrayType;
         }
     }
 }

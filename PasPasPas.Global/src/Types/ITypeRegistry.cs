@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Environment;
+﻿using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
@@ -8,11 +7,6 @@ namespace PasPasPas.Globals.Types {
     ///     interface for the global type registry
     /// </summary>
     public interface ITypeRegistry : IEnvironmentItem {
-
-        /// <summary>
-        ///     all registered types
-        /// </summary>
-        IEnumerable<ITypeDefinition> RegisteredTypeDefinitions { get; }
 
         /// <summary>
         ///     system unit
@@ -61,7 +55,7 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     type factory
         /// </summary>
-        ITypeCreator TypeCreator { get; }
+        ITypeCreator CreateTypeFactory(IUnitType unitType);
 
     }
 }

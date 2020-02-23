@@ -28,7 +28,10 @@ namespace PasPasPas.Typings.Operators {
         /// <returns></returns>
         protected override ITypeSymbol EvaluateUnaryOperator(Signature input) {
             var operand = input[0];
-            return Runtime.MakePointerValue(operand);
+            if (operand.IsConstant(out var constant))
+                return Runtime.MakePointerValue(constant);
+
+            return default;
         }
     }
 

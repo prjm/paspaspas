@@ -1,4 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Hidden {
@@ -6,25 +6,37 @@ namespace PasPasPas.Typings.Hidden {
     /// <summary>
     ///     hidden type
     /// </summary>
-    public class HiddenIntrinsicType : TypeBase {
+    public class HiddenIntrinsicType : TypeDefinitionBase {
 
         /// <summary>
         ///     create a new hidden type
         /// </summary>
-        /// <param name="withId"></param>
-        public HiddenIntrinsicType(int withId) : base(withId) {
+        /// <param name="definingUnit"></param>
+        public HiddenIntrinsicType(IUnitType definingUnit) : base(definingUnit) {
         }
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.HiddenType;
 
         /// <summary>
         ///     type size
         /// </summary>
         public override uint TypeSizeInBytes
             => 0;
+
+        /// <summary>
+        ///     base type: error type
+        /// </summary>
+        public override BaseType BaseType
+            => BaseType.Error;
+
+        /// <summary>
+        ///     type name (empty)
+        /// </summary>
+        public override string Name
+            => string.Empty;
+
+        /// <summary>
+        ///     mangled name
+        /// </summary>
+        public override string MangledName
+            => string.Empty;
     }
 }

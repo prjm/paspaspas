@@ -472,7 +472,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="right"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        public static IOldTypeReference GetMatchingSetType(this ITypeRegistry types, IOldTypeReference left, IOldTypeReference right) {
+        public static IOldTypeReference GetMatchingSetType(this ITypeRegistry types, ITypeDefinition left, ITypeDefinition right) {
             var baseType = types.GetMatchingSetBaseType(left, right, out var newType);
             if (baseType == KnownTypeIds.ErrorType)
                 return types.Runtime.Types.MakeErrorTypeReference();
@@ -492,9 +492,9 @@ namespace PasPasPas.Typings.Common {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool HaveSetsCommonBaseType(this ITypeRegistry typeRegistry, IOldTypeReference left, IOldTypeReference right) {
-            var baseType = typeRegistry.GetMatchingSetBaseType(left, right, out var _);
-            return baseType != KnownTypeIds.ErrorType;
+        public static bool HaveSetsCommonBaseType(this ITypeRegistry typeRegistry, ITypeSymbol left, ITypeSymbol right) {
+            var baseType = typeRegistry.GetMatchingSetBaseType(left.TypeDefinition, right.TypeDefinition, out var _);
+            return baseType.BaseType != BaseType.Error;
         }
 
         /// <summary>
@@ -529,8 +529,8 @@ namespace PasPasPas.Typings.Common {
             if (rightBaseType is ISubrangeType rsrt && typeRegistry.ResolveAlias(rsrt.BaseTypeId) is IOrdinalType rsrtb)
                 leftBaseType = rsrtb;
 
-            if (leftBaseType.TypeId == rightBaseType.TypeId)
-                return leftBaseType.TypeId;
+            if (leftBaseType.Equals(rightBaseType))
+                return leftBaseType;
 
             if (leftBaseType is IIntegralType && rightBaseType is IIntegralType) {
                 var result = typeRegistry.GetSmallestIntegralTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);

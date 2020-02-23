@@ -70,8 +70,8 @@ namespace PasPasPas.Typings.Operators {
                 return Invalid;
 
             if (Kind == DefinedOperators.NotOperator)
-                if (operand.IsConstant())
-                    return operations.NotOperator(operand);
+                if (operand.IsConstant(out var constOperand))
+                    return operations.NotOperator(constOperand);
                 else
                     return operand;
 
@@ -111,11 +111,11 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeSymbol EvaluateShiftOperator(bool toLeft, ITypeSymbol left, ITypeSymbol right) {
-            if (left.IsConstant() && right.IsConstant())
+            if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
                 if (toLeft)
-                    return Runtime.Integers.Shl(left, right);
+                    return Runtime.Integers.Shl(leftConstant, rightConstant);
                 else
-                    return Runtime.Integers.Shr(left, right);
+                    return Runtime.Integers.Shr(leftConstant, rightConstant);
 
             var baseType = left.TypeDefinition;
 
@@ -145,26 +145,26 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeSymbol EvaluateXorOperator(ITypeSymbol left, ITypeSymbol right, ILogicalOperations operations) {
-            if (left.IsConstant() && right.IsConstant())
-                return operations.XorOperator(left, right);
+            if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
+                return operations.XorOperator(leftConstant, rightConstant);
             else
                 return GetSmallestBoolOrIntegralType(left, right, 1);
         }
 
         private ITypeSymbol EvaluateOrOperator(ITypeSymbol left, ITypeSymbol right, ILogicalOperations operations) {
-            if (left.IsConstant() && right.IsConstant())
-                return operations.OrOperator(left, right);
+            if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
+                return operations.OrOperator(leftConstant, rightConstant);
             else if (left.IsConstant() && Runtime.Booleans.TrueValue.Equals(left))
                 return Runtime.Booleans.TrueValue;
-            else if (left.IsConstant() && Runtime.Booleans.FalseValue.Equals(false))
+            else if (left.IsConstant() && Runtime.Booleans.FalseValue.Equals(left))
                 return right;
             else
                 return GetSmallestBoolOrIntegralType(left, right, 1);
         }
 
         private ITypeSymbol EvaluateAndOperator(ITypeSymbol left, ITypeSymbol right, ILogicalOperations operations) {
-            if (left.IsConstant() && right.IsConstant())
-                return operations.AndOperator(left, right);
+            if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
+                return operations.AndOperator(leftConstant, rightConstant);
             else if (left.IsConstant() && Runtime.Booleans.FalseValue.Equals(left))
                 return Runtime.Booleans.FalseValue;
             else if (left.IsConstant() && Runtime.Booleans.TrueValue.Equals(left))

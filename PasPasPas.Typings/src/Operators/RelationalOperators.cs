@@ -102,58 +102,58 @@ namespace PasPasPas.Typings.Operators {
             return Invalid;
         }
 
-        private IOldTypeReference EvaluteGreaterThenOrEqualOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
-            if (left.IsSet() && right.IsSet() && !TypeRegistry.HaveSetsCommonBaseType(left, right))
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
-
-            if (left.IsConstant() && right.IsConstant())
-                return operations.GreaterThenEqual(left, right);
-            else
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
-        }
-
-        private IOldTypeReference EvaluateLessThenOrEqualOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
-            if (left.IsSet() && right.IsSet() && !TypeRegistry.HaveSetsCommonBaseType(left, right))
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
-
-            if (left.IsConstant() && right.IsConstant())
-                return operations.LessThenOrEqual(left, right);
-            else
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
-        }
-
-        private IOldTypeReference EvaluateGreaterThenOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
-            if (left.IsConstant() && right.IsConstant())
-                return operations.GreaterThen(left, right);
-            else
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
-        }
-
-        private IOldTypeReference EvaluateLessThenOperator(IOldTypeReference left, IOldTypeReference right, IRelationalOperations operations) {
-            if (left.IsConstant() && right.IsConstant())
-                return operations.LessThen(left, right);
-            else
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
-        }
-
-        private IOldTypeReference EvaluateNotEqualsOperator(ITypeSymbol left, ITypeSymbol right, IRelationalOperations operations) {
-            if (left.IsSet() && right.IsSet() && !TypeRegistry.HaveSetsCommonBaseType(left, right))
+        private ITypeSymbol EvaluteGreaterThenOrEqualOperator(ITypeSymbol left, ITypeSymbol right, IRelationalOperations operations) {
+            if (left.TypeDefinition.BaseType == BaseType.Set && right.TypeDefinition.BaseType == BaseType.Set && !TypeRegistry.HaveSetsCommonBaseType(left.TypeDefinition, right.TypeDefinition))
                 return Invalid;
 
-            if (left.IsConstant() && right.IsConstant())
-                return operations.NotEquals(left, right);
+            if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
+                return operations.GreaterThenEqual(leftConstant, rightConstant);
             else
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
+                return SystemUnit.BooleanType;
         }
 
-        private IOldTypeReference EvaluateEqualsOperator(ITypeSymbol left, ITypeSymbol right, IRelationalOperations operations) {
-            if (left.IsSet() && right.IsSet() && !TypeRegistry.HaveSetsCommonBaseType(left, right))
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.ErrorType);
+        private ITypeSymbol EvaluateLessThenOrEqualOperator(ITypeSymbol left, ITypeSymbol right, IRelationalOperations operations) {
+            if (left.TypeDefinition.BaseType == BaseType.Set && right.TypeDefinition.BaseType == BaseType.Set && !TypeRegistry.HaveSetsCommonBaseType(left.TypeDefinition, right.TypeDefinition))
+                return Invalid;
 
-            if (left.IsConstant() && right.IsConstant())
-                return operations.Equal(left, right);
+            if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
+                return operations.LessThenOrEqual(leftConstant, rightConstant);
             else
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.BooleanType);
+                return SystemUnit.BooleanType;
+        }
+
+        private ITypeSymbol EvaluateGreaterThenOperator(ITypeSymbol left, ITypeSymbol right, IRelationalOperations operations) {
+            if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
+                return operations.GreaterThen(leftConstant, rightConstant);
+            else
+                return SystemUnit.BooleanType;
+        }
+
+        private ITypeSymbol EvaluateLessThenOperator(ITypeSymbol left, ITypeSymbol right, IRelationalOperations operations) {
+            if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
+                return operations.LessThen(leftConstant, rightConstant);
+            else
+                return SystemUnit.BooleanType;
+        }
+
+        private ITypeSymbol EvaluateNotEqualsOperator(ITypeSymbol left, ITypeSymbol right, IRelationalOperations operations) {
+            if (left.TypeDefinition.BaseType == BaseType.Set && right.TypeDefinition.BaseType == BaseType.Set && !TypeRegistry.HaveSetsCommonBaseType(left.TypeDefinition, right.TypeDefinition))
+                return Invalid;
+
+            if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
+                return operations.NotEquals(leftConstant, rightConstant);
+            else
+                return SystemUnit.BooleanType;
+        }
+
+        private ITypeSymbol EvaluateEqualsOperator(ITypeSymbol left, ITypeSymbol right, IRelationalOperations operations) {
+            if (left.TypeDefinition.BaseType == BaseType.Set && right.TypeDefinition.BaseType == BaseType.Set && !TypeRegistry.HaveSetsCommonBaseType(left.TypeDefinition, right.TypeDefinition))
+                return Invalid;
+
+            if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
+                return operations.Equal(leftConstant, rightConstant);
+            else
+                return SystemUnit.BooleanType;
         }
     }
 }
