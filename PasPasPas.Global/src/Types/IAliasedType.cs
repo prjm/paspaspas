@@ -10,5 +10,9 @@
         /// </summary>
         ITypeDefinition BaseTypeDefinition { get; }
 
+        /// <summary>
+        ///     <c>true</c> if this is a new type
+        /// </summary>
+        bool IsNewType { get; }
     }
 }

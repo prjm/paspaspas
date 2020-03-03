@@ -14,7 +14,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="definingUnit"></param>
         /// <param name="name"></param>
         /// <param name="constraints"></param>
-        public GenericTypeParameter(IUnitType definingUnit, string name, ImmutableArray<int> constraints) : base(definingUnit) {
+        public GenericTypeParameter(IUnitType definingUnit, string name, ImmutableArray<ITypeDefinition> constraints) : base(definingUnit) {
             Name = name;
             Constraints = constraints;
         }
@@ -39,7 +39,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     type constraints
         /// </summary>
-        public ImmutableArray<int> Constraints { get; }
+        public ImmutableArray<ITypeDefinition> Constraints { get; }
 
         /// <summary>
         ///     mangled name

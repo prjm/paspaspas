@@ -96,7 +96,7 @@ namespace PasPasPas.Globals.Types {
         /// <param name="constraints">type constraints</param>
         /// <param name="name">type name</param>
         /// <returns></returns>
-        IGenericTypeParameter CreateUnboundGenericTypeParameter(string name, ImmutableArray<int> constraints);
+        IGenericTypeParameter CreateUnboundGenericTypeParameter(string name, ImmutableArray<ITypeDefinition> constraints);
 
         /// <summary>
         ///     create a new generic type placeholder

@@ -17,7 +17,7 @@ namespace PasPasPas.Typings.Structured {
 
         /// <summary>
         ///     create a new unit type
-        /// </summary
+        /// </summary>
         /// <param name="unitName">unit name</param>
         public UnitType(string unitName, ITypeRegistry typeRegistry) {
             Name = unitName;

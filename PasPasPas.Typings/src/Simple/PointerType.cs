@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     pointer type definition
     /// </summary>
-    public class PointerType : TypeDefinitionBase, IFixedSizeType {
+    public class PointerType : TypeDefinitionBase, IPointerType {
 
         /// <summary>
         ///     create a new pointer type definition

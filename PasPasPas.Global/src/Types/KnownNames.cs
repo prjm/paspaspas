@@ -318,6 +318,11 @@
         public const string PLongBool = "PLongBool";
 
         /// <summary>
+        ///     pointer to a byte boolean
+        /// </summary>
+        public const string PByteBool = "PByteBool";
+
+        /// <summary>
         ///     pointer to a word boolean
         /// </summary>
         public const string PWordBool = "PWordBool";
@@ -361,6 +366,51 @@
         ///     error type name
         /// </summary>
         public const string Error = "Error";
+
+        /// <summary>
+        ///     char type
+        /// </summary>
+        public const string Char = "Char";
+
+        /// <summary>
+        ///     ucs2 char type
+        /// </summary>
+        public const string Ucs2Char = "UCS2Char";
+
+        /// <summary>
+        ///     ucs4 char type
+        /// </summary>
+        public const string Ucs4Char = "UCS4Char";
+
+        /// <summary>
+        ///     string type
+        /// </summary>
+        public const string String = "String";
+
+        /// <summary>
+        ///     pointer to a char type
+        /// </summary>
+        public const string PChar = "PChar";
+
+        /// <summary>
+        ///     pointer to a string type
+        /// </summary>
+        public const string PString = "PString";
+
+        /// <summary>
+        ///     real type
+        /// </summary>
+        public const string Real = "Real";
+
+        /// <summary>
+        ///     generic array type
+        /// </summary>
+        public const string TArray = "TArray";
+
+        /// <summary>
+        ///     generic file type
+        /// </summary>
+        public const string File = "File";
 
         #endregion
         #region Short Type names

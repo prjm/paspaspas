@@ -12,8 +12,9 @@ namespace PasPasPas.Typings.Structured {
         ///     create a new generic constraint type
         /// </summary>
         /// <param name="definingUnit"></param>
-        public GenericConstraintType(IUnitType definingUnit) : base(definingUnit) {
-        }
+        /// <param name="kind">constraint kind</param>
+        public GenericConstraintType(IUnitType definingUnit, GenericConstraintKind kind) : base(definingUnit)
+            => Kind = kind;
 
         /// <summary>
         ///     hidden type
@@ -39,5 +40,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public override string MangledName
             => string.Empty;
+
+        public GenericConstraintKind Kind { get; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System.Collections.Generic;
+using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Common {
 
@@ -57,29 +59,21 @@ namespace PasPasPas.Typings.Common {
         public SymbolTypeKind SymbolKind
             => SymbolTypeKind.TypeDefinition;
 
-        /*
+        private static bool CanBeAssignedFromAlias(IAliasedType alias) {
 
-        private static bool CanBeAssignedFromAlias(TypeAlias alias) {
-
-            if (alias.TypeKind == CommonTypeKind.IntegerType)
+            if (alias.BaseType == BaseType.Integer)
                 return true;
 
-            if (alias.TypeKind == CommonTypeKind.Int64Type)
+            if (alias.BaseType == BaseType.Real)
                 return true;
 
-            if (alias.TypeKind == CommonTypeKind.RealType)
+            if (alias.BaseType == BaseType.Char)
                 return true;
 
-            if (alias.TypeKind == CommonTypeKind.AnsiCharType)
+            if (alias.BaseType == BaseType.Boolean)
                 return true;
 
-            if (alias.TypeKind == CommonTypeKind.WideCharType)
-                return true;
-
-            if (alias.TypeKind == CommonTypeKind.BooleanType)
-                return true;
-
-            if (alias.TypeKind == CommonTypeKind.EnumerationType)
+            if (alias.BaseType == BaseType.Enumeration)
                 return true;
 
             return !alias.IsNewType;
@@ -91,13 +85,13 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeDefinition"></param>
         /// <returns></returns>
         public static ITypeDefinition ResolveAliasForAssignment(ITypeDefinition typeDefinition) {
-            while (typeDefinition is TypeAlias alias && CanBeAssignedFromAlias(alias)) {
-                typeDefinition = alias.BaseType;
+            while (typeDefinition is IAliasedType alias && CanBeAssignedFromAlias(alias)) {
+                typeDefinition = alias.BaseTypeDefinition;
             }
 
             return typeDefinition;
         }
-
+        /*
         /// <summary>
         ///     resolve type alias
         /// </summary>
@@ -111,35 +105,29 @@ namespace PasPasPas.Typings.Common {
             return typeDefinition;
         }
 
-
+*/
         /// <summary>
         ///     test if this type can be assigned from another type
         /// </summary>
         /// <param name="otherType">other type</param>
         /// <returns><c>true</c> if the type can be assigned from</returns>
-        public virtual bool CanBeAssignedFrom(ITypeDefinition otherType) {
-            if (otherType.TypeId.In(KnownTypeIds.ErrorType, KnownTypeIds.NoType, KnownTypeIds.UnspecifiedType))
+        public virtual bool CanBeAssignedFromType(ITypeDefinition otherType) {
+
+            if (otherType.IsErrorType())
                 return false;
 
-            if (otherType.TypeId == TypeInfo.TypeId)
+            if (otherType.Equals(this))
                 return true;
 
             var baseType = ResolveAliasForAssignment(this);
             var anotherType = ResolveAliasForAssignment(otherType);
 
             if (baseType != this || anotherType != otherType) {
-                return baseType.CanBeAssignedFrom(anotherType);
+                return baseType.CanBeAssignedFromType(anotherType);
             }
 
             return false;
         }
-
-        /// <summary>
-        ///     get the short type name
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => ShortName;
 
         /// <summary>
         ///     helper function: get a list item
@@ -148,6 +136,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         protected IPoolItem<List<T>> GetList<T>()
             => TypeRegistry.ListPools.GetList<T>();
-    */
+
     }
 }

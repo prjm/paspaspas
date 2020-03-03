@@ -104,5 +104,70 @@
         ///     wide string type
         /// </summary>
         IStringType WideStringType { get; }
+
+        /// <summary>
+        ///     fixed integer type
+        /// </summary>
+        IAliasedType FixedIntType { get; }
+
+        /// <summary>
+        ///     fixed unsigned integer type
+        /// </summary>
+        IAliasedType FixedUIntType { get; }
+
+        /// <summary>
+        ///     native unsigned integer type
+        /// </summary>
+        IAliasedType NativeUIntType { get; }
+
+        /// <summary>
+        ///     long integer types
+        /// </summary>
+        IAliasedType LongIntType { get; }
+
+        /// <summary>
+        ///     single type
+        /// </summary>
+        IRealType SingleType { get; }
+
+        /// <summary>
+        ///     double type
+        /// </summary>
+        IRealType DoubleType { get; }
+
+        /// <summary>
+        ///     byte boolean type
+        /// </summary>
+        IBooleanType ByteBoolType { get; }
+
+        /// <summary>
+        ///     word boolean type
+        /// </summary>
+        IBooleanType WordBoolType { get; }
+
+        /// <summary>
+        ///     long boolean type
+        /// </summary>
+        IBooleanType LongBoolType { get; }
+
+        /// <summary>
+        ///     currency type
+        /// </summary>
+        IRealType CurrencyType { get; }
+
+        /// <summary>
+        ///     raw byte string type
+        /// </summary>
+        IStringType RawByteStringType { get; }
+
+        /// <summary>
+        ///     pointer to Unicode string type
+        /// </summary>
+        IPointerType PUnicodeStringType { get; }
+
+        /// <summary>
+        ///     pointer to wide char type
+        /// </summary>
+        IPointerType PWideCharType { get; }
     }
 }

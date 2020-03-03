@@ -33,14 +33,6 @@ namespace PasPasPas.Globals.Types {
         IRuntimeValueFactory Runtime { get; }
 
         /// <summary>
-        ///     cast a type into a another type, if possible
-        /// </summary>
-        /// <param name="sourceType"></param>
-        /// <param name="targetType"></param>
-        /// <returns></returns>
-        int Cast(int sourceType, int targetType);
-
-        /// <summary>
         ///     list pools
         /// </summary>
         IListPools ListPools { get; }

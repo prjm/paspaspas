@@ -18,6 +18,11 @@ namespace PasPasPas.Globals.Types {
         ITypeRegistry TypeRegistry { get; }
 
         /// <summary>
+        ///     number of registered symbol
+        /// </summary>
+        int Count { get; }
+
+        /// <summary>
         ///     register a symbol
         /// </summary>
         /// <param name="symbol">symbol to register</param>

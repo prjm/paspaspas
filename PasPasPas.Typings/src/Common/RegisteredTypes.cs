@@ -1,26 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Hidden;
 using PasPasPas.Typings.Operators;
-using PasPasPas.Typings.Simple;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
-    using Names = KnownNames;
-
     /// <summary>
-    ///     common type registry - contains all system defined types
+    ///     common type registry - contains all registered units
     /// </summary>
-    /// <remarks>
-    ///     <list type="bullet">
-    ///         <item>each registered type gets an unique id</item>
-    ///     </list>
-    /// </remarks>
     public class RegisteredTypes : ITypeRegistry, IEnvironmentItem {
 
         private readonly List<IUnitType> units
@@ -45,6 +34,18 @@ namespace PasPasPas.Typings.Common {
         public IListPools ListPools { get; }
 
         /// <summary>
+        ///     count registered types
+        /// </summary>
+        public int Count {
+            get {
+                var result = 0;
+                foreach (var unit in units)
+                    result += unit.Count;
+                return result;
+            }
+        }
+
+        /// <summary>
         ///     create a new type registry
         /// </summary>
         /// <param name="intSize">integer size</param>
@@ -53,20 +54,18 @@ namespace PasPasPas.Typings.Common {
         public RegisteredTypes(IRuntimeValueFactory runtime, IListPools listPools, NativeIntSize intSize) {
             Runtime = runtime;
             ListPools = listPools;
-            SystemUnit = new SystemUnit(this);
-            RegisterUnit(SystemUnit);
+            SystemUnit = new SystemUnit(this, intSize);
 
-            RegisterCommonTypes(intSize);
+            RegisterUnit(SystemUnit);
             RegisterCommonOperators();
-            RegisterTObject();
         }
 
         /// <summary>
         ///     register a unit
         /// </summary>
-        /// <param name="unitTpe"></param>
-        private void RegisterUnit(IUnitType unitTpe)
-            => units.Add(unitTpe);
+        /// <param name="unitType"></param>
+        private void RegisterUnit(IUnitType unitType)
+            => units.Add(unitType);
 
         /// <summary>
         ///     register common operators
@@ -93,116 +92,6 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     register built-in types
-        /// </summary>
-        private void RegisterCommonTypes(NativeIntSize intSize) {
-            RegisterIntTypes();
-            RegisterStringTypes();
-            RegisterPointerTypes();
-            RegisterAliasTypes();
-            RegisterNativeIntTypes(intSize);
-            RegisterHiddenTypes();
-            RegisterSystemType(new GenericArrayType(Ids.GenericArrayType), "TArray", 1);
-            RegisterSystemType(new FileType(Ids.UntypedFile, Ids.GenericPointer), "");
-            RegisterSystemType(new GenericConstraintType(Ids.GenericClassConstraint), "");
-            RegisterSystemType(new GenericConstraintType(Ids.GenericRecordConstraint), "");
-            RegisterSystemType(new GenericConstraintType(Ids.GenericConstructorConstraint), "");
-        }
-
-        private void RegisterHiddenTypes() {
-            RegisterSystemType(new UnspecifiedType(Ids.UnspecifiedType), null);
-            RegisterSystemType(new VoidType(Ids.NoType), null);
-            RegisterSystemType(new GenericTypeParameter(Ids.UnconstrainedGenericTypeParameter, ImmutableArray<int>.Empty), null);
-        }
-
-        /// <summary>
-        ///     register type alias
-        /// </summary>
-        private void RegisterAliasTypes() {
-            RegisterSystemAlias(Ids.CharType, Ids.WideCharType, "Char");
-            RegisterSystemAlias(Ids.Ucs2CharType, Ids.WideCharType, "UCS2Char");
-            RegisterSystemAlias(Ids.Ucs4CharType, Ids.CardinalType, "UCS4Char");
-            RegisterSystemAlias(Ids.StringType, Ids.UnicodeStringType, "String");
-            RegisterSystemAlias(Ids.Real, Ids.DoubleType, "Real");
-            RegisterSystemAlias(Ids.PChar, Ids.PAnsiChar, "PChar");
-            RegisterSystemAlias(Ids.PString, Ids.PUnicodeString, "PString");
-        }
-
-        private void RegisterPointerTypes() {
-            RegisterSystemType(new PointerType(Ids.GenericPointer, Ids.UntypedPointer, Names.Pointer));
-            RegisterSystemType(new PointerType(Ids.PByte, Ids.ByteType, Names.PByte));
-            RegisterSystemType(new PointerType(Ids.PShortInt, Ids.ShortInt, Names.PShortInt));
-            RegisterSystemType(new PointerType(Ids.PWord, Ids.WordType, Names.PWord));
-            RegisterSystemType(new PointerType(Ids.PSmallInt, Ids.SmallInt, Names.PSmallInt));
-            RegisterSystemType(new PointerType(Ids.PCardinal, Ids.CardinalType, Names.PCardinal));
-            RegisterSystemType(new PointerType(Ids.PLongword, Ids.LongWord, Names.PLongword));
-            RegisterSystemType(new PointerType(Ids.PFixedUint, Ids.FixedUInt, Names.PFixedUint));
-            RegisterSystemType(new PointerType(Ids.PInteger, Ids.IntegerType, Names.PInteger));
-            RegisterSystemType(new PointerType(Ids.PLongInt, Ids.LongInt, Names.PLongInt));
-            RegisterSystemType(new PointerType(Ids.PFixedInt, Ids.FixedInt, Names.PFixedInt));
-            RegisterSystemType(new PointerType(Ids.PUInt64, Ids.UInt64Type, Names.PUInt64));
-            RegisterSystemType(new PointerType(Ids.PInt64, Ids.Int64Type, Names.PInt64));
-            RegisterSystemType(new PointerType(Ids.PNativeUInt, Ids.NativeUInt, Names.PNativeUInt));
-            RegisterSystemType(new PointerType(Ids.PNativeInt, Ids.NativeInt, Names.PNativeInt));
-            RegisterSystemType(new PointerType(Ids.PSingle, Ids.SingleType, Names.PSingle));
-            RegisterSystemType(new PointerType(Ids.PDouble, Ids.DoubleType, Names.PDouble));
-            RegisterSystemType(new PointerType(Ids.PExtended, Ids.Extended, Names.PExtended));
-            RegisterSystemType(new PointerType(Ids.PAnsiChar, Ids.AnsiCharType, Names.PAnsiChar));
-            RegisterSystemType(new PointerType(Ids.PWideChar, Ids.WideCharType, Names.PWideChar));
-            RegisterSystemType(new PointerType(Ids.PAnsiString, Ids.AnsiStringType, Names.PAnsiString));
-            RegisterSystemType(new PointerType(Ids.PRawByteString, Ids.RawByteString, Names.PRawByteString));
-            RegisterSystemType(new PointerType(Ids.PUnicodeString, Ids.UnicodeStringType, Names.PUnicodeString));
-            RegisterSystemType(new PointerType(Ids.PShortString, Ids.ShortStringType, Names.PShortString));
-            RegisterSystemType(new PointerType(Ids.PWideString, Ids.WideStringType, Names.PWideString));
-            RegisterSystemType(new PointerType(Ids.PBoolean, Ids.BooleanType, Names.PBoolean));
-            RegisterSystemType(new PointerType(Ids.PLongBool, Ids.LongBoolType, Names.PLongBool));
-            RegisterSystemType(new PointerType(Ids.PWordBool, Ids.WordBoolType, Names.PWordBool));
-            RegisterSystemType(new PointerType(Ids.PPointer, Ids.GenericPointer, Names.PPointer));
-            RegisterSystemType(new PointerType(Ids.PCurrency, Ids.Currency, Names.PCurrency));
-        }
-
-        /// <summary>
-        ///     register native integer types
-        /// </summary>
-        /// <param name="intSize">integer size</param>
-        private void RegisterNativeIntTypes(NativeIntSize intSize) {
-            RegisterSystemAlias(Ids.FixedInt, Ids.IntegerType, Names.FixedInt);
-            RegisterSystemAlias(Ids.FixedUInt, Ids.CardinalType, Names.FixedUInt);
-
-            if (intSize == NativeIntSize.Windows64bit) {
-                RegisterSystemAlias(Ids.NativeInt, Ids.Int64Type, Names.NativeInt);
-                RegisterSystemAlias(Ids.NativeUInt, Ids.UInt64Type, Names.NativeUInt);
-                RegisterSystemAlias(Ids.LongInt, Ids.IntegerType, Names.LongInt);
-                RegisterSystemAlias(Ids.LongWord, Ids.CardinalType, Names.LongWord);
-            }
-            else if (intSize == NativeIntSize.All64bit) {
-                RegisterSystemAlias(Ids.NativeInt, Ids.Int64Type, Names.NativeInt);
-                RegisterSystemAlias(Ids.NativeUInt, Ids.UInt64Type, Names.NativeUInt);
-                RegisterSystemAlias(Ids.LongInt, Ids.Int64Type, Names.LongInt);
-                RegisterSystemAlias(Ids.LongWord, Ids.UInt64Type, Names.LongWord);
-            }
-            else {
-                RegisterSystemAlias(Ids.NativeInt, Ids.IntegerType, Names.NativeInt);
-                RegisterSystemAlias(Ids.NativeUInt, Ids.CardinalType, Names.NativeUInt);
-                RegisterSystemAlias(Ids.LongInt, Ids.IntegerType, Names.LongInt);
-                RegisterSystemAlias(Ids.LongWord, Ids.CardinalType, Names.LongWord);
-            }
-        }
-
-        /// <summary>
-        ///     register string types
-        /// </summary>
-        private void RegisterStringTypes() {
-            RegisterSystemType(new AnsiCharType(Ids.AnsiCharType));
-            RegisterSystemType(new WideCharType(Ids.WideCharType));
-            RegisterSystemType(new AnsiStringType(Names.AnsiString, Ids.AnsiStringType, AnsiStringType.DefaultSystemCodePage));
-            RegisterSystemType(new AnsiStringType(Names.RawByteString, Ids.RawByteString, AnsiStringType.NoCodePage));
-            RegisterSystemType(new ShortStringType(Ids.ShortStringType, 0xff));
-            RegisterSystemType(new UnicodeStringType(Ids.UnicodeStringType));
-            RegisterSystemType(new WideStringType(Ids.WideStringType));
-        }
-
-        /// <summary>
         ///     gets an registered operator
         /// </summary>
         /// <param name="operatorKind">operator kind</param>
@@ -213,21 +102,7 @@ namespace PasPasPas.Typings.Common {
             return null;
         }
 
-        /// <summary>
-        ///     get a type definition or the error fall back
-        /// </summary>
-        /// <param name="typeId">type id</param>
-        /// <returns></returns>
-        public ITypeDefinition GetTypeByIdOrUndefinedType(int typeId) {
-            if (!types.TryGetValue(typeId, out var result))
-                result = types[Ids.ErrorType];
-
-            return result;
-        }
-
-        /// <summary>
-        ///     register the global TObject class
-        /// </summary>
+        /*
         private void RegisterTObject() {
             var def = new StructuredTypeDeclaration(Ids.TObject, StructuredTypeKind.Class);
             //var meta = new MetaStructuredTypeDeclaration(KnownTypeIds.TClass, KnownTypeIds.TObject);
@@ -247,28 +122,6 @@ namespace PasPasPas.Typings.Common {
             //    KnownTypeIds.GenericPointer)[0].ConstantParam = true;
         }
 
-        /// <summary>
-        ///     resolve a type kind
-        /// </summary>
-        /// <param name="typeId">given type id</param>
-        /// <returns>common type kind</returns>
-        public CommonTypeKind GetTypeKindOf(int typeId)
-            => GetTypeByIdOrUndefinedType(typeId).TypeKind;
-
-        /// <summary>
-        ///     create a type reference
-        /// </summary>
-        /// <param name="typeId">type id</param>
-        /// <returns>type reference</returns>
-        public IOldTypeReference MakeTypeInstanceReference(int typeId)
-            => Runtime.Types.MakeTypeInstanceReference(typeId, GetTypeKindOf(typeId));
-
-        private int ResolveAlias(int typeId) {
-            var typeDef = GetTypeByIdOrUndefinedType(typeId);
-            if (typeDef is TypeAlias alias)
-                return ResolveAlias(alias.BaseTypeId);
-            return typeId;
-        }
 
         /// <summary>
         ///     cast one type to another type
@@ -359,14 +212,7 @@ namespace PasPasPas.Typings.Common {
 
             return Ids.Unused;
         }
-
-        /// <summary>
-        ///     make a reference to a type
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
-        public IOldTypeReference MakeTypeReference(int typeId)
-            => Runtime.Types.MakeTypeReference(typeId);
+        */
 
         /// <summary>
         ///     find an intrinsic routine from the system unit
@@ -386,5 +232,13 @@ namespace PasPasPas.Typings.Common {
 
             return default;
         }
+
+        /// <summary>
+        ///     create a new type factory
+        /// </summary>
+        /// <param name="unitType"></param>
+        /// <returns></returns>
+        public ITypeCreator CreateTypeFactory(IUnitType unitType)
+            => new CommonTypeCreator(this, unitType);
     }
 }

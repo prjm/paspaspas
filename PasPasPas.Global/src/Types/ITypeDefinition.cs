@@ -30,5 +30,11 @@
         /// </summary>
         string MangledName { get; }
 
+        /// <summary>
+        ///     test if this type can be assigned from a value of another type
+        /// </summary>
+        /// <param name="otherType"></param>
+        /// <returns></returns>
+        bool CanBeAssignedFromType(ITypeDefinition otherType);
     }
 }

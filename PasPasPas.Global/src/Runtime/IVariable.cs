@@ -26,5 +26,11 @@ namespace PasPasPas.Globals.Runtime {
         ///     class fields
         /// </summary>
         bool ClassItem { get; }
+
+        /// <summary>
+        ///     variable type
+        /// </summary>
+        ITypeDefinition TypeDefinition { get; }
+
     }
 }

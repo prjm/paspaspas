@@ -1,4 +1,6 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Collections.Immutable;
+using PasPasPas.Globals.Options.DataTypes;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Hidden;
 using PasPasPas.Typings.Routines;
@@ -18,12 +20,20 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     create a new system unit
         /// </summary>
-        /// <param name="types"></param>
-        public SystemUnit(ITypeRegistry types) : base(KnownNames.System, types) {
+        /// <param name="types">global type registry</param>
+        /// <param name="intSize">integer size</param>
+        public SystemUnit(ITypeRegistry types, NativeIntSize intSize) : base(KnownNames.System, types) {
             ErrorType = RegisterType(new ErrorType(this));
 
             RegisterIntegralTypes();
             RegisterRealTypes();
+            RegisterBooleanTypes();
+            RegisterStringTypes();
+            RegisterPointerTypes();
+            RegisterNativeIntTypes(intSize);
+            RegisterAliasTypes();
+            RegisterHiddenTypes();
+            RegisterOtherTypes();
 
             // intrinsic functions
             RegisterRoutine(new Abs());
@@ -56,11 +66,11 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         private void RegisterRealTypes() {
             RegisterType(new RealType(this, RealTypeKind.Real48));
-            RegisterType(new RealType(this, RealTypeKind.Single));
-            RegisterType(new RealType(this, RealTypeKind.Double));
+            SingleType = RegisterType(new RealType(this, RealTypeKind.Single));
+            DoubleType = RegisterType(new RealType(this, RealTypeKind.Double));
             ExtendedType = RegisterType(new RealType(this, RealTypeKind.Extended));
             RegisterType(new RealType(this, RealTypeKind.Comp));
-            RegisterType(new RealType(this, RealTypeKind.Currency));
+            CurrencyType = RegisterType(new RealType(this, RealTypeKind.Currency));
         }
 
         private void RegisterIntegralTypes() {
@@ -83,9 +93,108 @@ namespace PasPasPas.Typings.Common {
 
         private void RegisterBooleanTypes() {
             BooleanType = RegisterType(new BooleanType(this, BooleanTypeKind.Boolean));
-            RegisterType(new BooleanType(this, BooleanTypeKind.ByteBool));
-            RegisterType(new BooleanType(this, BooleanTypeKind.WordBool));
-            RegisterType(new BooleanType(this, BooleanTypeKind.LongBool));
+            ByteBoolType = RegisterType(new BooleanType(this, BooleanTypeKind.ByteBool));
+            WordBoolType = RegisterType(new BooleanType(this, BooleanTypeKind.WordBool));
+            LongBoolType = RegisterType(new BooleanType(this, BooleanTypeKind.LongBool));
+        }
+
+        private void RegisterStringTypes() {
+            AnsiCharType = RegisterType(new AnsiCharType(this));
+            WideCharType = RegisterType(new WideCharType(this));
+            AnsiStringType = RegisterType(new AnsiStringType(this, Names.AnsiString, Simple.AnsiStringType.DefaultSystemCodePage));
+            RawByteStringType = RegisterType(new AnsiStringType(this, Names.RawByteString, Simple.AnsiStringType.NoCodePage));
+            ShortStringType = RegisterType(new ShortStringType(this, 0xff));
+            UnicodeStringType = RegisterType(new UnicodeStringType(this));
+            WideStringType = RegisterType(new WideStringType(this));
+        }
+
+        private void RegisterPointerTypes() {
+            GenericPointerType = RegisterType(new PointerType(this, default, Names.Pointer));
+            RegisterType(new PointerType(this, ByteType, Names.PByte));
+            RegisterType(new PointerType(this, ShortIntType, Names.PShortInt));
+            RegisterType(new PointerType(this, WordType, Names.PWord));
+            RegisterType(new PointerType(this, SmallIntType, Names.PSmallInt));
+            RegisterType(new PointerType(this, CardinalType, Names.PCardinal));
+            RegisterType(new PointerType(this, LongWordType, Names.PLongword));
+            RegisterType(new PointerType(this, FixedUIntType, Names.PFixedUint));
+            RegisterType(new PointerType(this, IntegerType, Names.PInteger));
+            RegisterType(new PointerType(this, LongIntType, Names.PLongInt));
+            RegisterType(new PointerType(this, FixedIntType, Names.PFixedInt));
+            RegisterType(new PointerType(this, UInt64Type, Names.PUInt64));
+            RegisterType(new PointerType(this, Int64Type, Names.PInt64));
+            RegisterType(new PointerType(this, NativeUIntType, Names.PNativeUInt));
+            RegisterType(new PointerType(this, NativeIntType, Names.PNativeInt));
+            RegisterType(new PointerType(this, SingleType, Names.PSingle));
+            RegisterType(new PointerType(this, DoubleType, Names.PDouble));
+            RegisterType(new PointerType(this, ExtendedType, Names.PExtended));
+            RegisterType(new PointerType(this, AnsiCharType, Names.PAnsiChar));
+            PWideCharType = RegisterType(new PointerType(this, WideCharType, Names.PWideChar));
+            RegisterType(new PointerType(this, AnsiStringType, Names.PAnsiString));
+            RegisterType(new PointerType(this, RawByteStringType, Names.PRawByteString));
+            PUnicodeStringType = RegisterType(new PointerType(this, UnicodeStringType, Names.PUnicodeString));
+            RegisterType(new PointerType(this, ShortStringType, Names.PShortString));
+            RegisterType(new PointerType(this, WideStringType, Names.PWideString));
+            RegisterType(new PointerType(this, BooleanType, Names.PBoolean));
+            RegisterType(new PointerType(this, ByteBoolType, Names.PByteBool));
+            RegisterType(new PointerType(this, LongBoolType, Names.PLongBool));
+            RegisterType(new PointerType(this, WordBoolType, Names.PWordBool));
+            RegisterType(new PointerType(this, GenericPointerType, Names.PPointer));
+            RegisterType(new PointerType(this, CurrencyType, Names.PCurrency));
+        }
+
+        /// <summary>
+        ///     register type alias
+        /// </summary>
+        private void RegisterAliasTypes() {
+            RegisterAlias(WideCharType, Names.Char);
+            RegisterAlias(WideCharType, Names.Ucs2Char);
+            RegisterAlias(CardinalType, Names.Ucs4Char);
+            RegisterAlias(UnicodeStringType, Names.String);
+            RegisterAlias(DoubleType, Names.Real);
+            RegisterAlias(PWideCharType, Names.PChar);
+            RegisterAlias(PUnicodeStringType, Names.PString);
+        }
+
+        private void RegisterHiddenTypes() {
+            RegisterType(new UnspecifiedType(this));
+            RegisterType(new VoidType(this));
+            RegisterType(new GenericTypeParameter(this, string.Empty, ImmutableArray<ITypeDefinition>.Empty));
+        }
+
+        private void RegisterOtherTypes() {
+            RegisterType(new GenericArrayType(Names.TArray, this, default));
+            RegisterType(new FileType(this, Names.File, GenericPointerType));
+            RegisterType(new GenericConstraintType(this, GenericConstraintKind.Class));
+            RegisterType(new GenericConstraintType(this, GenericConstraintKind.Record));
+            RegisterType(new GenericConstraintType(this, GenericConstraintKind.Constructor));
+        }
+
+        /// <summary>
+        ///     register native integer types
+        /// </summary>
+        /// <param name="intSize">integer size</param>
+        private void RegisterNativeIntTypes(NativeIntSize intSize) {
+            FixedIntType = RegisterAlias(IntegerType, Names.FixedInt);
+            FixedUIntType = RegisterAlias(CardinalType, Names.FixedUInt);
+
+            if (intSize == NativeIntSize.Windows64bit) {
+                NativeIntType = RegisterAlias(Int64Type, Names.NativeInt);
+                NativeUIntType = RegisterAlias(UInt64Type, Names.NativeUInt);
+                LongIntType = RegisterAlias(IntegerType, Names.LongInt);
+                LongWordType = RegisterAlias(CardinalType, Names.LongWord);
+            }
+            else if (intSize == NativeIntSize.All64bit) {
+                NativeIntType = RegisterAlias(Int64Type, Names.NativeInt);
+                NativeUIntType = RegisterAlias(UInt64Type, Names.NativeUInt);
+                LongIntType = RegisterAlias(Int64Type, Names.LongInt);
+                LongWordType = RegisterAlias(UInt64Type, Names.LongWord);
+            }
+            else {
+                NativeIntType = RegisterAlias(IntegerType, Names.NativeInt);
+                NativeUIntType = RegisterAlias(CardinalType, Names.NativeUInt);
+                LongIntType = RegisterAlias(IntegerType, Names.LongInt);
+                LongWordType = RegisterAlias(CardinalType, Names.LongWord);
+            }
         }
 
         /// <summary>
@@ -104,9 +213,10 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="baseType"></param>
         /// <param name="aliasName"></param>
-        private void RegisterAlias(ITypeDefinition baseType, string aliasName) {
+        private IAliasedType RegisterAlias(ITypeDefinition baseType, string aliasName) {
             var alias = new TypeAlias(this, baseType, aliasName, false);
             Register(alias);
+            return alias;
         }
 
         /// <summary>
@@ -172,27 +282,121 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public IBooleanType BooleanType { get; private set; }
 
-        public ICharType WideCharType => throw new System.NotImplementedException();
+        /// <summary>
+        ///     byte boolean type
+        /// </summary>
+        public IBooleanType ByteBoolType { get; private set; }
 
-        public ICharType AnsiCharType => throw new System.NotImplementedException();
+        /// <summary>
+        ///     word boolean type
+        /// </summary>
+        public IBooleanType WordBoolType { get; private set; }
 
-        public IStringType UnicodeStringType => throw new System.NotImplementedException();
+        /// <summary>
+        ///     long boolean type
+        /// </summary>
+        public IBooleanType LongBoolType { get; private set; }
 
-        public IStringType AnsiStringType => throw new System.NotImplementedException();
+        /// <summary>
+        ///     wide char type
+        /// </summary>
+        public ICharType WideCharType { get; private set; }
 
-        public IStringType ShortStringType => throw new System.NotImplementedException();
+        /// <summary>
+        ///     ANSI char type
+        /// </summary>
+        public ICharType AnsiCharType { get; private set; }
+
+        /// <summary>
+        ///     Unicode string type
+        /// </summary>
+        public IStringType UnicodeStringType { get; private set; }
+
+        /// <summary>
+        ///     ANSI string type
+        /// </summary>
+        public IStringType AnsiStringType { get; private set; }
+
+        /// <summary>
+        ///     raw byte string type
+        /// </summary>
+        public IStringType RawByteStringType { get; private set; }
+
+        /// <summary>
+        ///     short string type
+        /// </summary>
+        public IStringType ShortStringType { get; private set; }
 
         /// <summary>
         ///     extended type definition
         /// </summary>
         public IRealType ExtendedType { get; private set; }
 
-        public IAliasedType NativeIntType => throw new System.NotImplementedException();
+        /// <summary>
+        ///     native integer type
+        /// </summary>
+        public IAliasedType NativeIntType { get; private set; }
 
-        public ITypeDefinition GenericPointerType => throw new System.NotImplementedException();
+        /// <summary>
+        ///     native unsigned integer type
+        /// </summary>
+        public IAliasedType NativeUIntType { get; private set; }
+
+        /// <summary>
+        ///     native long int type
+        /// </summary>
+        public IAliasedType LongIntType { get; private set; }
+
+        /// <summary>
+        ///     native long word type
+        /// </summary>
+        public IAliasedType LongWordType { get; private set; }
+
+        /// <summary>
+        ///     generic pointer type
+        /// </summary>
+        public ITypeDefinition GenericPointerType { get; private set; }
 
         public ITypeDefinition NilType => throw new System.NotImplementedException();
 
-        public IStringType WideStringType => throw new System.NotImplementedException();
+        /// <summary>
+        ///     wide string type
+        /// </summary>
+        public IStringType WideStringType { get; private set; }
+
+        /// <summary>
+        ///     fixed integer type
+        /// </summary>
+        public IAliasedType FixedIntType { get; private set; }
+
+        /// <summary>
+        ///     fixed unsigned int type
+        /// </summary>
+        public IAliasedType FixedUIntType { get; private set; }
+
+        /// <summary>
+        ///     single type
+        /// </summary>
+        public IRealType SingleType { get; private set; }
+
+        /// <summary>
+        ///     double type
+        /// </summary>
+        public IRealType DoubleType { get; private set; }
+
+        /// <summary>
+        ///     currency type
+        /// </summary>
+        public IRealType CurrencyType { get; private set; }
+
+        /// <summary>
+        ///     pointer to a wide char type
+        /// </summary>
+        public IPointerType PWideCharType { get; private set; }
+
+        /// <summary>
+        ///     pointer to a Unicode string type
+        /// </summary>
+        public IPointerType PUnicodeStringType { get; private set; }
     }
 }

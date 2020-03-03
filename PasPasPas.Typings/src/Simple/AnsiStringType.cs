@@ -5,7 +5,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     string type definition
     /// </summary>
-    public class AnsiStringType : StringTypeBase {
+    public class AnsiStringType : StringTypeBase, IAnsiStringType {
 
         /// <summary>
         ///     default system code page

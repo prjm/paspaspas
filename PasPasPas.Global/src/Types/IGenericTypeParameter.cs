@@ -10,7 +10,7 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     constraint types
         /// </summary>
-        ImmutableArray<int> Constraints { get; }
+        ImmutableArray<ITypeDefinition> Constraints { get; }
 
     }
 }
