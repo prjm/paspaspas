@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Routines {
 
@@ -63,12 +63,6 @@ namespace PasPasPas.Typings.Routines {
             => TypeRegistry.Runtime.RealNumbers;
 
         /// <summary>
-        ///     defining type
-        /// </summary>
-        public int DefiningType
-            => KnownTypeIds.UnspecifiedType;
-
-        /// <summary>
         ///     parameters
         /// </summary>
         public List<IRoutine> Items { get; }
@@ -80,37 +74,58 @@ namespace PasPasPas.Typings.Routines {
         public abstract IntrinsicRoutineId RoutineId { get; }
 
         /// <summary>
+        ///     defining type
+        /// </summary>
+        public ITypeDefinition DefiningType
+            => TypeRegistry.SystemUnit;
+
+        /// <summary>
+        ///     symbol kind
+        /// </summary>
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.IntrinsicRoutine;
+
+        /// <summary>
+        ///     no type definition
+        /// </summary>
+        public ITypeDefinition TypeDefinition
+            => TypeRegistry.SystemUnit.UnspecifiedType;
+
+        /// <summary>
+        ///     make an invocation result
+        /// </summary>
+        /// <param name="parameter">parameter</param>
+        /// <param name="returnType">return type</param>
+        /// <returns></returns>
+        protected IIntrinsicInvocationResult MakeResult(ITypeSymbol returnType, ITypeSymbol parameter)
+            => Types.MakeInvocationResultFromIntrinsic(this, Types.MakeSignature(returnType, parameter));
+
+        /// <summary>
+        ///     make an invocation result
+        /// </summary>
+        /// <param name="returnType">return type</param>
+        /// <returns></returns>
+        protected IIntrinsicInvocationResult MakeResult(ITypeSymbol returnType)
+            => Types.MakeInvocationResultFromIntrinsic(this, Types.MakeSignature(returnType));
+
+
+        /// <summary>
+        ///     make an invocation result
+        /// </summary>
+        /// <param name="returnType"></param>
+        /// <param name="signature"></param>
+        /// <returns></returns>
+        protected IIntrinsicInvocationResult MakeResult(ITypeSymbol returnType, ISignature signature)
+            => Types.MakeInvocationResultFromIntrinsic(this, Types.MakeSignature(returnType, signature));
+
+        /// <summary>
         ///     make a subrange value
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IOldTypeReference MakeSubrangeValue(int typeId, IOldTypeReference value)
+        public IValue MakeSubrangeValue(ITypeDefinition typeId, IValue value)
             => Runtime?.Types?.MakeSubrangeValue(typeId, value);
-
-        /// <summary>
-        ///     make a type instance reference
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
-        public IOldTypeReference MakeTypeInstanceReference(int typeId)
-            => Runtime?.Types?.MakeTypeInstanceReference(typeId, TypeRegistry.GetTypeKindOf(typeId));
-
-        /// <summary>
-        ///     retrieve an ordinal type
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <param name="ordinalType"></param>
-        /// <returns></returns>
-        public bool IsOrdinalType(int typeId, out IOrdinalType ordinalType) {
-            ordinalType = TypeRegistry.GetTypeByIdOrUndefinedType(typeId) as IOrdinalType;
-
-            if (ordinalType != default && ordinalType.TypeKind.IsOrdinal())
-                return true;
-
-            ordinalType = default;
-            return false;
-        }
 
         /// <summary>
         ///     create parameters
@@ -118,59 +133,11 @@ namespace PasPasPas.Typings.Routines {
         internal virtual void CreateParameters() { }
 
         /// <summary>
-        ///     test if the given type is a short string type
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <param name="shortStringType"></param>
-        /// <returns></returns>
-        public bool IsShortStringType(int typeId, out IShortStringType shortStringType) {
-            shortStringType = TypeRegistry.GetTypeByIdOrUndefinedType(typeId) as IShortStringType;
-
-            if (shortStringType != default && shortStringType.TypeKind == CommonTypeKind.ShortStringType)
-                return true;
-
-            shortStringType = default;
-            return false;
-        }
-
-        /// <summary>
-        ///     test if the given type is a subrange type
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <param name="subrangeType"></param>
-        /// <returns></returns>
-        public bool IsSubrangeType(int typeId, out ISubrangeType subrangeType) {
-            subrangeType = TypeRegistry.GetTypeByIdOrUndefinedType(typeId) as ISubrangeType;
-
-            if (subrangeType != default && subrangeType.TypeKind == CommonTypeKind.SubrangeType)
-                return true;
-
-            subrangeType = default;
-            return false;
-        }
-
-        /// <summary>
-        ///     test if the given type is a array type
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <param name="arrayType"></param>
-        /// <returns></returns>
-        public bool IsArrayType(int typeId, out IArrayType arrayType) {
-            arrayType = TypeRegistry.GetTypeByIdOrUndefinedType(typeId) as IArrayType;
-
-            if (arrayType != default && arrayType.TypeKind.IsArray())
-                return true;
-
-            arrayType = default;
-            return false;
-        }
-
-        /// <summary>
         ///     resolve a call
         /// </summary>
         /// <param name="callableRoutines"></param>
         /// <param name="signature"></param>
-        public virtual void ResolveCall(IList<IRoutine> callableRoutines, Signature signature) {
+        public virtual void ResolveCall(IList<IRoutineResult> callableRoutines, ISignature signature) {
             if (this is IUnaryRoutine unaryRoutine)
                 ResolveCall(unaryRoutine, callableRoutines, signature);
 
@@ -178,8 +145,8 @@ namespace PasPasPas.Typings.Routines {
                 ResolveCall(variadicRoutine, callableRoutines, signature);
         }
 
-        private static void ResolveCall(IUnaryRoutine unaryRoutine, IList<IRoutine> callableRoutines, Signature signature) {
-            if (signature.Length != 1)
+        private void ResolveCall(IUnaryRoutine unaryRoutine, IList<IRoutineResult> callableRoutines, ISignature signature) {
+            if (signature.Count != 1)
                 return;
 
             var parameter = signature[0];
@@ -187,45 +154,30 @@ namespace PasPasPas.Typings.Routines {
             if (!unaryRoutine.CheckParameter(parameter))
                 return;
 
-            var resultType = default(IOldTypeReference);
+            var resultType = default(IRoutineResult);
 
-            if (unaryRoutine.IsConstant && parameter.IsConstant())
-                resultType = unaryRoutine.ExecuteCall(parameter);
+            if (unaryRoutine.IsConstant && parameter.IsConstant(out var value))
+                resultType = Types.MakeInvocationResultFromIntrinsic(this, unaryRoutine.ExecuteCall(value));
             else
                 resultType = unaryRoutine.ResolveCall(parameter);
 
-            var result = new Routine(unaryRoutine, unaryRoutine.Kind, resultType);
-            result.AddParameter("AValue").SymbolType = parameter;
-            callableRoutines.Add(result);
+            callableRoutines.Add(resultType);
         }
 
 
-        private static void ResolveCall(IVariadicRoutine variadicRoutine, IList<IRoutine> callableRoutines, Signature signature) {
+        private void ResolveCall(IVariadicRoutine variadicRoutine, IList<IRoutineResult> callableRoutines, ISignature signature) {
 
             if (!variadicRoutine.CheckParameter(signature))
                 return;
 
-            var resultType = default(IOldTypeReference);
+            var result = default(IRoutineResult);
 
-            if (variadicRoutine.IsConstant && signature.IsConstant && variadicRoutine is IConstantVariadicRoutine cvr)
-                resultType = cvr.ExecuteCall(signature);
+            if (variadicRoutine.IsConstant && signature.HasConstantParameters && variadicRoutine is IConstantVariadicRoutine cvr)
+                result = Types.MakeInvocationResultFromIntrinsic(this, cvr.ExecuteCall(signature));
             else
-                resultType = variadicRoutine.ResolveCall(signature);
+                result = variadicRoutine.ResolveCall(signature);
 
-            var result = new Routine(variadicRoutine, variadicRoutine.Kind, resultType);
-
-            for (var i = 0; i < signature.Length; i++)
-                result.AddParameter($"AValue{signature}").SymbolType = signature[0];
             callableRoutines.Add(result);
         }
-
-
-        /// <summary>
-        ///     stub: make an runtime exception
-        /// </summary>
-        /// <returns></returns>
-        protected IOldTypeReference RuntimeException()
-            => Runtime.Types.MakeErrorTypeReference(); // ... to be changed
-
     }
 }

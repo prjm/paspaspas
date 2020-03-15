@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Environment;
+﻿using System.Collections.Generic;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
@@ -36,6 +37,11 @@ namespace PasPasPas.Globals.Types {
         ///     list pools
         /// </summary>
         IListPools ListPools { get; }
+
+        /// <summary>
+        ///     registered units
+        /// </summary>
+        IEnumerable<IUnitType> Units { get; }
 
         /// <summary>
         ///     find a intrinsic routine by id

@@ -53,7 +53,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input) {
 
             if (Kind == DefinedOperators.IsOperator)
                 return EvaluateIsOperator(input);
@@ -64,7 +64,7 @@ namespace PasPasPas.Typings.Operators {
             return Invalid;
         }
 
-        private ITypeSymbol EvaluateIsOperator(Signature input) {
+        private ITypeSymbol EvaluateIsOperator(ISignature input) {
             var classObject = input[0].TypeDefinition as IStructuredType;
             var classType = input[1].TypeDefinition as IStructuredType;
 
@@ -80,7 +80,7 @@ namespace PasPasPas.Typings.Operators {
             return Invalid;
         }
 
-        private ITypeSymbol EvaluateAsOperator(Signature input) {
+        private ITypeSymbol EvaluateAsOperator(ISignature input) {
             var classObject = input[0].TypeDefinition as IStructuredType;
             var classType = input[1].TypeDefinition as IStructuredType;
 

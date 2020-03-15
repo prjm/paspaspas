@@ -43,14 +43,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeRegistry"></param>
         /// <param name="signature"></param>
         /// <returns></returns>
-        bool Matches(ITypeRegistry typeRegistry, Signature signature);
-
-        ////
-        /// <summary>
-        ///     create a signature
-        /// </summary>
-        /// <returns></returns>
-        Signature CreateSignature(ITypeRegistry runtime);
+        bool Matches(ITypeRegistry typeRegistry, ISignature signature);
 
         /// <summary>
         ///     routine code

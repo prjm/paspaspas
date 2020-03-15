@@ -12,7 +12,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => "Concat";
+            => KnownNames.Concat;
 
         /// <summary>
         ///     constant routine
@@ -37,15 +37,16 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public bool CheckParameter(Signature signature) {
-            if (signature.Length < 1)
+        public bool CheckParameter(ISignature signature) {
+            if (signature.Count < 1)
                 return false;
 
-            for (var i = 0; i < signature.Length; i++) {
-                if (signature[i].IsTextual())
+            foreach (var parameter in signature) {
+
+                if (parameter.HasTextType())
                     continue;
 
-                if (IsSubrangeType(signature[i].TypeId, out var subrangeType) && subrangeType.BaseType.TypeKind.IsTextual())
+                if (parameter.TypeDefinition is ISubrangeType subrangeType && subrangeType.SubrangeOfType.IsTextType())
                     continue;
 
                 return false;
@@ -59,25 +60,25 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(Signature signature) {
-            if (signature.Length < 1)
-                return RuntimeException();
+        public IValue ExecuteCall(ISignature signature) {
+            if (signature.Count < 1)
+                return Strings.Invalid;
 
-            var result = signature[0];
+            var result = signature[0] as IValue;
 
-            if (result.IsSubrangeValue(out var value))
-                result = value.Value;
+            if (result is ISubrangeValue subrange)
+                result = subrange.WrappedValue;
 
-            for (var i = 1; i < signature.Length; i++) {
+            foreach (var parameter in signature) {
 
-                if (signature[i].IsTextual())
-                    result = Strings.Concat(result, signature[i]);
+                if (parameter.HasTextType())
+                    result = Strings.Concat(result, parameter as IValue);
 
-                else if (signature[i].IsSubrangeValue(out value))
-                    result = Strings.Concat(result, value.Value);
+                else if (parameter is ISubrangeValue subrangeValue)
+                    result = Strings.Concat(result, subrangeValue.WrappedValue);
 
                 else
-                    return RuntimeException();
+                    return Strings.Invalid;
             }
 
             return result;
@@ -88,27 +89,35 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(Signature signature) {
-            if (signature.Length == 1) {
-                if (IsSubrangeType(signature[0].TypeId, out var subrangeType))
-                    return MakeTypeInstanceReference(subrangeType.BaseTypeId);
+        public IIntrinsicInvocationResult ResolveCall(ISignature signature) {
+            if (signature.Count == 1) {
+                if (signature[0] is ISubrangeType subrangeType)
+                    return MakeResult(subrangeType.SubrangeOfType, subrangeType.SubrangeOfType);
                 else
-                    return MakeTypeInstanceReference(signature[0].TypeId);
+                    return MakeResult(signature[0].TypeDefinition, signature[0].TypeDefinition);
             }
 
             var useUnicode = false;
 
-            for (var i = 0; i < signature.Length; i++) {
-                if (IsSubrangeType(signature[i].TypeId, out var subrangeType))
-                    useUnicode |= subrangeType.BaseType.TypeKind.IsUnicodeText();
+            foreach (var parameter in signature) {
+                ITypeDefinition baseType;
+
+                if (parameter.TypeDefinition is ISubrangeType subrangeType)
+                    baseType = subrangeType.SubrangeOfType.TypeDefinition;
                 else
-                    useUnicode |= signature[i].IsUnicodeText();
+                    baseType = parameter.TypeDefinition;
+
+                useUnicode |= baseType is IStringType stringType && //
+                    (stringType.Kind == StringTypeKind.UnicodeString || stringType.Kind == StringTypeKind.WideStringType);
+
+                useUnicode |= baseType is ICharType charType && charType.Kind == CharTypeKind.WideChar;
+
             }
 
             if (useUnicode)
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnicodeStringType);
+                return MakeResult(TypeRegistry.SystemUnit.UnicodeStringType, signature);
             else
-                return TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.AnsiStringType);
+                return MakeResult(TypeRegistry.SystemUnit.AnsiStringType, signature);
 
         }
     }

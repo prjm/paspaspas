@@ -5,13 +5,13 @@ namespace PasPasPas.Typings.Hidden {
     /// <summary>
     ///     unspecified type (placeholder)
     /// </summary>
-    public class UnspecifiedType : HiddenIntrinsicType {
+    public class UnspecifiedType : HiddenIntrinsicType, IUnspecifiedType {
 
         /// <summary>
         ///     create a new unspecified type
         /// </summary>
-        /// <param name="deifningUnit"></param>
-        public UnspecifiedType(IUnitType deifningUnit) : base(deifningUnit) {
+        /// <param name="definingUnit"></param>
+        public UnspecifiedType(IUnitType definingUnit) : base(definingUnit) {
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Contracts;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
@@ -12,7 +13,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => "Chr";
+            => KnownNames.Chr;
 
         /// <summary>
         ///     constant routine
@@ -37,12 +38,14 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter) {
-            if (parameter.IsIntegral())
+        public bool CheckParameter(ITypeSymbol parameter) {
+            Ensure.NotNull(parameter);
+
+            if (parameter.GetBaseType() == BaseType.Integer)
                 return true;
 
-            if (IsSubrangeType(parameter.TypeId, out var subrangeType))
-                return subrangeType.BaseType.TypeKind.IsIntegral();
+            if (parameter.HasSubrangeType(out var subrangeType))
+                return CheckParameter(subrangeType.SubrangeOfType);
 
             return false;
         }
@@ -52,15 +55,15 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
+        public IValue ExecuteCall(IValue parameter) {
 
-            if (parameter.IsIntegral())
-                return TypeRegistry.Runtime.Integers.Chr(parameter);
+            if (parameter is IIntegerValue integer)
+                return TypeRegistry.Runtime.Integers.Chr(integer);
 
-            if (parameter.IsSubrangeValue(out var value))
-                return ExecuteCall(value.Value);
+            if (parameter is ISubrangeValue subrange)
+                return ExecuteCall(subrange.WrappedValue);
 
-            return RuntimeException();
+            return Runtime.Chars.Invalid;
         }
 
         /// <summary>
@@ -68,7 +71,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => MakeTypeInstanceReference(KnownTypeIds.CharType);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(TypeRegistry.SystemUnit.WideCharType, parameter);
     }
 }

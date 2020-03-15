@@ -30,7 +30,7 @@
         /// </summary>
         /// <param name="input">operator input - type reference or constant</param>
         /// <returns>operator result - type reference or constant</returns>
-        ITypeSymbol EvaluateOperator(Signature input);
+        ITypeSymbol EvaluateOperator(ISignature input);
 
     }
 }

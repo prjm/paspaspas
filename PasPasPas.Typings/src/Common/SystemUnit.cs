@@ -156,7 +156,7 @@ namespace PasPasPas.Typings.Common {
         }
 
         private void RegisterHiddenTypes() {
-            RegisterType(new UnspecifiedType(this));
+            UnspecifiedType = RegisterType(new UnspecifiedType(this));
             RegisterType(new VoidType(this));
             RegisterType(new GenericTypeParameter(this, string.Empty, ImmutableArray<ITypeDefinition>.Empty));
         }
@@ -398,5 +398,10 @@ namespace PasPasPas.Typings.Common {
         ///     pointer to a Unicode string type
         /// </summary>
         public IPointerType PUnicodeStringType { get; private set; }
+
+        /// <summary>
+        ///     unspecified type
+        /// </summary>
+        public IUnspecifiedType UnspecifiedType { get; private set; }
     }
 }

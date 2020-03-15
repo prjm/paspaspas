@@ -73,7 +73,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">operator input</param>
         /// <returns>operator result</returns>
-        protected override ITypeSymbol EvaluateUnaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateUnaryOperator(ISignature input) {
             var operand = input[0];
             var operations = Runtime.GetArithmeticOperators(TypeRegistry, operand);
 
@@ -105,7 +105,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input signature</param>
         /// <returns>operator result</returns>
-        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input) {
             var left = input[0];
             var right = input[1];
 

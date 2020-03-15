@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Structured;
@@ -11,29 +12,13 @@ namespace PasPasPas.Typings.Common {
     public static class RegisteredTypesHelper {
 
         /// <summary>
-        ///     test if the given type is a subrange type
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <param name="subrangeType"></param>
-        /// <returns></returns>
-        public static bool IsSubrangeType(this ITypeDefinition typeId, out ISubrangeType subrangeType) {
-            if (typeId.BaseType == BaseType.Subrange && typeId is ISubrangeType subrange) {
-                subrangeType = subrange;
-                return true;
-            }
-
-            subrangeType = default;
-            return false;
-        }
-
-        /// <summary>
         ///     test if a given type is a string type
         /// </summary>
-        /// <param name="typeId"></param>
+        /// <param name="typeDefinition"></param>
         /// <param name="stringTypeDefinition"></param>
         /// <returns></returns>
-        public static bool IsStringType(this ITypeDefinition typeId, out IStringType stringTypeDefinition) {
-            if (typeId.BaseType == BaseType.String && typeId is IStringType stringType) {
+        public static bool IsStringType(this ITypeDefinition typeDefinition, out IStringType stringTypeDefinition) {
+            if (typeDefinition.BaseType == BaseType.String && typeDefinition is IStringType stringType) {
                 stringTypeDefinition = stringType;
                 return true;
             }
@@ -41,7 +26,6 @@ namespace PasPasPas.Typings.Common {
             stringTypeDefinition = default;
             return false;
         }
-
 
         /// <summary>
         ///     resolve a type alias
@@ -406,10 +390,11 @@ namespace PasPasPas.Typings.Common {
         ///     determine the resulting type for a subrange type
         /// </summary>
         /// <param name="types">used type registry</param>
+        /// <param name="typeCreator"></param>
         /// <param name="lowerBound">lower bound of the subrange</param>
         /// <param name="upperBound">upper bound of the subrange type</param>
         /// <returns></returns>
-        public static ITypeDefinition GetTypeForSubrangeType(this ITypeRegistry types, ITypeSymbol lowerBound, ITypeSymbol upperBound) {
+        public static ITypeDefinition GetTypeForSubrangeType(this ITypeRegistry types, ITypeCreator typeCreator, ITypeSymbol lowerBound, ITypeSymbol upperBound) {
             var left = lowerBound.TypeDefinition.BaseType;
             var right = upperBound.TypeDefinition.BaseType;
 
@@ -435,20 +420,20 @@ namespace PasPasPas.Typings.Common {
                     baseType = types.GetSmallestCharTypeOrNext(lowerBound.TypeDefinition, upperBound.TypeDefinition);
                 else if (isBoolean)
                     baseType = types.GetSmallestBooleanTypeOrNext(lowerBound.TypeDefinition, upperBound.TypeDefinition);
-                else if (isEnum && lowerBound.TypeDefinition.Equals(upperBound.TypeDefinition);
-                baseType = lowerBound.TypeDefinition;
+                else if (isEnum && lowerBound.TypeDefinition.Equals(upperBound.TypeDefinition))
+                    baseType = lowerBound.TypeDefinition;
 
                 if (baseType.IsErrorType())
                     return baseType;
 
-                var typeDef = types.TypeCreator.CreateSubrangeType(baseType, lowerBound, upperBound);
-                return typeDef.TypeId;
+                var typeDef = typeCreator.CreateSubrangeType(string.Empty, baseType as IOrdinalType, lowerBound as IValue, upperBound as IValue);
+                return typeDef;
             }
 
-            if (lowerBound.TypeId == upperBound.TypeId) {
-                var baseType = types.GetTypeByIdOrUndefinedType(upperBound.TypeId);
-                var typeDef = types.TypeCreator.CreateSubrangeType(baseType.TypeId, lowerBound, upperBound);
-                return typeDef.TypeId;
+            if (lowerBound.TypeDefinition.Equals(upperBound.TypeDefinition)) {
+                var baseType = upperBound.TypeDefinition as IOrdinalType;
+                var typeDef = typeCreator.CreateSubrangeType(string.Empty, baseType, lowerBound as IValue, upperBound as IValue);
+                return typeDef;
             }
 
             return types.SystemUnit.ErrorType;
@@ -463,19 +448,20 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public static ITypeSymbol GetBaseTypeForArrayOrSet(this ITypeRegistry types, ITypeSymbol baseType, ITypeSymbol elementType) {
             if (elementType == default)
-                baseType = types.Runtime.Types.MakeErrorTypeReference();
+                baseType = types.SystemUnit.ErrorType;
             else if (baseType == default)
-                baseType = types.MakeTypeInstanceReference(elementType.TypeId);
-            else if (baseType.TypeKind.IsIntegral() && elementType.TypeKind.IsIntegral())
-                baseType = types.MakeTypeInstanceReference(types.GetSmallestIntegralTypeOrNext(baseType.TypeDefinition, elementType.TypeDefinition));
-            else if (baseType.TypeKind.IsTextual() && elementType.TypeKind.IsTextual())
-                baseType = types.MakeTypeInstanceReference(types.GetSmallestTextTypeOrNext(baseType.TypeId, elementType.TypeId));
-            else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == elementType.TypeId)
-                baseType = types.MakeTypeInstanceReference(elementType.TypeId);
-            else if (baseType.TypeKind == CommonTypeKind.RealType && elementType.TypeKind == CommonTypeKind.RealType)
-                baseType = types.MakeTypeInstanceReference(KnownTypeIds.Extended);
-            else if (baseType.TypeKind == CommonTypeKind.RecordType && types.AreRecordTypesCompatible(baseType.TypeId, elementType.TypeId))
-                baseType = types.MakeTypeInstanceReference(elementType.TypeId);
+                baseType = elementType.TypeDefinition;
+            else if (baseType.TypeDefinition.BaseType == BaseType.Integer && elementType.TypeDefinition.BaseType == BaseType.Integer)
+                baseType = types.GetSmallestIntegralTypeOrNext(baseType.TypeDefinition, elementType.TypeDefinition);
+            else if ((baseType.TypeDefinition.BaseType == BaseType.Char || baseType.TypeDefinition.BaseType == BaseType.String) &&
+                (elementType.TypeDefinition.BaseType == BaseType.Char || elementType.TypeDefinition.BaseType == BaseType.String))
+                baseType = types.GetSmallestTextTypeOrNext(baseType.TypeDefinition, elementType.TypeDefinition);
+            else if (baseType.TypeDefinition is IOrdinalType && baseType.Equals(elementType))
+                baseType = elementType.TypeDefinition;
+            else if (baseType.TypeDefinition.BaseType == BaseType.Real && elementType.TypeDefinition.BaseType == BaseType.Real)
+                baseType = types.SystemUnit.ExtendedType;
+            else if (baseType.TypeDefinition is IStructuredType structType && structType.StructTypeKind == StructuredTypeKind.Record && types.AreRecordTypesCompatible(baseType.TypeDefinition, elementType.TypeDefinition))
+                baseType = elementType.TypeDefinition;
 
             return baseType;
         }
@@ -486,18 +472,18 @@ namespace PasPasPas.Typings.Common {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <param name="types"></param>
+        /// <param name="typeCreator"></param>
         /// <returns></returns>
-        public static IOldTypeReference GetMatchingSetType(this ITypeRegistry types, ITypeDefinition left, ITypeDefinition right) {
+        public static ITypeDefinition GetMatchingSetType(this ITypeRegistry types, ITypeCreator typeCreator, ITypeDefinition left, ITypeDefinition right) {
             var baseType = types.GetMatchingSetBaseType(left, right, out var newType);
-            if (baseType == KnownTypeIds.ErrorType)
-                return types.Runtime.Types.MakeErrorTypeReference();
+            if (baseType.IsErrorType())
+                return baseType;
 
             if (!newType) {
-                return types.MakeTypeInstanceReference(left.TypeId);
+                return left.TypeDefinition;
             }
 
-            var type = types.TypeCreator.CreateSetType(baseType);
-            return types.MakeTypeInstanceReference(type.TypeId);
+            return typeCreator.CreateSetType(baseType as IOrdinalType, string.Empty);
         }
 
         /// <summary>
@@ -520,51 +506,50 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeRegistry"></param>
         /// <param name="requireNewType"></param>
         /// <returns></returns>
-        public static IOrdinalType GetMatchingSetBaseType(this ITypeRegistry typeRegistry, ITypeDefinition left, ITypeDefinition right, out bool requireNewType) {
+        public static ITypeDefinition GetMatchingSetBaseType(this ITypeRegistry typeRegistry, ITypeDefinition left, ITypeDefinition right, out bool requireNewType) {
             requireNewType = false;
 
-            if (!(typeRegistry.GetTypeByIdOrUndefinedType(left.TypeId) is ISetType leftType))
-                return KnownTypeIds.ErrorType;
+            if (!(left.TypeDefinition is ISetType leftType))
+                return typeRegistry.SystemUnit.ErrorType;
 
-            if (!(typeRegistry.GetTypeByIdOrUndefinedType(right.TypeId) is ISetType rightType))
-                return KnownTypeIds.ErrorType;
+            if (!(right.TypeDefinition is ISetType rightType))
+                return typeRegistry.SystemUnit.ErrorType;
 
-            if (!(typeRegistry.ResolveAlias(leftType.BaseTypeId) is IOrdinalType leftBaseType))
-                return KnownTypeIds.ErrorType;
+            if (!(leftType.BaseTypeDefinition.ResolveAlias() is IOrdinalType leftBaseType))
+                return typeRegistry.SystemUnit.ErrorType;
 
-            if (!(typeRegistry.ResolveAlias(rightType.BaseTypeId) is IOrdinalType rightBaseType))
-                return KnownTypeIds.ErrorType;
+            if (!(rightType.BaseTypeDefinition.ResolveAlias() is IOrdinalType rightBaseType))
+                return typeRegistry.SystemUnit.ErrorType;
 
-            if (leftBaseType.TypeId == rightBaseType.TypeId)
-                return leftBaseType.TypeId;
+            if (leftBaseType.Equals(rightBaseType))
+                return leftBaseType;
 
-            if (leftBaseType is ISubrangeType lsrt && typeRegistry.ResolveAlias(lsrt.BaseTypeId) is IOrdinalType lsrtb)
+            if (leftBaseType is ISubrangeType lsrt && lsrt.SubrangeOfType.ResolveAlias() is IOrdinalType lsrtb)
                 leftBaseType = lsrtb;
 
-            if (rightBaseType is ISubrangeType rsrt && typeRegistry.ResolveAlias(rsrt.BaseTypeId) is IOrdinalType rsrtb)
+            if (rightBaseType is ISubrangeType rsrt && rsrt.SubrangeOfType.ResolveAlias() is IOrdinalType rsrtb)
                 leftBaseType = rsrtb;
 
             if (leftBaseType.Equals(rightBaseType))
                 return leftBaseType;
 
             if (leftBaseType is IIntegralType && rightBaseType is IIntegralType) {
-                var result = typeRegistry.GetSmallestIntegralTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
-                requireNewType = result != leftBaseType.TypeId || result != rightBaseType.TypeId;
+                var result = typeRegistry.GetSmallestIntegralTypeOrNext(leftBaseType, rightBaseType);
+                requireNewType = !result.Equals(leftBaseType) || !result.Equals(rightBaseType);
                 return result;
             }
 
             if (leftBaseType is ICharType && rightBaseType is ICharType) {
-                var result = typeRegistry.GetSmallestCharTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
-                requireNewType = result != leftBaseType.TypeId || result != rightBaseType.TypeId;
-                return result;
+                var result = typeRegistry.GetSmallestCharTypeOrNext(leftBaseType, rightBaseType);
+                requireNewType = !result.Equals(leftBaseType) || !result.Equals(rightBaseType); return result;
             }
             if (leftBaseType is IBooleanType && rightBaseType is IBooleanType) {
-                var result = typeRegistry.GetSmallestBooleanTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
-                requireNewType = result != leftBaseType.TypeId || result != rightBaseType.TypeId;
+                var result = typeRegistry.GetSmallestBooleanTypeOrNext(leftBaseType, rightBaseType);
+                requireNewType = !result.Equals(leftBaseType) || !result.Equals(rightBaseType);
                 return result;
             }
 
-            return KnownTypeIds.ErrorType;
+            return typeRegistry.SystemUnit.ErrorType;
         }
 
         /// <summary>
@@ -573,7 +558,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeRegistry"></param>
         /// <returns></returns>
         public static uint GetPointerSize(this ITypeRegistry typeRegistry)
-            => typeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.GenericPointer).TypeSizeInBytes;
+            => typeRegistry.SystemUnit.GenericPointerType.TypeSizeInBytes;
 
         /// <summary>
         ///     check if two types have a common base class
@@ -596,13 +581,12 @@ namespace PasPasPas.Typings.Common {
                 baseClass = baseClass.BaseClass as IStructuredType;
             }
 
-            baseClass = typeRegistry.GetTypeByIdOrUndefinedType(rightClass.BaseClassId) as IStructuredType;
+            baseClass = rightClass.BaseClass as IStructuredType;
             while (baseClass != default) {
-                if (baseClass.TypeId == leftClass.TypeId)
+                if (baseClass.Equals(leftClass))
                     return true;
-                baseClass = typeRegistry.GetTypeByIdOrUndefinedType(baseClass.BaseClassId) as IStructuredType;
+                baseClass = baseClass.BaseClass as IStructuredType;
             }
-
 
             return false;
         }

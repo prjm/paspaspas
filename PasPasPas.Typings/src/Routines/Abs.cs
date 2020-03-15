@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Contracts;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
@@ -12,19 +13,21 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => "Abs";
+            => KnownNames.Abs;
 
         /// <summary>
         ///     check parameter type kind
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter) {
-            if (parameter.IsNumerical())
+        public bool CheckParameter(ITypeSymbol parameter) {
+            Ensure.NotNull(parameter);
+
+            if (parameter.HasNumericType())
                 return true;
 
-            if (IsSubrangeType(parameter.TypeId, out var value))
-                return value.BaseType.TypeKind.IsNumerical();
+            if (parameter.HasSubrangeType(out var subrangeType))
+                return subrangeType.SubrangeOfType.IsNumericType();
 
             return false;
         }
@@ -52,26 +55,31 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => MakeTypeInstanceReference(parameter.TypeId);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(parameter, parameter);
 
         /// <summary>
         ///     resolve a call
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
+        public IValue ExecuteCall(IValue parameter) {
+            switch (parameter.GetBaseType()) {
 
-            if (parameter.IsIntegral())
-                return Integers.Abs(parameter);
+                case BaseType.Integer:
+                    return Integers.Abs(parameter);
 
-            if (parameter.IsReal())
-                return RealNumbers.Abs(parameter);
+                case BaseType.Real:
+                    return RealNumbers.Abs(parameter);
 
-            if (parameter.IsSubrangeValue(out var value))
-                return MakeSubrangeValue(parameter.TypeId, ExecuteCall(value.Value));
+                case BaseType.Subrange:
+                    var subrangeValue = parameter as ISubrangeValue;
+                    var wrappedValue = ExecuteCall(subrangeValue.WrappedValue);
+                    return MakeSubrangeValue(parameter.TypeDefinition, wrappedValue);
 
-            return RuntimeException();
+                default:
+                    return Integers.Invalid;
+            }
         }
     }
 }

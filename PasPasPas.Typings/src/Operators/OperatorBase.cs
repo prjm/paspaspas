@@ -67,7 +67,11 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input signature</param>
         /// <returns>output type id</returns>
-        public ITypeSymbol EvaluateOperator(Signature input) {
+        public ITypeSymbol EvaluateOperator(ISignature input) {
+
+            if (input.ParameterCount != Arity)
+                throw new InvalidOperationException();
+
             switch (Arity) {
                 case 1:
                     return EvaluateUnaryOperator(input);
@@ -83,7 +87,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input parameters</param>
         /// <returns>operator result</returns>
-        protected virtual ITypeSymbol EvaluateBinaryOperator(Signature input)
+        protected virtual ITypeSymbol EvaluateBinaryOperator(ISignature input)
             => Invalid;
 
         /// <summary>
@@ -91,7 +95,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">operator parameters</param>
         /// <returns></returns>
-        protected virtual ITypeSymbol EvaluateUnaryOperator(Signature input)
+        protected virtual ITypeSymbol EvaluateUnaryOperator(ISignature input)
             => Invalid;
 
         /// <summary>
@@ -137,10 +141,10 @@ namespace PasPasPas.Typings.Operators {
         /// <returns>type reference</returns>
         protected ITypeDefinition GetSmallestBoolOrIntegralType(ITypeSymbol left, ITypeSymbol right, int minBitSize) {
 
-            if (TypeRegistry.IsSubrangeType(left.TypeDefinition, out var subrangeType1))
+            if (left.TypeDefinition.IsSubrangeType(out var subrangeType1))
                 return GetSmallestBoolOrIntegralType(subrangeType1.SubrangeOfType, right, minBitSize);
 
-            if (TypeRegistry.IsSubrangeType(right.TypeDefinition, out var subrangeType2))
+            if (left.TypeDefinition.IsSubrangeType(out var subrangeType2))
                 return GetSmallestBoolOrIntegralType(left, subrangeType2.SubrangeOfType, minBitSize);
 
             if (left.TypeDefinition.BaseType == BaseType.Boolean && right.TypeDefinition.BaseType == BaseType.Boolean)

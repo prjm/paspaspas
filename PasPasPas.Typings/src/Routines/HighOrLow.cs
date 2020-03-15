@@ -86,7 +86,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter) {
+        public bool CheckParameter(ITypeSymbol parameter) {
 
             var typeKind = parameter.TypeKind;
 

@@ -119,7 +119,7 @@ namespace PasPasPas.Typings.Operators {
 
             var baseType = left.TypeDefinition;
 
-            if (TypeRegistry.IsSubrangeType(left.TypeDefinition, out var subrangeType))
+            if (left.TypeDefinition.IsSubrangeType(out var subrangeType))
                 baseType = subrangeType.SubrangeOfType;
 
             if (!(baseType is IIntegralType intType))

@@ -5,12 +5,12 @@ namespace PasPasPas.Globals.Types {
     /// <summary>
     ///     result of an invocation
     /// </summary>
-    public interface IInvocationResult : ITypeSymbol {
+    public interface IInvocationResult : IRoutineResult {
 
         /// <summary>
         ///     get the called routine
         /// </summary>
-        IRoutineGroup Routine { get; }
+        IRoutine RoutineIndex { get; }
 
     }
 }

@@ -29,5 +29,10 @@
         ///     invocation result
         /// </summary>
         InvocationResult = 4,
+
+        /// <summary>
+        ///     intrinsic routine
+        /// </summary>
+        IntrinsicRoutine = 5,
     }
 }

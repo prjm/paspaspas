@@ -169,5 +169,10 @@
         ///     pointer to wide char type
         /// </summary>
         IPointerType PWideCharType { get; }
+
+        /// <summary>
+        ///     unspecified type
+        /// </summary>
+        IUnspecifiedType UnspecifiedType { get; }
     }
 }

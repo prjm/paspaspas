@@ -25,7 +25,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => "Pi";
+            => KnownNames.Pi;
 
         /// <summary>
         ///     <c>pi</c> routine id
@@ -38,23 +38,23 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public bool CheckParameter(Signature signature)
-            => signature.Length == 0;
+        public bool CheckParameter(ISignature signature)
+            => signature.Count == 0;
 
         /// <summary>
         ///     execute a call
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(Signature signature)
-            => Runtime.RealNumbers.ToExtendedValue(KnownTypeIds.Extended, ExtF80.Pi);
+        public IValue ExecuteCall(ISignature signature)
+            => Runtime.RealNumbers.ToExtendedValue(ExtF80.Pi);
 
         /// <summary>
         ///     resolve a call
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(Signature signature)
-            => MakeTypeInstanceReference(KnownTypeIds.Extended);
+        public IIntrinsicInvocationResult ResolveCall(ISignature signature)
+            => MakeResult(TypeRegistry.SystemUnit.ExtendedType);
     }
 }

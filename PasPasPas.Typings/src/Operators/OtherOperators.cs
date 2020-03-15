@@ -26,7 +26,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override ITypeSymbol EvaluateUnaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateUnaryOperator(ISignature input) {
             var operand = input[0];
             if (operand.IsConstant(out var constant))
                 return Runtime.MakePointerValue(constant);
@@ -57,7 +57,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input) {
             if (!(input[0] is IArrayValue i0))
                 return Invalid;
             if (!(input[1] is IArrayValue i1))
@@ -70,7 +70,7 @@ namespace PasPasPas.Typings.Operators {
             if (baseType.TypeDefinition.BaseType == BaseType.Error)
                 return baseType;
 
-            if (!input.IsConstant) {
+            if (!input.HasConstantParameters) {
                 var arrayType = TypeRegistry.TypeCreator.CreateDynamicArrayType(baseType.TypeDefinition, false);
                 return arrayType;
             }

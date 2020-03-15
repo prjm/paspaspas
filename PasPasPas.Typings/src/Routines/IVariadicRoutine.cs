@@ -13,7 +13,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        bool CheckParameter(Signature signature);
+        bool CheckParameter(ISignature signature);
 
         /// <summary>
         ///     <c>true</c> if this routine is constant
@@ -30,7 +30,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        ITypeSymbol ResolveCall(Signature signature);
+        IIntrinsicInvocationResult ResolveCall(ISignature signature);
 
     }
 }

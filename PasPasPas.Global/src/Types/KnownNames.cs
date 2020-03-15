@@ -527,5 +527,28 @@
         /// </summary>
         public const string AtSymbol = "@";
 
+        #region Intrinsic routines
+
+        /// <summary>
+        ///     abs routine
+        /// </summary>
+        public const string Abs = "Abs";
+
+        /// <summary>
+        ///     chr routine
+        /// </summary>
+        public const string Chr = "Chr";
+
+        /// <summary>
+        ///     concat routine
+        /// </summary>
+        public const string Concat = "Concat";
+
+        /// <summary>
+        ///     pi function
+        /// </summary>
+        public const string Pi = "Pi";
+
+        #endregion
     }
 }

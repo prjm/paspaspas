@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Globals;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.Dynamic;
@@ -60,18 +61,8 @@ namespace PasPasPas.Runtime.Values.Other {
         ///     make a new method invocation result
         /// </summary>
         /// <param name="routine"></param>
-        /// <param name="routineIndex"></param>
-        public IInvocationResult MakeInvocationResult(IRoutineGroup routine, int routineIndex)
-            => new InvocationResult(routine, routineIndex);
-
-        /// <summary>
-        ///     create a new invocation result from an intrinsic routine
-        /// </summary>
-        /// <param name="parameterGroup"></param>
-        /// <param name="targetRoutine">target routine</param>
-        /// <returns></returns>
-        public IIntrinsicInvocationResult MakeInvocationResultFromIntrinsic(IRoutineGroup targetRoutine, IRoutine parameterGroup)
-            => new IntrinsicInvocationResult(targetRoutine, parameterGroup);
+        public IInvocationResult MakeInvocationResult(IRoutine routine)
+            => new InvocationResult(routine);
 
         /// <summary>
         ///     create an invalid / error value
@@ -80,6 +71,26 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <returns></returns>
         public IValue MakeInvalidValue(SpecialConstantKind invalidResult)
             => new ErrorValue(provider.GetErrorType(), invalidResult);
+        /// <summary>
+        ///     make a new intrinsic invocation result
+        /// </summary>
+        /// <param name="routine"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public IIntrinsicInvocationResult MakeInvocationResultFromIntrinsic(IRoutineGroup routine, ISignature parameters) => throw new NotImplementedException();
 
+        /// <summary>
+        ///     create an unary signature
+        /// </summary>
+        /// <param name="returnType"></param>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ISignature MakeSignature(ITypeSymbol returnType, ITypeSymbol parameter)
+            => new Signature1(returnType, parameter);
+
+        public ISignature MakeSignature(ITypeSymbol returnType, ISignature signature)
+            => new SignatureN(returnType, signature);
+
+        public IRoutineResult MakeInvocationResultFromIntrinsic(IRoutineGroup intrinsicRoutine, IValue value) => throw new NotImplementedException();
     }
 }

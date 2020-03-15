@@ -8,6 +8,11 @@ namespace PasPasPas.Globals.Runtime {
     public interface ICharOperations {
 
         /// <summary>
+        ///     invalid character
+        /// </summary>
+        IValue Invalid { get; }
+
+        /// <summary>
         ///     convert a Unicode char to a runtime value object
         /// </summary>
         /// <param name="character">Unicode character (16 bits)</param>

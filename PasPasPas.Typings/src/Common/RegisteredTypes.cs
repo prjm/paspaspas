@@ -46,6 +46,12 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
+        ///     registered units
+        /// </summary>
+        public IEnumerable<IUnitType> Units
+            => units;
+
+        /// <summary>
         ///     create a new type registry
         /// </summary>
         /// <param name="intSize">integer size</param>

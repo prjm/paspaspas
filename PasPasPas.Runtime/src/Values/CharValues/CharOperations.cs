@@ -1,5 +1,7 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Runtime.Values.Other;
 
 namespace PasPasPas.Runtime.Values.CharValues {
 
@@ -8,14 +10,24 @@ namespace PasPasPas.Runtime.Values.CharValues {
     /// </summary>
     public class CharOperations : ICharOperations {
 
+        private readonly Lazy<IValue> invalidChar;
+
         /// <summary>
         ///     create a new registry provider for char data types
         /// </summary>
-        /// <param name="registryProvider"></param>
-        public CharOperations(ITypeRegistryProvider registryProvider)
-            => registryProvider = registryProvider;
+        /// <param name="provider"></param>
+        public CharOperations(ITypeRegistryProvider provider) {
+            registryProvider = provider;
+            invalidChar = new Lazy<IValue>(() => new ErrorValue(provider.GetErrorType(), SpecialConstantKind.InvalidChar));
+        }
 
-        private ITypeRegistryProvider registryProvider;
+        private readonly ITypeRegistryProvider registryProvider;
+
+        /// <summary>
+        ///     invalid char value
+        /// </summary>
+        public IValue Invalid
+            => invalidChar.Value;
 
         /// <summary>
         ///     get a constant ANSI char value

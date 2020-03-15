@@ -1,16 +1,14 @@
-﻿using PasPasPas.Globals.Runtime;
-
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     intrinsic invocation result
     /// </summary>
-    public interface IIntrinsicInvocationResult : IInvocationResult {
+    public interface IIntrinsicInvocationResult : IRoutineResult {
 
         /// <summary>
         ///     parameters
         /// </summary>
-        IRoutine Parameters { get; }
+        ISignature Parameters { get; }
 
     }
 }

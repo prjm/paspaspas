@@ -219,6 +219,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="typeRegistry"></param>
         /// <param name="left"></param>
         /// <param name="right"></param>
+        /// <param name="currentUnit"></param>
         /// <returns></returns>
         public IValue SetIntersection(IUnitType currentUnit, ITypeRegistry typeRegistry, IValue left, IValue right) {
             if (!(left is SetValue leftSet))
@@ -237,7 +238,7 @@ namespace PasPasPas.Runtime.Values.Structured {
 
             var typeId = default(ITypeDefinition);
             if (newType) {
-                typeId = typeRegistry.CreateTypeFactory(currentUnit).CreateSetType(baseType, string.Empty);
+                typeId = typeRegistry.CreateTypeFactory(currentUnit).CreateSetType(baseType as IOrdinalType, string.Empty);
             }
             else
                 typeId = left.TypeDefinition;
@@ -285,7 +286,7 @@ namespace PasPasPas.Runtime.Values.Structured {
 
             var typeId = default(ITypeDefinition);
             if (newType)
-                typeId = types.CreateTypeFactory(currentUnit).CreateSetType(baseType, string.Empty);
+                typeId = types.CreateTypeFactory(currentUnit).CreateSetType(baseType as IOrdinalType, string.Empty);
             else
                 typeId = left.TypeDefinition;
 

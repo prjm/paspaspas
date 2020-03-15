@@ -90,12 +90,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter) {
-            if (parameter.IsIntegral())
+        public bool CheckParameter(ITypeSymbol parameter) {
+            if (parameter.GetBaseType() == BaseType.Integer)
                 return true;
 
-            if (IsSubrangeType(parameter.TypeId, out var subrangeType))
-                return subrangeType.BaseType.TypeKind.IsIntegral();
+            if (parameter.TypeDefinition.IsSubrangeType(out var subrangeType))
+                return subrangeType.SubrangeOfType.GetBaseType() == BaseType.Integer;
 
             return false;
         }
@@ -105,18 +105,18 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
+        public IValue ExecuteCall(IValue parameter) {
 
-            if (parameter.IsIntegral())
+            if (parameter.GetBaseType() == BaseType.Integer)
                 if (Lo)
                     return Integers.Lo(parameter);
                 else
                     return Integers.Hi(parameter);
 
-            if (parameter.IsSubrangeValue(out var value))
-                return ExecuteCall(value.Value);
+            if (parameter is ISubrangeValue subrangeValue)
+                return ExecuteCall(subrangeValue.WrappedValue);
 
-            return RuntimeException();
+            return Integers.Invalid;
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => MakeTypeInstanceReference(KnownTypeIds.ByteType);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(TypeRegistry.SystemUnit.IntegerType);
     }
 }
