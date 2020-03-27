@@ -24,7 +24,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name <c>Ord</c>
         /// </summary>
         public override string Name
-            => "Ord";
+            => KnownNames.Ord;
 
         /// <summary>
         ///     <c>ord</c> routine id
@@ -37,17 +37,17 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter)
-            => parameter.IsOrdinal();
+        public bool CheckParameter(ITypeSymbol parameter)
+            => parameter.TypeDefinition is IOrdinalType;
 
         /// <summary>
         ///     get the ordinal value
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
-            if (!parameter.IsOrdinalValue(out var value))
-                return RuntimeException();
+        public IValue ExecuteCall(IValue parameter) {
+            if (!(parameter is IOrdinalValue value))
+                return Integers.Invalid;
 
             return value.GetOrdinalValue(TypeRegistry);
         }
@@ -57,30 +57,31 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter) {
-            if (!IsOrdinalType(parameter.TypeId, out var ordinalType))
-                return Runtime.Types.MakeErrorTypeReference();
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter) {
+            if (!(parameter.TypeDefinition is IOrdinalType ordinalType))
+                return MakeResult(TypeRegistry.SystemUnit.ErrorType, parameter);
 
-            int GetTypeId() {
-                var bitSize = ordinalType.BitSize;
+            ITypeDefinition GetTypeId() {
+                var numberOfBytes = ordinalType.TypeSizeInBytes;
                 var signed = ordinalType.IsSigned;
+                var s = TypeRegistry.SystemUnit;
 
-                if (bitSize > 0 && bitSize <= 8)
-                    return signed ? KnownTypeIds.ShortInt : KnownTypeIds.ByteType;
+                if (numberOfBytes > 0 && numberOfBytes <= 1)
+                    return signed ? s.ShortIntType : s.ByteType;
 
-                if (bitSize > 8 && bitSize <= 16)
-                    return signed ? KnownTypeIds.SmallInt : KnownTypeIds.WordType;
+                if (numberOfBytes > 1 && numberOfBytes <= 2)
+                    return signed ? s.SmallIntType : s.WordType;
 
-                if (bitSize > 16 && bitSize <= 32)
-                    return signed ? KnownTypeIds.IntegerType : KnownTypeIds.CardinalType;
+                if (numberOfBytes > 2 && numberOfBytes <= 4)
+                    return signed ? s.IntegerType : s.CardinalType;
 
-                if (bitSize > 32 && bitSize <= 64)
-                    return signed ? KnownTypeIds.Int64Type : KnownTypeIds.UInt64Type;
+                if (numberOfBytes > 4 && numberOfBytes <= 8)
+                    return signed ? s.Int64Type : s.UInt64Type;
 
-                return KnownTypeIds.ErrorType;
+                return s.ErrorType;
             };
 
-            return MakeTypeInstanceReference(GetTypeId());
+            return MakeResult(GetTypeId(), parameter);
         }
     }
 }

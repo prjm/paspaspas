@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     boolean runtime values
@@ -15,5 +17,9 @@
         /// </summary>
         uint AsUint { get; }
 
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        BooleanTypeKind Kind { get; }
     }
 }

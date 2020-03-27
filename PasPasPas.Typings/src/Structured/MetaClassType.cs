@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     meta class type
     /// </summary>
-    public class MetaClassType : TypeDefinitionBase, IMetaClassType {
+    public class MetaClassType : TypeDefinitionBase, IMetaType {
 
         /// <summary>
         ///     create a new meta class type

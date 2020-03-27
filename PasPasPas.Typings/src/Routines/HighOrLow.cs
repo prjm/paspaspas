@@ -49,7 +49,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => Low ? "Low" : "High";
+            => Low ? KnownNames.Low : KnownNames.High;
 
         /// <summary>
         ///     constant routine
@@ -88,18 +88,18 @@ namespace PasPasPas.Typings.Routines {
         /// <returns></returns>
         public bool CheckParameter(ITypeSymbol parameter) {
 
-            var typeKind = parameter.TypeKind;
+            var typeDefinition = parameter.TypeDefinition;
 
-            if (typeKind.IsType())
-                typeKind = TypeRegistry.GetTypeKindOf(parameter.TypeId);
+            if (typeDefinition is IMetaType metaType)
+                typeDefinition = metaType.BaseTypeDefinition;
 
-            if (typeKind.IsOrdinal())
+            if (typeDefinition is IOrdinalType)
                 return true;
 
-            if (typeKind.IsShortString())
+            if (TypeDefinition is IStringType stringType && stringType.Kind == StringTypeKind.ShortString)
                 return true;
 
-            if (typeKind.IsArray())
+            if (typeDefinition is IArrayType)
                 return true;
 
             return false;
@@ -110,19 +110,19 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
+        public IValue ExecuteCall(IValue parameter) {
 
-            if (IsOrdinalType(parameter.TypeId, out var ordinalType))
+            if (parameter.TypeDefinition is IOrdinalType ordinalType)
                 return Low ? ordinalType.LowestElement : ordinalType.HighestElement;
 
-            if (IsShortStringType(parameter.TypeId, out var shortStringType))
+            if (parameter is IShortStringType shortStringType)
                 return Low ? Integers.ToScaledIntegerValue(1) : Integers.ToScaledIntegerValue(shortStringType.Size);
 
-            if (IsArrayType(parameter.TypeId, out var arrayType) &&  //
-                IsOrdinalType(arrayType.IndexTypeId, out var ordinalIndexType))
+            if (parameter.TypeDefinition is IArrayType arrayType &&  //
+                arrayType.IndexType is IOrdinalType ordinalIndexType)
                 return Low ? ordinalIndexType.LowestElement : ordinalIndexType.HighestElement;
 
-            return RuntimeException();
+            return Integers.Invalid;
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => ExecuteCall(parameter);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(ExecuteCall(parameter as IValue), parameter);
     }
 }

@@ -31,7 +31,6 @@ namespace PasPasPas.Globals.Runtime {
         ///     make an invocation result
         /// </summary>
         /// <param name="routine">routine</param>
-        /// <param name="routineIndex">routine index</param>
         IInvocationResult MakeInvocationResult(IRoutine routine);
 
         /// <summary>
@@ -65,7 +64,28 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="returnType">return type</param>
         /// <returns></returns>
         ISignature MakeSignature(ITypeSymbol returnType, ITypeSymbol parameter);
+
+        /// <summary>
+        ///     make a variadic signature
+        /// </summary>
+        /// <param name="returnType"></param>
+        /// <param name="signature"></param>
+        /// <returns></returns>
         ISignature MakeSignature(ITypeSymbol returnType, ISignature signature);
+
+        /// <summary>
+        ///     make an invocation result
+        /// </summary>
+        /// <param name="intrinsicRoutine"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         IRoutineResult MakeInvocationResultFromIntrinsic(IRoutineGroup intrinsicRoutine, IValue value);
+
+        /// <summary>
+        ///     make a signature of zero parameters
+        /// </summary>
+        /// <param name="returnType"></param>
+        /// <returns></returns>
+        ISignature MakeSignature(ITypeSymbol returnType);
     }
 }

@@ -26,6 +26,12 @@ namespace PasPasPas.Runtime.Values.CharValues {
         }
 
         /// <summary>
+        ///     char type kind
+        /// </summary>
+        public CharTypeKind Kind
+            => (TypeDefinition as ICharType).Kind;
+
+        /// <summary>
         ///     get the boolean value
         /// </summary>
         public abstract char AsWideChar { get; }

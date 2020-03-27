@@ -12,7 +12,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name <c>Length</c>
         /// </summary>
         public override string Name
-            => "Length";
+            => KnownNames.Length;
 
         /// <summary>
         ///     procedure kind
@@ -37,21 +37,20 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter) {
+        public bool CheckParameter(ITypeSymbol parameter) {
 
-            var typeKind = parameter.TypeKind;
+            var typeKind = parameter.GetBaseType();
 
-            if (IsSubrangeType(parameter.TypeId, out var subrangeType))
-                typeKind = subrangeType.BaseType.TypeKind;
+            if (parameter.TypeDefinition.IsSubrangeType(out var subrangeType))
+                typeKind = subrangeType.SubrangeOfType.GetBaseType();
 
-
-            if (typeKind.IsString())
+            if (typeKind == BaseType.String)
                 return true;
 
-            if (typeKind.IsChar())
+            if (typeKind == BaseType.Char)
                 return true;
 
-            if (typeKind.IsArray())
+            if (typeKind == BaseType.Array)
                 return true;
 
             return false;
@@ -62,21 +61,21 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
+        public IValue ExecuteCall(IValue parameter) {
 
-            if (parameter.IsStringValue(out var stringValue))
+            if (parameter is IStringValue stringValue)
                 return Integers.ToScaledIntegerValue(stringValue.NumberOfCharElements);
 
-            if (parameter.IsChar())
+            if (parameter is ICharValue)
                 return Integers.ToScaledIntegerValue(1);
 
-            if (parameter.IsArrayValue(out var arrayValue))
+            if (parameter is IArrayValue arrayValue)
                 return Integers.ToScaledIntegerValue(arrayValue.Values.Length);
 
-            if (parameter.IsSubrangeValue(out var subrangeValue))
-                return ExecuteCall(subrangeValue.Value);
+            if (parameter is ISubrangeValue subrangeValue)
+                return ExecuteCall(subrangeValue.WrappedValue);
 
-            return RuntimeException();
+            return Integers.Invalid; ;
         }
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => MakeTypeInstanceReference(KnownTypeIds.IntegerType);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(TypeRegistry.SystemUnit.IntegerType, parameter);
     }
 }

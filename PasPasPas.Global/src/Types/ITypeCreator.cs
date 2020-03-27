@@ -116,6 +116,6 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="baseType"></param>
         /// <returns></returns>
-        IMetaClassType CreateMetaClassType(string name, ITypeDefinition baseType);
+        IMetaType CreateMetaClassType(string name, ITypeDefinition baseType);
     }
 }

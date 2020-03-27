@@ -3,7 +3,7 @@
     /// <summary>
     ///     meta class type
     /// </summary>
-    public interface IMetaClassType : ITypeDefinition {
+    public interface IMetaType : ITypeDefinition {
 
         /// <summary>
         ///     base type id

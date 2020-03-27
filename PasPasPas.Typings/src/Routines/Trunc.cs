@@ -18,7 +18,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => "Trunc";
+            => KnownNames.Trunc;
 
         /// <summary>
         ///     procedure kind
@@ -37,12 +37,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter) {
-            if (parameter.IsNumerical())
+        public bool CheckParameter(ITypeSymbol parameter) {
+            if (parameter.HasNumericType())
                 return true;
 
-            if (IsSubrangeType(parameter.TypeId, out var value))
-                return value.BaseType.TypeKind.IsNumerical();
+            if (parameter.HasSubrangeType(out var value))
+                return value.SubrangeOfType.HasNumericType();
 
             return false;
         }
@@ -52,18 +52,18 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
+        public IValue ExecuteCall(IValue parameter) {
 
-            if (parameter is IIntegerValue integerValue)
+            if (parameter is IIntegerValue)
                 return parameter;
 
-            if (parameter is ISubrangeValue subrangeValue)
+            if (parameter is ISubrangeValue)
                 return parameter;
 
             if (parameter is IRealNumberValue realNumberValue)
                 return RealNumbers.Trunc(realNumberValue);
 
-            return RuntimeException();
+            return Integers.Invalid;
         }
 
         /// <summary>
@@ -71,7 +71,15 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => MakeTypeInstanceReference(KnownTypeIds.Int64Type);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter) {
+
+            if (parameter.GetBaseType() == BaseType.Integer)
+                return MakeResult(parameter.TypeDefinition, parameter);
+
+            if (parameter.HasSubrangeType(out var _))
+                return MakeResult(parameter.TypeDefinition, parameter);
+
+            return MakeResult(TypeRegistry.SystemUnit.Int64Type, parameter);
+        }
     }
 }

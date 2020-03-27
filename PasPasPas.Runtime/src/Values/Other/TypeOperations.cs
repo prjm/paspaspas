@@ -88,9 +88,30 @@ namespace PasPasPas.Runtime.Values.Other {
         public ISignature MakeSignature(ITypeSymbol returnType, ITypeSymbol parameter)
             => new Signature1(returnType, parameter);
 
+        /// <summary>
+        ///     make a variadic signature
+        /// </summary>
+        /// <param name="returnType"></param>
+        /// <param name="signature"></param>
+        /// <returns></returns>
         public ISignature MakeSignature(ITypeSymbol returnType, ISignature signature)
             => new SignatureN(returnType, signature);
 
-        public IRoutineResult MakeInvocationResultFromIntrinsic(IRoutineGroup intrinsicRoutine, IValue value) => throw new NotImplementedException();
+        /// <summary>
+        ///     make a intrinsic result
+        /// </summary>
+        /// <param name="intrinsicRoutine"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public IRoutineResult MakeInvocationResultFromIntrinsic(IRoutineGroup intrinsicRoutine, IValue value)
+            => throw new NotImplementedException();
+
+        /// <summary>
+        ///     make a signature without any parameters
+        /// </summary>
+        /// <param name="returnType"></param>
+        /// <returns></returns>
+        public ISignature MakeSignature(ITypeSymbol returnType)
+           => new Signature0(returnType);
     }
 }

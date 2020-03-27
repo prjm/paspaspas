@@ -61,5 +61,13 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeDef"></param>
         /// <returns></returns>
         IBooleanValue ToLongBool(uint unsignedValue, ITypeDefinition typeDef);
+
+        /// <summary>
+        ///     convert a integer boolean value object to a boolean
+        /// </summary>
+        /// <param name="typeDef"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        IBooleanValue ToBoolean(IBooleanType typeDef, uint value);
     }
 }

@@ -18,7 +18,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => "Sqr";
+            => KnownNames.Sqr;
 
         /// <summary>
         ///     procedure kind
@@ -37,25 +37,25 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter)
-            => parameter.IsNumerical();
+        public bool CheckParameter(ITypeSymbol parameter)
+            => parameter.HasNumericType();
 
         /// <summary>
         ///     execute the call
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
-            if (parameter.IsIntegralValue(out var _))
+        public IValue ExecuteCall(IValue parameter) {
+            if (parameter is IIntegerValue)
                 return Integers.Multiply(parameter, parameter);
 
-            if (parameter.IsRealValue(out var _))
+            if (parameter is IRealNumberValue)
                 return RealNumbers.Multiply(parameter, parameter);
 
-            if (parameter.IsSubrangeValue(out var value))
-                return ExecuteCall(value.Value);
+            if (parameter is ISubrangeValue value)
+                return ExecuteCall(value.WrappedValue);
 
-            return RuntimeException();
+            return Integers.Invalid;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => MakeTypeInstanceReference(parameter.TypeId);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(parameter, parameter);
     }
 }

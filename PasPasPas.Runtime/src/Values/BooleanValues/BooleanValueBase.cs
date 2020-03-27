@@ -36,6 +36,12 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         public abstract uint AsUint { get; }
 
         /// <summary>
+        ///     boolean value kind
+        /// </summary>
+        public BooleanTypeKind Kind
+            => (TypeDefinition as IBooleanType).Kind;
+
+        /// <summary>
         ///     compare to another boolean value
         /// </summary>
         /// <param name="obj"></param>

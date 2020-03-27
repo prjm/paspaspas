@@ -13,7 +13,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => "MulDivInt64";
+            => KnownNames.MulDivInt64;
 
         /// <summary>
         ///     procedure kind
@@ -38,14 +38,14 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public bool CheckParameter(Signature signature) {
+        public bool CheckParameter(ISignature signature) {
 
-            if (signature.Length != 3)
+            if (signature.Count != 3)
                 return false;
 
-            for (var i = 0; i < signature.Length; i++) {
+            foreach (var param in signature) {
 
-                if (signature[i].TypeKind.IsIntegral() || IsSubrangeType(signature[i].TypeId, out var subrangeType) && subrangeType.BaseType.TypeKind.IsIntegral())
+                if (param.GetBaseType() == BaseType.Integer || param.HasSubrangeType(out var subrangeType) && subrangeType.SubrangeOfType.GetBaseType() == BaseType.Integer)
                     continue;
 
                 return false;
@@ -59,26 +59,29 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(Signature signature) {
+        public IValue ExecuteCall(ISignature signature) {
             bool GetValue(int index, out IIntegerValue value) {
-                if (signature[index].IsIntegralValue(out value))
+                if (signature[index] is IIntegerValue) {
+                    value = signature[index] as IIntegerValue;
                     return true;
+                }
 
-                if (signature[index].IsSubrangeValue(out var subrangeValue) && subrangeValue.Value.IsIntegralValue(out value))
+                if (signature[index] is ISubrangeValue subrangeValue && subrangeValue.GetBaseType() == BaseType.Integer) {
+                    value = subrangeValue.WrappedValue as IIntegerValue;
                     return true;
-
+                }
                 value = default;
                 return false;
             };
 
             if (!GetValue(0, out var value1))
-                return RuntimeException();
+                return Integers.Invalid;
 
             if (!GetValue(1, out var value2))
-                return RuntimeException();
+                return Integers.Invalid;
 
             if (!GetValue(2, out var value3))
-                return RuntimeException();
+                return Integers.Invalid;
 
             var result = (long)UInt128.Mul64To128DivTo64(value1.UnsignedValue, value2.UnsignedValue, value3.UnsignedValue);
             return Integers.ToScaledIntegerValue(result);
@@ -89,7 +92,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(Signature signature)
-            => MakeTypeInstanceReference(KnownTypeIds.Int64Type);
+        public IIntrinsicInvocationResult ResolveCall(ISignature signature)
+            => MakeResult(TypeRegistry.SystemUnit.Int64Type, signature);
     }
 }

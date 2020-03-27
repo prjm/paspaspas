@@ -535,12 +535,12 @@
         public const string Abs = "Abs";
 
         /// <summary>
-        ///     chr routine
+        ///     <c>chr</c> routine
         /// </summary>
         public const string Chr = "Chr";
 
         /// <summary>
-        ///     concat routine
+        ///     concatenation routine
         /// </summary>
         public const string Concat = "Concat";
 
@@ -548,6 +548,76 @@
         ///     pi function
         /// </summary>
         public const string Pi = "Pi";
+
+        /// <summary>
+        ///     truncate routine
+        /// </summary>
+        public const string Trunc = "Trunc";
+
+        /// <summary>
+        ///     <c>ptr</c> routine
+        /// </summary>
+        public const string Ptr = "Ptr";
+
+        /// <summary>
+        ///     <c>high</c> routine
+        /// </summary>
+        public const string High = "High";
+
+        /// <summary>
+        ///     <c>low</c> routine
+        /// </summary>
+        public const string Low = "Low";
+
+        /// <summary>
+        ///     <c>length</c> routine
+        /// </summary>
+        public const string Length = "Length";
+
+        /// <summary>
+        ///     <c>odd</c> routine
+        /// </summary>
+        public const string Odd = "Odd";
+
+        /// <summary>
+        ///     <c>sqr</c> routine
+        /// </summary>
+        public const string Sqr = "Sqr";
+
+        /// <summary>
+        ///     <c>MulDivInt64</c> routine
+        /// </summary>
+        public const string MulDivInt64 = "MulDivInt64";
+
+        /// <summary>
+        ///     <c>Ord</c> routine
+        /// </summary>
+        public const string Ord = "Ord";
+
+        /// <summary>
+        ///     <c>round</c> routine
+        /// </summary>
+        public const string Round = "Round";
+
+        /// <summary>
+        ///     <c>pred</c> routine
+        /// </summary>
+        public const string Pred = "Pred";
+
+        /// <summary>
+        ///     <c>succ</c> routine
+        /// </summary>
+        public const string Succ = "Succ";
+
+        /// <summary>
+        ///     <c>swap</c> routine
+        /// </summary>
+        public const string Swap = "Swap";
+
+        /// <summary>
+        ///     <c>sizeof</c> routine
+        /// </summary>
+        public const string SizeOf = "SizeOf";
 
         #endregion
     }

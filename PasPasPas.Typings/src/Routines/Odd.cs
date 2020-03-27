@@ -24,7 +24,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => "Odd";
+            => KnownNames.Odd;
 
         /// <summary>
         ///     <c>odd</c> routine id
@@ -37,12 +37,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter) {
-            if (parameter.IsIntegral())
+        public bool CheckParameter(ITypeSymbol parameter) {
+            if (parameter.GetBaseType() == BaseType.Integer)
                 return true;
 
-            if (IsSubrangeType(parameter.TypeId, out var subrangeType))
-                return subrangeType.BaseType.TypeKind.IsIntegral();
+            if (parameter.HasSubrangeType(out var subrangeType))
+                return subrangeType.SubrangeOfType.GetBaseType() == BaseType.Integer;
 
             return false;
         }
@@ -52,10 +52,14 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
+        public IValue ExecuteCall(IValue parameter) {
 
-            if (!parameter.IsIntegralValue(out var value) && !(parameter.IsSubrangeValue(out var subrangeValue) && subrangeValue.Value.IsIntegralValue(out value)))
-                return RuntimeException();
+            var value = parameter as IIntegerValue;
+            if (value == default)
+                value = (parameter as ISubrangeValue)?.WrappedValue as IIntegerValue;
+
+            if (value == default)
+                return Integers.Invalid;
 
             if (value.SignedValue % 2 == 0)
                 return Booleans.FalseValue;
@@ -68,7 +72,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => MakeTypeInstanceReference(KnownTypeIds.BooleanType);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(TypeRegistry.SystemUnit.BooleanType, parameter);
     }
 }

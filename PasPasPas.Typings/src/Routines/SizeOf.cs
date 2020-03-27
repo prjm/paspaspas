@@ -18,7 +18,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name <pre>SizeOf</pre>
         /// </summary>
         public override string Name
-            => "SizeOf";
+            => KnownNames.SizeOf;
 
         /// <summary>
         ///     procedure kind
@@ -37,7 +37,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter)
+        public bool CheckParameter(ITypeSymbol parameter)
             => true;
 
         /// <summary>
@@ -45,17 +45,23 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
-            var type = TypeRegistry.GetTypeByIdOrUndefinedType(parameter.TypeId);
-            return Integers.ToScaledIntegerValue(type.TypeSizeInBytes);
-        }
+        public IValue ExecuteCall(IValue parameter)
+            => ExecuteCall(parameter.TypeDefinition);
+
+        /// <summary>
+        ///     execute a call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public IValue ExecuteCall(ITypeDefinition parameter)
+            => Integers.ToScaledIntegerValue(parameter.TypeSizeInBytes);
 
         /// <summary>
         ///     resolve type definition
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => ExecuteCall(parameter);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(ExecuteCall(parameter.TypeDefinition), parameter);
     }
 }

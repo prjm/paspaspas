@@ -5,7 +5,7 @@ using PasPasPas.Globals.Types;
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
-    ///     <pre>pred</pre> or <pre>succ</pre> routine mode
+    ///     <c>pred</c> or <c>succ</c> routine mode
     /// </summary>
     public enum PredSuccMode {
 
@@ -15,12 +15,12 @@ namespace PasPasPas.Typings.Routines {
         Undefined = 0,
 
         /// <summary>
-        ///     <pre>pred</pre>
+        ///     <c>pred</c>
         /// </summary>
         Pred = 1,
 
         /// <summary>
-        ///     <pre>succ</pre>
+        ///     <c>succ</c>
         /// </summary>
         Succ = 2
 
@@ -32,7 +32,7 @@ namespace PasPasPas.Typings.Routines {
     public class PredOrSucc : IntrinsicRoutine, IUnaryRoutine {
 
         /// <summary>
-        ///     crate a <pre>pred</pre> or <pre>succ</pre> routine
+        ///     crate a <c>pred</c> or <c>succ</c> routine
         /// </summary>
         /// <param name="mode"></param>
         public PredOrSucc(PredSuccMode mode) {
@@ -49,13 +49,13 @@ namespace PasPasPas.Typings.Routines {
             => RoutineKind.Function;
 
         /// <summary>
-        ///     <pre>pred</pre>
+        ///     <c>pred</c>
         /// </summary>
         public bool Pred
             => Mode == PredSuccMode.Pred;
 
         /// <summary>
-        ///     <pre>succ</pre>
+        ///     <c>succ</c>
         /// </summary>
         public bool Succ
             => Mode == PredSuccMode.Succ;
@@ -64,7 +64,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => Pred ? "Pred" : "Succ";
+            => Pred ? KnownNames.Pred : KnownNames.Succ;
 
         /// <summary>
         ///     routine mode
@@ -95,15 +95,15 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter)
-            => parameter.IsOrdinal();
+        public bool CheckParameter(ITypeSymbol parameter)
+            => parameter.TypeDefinition is IOrdinalType;
 
         /// <summary>
         ///     execute the call
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter)
+        public IValue ExecuteCall(IValue parameter)
             => StaticExecuteCall(TypeRegistry, parameter, Pred);
 
         /// <summary>
@@ -113,56 +113,56 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="pred"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        public static IOldTypeReference StaticExecuteCall(ITypeRegistry types, IOldTypeReference parameter, bool pred) {
+        public static IValue StaticExecuteCall(ITypeRegistry types, ITypeSymbol parameter, bool pred) {
 
-            var ordinalType = types.GetTypeByIdOrUndefinedType(parameter.TypeId) as IOrdinalType;
+            var ordinalType = parameter.TypeDefinition as IOrdinalType;
 
-            if (parameter.IsSubrangeValue(out var subrangeValue))
-                return types.Runtime.Types.MakeSubrangeValue(parameter.TypeId, PredOrSucc.StaticExecuteCall(types, subrangeValue.Value, pred));
+            if (ordinalType is ISubrangeValue subrangeValue)
+                return types.Runtime.Types.MakeSubrangeValue(parameter.TypeDefinition, PredOrSucc.StaticExecuteCall(types, subrangeValue.WrappedValue, pred));
 
             if (pred) {
 
-                if (parameter.IsIntegralValue(out var intValue))
+                if (parameter is IIntegerValue intValue)
                     return types.Runtime.Integers.Subtract(intValue, types.Runtime.Integers.One);
 
-                if (parameter.IsAnsiCharValue(out var charValue))
-                    return types.Runtime.Chars.ToAnsiCharValue(parameter.TypeId, unchecked((byte)(charValue.AsAnsiChar - 1)));
+                if (parameter is ICharValue charValue)
+                    if (charValue.Kind == CharTypeKind.AnsiChar)
+                        return types.Runtime.Chars.ToAnsiCharValue(parameter.TypeDefinition, unchecked((byte)(charValue.AsAnsiChar - 1)));
+                    else if (charValue.Kind == CharTypeKind.WideChar)
+                        return types.Runtime.Chars.ToWideCharValue(parameter.TypeDefinition, unchecked((char)(charValue.AsWideChar - 1)));
 
-                if (parameter.IsWideCharValue(out charValue))
-                    return types.Runtime.Chars.ToWideCharValue(parameter.TypeId, unchecked((char)(charValue.AsWideChar - 1)));
-
-                if (parameter.IsBooleanValue(out var boolValue)) {
-                    var mask = 1u << ((int)ordinalType.BitSize - 1);
-                    return types.Runtime.Booleans.ToBoolean(ordinalType.BitSize, (boolValue.AsUint - 1u) & mask);
+                if (parameter is IBooleanValue boolValue) {
+                    var mask = 1u << ((int)ordinalType.TypeSizeInBytes * 4 - 1);
+                    return types.Runtime.Booleans.ToBoolean(boolValue.TypeDefinition as IBooleanType, (boolValue.AsUint - 1u) & mask);
                 }
 
-                if (parameter.IsEnumValue(out var enumValue))
-                    return types.Runtime.Types.MakeEnumValue(enumValue.TypeId, StaticExecuteCall(types, enumValue.Value, pred));
+                if (parameter is IEnumeratedValue enumValue)
+                    return types.Runtime.Types.MakeEnumValue(enumValue.TypeDefinition, StaticExecuteCall(types, enumValue.Value, pred) as IIntegerValue);
 
             }
 
             if (!pred) {
 
-                if (parameter.IsIntegralValue(out var intValue))
+                if (parameter is IIntegerValue intValue)
                     return types.Runtime.Integers.Add(intValue, types.Runtime.Integers.One);
 
-                if (parameter.IsAnsiCharValue(out var charValue))
-                    return types.Runtime.Chars.ToAnsiCharValue(parameter.TypeId, unchecked((byte)(1 + charValue.AsAnsiChar)));
+                if (parameter is ICharValue charValue)
+                    if (charValue.Kind == CharTypeKind.AnsiChar)
+                        return types.Runtime.Chars.ToAnsiCharValue(parameter.TypeDefinition, unchecked((byte)(1 + charValue.AsAnsiChar)));
+                    else if (charValue.Kind == CharTypeKind.WideChar)
+                        return types.Runtime.Chars.ToWideCharValue(parameter.TypeDefinition, unchecked((char)(1 + charValue.AsWideChar)));
 
-                if (parameter.IsWideCharValue(out charValue))
-                    return types.Runtime.Chars.ToWideCharValue(parameter.TypeId, unchecked((char)(1 + charValue.AsWideChar)));
-
-                if (parameter.IsBooleanValue(out var boolValue)) {
-                    var mask = 1u << ((int)ordinalType.BitSize - 1);
-                    return types.Runtime.Booleans.ToBoolean(ordinalType.BitSize, (1u + boolValue.AsUint) & mask);
+                if (parameter is IBooleanValue boolValue) {
+                    var mask = 1u << ((int)ordinalType.TypeSizeInBytes * 8 - 1);
+                    return types.Runtime.Booleans.ToBoolean(boolValue.TypeDefinition as IBooleanType, (1u + boolValue.AsUint) & mask);
                 }
 
-                if (parameter.IsEnumValue(out var enumValue))
-                    return types.Runtime.Types.MakeEnumValue(enumValue.TypeId, StaticExecuteCall(types, enumValue.Value, pred));
+                if (parameter is IEnumeratedValue enumValue)
+                    return types.Runtime.Types.MakeEnumValue(enumValue.TypeDefinition, StaticExecuteCall(types, enumValue.Value, pred) as IIntegerValue);
 
             }
 
-            return types.Runtime.Types.MakeErrorTypeReference();
+            return types.Runtime.Integers.Invalid;
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => MakeTypeInstanceReference(parameter.TypeId);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(parameter, parameter);
     }
 }

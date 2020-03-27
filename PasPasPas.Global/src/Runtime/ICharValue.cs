@@ -1,7 +1,9 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
-    ///     widechar runtime value (utf-16)
+    ///     interface for char values
     /// </summary>
     public interface ICharValue : IOrdinalValue {
 
@@ -19,5 +21,10 @@
         ///     string value
         /// </summary>
         string AsUnicodeString { get; }
+
+        /// <summary>
+        ///     char type kind
+        /// </summary>
+        CharTypeKind Kind { get; }
     }
 }

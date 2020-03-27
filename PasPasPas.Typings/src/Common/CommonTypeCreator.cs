@@ -98,7 +98,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="baseType"></param>
         /// <param name="name">type name</param>
         /// <returns></returns>
-        public IMetaClassType CreateMetaClassType(string name, ITypeDefinition baseType) {
+        public IMetaType CreateMetaClassType(string name, ITypeDefinition baseType) {
             var result = new MetaClassType(DefiningUnit, name, baseType);
             DefiningUnit.Register(result);
             return result;

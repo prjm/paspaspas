@@ -12,7 +12,7 @@ namespace PasPasPas.Typings.Routines {
         ///     name of the function
         /// </summary>
         public override string Name
-            => "Swap";
+            => KnownNames.Swap;
 
         /// <summary>
         ///     constant routine
@@ -37,12 +37,12 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter) {
-            if (parameter.IsIntegral())
+        public bool CheckParameter(ITypeSymbol parameter) {
+            if (parameter.GetBaseType() == BaseType.Integer)
                 return true;
 
-            if (IsSubrangeType(parameter.TypeId, out var subrangeType))
-                return subrangeType.BaseType.TypeKind.IsIntegral();
+            if (parameter.HasSubrangeType(out var subrangeType))
+                return subrangeType.BaseType == BaseType.Integer;
 
             return false;
         }
@@ -52,15 +52,15 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
+        public IValue ExecuteCall(IValue parameter) {
 
-            if (parameter.IsIntegral())
+            if (parameter.GetBaseType() == BaseType.Integer)
                 return Integers.Swap(parameter, TypeRegistry);
 
-            if (parameter.IsSubrangeValue(out var value))
-                return ExecuteCall(value.Value);
+            if (parameter is ISubrangeValue value)
+                return ExecuteCall(value.WrappedValue);
 
-            return RuntimeException();
+            return Integers.Invalid;
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => MakeTypeInstanceReference(parameter.TypeId);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(parameter, parameter);
     }
 }

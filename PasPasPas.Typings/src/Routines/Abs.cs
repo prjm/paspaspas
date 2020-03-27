@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Contracts;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
@@ -21,7 +20,6 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="parameter"></param>
         /// <returns></returns>
         public bool CheckParameter(ITypeSymbol parameter) {
-            Ensure.NotNull(parameter);
 
             if (parameter.HasNumericType())
                 return true;

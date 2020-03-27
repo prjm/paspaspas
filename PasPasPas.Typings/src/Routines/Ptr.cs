@@ -18,7 +18,7 @@ namespace PasPasPas.Typings.Routines {
         ///     routine name
         /// </summary>
         public override string Name
-            => "Ptr";
+            => KnownNames.Ptr;
 
         /// <summary>
         ///     procedure kind
@@ -37,22 +37,22 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CheckParameter(IOldTypeReference parameter)
-            => parameter.IsIntegral();
+        public bool CheckParameter(ITypeSymbol parameter)
+            => parameter.GetBaseType() == BaseType.Integer;
 
         /// <summary>
         ///     execute the call
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ExecuteCall(IOldTypeReference parameter) {
+        public IValue ExecuteCall(IValue parameter) {
 
-            if (parameter.IsIntegral()) {
+            if (parameter.GetBaseType() == BaseType.Integer) {
                 var nativeInt = Integers.ToNativeInt(parameter, TypeRegistry);
-                return Types.MakePointerValue(KnownTypeIds.UntypedPointer, nativeInt);
+                return Types.MakePointerValue(TypeRegistry.SystemUnit.GenericPointerType, nativeInt);
             }
 
-            return RuntimeException();
+            return Integers.Invalid;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IOldTypeReference ResolveCall(IOldTypeReference parameter)
-            => MakeTypeInstanceReference(KnownTypeIds.GenericPointer);
+        public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
+            => MakeResult(TypeRegistry.SystemUnit.GenericPointerType, parameter);
     }
 }
