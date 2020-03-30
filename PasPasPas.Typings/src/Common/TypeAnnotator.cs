@@ -60,7 +60,7 @@ namespace PasPasPas.Typings.Common {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
-        private readonly Stack<IOldTypeReference> currentTypeDefinition;
+        private readonly Stack<ITypeSymbol> currentTypeDefinition;
         private readonly Stack<Routine> currentMethodParameters;
         private readonly Resolver resolver;
         private readonly List<(Routine, BlockOfStatements)> routines;
@@ -85,34 +85,15 @@ namespace PasPasPas.Typings.Common {
             visitor = new ChildVisitor(this);
             environment = env;
             resolver = new Resolver(new Scope(env.TypeRegistry));
-            currentTypeDefinition = new Stack<IOldTypeReference>();
+            currentTypeDefinition = new Stack<ITypeSymbol>();
             currentMethodParameters = new Stack<Routine>();
             routines = new List<(Routine, BlockOfStatements)>();
         }
 
-        private IOldTypeReference GetTypeRefence(ITypedSyntaxPart syntaxNode) {
-            if (syntaxNode != default && syntaxNode.TypeInfo != null)
-                return syntaxNode.TypeInfo;
-
-            return GetErrorTypeReference(syntaxNode);
-        }
-
-        private ITypeDefinition GetTypeByIdOrUndefinedType(int typeId)
-            => environment.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
-
-        private IOldTypeReference GetInstanceTypeById(int typeId)
-            => environment.TypeRegistry.MakeTypeInstanceReference(typeId);
-
-        private IOldTypeReference GetTypeReferenceById(int typeId)
-            => environment.TypeRegistry.MakeTypeReference(typeId);
-
         private ITypeDefinition GetErrorType(ITypedSyntaxPart node)
-            => environment.TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
+            => environment.TypeRegistry.SystemUnit.ErrorType;
 
-        private IOldTypeReference GetErrorTypeReference(ITypedSyntaxPart node)
-            => environment.Runtime.Types.MakeErrorTypeReference();
-
-        private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
+        private int GetSmallestIntegralTypeOrNext(ITypeDefinition leftId, ITypeDefinition rightId)
             => environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId, rightId);
 
         private ITypeRegistry TypeRegistry

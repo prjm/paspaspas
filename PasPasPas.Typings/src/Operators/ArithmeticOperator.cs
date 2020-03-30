@@ -15,7 +15,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="registry">type registry</param>
         /// <param name="kind">operator kind</param>
         /// <param name="arity">operator arity</param>
-        private static void Register(ITypeRegistry registry, int kind, int arity = 2)
+        private static void Register(ITypeRegistry registry, OperatorKind kind, int arity = 2)
             => registry.RegisterOperator(new ArithmeticOperator(kind, arity));
 
         /// <summary>
@@ -23,14 +23,14 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="registry">type registry</param>
         public static void RegisterOperators(ITypeRegistry registry) {
-            Register(registry, DefinedOperators.UnaryMinus, 1);
-            Register(registry, DefinedOperators.UnaryPlus, 1);
-            Register(registry, DefinedOperators.PlusOperator);
-            Register(registry, DefinedOperators.MinusOperator);
-            Register(registry, DefinedOperators.TimesOperator);
-            Register(registry, DefinedOperators.DivOperator);
-            Register(registry, DefinedOperators.ModOperator);
-            Register(registry, DefinedOperators.SlashOperator);
+            Register(registry, OperatorKind.UnaryMinus, 1);
+            Register(registry, OperatorKind.UnaryPlus, 1);
+            Register(registry, OperatorKind.PlusOperator);
+            Register(registry, OperatorKind.MinusOperator);
+            Register(registry, OperatorKind.TimesOperator);
+            Register(registry, OperatorKind.DivOperator);
+            Register(registry, OperatorKind.ModOperator);
+            Register(registry, OperatorKind.SlashOperator);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="withArity">arity</param>
-        public ArithmeticOperator(int withKind, int withArity = 2)
+        public ArithmeticOperator(OperatorKind withKind, int withArity = 2)
             : base(withKind, withArity) { }
 
         /// <summary>
@@ -47,22 +47,22 @@ namespace PasPasPas.Typings.Operators {
         public override string Name {
             get {
                 switch (Kind) {
-                    case DefinedOperators.UnaryPlus:
-                        return "+";
-                    case DefinedOperators.UnaryMinus:
-                        return "-";
-                    case DefinedOperators.PlusOperator:
-                        return "+";
-                    case DefinedOperators.MinusOperator:
-                        return "-";
-                    case DefinedOperators.TimesOperator:
-                        return "*";
-                    case DefinedOperators.DivOperator:
-                        return "div";
-                    case DefinedOperators.ModOperator:
-                        return "mod";
-                    case DefinedOperators.SlashOperator:
-                        return "/";
+                    case OperatorKind.UnaryPlus:
+                        return KnownNames.Plus;
+                    case OperatorKind.UnaryMinus:
+                        return KnownNames.Minus;
+                    case OperatorKind.PlusOperator:
+                        return KnownNames.Plus;
+                    case OperatorKind.MinusOperator:
+                        return KnownNames.Minus;
+                    case OperatorKind.TimesOperator:
+                        return KnownNames.Star;
+                    case OperatorKind.DivOperator:
+                        return KnownNames.Div;
+                    case OperatorKind.ModOperator:
+                        return KnownNames.Mod;
+                    case OperatorKind.SlashOperator:
+                        return KnownNames.Slash;
                 }
                 throw new InvalidOperationException();
             }
@@ -72,18 +72,19 @@ namespace PasPasPas.Typings.Operators {
         ///     evaluate an unary operator
         /// </summary>
         /// <param name="input">operator input</param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns>operator result</returns>
-        protected override ITypeSymbol EvaluateUnaryOperator(ISignature input) {
+        protected override ITypeSymbol EvaluateUnaryOperator(ISignature input, IUnitType currentUnit) {
             var operand = input[0];
             var operations = Runtime.GetArithmeticOperators(TypeRegistry, operand);
 
             if (operations == null)
                 return Invalid;
 
-            if (Kind == DefinedOperators.UnaryPlus)
+            if (Kind == OperatorKind.UnaryPlus)
                 return EvaluateUnaryOperand(negate: false, operand, operations);
 
-            if (Kind == DefinedOperators.UnaryMinus)
+            if (Kind == OperatorKind.UnaryMinus)
                 return EvaluateUnaryOperand(negate: true, operand, operations);
 
             return Invalid;
@@ -104,18 +105,19 @@ namespace PasPasPas.Typings.Operators {
         ///     evaluate a binary operator
         /// </summary>
         /// <param name="input">input signature</param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns>operator result</returns>
-        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input, IUnitType currentUnit) {
             var left = input[0];
             var right = input[1];
 
-            if (Kind == DefinedOperators.DivOperator)
+            if (Kind == OperatorKind.DivOperator)
                 return EvaluateDivOperator(left, right);
 
-            if (Kind == DefinedOperators.ModOperator)
+            if (Kind == OperatorKind.ModOperator)
                 return EvaluateModOperator(left, right);
 
-            if (Kind == DefinedOperators.SlashOperator)
+            if (Kind == OperatorKind.SlashOperator)
                 return EvaluateRealDivOperator(left, right);
 
             var operations = Runtime.GetArithmeticOperators(TypeRegistry, left, right);
@@ -123,13 +125,13 @@ namespace PasPasPas.Typings.Operators {
             if (operations == null)
                 return Invalid;
 
-            if (Kind == DefinedOperators.PlusOperator)
+            if (Kind == OperatorKind.PlusOperator)
                 return EvaluatePlusOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.MinusOperator)
+            if (Kind == OperatorKind.MinusOperator)
                 return EvaluateMinusOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.TimesOperator)
+            if (Kind == OperatorKind.TimesOperator)
                 return EvaluateMultiplicationOperator(left, right, operations);
 
             return Invalid;

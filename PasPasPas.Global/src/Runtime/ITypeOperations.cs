@@ -74,14 +74,6 @@ namespace PasPasPas.Globals.Runtime {
         ISignature MakeSignature(ITypeSymbol returnType, ISignature signature);
 
         /// <summary>
-        ///     make an invocation result
-        /// </summary>
-        /// <param name="intrinsicRoutine"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        IRoutineResult MakeInvocationResultFromIntrinsic(IRoutineGroup intrinsicRoutine, IValue value);
-
-        /// <summary>
         ///     make a signature of zero parameters
         /// </summary>
         /// <param name="returnType"></param>

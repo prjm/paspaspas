@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Routines.Runtime {
 
@@ -38,11 +37,11 @@ namespace PasPasPas.Typings.Routines.Runtime {
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public bool CheckParameter(Signature signature) {
-            if (signature.Length < 1)
+        public bool CheckParameter(ISignature signature) {
+            if (signature.Count < 1)
                 return true;
 
-            for (var i = 0; i < signature.Length; i++)
+            for (var i = 0; i < signature.Count; i++)
                 if (!IsWriteLnType(signature[i]))
                     return false;
 
@@ -61,19 +60,12 @@ namespace PasPasPas.Typings.Routines.Runtime {
             return false;
         }
 
-        internal override void CreateParameters() {
-            var p = new Routine(this, RoutineKind.Procedure, TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.NoType));
-            Items.Add(p);
-        }
-
         /// <summary>
         ///     resolve a call
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public ITypeSymbol ResolveCall(Signature signature) {
-            var kind = MakeTypeInstanceReference(KnownTypeIds.NoType);
-            return Types.MakeInvocationResultFromIntrinsic(this, new Routine(this, RoutineKind.Procedure, kind));
-        }
+        public IIntrinsicInvocationResult ResolveCall(ISignature signature)
+            => MakeProcedureResult(signature);
     }
 }

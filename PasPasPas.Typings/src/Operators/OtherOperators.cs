@@ -12,7 +12,7 @@ namespace PasPasPas.Typings.Operators {
         /// <summary>
         ///     create a new address-of operator
         /// </summary>
-        public AddressOfOperator() : base(DefinedOperators.AtOperator, 1) {
+        public AddressOfOperator() : base(OperatorKind.AtOperator, 1) {
         }
 
         /// <summary>
@@ -25,8 +25,9 @@ namespace PasPasPas.Typings.Operators {
         ///     evaluate this operator
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns></returns>
-        protected override ITypeSymbol EvaluateUnaryOperator(ISignature input) {
+        protected override ITypeSymbol EvaluateUnaryOperator(ISignature input, IUnitType currentUnit) {
             var operand = input[0];
             if (operand.IsConstant(out var constant))
                 return Runtime.MakePointerValue(constant);
@@ -43,21 +44,22 @@ namespace PasPasPas.Typings.Operators {
         /// <summary>
         ///     create a new array concatenate operator
         /// </summary>
-        public ArrayConcatOperator() : base(DefinedOperators.ConcatArrayOperator, 2) {
+        public ArrayConcatOperator() : base(OperatorKind.ConcatArrayOperator, 2) {
         }
 
         /// <summary>
         ///     operator name
         /// </summary>
         public override string Name
-            => "+";
+            => KnownNames.Plus;
 
         /// <summary>
         ///     evaluate the binary operator
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns></returns>
-        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input, IUnitType currentUnit) {
             if (!(input[0] is IArrayValue i0))
                 return Invalid;
             if (!(input[1] is IArrayValue i1))
@@ -66,12 +68,13 @@ namespace PasPasPas.Typings.Operators {
             var b0 = i0.BaseTypeDefinition;
             var b1 = i1.BaseTypeDefinition;
             var baseType = TypeRegistry.GetBaseTypeForArrayOrSet(b0, b1);
+            var typeCreator = TypeRegistry.CreateTypeFactory(currentUnit);
 
             if (baseType.TypeDefinition.BaseType == BaseType.Error)
                 return baseType;
 
             if (!input.HasConstantParameters) {
-                var arrayType = TypeRegistry.TypeCreator.CreateDynamicArrayType(baseType.TypeDefinition, false);
+                var arrayType = typeCreator.CreateDynamicArrayType(baseType.TypeDefinition, string.Empty, false);
                 return arrayType;
             }
 
@@ -80,8 +83,8 @@ namespace PasPasPas.Typings.Operators {
             using (var list = TypeRegistry.ListPools.GetList<IValue>()) {
                 list.Item.AddRange(leftValue.Values);
                 list.Item.AddRange(rightValue.Values);
-                var indexType = TypeRegistry.TypeCreator.CreateSubrangeType(SystemUnit.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(list.Item.Count - 1));
-                var arrayType = TypeRegistry.TypeCreator.CreateStaticArrayType(baseType.TypeDefinition, indexType, false);
+                var indexType = typeCreator.CreateSubrangeType(string.Empty, SystemUnit.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(list.Item.Count - 1));
+                var arrayType = typeCreator.CreateStaticArrayType(baseType.TypeDefinition, string.Empty, indexType, false);
                 return TypeRegistry.Runtime.Structured.CreateArrayValue(arrayType, baseType.TypeDefinition, TypeRegistry.ListPools.GetFixedArray(list));
             }
         }

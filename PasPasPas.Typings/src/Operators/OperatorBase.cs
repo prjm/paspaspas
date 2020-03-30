@@ -15,7 +15,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="withArity">operator arity</param>
-        protected OperatorBase(int withKind, int withArity) {
+        protected OperatorBase(OperatorKind withKind, int withArity) {
             Kind = withKind;
             Arity = withArity;
             invalidResult = new Lazy<IValue>(() => TypeRegistry.Runtime.Types.MakeInvalidValue(SpecialConstantKind.InvalidResult));
@@ -25,7 +25,7 @@ namespace PasPasPas.Typings.Operators {
         ///     operator kind
         /// </summary>
         /// <see cref="DefinedOperators"/>
-        public int Kind { get; }
+        public OperatorKind Kind { get; }
 
         /// <summary>
         ///     operator arity (number of operands)
@@ -66,17 +66,18 @@ namespace PasPasPas.Typings.Operators {
         ///     get the output type for an operation
         /// </summary>
         /// <param name="input">input signature</param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns>output type id</returns>
-        public ITypeSymbol EvaluateOperator(ISignature input) {
+        public ITypeSymbol EvaluateOperator(ISignature input, IUnitType currentUnit) {
 
-            if (input.ParameterCount != Arity)
+            if (input.Count != Arity)
                 throw new InvalidOperationException();
 
             switch (Arity) {
                 case 1:
-                    return EvaluateUnaryOperator(input);
+                    return EvaluateUnaryOperator(input, currentUnit);
                 case 2:
-                    return EvaluateBinaryOperator(input);
+                    return EvaluateBinaryOperator(input, currentUnit);
             }
 
             return Invalid;
@@ -86,16 +87,18 @@ namespace PasPasPas.Typings.Operators {
         ///     evaluate binary operator
         /// </summary>
         /// <param name="input">input parameters</param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns>operator result</returns>
-        protected virtual ITypeSymbol EvaluateBinaryOperator(ISignature input)
+        protected virtual ITypeSymbol EvaluateBinaryOperator(ISignature input, IUnitType currentUnit)
             => Invalid;
 
         /// <summary>
         ///     evaluate binary operator
         /// </summary>
         /// <param name="input">operator parameters</param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns></returns>
-        protected virtual ITypeSymbol EvaluateUnaryOperator(ISignature input)
+        protected virtual ITypeSymbol EvaluateUnaryOperator(ISignature input, IUnitType currentUnit)
             => Invalid;
 
         /// <summary>

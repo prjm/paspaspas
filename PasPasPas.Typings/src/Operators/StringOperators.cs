@@ -9,21 +9,22 @@ namespace PasPasPas.Typings.Operators {
     /// </summary>
     public class StringOperator : OperatorBase {
 
-        private static void Register(ITypeRegistry registry, int kind)
+        private static void Register(ITypeRegistry registry, OperatorKind kind)
             => registry.RegisterOperator(new StringOperator(kind, 2));
 
         /// <summary>
         ///     register known operators
         /// </summary>
         /// <param name="typeRegistry">type registry</param>
-        public static void RegisterOperators(ITypeRegistry typeRegistry) => Register(typeRegistry, DefinedOperators.ConcatOperator);
+        public static void RegisterOperators(ITypeRegistry typeRegistry)
+            => Register(typeRegistry, OperatorKind.ConcatOperator);
 
         /// <summary>
         ///     create a new string operator
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="arity">operator arity</param>
-        public StringOperator(int withKind, int arity) : base(withKind, arity) { }
+        public StringOperator(OperatorKind withKind, int arity) : base(withKind, arity) { }
 
         /// <summary>
         ///     get the operator name
@@ -31,8 +32,8 @@ namespace PasPasPas.Typings.Operators {
         public override string Name {
             get {
                 switch (Kind) {
-                    case DefinedOperators.ConcatOperator:
-                        return "+";
+                    case OperatorKind.ConcatOperator:
+                        return KnownNames.Plus;
                 }
                 throw new InvalidOperationException();
             }
@@ -42,8 +43,9 @@ namespace PasPasPas.Typings.Operators {
         ///     evaluate a binary operator
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns></returns>
-        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input, IUnitType currentUnit) {
             var left = input[0];
             var right = input[1];
             var operations = Runtime.GetStringOperators(left.TypeDefinition, right.TypeDefinition);
@@ -51,7 +53,7 @@ namespace PasPasPas.Typings.Operators {
             if (operations == null)
                 return Invalid;
 
-            if (Kind == DefinedOperators.ConcatOperator)
+            if (Kind == OperatorKind.ConcatOperator)
                 return EvaluateConcatOperator(left, right, operations);
 
             return Invalid;

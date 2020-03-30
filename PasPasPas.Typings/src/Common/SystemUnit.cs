@@ -157,7 +157,8 @@ namespace PasPasPas.Typings.Common {
 
         private void RegisterHiddenTypes() {
             UnspecifiedType = RegisterType(new UnspecifiedType(this));
-            RegisterType(new VoidType(this));
+            NoType = RegisterType(new VoidType(this));
+            NilType = RegisterType(new NilType(this));
             RegisterType(new GenericTypeParameter(this, string.Empty, ImmutableArray<ITypeDefinition>.Empty));
         }
 
@@ -357,7 +358,10 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public ITypeDefinition GenericPointerType { get; private set; }
 
-        public ITypeDefinition NilType => throw new System.NotImplementedException();
+        /// <summary>
+        ///     nil type
+        /// </summary>
+        public ITypeDefinition NilType { get; private set; }
 
         /// <summary>
         ///     wide string type
@@ -403,5 +407,10 @@ namespace PasPasPas.Typings.Common {
         ///     unspecified type
         /// </summary>
         public IUnspecifiedType UnspecifiedType { get; private set; }
+
+        /// <summary>
+        ///     no type at all
+        /// </summary>
+        public INoType NoType { get; private set; }
     }
 }

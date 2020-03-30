@@ -15,8 +15,8 @@ namespace PasPasPas.Typings.Common {
         private readonly List<IUnitType> units
             = new List<IUnitType>();
 
-        private readonly IDictionary<int, IOperator> operators
-            = new Dictionary<int, IOperator>();
+        private readonly IDictionary<OperatorKind, IOperator> operators
+            = new Dictionary<OperatorKind, IOperator>();
 
         /// <summary>
         ///     system unit
@@ -102,7 +102,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="operatorKind">operator kind</param>
         /// <returns></returns>
-        public IOperator GetOperator(int operatorKind) {
+        public IOperator GetOperator(OperatorKind operatorKind) {
             if (operators.TryGetValue(operatorKind, out var result))
                 return result;
             return null;

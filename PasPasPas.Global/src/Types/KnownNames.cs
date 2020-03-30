@@ -522,11 +522,6 @@
 
         #endregion
 
-        /// <summary>
-        ///     at symbol
-        /// </summary>
-        public const string AtSymbol = "@";
-
         #region Intrinsic routines
 
         /// <summary>
@@ -620,5 +615,115 @@
         public const string SizeOf = "SizeOf";
 
         #endregion
+
+        /// <summary>
+        ///     plus operator
+        /// </summary>
+        public const string Plus = "+";
+
+        /// <summary>
+        ///     minus operator
+        /// </summary>
+        public const string Minus = "-";
+
+        /// <summary>
+        ///     multiplication operator
+        /// </summary>
+        public const string Star = "*";
+
+        /// <summary>
+        ///     in operator
+        /// </summary>
+        public const string InOperator = "in";
+
+        /// <summary>
+        ///     at symbol
+        /// </summary>
+        public const string AtSymbol = "@";
+
+        /// <summary>
+        ///     div symbol
+        /// </summary>
+        public const string Div = "div";
+
+        /// <summary>
+        ///     mod symbol
+        /// </summary>
+        public const string Mod = "mod";
+
+        /// <summary>
+        ///     slash symbol
+        /// </summary>
+        public const string Slash = "/";
+
+        /// <summary>
+        ///     <c>as</c> operator
+        /// </summary>
+        public const string AsSymbol = "as";
+
+        /// <summary>
+        ///     <c>is</c> operator
+        /// </summary>
+        public const string IsSymbol = "is";
+
+        /// <summary>
+        ///     and operator
+        /// </summary>
+        public const string And = "and";
+
+        /// <summary>
+        ///     or operator
+        /// </summary>
+        public const string Or = "or";
+
+        /// <summary>
+        ///     <c>xor</c> operator
+        /// </summary>
+        public const string Xor = "xor";
+
+        /// <summary>
+        ///     <c>not</c> operator
+        /// </summary>
+        public const string Not = "not";
+
+        /// <summary>
+        ///     <c>shl</c> operator
+        /// </summary>
+        public const string Shl = "shl";
+
+        /// <summary>
+        ///     <c>shr</c> operator
+        /// </summary>
+        public const string Shr = "shr";
+
+        /// <summary>
+        ///     <c>=</c> operator
+        /// </summary>
+        public const string EqualsOperator = "=";
+
+        /// <summary>
+        ///     <c>!=</c> operator
+        /// </summary>
+        public const string NotEqualsOperator = "<>";
+
+        /// <summary>
+        ///     <c>&lt;</c> operator
+        /// </summary>
+        public const string LessThan = "<";
+
+        /// <summary>
+        ///     <c>&gt;</c> operator
+        /// </summary>
+        public const string GreaterThan = ">";
+
+        /// <summary>
+        ///     <c>&lt;=</c> operator
+        /// </summary>
+        public const string LessThanOrEqual = "<=";
+
+        /// <summary>
+        ///     <c>&gt;=</c> operator
+        /// </summary>
+        public const string GreaterThanOrEqual = ">=";
     }
 }

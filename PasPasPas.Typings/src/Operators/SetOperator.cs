@@ -14,7 +14,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="registry">type registry</param>
         /// <param name="kind">operator kind</param>
-        private static void Register(ITypeRegistry registry, int kind)
+        private static void Register(ITypeRegistry registry, OperatorKind kind)
             => registry.RegisterOperator(new SetOperator(kind));
 
 
@@ -23,17 +23,17 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="registry">type registry</param>
         public static void RegisterOperators(ITypeRegistry registry) {
-            Register(registry, DefinedOperators.SetAddOperator);
-            Register(registry, DefinedOperators.SetDifferenceOperator);
-            Register(registry, DefinedOperators.SetIntersectOperator);
-            Register(registry, DefinedOperators.InSetOperator);
+            Register(registry, OperatorKind.SetAddOperator);
+            Register(registry, OperatorKind.SetDifferenceOperator);
+            Register(registry, OperatorKind.SetIntersectOperator);
+            Register(registry, OperatorKind.InSetOperator);
         }
 
         /// <summary>
         ///     create a new arithmetic operator
         /// </summary>
         /// <param name="withKind">operator kind</param>
-        public SetOperator(int withKind)
+        public SetOperator(OperatorKind withKind)
             : base(withKind, 2) { }
 
         /// <summary>
@@ -42,14 +42,14 @@ namespace PasPasPas.Typings.Operators {
         public override string Name {
             get {
                 switch (Kind) {
-                    case DefinedOperators.SetAddOperator:
-                        return "+";
-                    case DefinedOperators.SetDifferenceOperator:
-                        return "-";
-                    case DefinedOperators.SetIntersectOperator:
-                        return "*";
-                    case DefinedOperators.InSetOperator:
-                        return "in";
+                    case OperatorKind.SetAddOperator:
+                        return KnownNames.Plus;
+                    case OperatorKind.SetDifferenceOperator:
+                        return KnownNames.Minus;
+                    case OperatorKind.SetIntersectOperator:
+                        return KnownNames.Star;
+                    case OperatorKind.InSetOperator:
+                        return KnownNames.InOperator;
                 }
                 throw new InvalidOperationException();
             }
@@ -59,21 +59,22 @@ namespace PasPasPas.Typings.Operators {
         ///     evaluate set operators
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns></returns>
-        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input, IUnitType currentUnit) {
             var left = input[0];
             var right = input[1];
 
-            if (Kind == DefinedOperators.SetAddOperator)
-                return EvaluateSetAddOperator(left, right);
+            if (Kind == OperatorKind.SetAddOperator)
+                return EvaluateSetAddOperator(left, right, currentUnit);
 
-            if (Kind == DefinedOperators.SetDifferenceOperator)
-                return EvaluateSetDiffOperator(left, right);
+            if (Kind == OperatorKind.SetDifferenceOperator)
+                return EvaluateSetDiffOperator(left, right, currentUnit);
 
-            if (Kind == DefinedOperators.SetIntersectOperator)
-                return EvaluateSetIntersectOperator(left, right);
+            if (Kind == OperatorKind.SetIntersectOperator)
+                return EvaluateSetIntersectOperator(left, right, currentUnit);
 
-            if (Kind == DefinedOperators.InSetOperator)
+            if (Kind == OperatorKind.InSetOperator)
                 return EvaluateInSetOperator(left, right);
 
             return Invalid;
@@ -109,25 +110,28 @@ namespace PasPasPas.Typings.Operators {
             return Invalid;
         }
 
-        private ITypeSymbol EvaluateSetDiffOperator(ITypeSymbol left, ITypeSymbol right) {
+        private ITypeSymbol EvaluateSetDiffOperator(ITypeSymbol left, ITypeSymbol right, IUnitType currentUnit) {
             if (left.IsConstant(out var l) && right.IsConstant(out var r))
                 return Runtime.Structured.SetDifference(TypeRegistry, l, r);
-            else
-                return TypeRegistry.GetMatchingSetType(left.TypeDefinition, right.TypeDefinition);
+
+            var typeCreator = TypeRegistry.CreateTypeFactory(currentUnit);
+            return TypeRegistry.GetMatchingSetType(typeCreator, left.TypeDefinition, right.TypeDefinition);
         }
 
-        private ITypeSymbol EvaluateSetAddOperator(ITypeSymbol left, ITypeSymbol right) {
+        private ITypeSymbol EvaluateSetAddOperator(ITypeSymbol left, ITypeSymbol right, IUnitType currentUnit) {
             if (left.IsConstant(out var leftSet) && right.IsConstant(out var rightSet))
-                return Runtime.Structured.SetUnion(TypeRegistry, leftSet, rightSet);
-            else
-                return TypeRegistry.GetMatchingSetType(left.TypeDefinition, right.TypeDefinition);
+                return Runtime.Structured.SetUnion(currentUnit, TypeRegistry, leftSet, rightSet);
+
+            var typeCreator = TypeRegistry.CreateTypeFactory(currentUnit);
+            return TypeRegistry.GetMatchingSetType(typeCreator, left.TypeDefinition, right.TypeDefinition);
         }
 
-        private ITypeSymbol EvaluateSetIntersectOperator(ITypeSymbol left, ITypeSymbol right) {
+        private ITypeSymbol EvaluateSetIntersectOperator(ITypeSymbol left, ITypeSymbol right, IUnitType currentUnit) {
             if (left.IsConstant(out var leftSet) && right.IsConstant(out var rightSet))
-                return Runtime.Structured.SetIntersection(TypeRegistry, leftSet, rightSet);
-            else
-                return TypeRegistry.GetMatchingSetType(left.TypeDefinition, right.TypeDefinition);
+                return Runtime.Structured.SetIntersection(currentUnit, TypeRegistry, leftSet, rightSet);
+
+            var typeCreator = TypeRegistry.CreateTypeFactory(currentUnit);
+            return TypeRegistry.GetMatchingSetType(typeCreator, left.TypeDefinition, right.TypeDefinition);
         }
     }
 }

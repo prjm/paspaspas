@@ -1,7 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Typings.Operators;
 
 namespace PasPasPas.Typings.Common {
 
@@ -34,7 +32,7 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            element.TypeInfo = GetErrorTypeReference(element);
+            MarkWithErrorType(element);
         }
 
         /// <summary>
@@ -86,32 +84,32 @@ namespace PasPasPas.Typings.Common {
 
             var operand = element.Value;
 
-            if (operand == null || operand.TypeInfo == null) {
-                element.TypeInfo = GetErrorTypeReference(element);
+            if (operand == default || operand.TypeInfo == default) {
+                MarkWithErrorType(element);
                 return;
             }
 
             if (element.Kind == ExpressionKind.Not) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperator, GetTypeRefence(operand));
+                element.TypeInfo = GetTypeOfOperator(OperatorKind.NotOperator, GetTypeRefence(operand));
                 return;
             }
 
             if (element.Kind == ExpressionKind.UnaryMinus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, GetTypeRefence(operand));
+                element.TypeInfo = GetTypeOfOperator(OperatorKind.UnaryMinus, GetTypeRefence(operand));
                 return;
             }
 
             if (element.Kind == ExpressionKind.UnaryPlus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, GetTypeRefence(operand));
+                element.TypeInfo = GetTypeOfOperator(OperatorKind.UnaryPlus, GetTypeRefence(operand));
                 return;
             }
 
             if (element.Kind == ExpressionKind.AddressOf) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.AtOperator, GetTypeRefence(operand));
+                element.TypeInfo = GetTypeOfOperator(OperatorKind.AtOperator, GetTypeRefence(operand));
                 return;
             }
 
-            element.TypeInfo = GetErrorTypeReference(element);
+            MarkWithErrorType(element);
         }
 
         /// <summary>
@@ -120,7 +118,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="operatorKind"></param>
         /// <param name="operand"></param>
         /// <returns></returns>
-        private IOldTypeReference GetTypeOfOperator(int operatorKind, IOldTypeReference operand) {
+        private IOldTypeReference GetTypeOfOperator(OperatorKind operatorKind, IOldTypeReference operand) {
             if (operand == null)
                 return GetErrorTypeReference(null);
 

@@ -3,15 +3,14 @@
 namespace PasPasPas.Typings.Hidden {
 
     /// <summary>
-    ///     create a new void type
+    ///     nil type
     /// </summary>
-    public class VoidType : HiddenIntrinsicType, INoType {
-
+    public class NilType : HiddenIntrinsicType {
         /// <summary>
         ///     create a new void type
         /// </summary>
         /// <param name="definingUnit"></param>
-        public VoidType(IUnitType definingUnit) : base(definingUnit) {
+        public NilType(IUnitType definingUnit) : base(definingUnit) {
         }
     }
 }

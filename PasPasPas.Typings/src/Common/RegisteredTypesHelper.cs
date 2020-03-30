@@ -287,12 +287,12 @@ namespace PasPasPas.Typings.Common {
         /// <param name="left">left type reference</param>
         /// <param name="right">right type reference</param>
         /// <returns>operator id</returns>
-        public static int GetOperatorId(this ITypeRegistry typeRegistry, ExpressionKind kind, ITypeSymbol left, ITypeSymbol right) {
+        public static OperatorKind GetOperatorId(this ITypeRegistry typeRegistry, ExpressionKind kind, ITypeSymbol left, ITypeSymbol right) {
             var leftType = left.TypeDefinition;
             var rightType = right.TypeDefinition;
 
             if (leftType.IsErrorType() || rightType.IsErrorType())
-                return DefinedOperators.Undefined;
+                return OperatorKind.Undefined;
 
             if (leftType.IsSubrangeType(out var subrangeType1))
                 leftType = subrangeType1.SubrangeOfType;
@@ -302,62 +302,62 @@ namespace PasPasPas.Typings.Common {
 
             switch (kind) {
                 case ExpressionKind.LessThen:
-                    return DefinedOperators.LessThen;
+                    return OperatorKind.LessThan;
                 case ExpressionKind.LessThenEquals:
-                    return DefinedOperators.LessThenOrEqual;
+                    return OperatorKind.LessThanOrEqual;
                 case ExpressionKind.GreaterThen:
-                    return DefinedOperators.GreaterThen;
+                    return OperatorKind.GreaterThan;
                 case ExpressionKind.GreaterThenEquals:
-                    return DefinedOperators.GreaterThenEqual;
+                    return OperatorKind.GreaterThanOrEqual;
                 case ExpressionKind.NotEquals:
-                    return DefinedOperators.NotEqualsOperator;
+                    return OperatorKind.NotEqualsOperator;
                 case ExpressionKind.EqualsSign:
-                    return DefinedOperators.EqualsOperator;
+                    return OperatorKind.EqualsOperator;
                 case ExpressionKind.Xor:
-                    return DefinedOperators.XorOperator;
+                    return OperatorKind.XorOperator;
                 case ExpressionKind.Or:
-                    return DefinedOperators.OrOperator;
+                    return OperatorKind.OrOperator;
                 case ExpressionKind.Shr:
-                    return DefinedOperators.ShrOperator;
+                    return OperatorKind.ShrOperator;
                 case ExpressionKind.Shl:
-                    return DefinedOperators.ShlOperator;
+                    return OperatorKind.ShlOperator;
                 case ExpressionKind.And:
-                    return DefinedOperators.AndOperator;
+                    return OperatorKind.AndOperator;
                 case ExpressionKind.Mod:
-                    return DefinedOperators.ModOperator;
+                    return OperatorKind.ModOperator;
                 case ExpressionKind.Slash:
-                    return DefinedOperators.SlashOperator;
+                    return OperatorKind.SlashOperator;
                 case ExpressionKind.Div:
-                    return DefinedOperators.DivOperator;
+                    return OperatorKind.DivOperator;
                 case ExpressionKind.Not:
-                    return DefinedOperators.NotOperator;
+                    return OperatorKind.NotOperator;
                 case ExpressionKind.UnaryMinus:
-                    return DefinedOperators.UnaryMinus;
+                    return OperatorKind.UnaryMinus;
                 case ExpressionKind.UnaryPlus:
-                    return DefinedOperators.UnaryPlus;
+                    return OperatorKind.UnaryPlus;
                 case ExpressionKind.In:
-                    return DefinedOperators.InSetOperator;
+                    return OperatorKind.InSetOperator;
                 case ExpressionKind.As:
-                    return DefinedOperators.AsOperator;
+                    return OperatorKind.AsOperator;
                 case ExpressionKind.Is:
-                    return DefinedOperators.IsOperator;
+                    return OperatorKind.IsOperator;
             };
 
             if (kind == ExpressionKind.Plus) {
 
                 if ((leftType.BaseType == BaseType.Char || leftType.BaseType == BaseType.String) &&
                     (rightType.BaseType == BaseType.Char || rightType.BaseType == BaseType.String))
-                    return DefinedOperators.ConcatOperator;
+                    return OperatorKind.ConcatOperator;
 
                 if ((leftType.BaseType == BaseType.Integer || leftType.BaseType == BaseType.Real) &&
                     (rightType.BaseType == BaseType.Integer || rightType.BaseType == BaseType.Real))
-                    return DefinedOperators.PlusOperator;
+                    return OperatorKind.PlusOperator;
 
                 if (leftType.BaseType == BaseType.Set && rightType.BaseType == BaseType.Set)
-                    return DefinedOperators.SetAddOperator;
+                    return OperatorKind.SetAddOperator;
 
                 if (leftType.BaseType == BaseType.Array && rightType.BaseType == BaseType.Array)
-                    return DefinedOperators.ConcatArrayOperator;
+                    return OperatorKind.ConcatArrayOperator;
 
             }
 
@@ -365,10 +365,10 @@ namespace PasPasPas.Typings.Common {
 
                 if ((leftType.BaseType == BaseType.Integer || leftType.BaseType == BaseType.Real) &&
                     (rightType.BaseType == BaseType.Integer || rightType.BaseType == BaseType.Real))
-                    return DefinedOperators.MinusOperator;
+                    return OperatorKind.MinusOperator;
 
                 if (leftType.BaseType == BaseType.Set && rightType.BaseType == BaseType.Set)
-                    return DefinedOperators.SetDifferenceOperator;
+                    return OperatorKind.SetDifferenceOperator;
 
             }
 
@@ -376,14 +376,14 @@ namespace PasPasPas.Typings.Common {
 
                 if ((leftType.BaseType == BaseType.Integer || leftType.BaseType == BaseType.Real) &&
                     (rightType.BaseType == BaseType.Integer || rightType.BaseType == BaseType.Real))
-                    return DefinedOperators.TimesOperator;
+                    return OperatorKind.TimesOperator;
 
                 if (leftType.BaseType == BaseType.Set && rightType.BaseType == BaseType.Set)
-                    return DefinedOperators.SetIntersectOperator;
+                    return OperatorKind.SetIntersectOperator;
 
             }
 
-            return DefinedOperators.Undefined;
+            return OperatorKind.Undefined;
         }
 
         /// <summary>

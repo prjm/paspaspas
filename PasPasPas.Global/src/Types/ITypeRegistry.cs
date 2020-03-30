@@ -19,7 +19,7 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="operatorKind">operator id</param>
         /// <returns>operator definition</returns>
-        IOperator GetOperator(int operatorKind);
+        IOperator GetOperator(OperatorKind operatorKind);
 
         /// <summary>
         ///     register an operator

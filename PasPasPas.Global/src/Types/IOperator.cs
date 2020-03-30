@@ -8,7 +8,7 @@
         /// <summary>
         ///     operator kind (unique id)
         /// </summary>
-        int Kind { get; }
+        OperatorKind Kind { get; }
 
         /// <summary>
         ///     operator name
@@ -29,8 +29,9 @@
         ///     evaluate an operator and compute its results
         /// </summary>
         /// <param name="input">operator input - type reference or constant</param>
+        /// <param name="currentUnit">current unit</param>
         /// <returns>operator result - type reference or constant</returns>
-        ITypeSymbol EvaluateOperator(ISignature input);
+        ITypeSymbol EvaluateOperator(ISignature input, IUnitType currentUnit);
 
     }
 }

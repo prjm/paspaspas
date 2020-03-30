@@ -174,5 +174,10 @@
         ///     unspecified type
         /// </summary>
         IUnspecifiedType UnspecifiedType { get; }
+
+        /// <summary>
+        ///     no type at all / void
+        /// </summary>
+        INoType NoType { get; }
     }
 }

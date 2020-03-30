@@ -119,6 +119,14 @@ namespace PasPasPas.Typings.Routines {
             => Types.MakeInvocationResultFromIntrinsic(this, Types.MakeSignature(returnType, signature));
 
         /// <summary>
+        ///     make a void invocation result
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        protected IIntrinsicInvocationResult MakeProcedureResult(ISignature parameters)
+            => Types.MakeInvocationResultFromIntrinsic(this, Types.MakeSignature(TypeRegistry.SystemUnit.NoType, parameters));
+
+        /// <summary>
         ///     make a subrange value
         /// </summary>
         /// <param name="typeId"></param>
@@ -126,11 +134,6 @@ namespace PasPasPas.Typings.Routines {
         /// <returns></returns>
         public IValue MakeSubrangeValue(ITypeDefinition typeId, IValue value)
             => Runtime?.Types?.MakeSubrangeValue(typeId, value);
-
-        /// <summary>
-        ///     create parameters
-        /// </summary>
-        internal virtual void CreateParameters() { }
 
         /// <summary>
         ///     resolve a call
@@ -157,7 +160,7 @@ namespace PasPasPas.Typings.Routines {
             var resultType = default(IRoutineResult);
 
             if (unaryRoutine.IsConstant && parameter.IsConstant(out var value))
-                resultType = Types.MakeInvocationResultFromIntrinsic(this, unaryRoutine.ExecuteCall(value));
+                resultType = MakeResult(unaryRoutine.ExecuteCall(value), signature);
             else
                 resultType = unaryRoutine.ResolveCall(parameter);
 
@@ -173,7 +176,7 @@ namespace PasPasPas.Typings.Routines {
             var result = default(IRoutineResult);
 
             if (variadicRoutine.IsConstant && signature.HasConstantParameters && variadicRoutine is IConstantVariadicRoutine cvr)
-                result = Types.MakeInvocationResultFromIntrinsic(this, cvr.ExecuteCall(signature));
+                result = MakeResult(cvr.ExecuteCall(signature), signature);
             else
                 result = variadicRoutine.ResolveCall(signature);
 

@@ -15,7 +15,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="registry">type registry</param>
         /// <param name="kind">operator kind to register</param>
-        private static void Register(ITypeRegistry registry, int kind)
+        private static void Register(ITypeRegistry registry, OperatorKind kind)
             => registry.RegisterOperator(new RelationalOperator(kind, 2));
 
         /// <summary>
@@ -23,12 +23,12 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="registry">type registry</param>
         public static void RegisterOperators(ITypeRegistry registry) {
-            Register(registry, DefinedOperators.EqualsOperator);
-            Register(registry, DefinedOperators.NotEqualsOperator);
-            Register(registry, DefinedOperators.LessThen);
-            Register(registry, DefinedOperators.GreaterThen);
-            Register(registry, DefinedOperators.LessThenOrEqual);
-            Register(registry, DefinedOperators.GreaterThenEqual);
+            Register(registry, OperatorKind.EqualsOperator);
+            Register(registry, OperatorKind.NotEqualsOperator);
+            Register(registry, OperatorKind.LessThan);
+            Register(registry, OperatorKind.GreaterThan);
+            Register(registry, OperatorKind.LessThanOrEqual);
+            Register(registry, OperatorKind.GreaterThanOrEqual);
         }
         //
         /// <summary>
@@ -36,7 +36,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="withArity">operator arity</param>
-        public RelationalOperator(int withKind, int withArity)
+        public RelationalOperator(OperatorKind withKind, int withArity)
             : base(withKind, withArity) { }
 
         /// <summary>
@@ -45,18 +45,18 @@ namespace PasPasPas.Typings.Operators {
         public override string Name {
             get {
                 switch (Kind) {
-                    case DefinedOperators.EqualsOperator:
-                        return "=";
-                    case DefinedOperators.NotEqualsOperator:
-                        return "<>";
-                    case DefinedOperators.LessThen:
-                        return "<";
-                    case DefinedOperators.GreaterThen:
-                        return ">";
-                    case DefinedOperators.LessThenOrEqual:
-                        return "<=";
-                    case DefinedOperators.GreaterThenEqual:
-                        return ">=";
+                    case OperatorKind.EqualsOperator:
+                        return KnownNames.EqualsOperator;
+                    case OperatorKind.NotEqualsOperator:
+                        return KnownNames.NotEqualsOperator;
+                    case OperatorKind.LessThan:
+                        return KnownNames.LessThan;
+                    case OperatorKind.GreaterThan:
+                        return KnownNames.GreaterThan;
+                    case OperatorKind.LessThanOrEqual:
+                        return KnownNames.LessThanOrEqual;
+                    case OperatorKind.GreaterThanOrEqual:
+                        return KnownNames.GreaterThanOrEqual;
                 }
                 throw new InvalidOperationException();
             }
@@ -67,7 +67,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">operator input</param>
         /// <returns>operator result - constant value or types</returns>
-        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input, IUnitType currentUnit) {
             var left = input[0];
             var right = input[1];
 
@@ -81,22 +81,22 @@ namespace PasPasPas.Typings.Operators {
             if (operations == null)
                 return Invalid;
 
-            if (Kind == DefinedOperators.EqualsOperator)
+            if (Kind == OperatorKind.EqualsOperator)
                 return EvaluateEqualsOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.NotEqualsOperator)
+            if (Kind == OperatorKind.NotEqualsOperator)
                 return EvaluateNotEqualsOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.LessThen)
+            if (Kind == OperatorKind.LessThan)
                 return EvaluateLessThenOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.GreaterThen)
+            if (Kind == OperatorKind.GreaterThan)
                 return EvaluateGreaterThenOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.LessThenOrEqual)
+            if (Kind == OperatorKind.LessThanOrEqual)
                 return EvaluateLessThenOrEqualOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.GreaterThenEqual)
+            if (Kind == OperatorKind.GreaterThanOrEqual)
                 return EvaluteGreaterThenOrEqualOperator(left, right, operations);
 
             return Invalid;

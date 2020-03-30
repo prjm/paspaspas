@@ -1,7 +1,6 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
 
@@ -10,7 +9,7 @@ namespace PasPasPas.Typings.Operators {
     /// </summary>
     public class LogicalOperator : OperatorBase {
 
-        private static void Register(ITypeRegistry registry, int kind, int arity = 2)
+        private static void Register(ITypeRegistry registry, OperatorKind kind, int arity = 2)
             => registry.RegisterOperator(new LogicalOperator(kind, arity));
 
         /// <summary>
@@ -18,12 +17,12 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="registry">type registry</param>
         public static void RegisterOperators(ITypeRegistry registry) {
-            Register(registry, DefinedOperators.NotOperator, 1);
-            Register(registry, DefinedOperators.AndOperator);
-            Register(registry, DefinedOperators.XorOperator);
-            Register(registry, DefinedOperators.OrOperator);
-            Register(registry, DefinedOperators.ShlOperator);
-            Register(registry, DefinedOperators.ShrOperator);
+            Register(registry, OperatorKind.NotOperator, 1);
+            Register(registry, OperatorKind.AndOperator);
+            Register(registry, OperatorKind.XorOperator);
+            Register(registry, OperatorKind.OrOperator);
+            Register(registry, OperatorKind.ShlOperator);
+            Register(registry, OperatorKind.ShrOperator);
         }
 
         /// <summary>
@@ -31,7 +30,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="withArity">operator arity</param>
-        public LogicalOperator(int withKind, int withArity)
+        public LogicalOperator(OperatorKind withKind, int withArity)
             : base(withKind, withArity) { }
 
         /// <summary>
@@ -40,18 +39,18 @@ namespace PasPasPas.Typings.Operators {
         public override string Name {
             get {
                 switch (Kind) {
-                    case DefinedOperators.AndOperator:
-                        return "and";
-                    case DefinedOperators.OrOperator:
-                        return "or";
-                    case DefinedOperators.XorOperator:
-                        return "xor";
-                    case DefinedOperators.NotOperator:
-                        return "not";
-                    case DefinedOperators.ShlOperator:
-                        return "shl";
-                    case DefinedOperators.ShrOperator:
-                        return "shr";
+                    case OperatorKind.AndOperator:
+                        return KnownNames.And;
+                    case OperatorKind.OrOperator:
+                        return KnownNames.Or;
+                    case OperatorKind.XorOperator:
+                        return KnownNames.Xor;
+                    case OperatorKind.NotOperator:
+                        return KnownNames.Not;
+                    case OperatorKind.ShlOperator:
+                        return KnownNames.Shl;
+                    case OperatorKind.ShrOperator:
+                        return KnownNames.Shr;
                 }
                 throw new InvalidOperationException();
             }
@@ -62,14 +61,14 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input</param>
         /// <returns></returns>
-        protected override ITypeSymbol EvaluateUnaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateUnaryOperator(ISignature input, IUnitType currentUnit) {
             var operand = input[0];
             var operations = Runtime.GetLogicalOperators(TypeRegistry, operand);
 
             if (operations == null)
                 return Invalid;
 
-            if (Kind == DefinedOperators.NotOperator)
+            if (Kind == OperatorKind.NotOperator)
                 if (operand.IsConstant(out var constOperand))
                     return operations.NotOperator(constOperand);
                 else
@@ -82,15 +81,16 @@ namespace PasPasPas.Typings.Operators {
         ///     binary operator
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="currentUnit"></param>
         /// <returns></returns>
-        protected override ITypeSymbol EvaluateBinaryOperator(Signature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input, IUnitType currentUnit) {
             var left = input[0];
             var right = input[1];
 
-            if (Kind == DefinedOperators.ShrOperator)
+            if (Kind == OperatorKind.ShrOperator)
                 return EvaluateShiftOperator(toLeft: false, left, right);
 
-            if (Kind == DefinedOperators.ShlOperator)
+            if (Kind == OperatorKind.ShlOperator)
                 return EvaluateShiftOperator(toLeft: true, left, right);
 
             var operations = Runtime.GetLogicalOperators(TypeRegistry, left, right);
@@ -98,13 +98,13 @@ namespace PasPasPas.Typings.Operators {
             if (operations == null)
                 return Invalid;
 
-            if (Kind == DefinedOperators.AndOperator)
+            if (Kind == OperatorKind.AndOperator)
                 return EvaluateAndOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.OrOperator)
+            if (Kind == OperatorKind.OrOperator)
                 return EvaluateOrOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.XorOperator)
+            if (Kind == OperatorKind.XorOperator)
                 return EvaluateXorOperator(left, right, operations);
 
             return Invalid;

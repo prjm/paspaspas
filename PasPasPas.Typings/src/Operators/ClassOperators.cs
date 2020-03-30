@@ -14,7 +14,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="registry">type registry</param>
         /// <param name="kind">operator kind to register</param>
-        private static void Register(ITypeRegistry registry, int kind)
+        private static void Register(ITypeRegistry registry, OperatorKind kind)
             => registry.RegisterOperator(new ClassOperators(kind));
 
         /// <summary>
@@ -22,15 +22,15 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="registry"></param>
         public static void RegisterOperators(ITypeRegistry registry) {
-            Register(registry, DefinedOperators.AsOperator);
-            Register(registry, DefinedOperators.IsOperator);
+            Register(registry, OperatorKind.AsOperator);
+            Register(registry, OperatorKind.IsOperator);
         }
 
         /// <summary>
         ///     create a new class operator
         /// </summary>
         /// <param name="withKind"></param>
-        public ClassOperators(int withKind) : base(withKind, 2) { }
+        public ClassOperators(OperatorKind withKind) : base(withKind, 2) { }
 
         /// <summary>
         ///     get the operator name
@@ -38,10 +38,10 @@ namespace PasPasPas.Typings.Operators {
         public override string Name {
             get {
                 switch (Kind) {
-                    case DefinedOperators.AsOperator:
-                        return "as";
-                    case DefinedOperators.IsOperator:
-                        return "is";
+                    case OperatorKind.AsOperator:
+                        return KnownNames.AsSymbol;
+                    case OperatorKind.IsOperator:
+                        return KnownNames.IsSymbol;
                 }
                 throw new InvalidOperationException();
             }
@@ -52,13 +52,14 @@ namespace PasPasPas.Typings.Operators {
         ///     evaluate a binary operator
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="currentUnit"></param>
         /// <returns></returns>
-        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input) {
+        protected override ITypeSymbol EvaluateBinaryOperator(ISignature input, IUnitType currentUnit) {
 
-            if (Kind == DefinedOperators.IsOperator)
+            if (Kind == OperatorKind.IsOperator)
                 return EvaluateIsOperator(input);
 
-            if (Kind == DefinedOperators.AsOperator)
+            if (Kind == OperatorKind.AsOperator)
                 return EvaluateAsOperator(input);
 
             return Invalid;
