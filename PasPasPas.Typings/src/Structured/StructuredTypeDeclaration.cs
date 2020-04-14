@@ -144,7 +144,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="symbolName"></param>
         /// <param name="callables"></param>
         /// <param name="signature"></param>
-        public override void ResolveCall(string symbolName, IList<IRoutine> callables, Signature signature) {
+        public override void ResolveCall(string symbolName, IList<IRoutine> callables, ISignature signature) {
             base.ResolveCall(symbolName, callables, signature);
 
             var baseClass = BaseClass;
@@ -188,8 +188,6 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <returns></returns>
         public ITypeSymbol MakeConstant() {
-            return default;
-            /*
             using (var list = GetList<ITypeSymbol>()) {
                 foreach (var value in Fields) {
                     list.Add(value.SymbolType);
@@ -198,7 +196,6 @@ namespace PasPasPas.Typings.Structured {
 
                 return TypeRegistry.Runtime.Structured.CreateRecordValue(TypeId, TypeRegistry.ListPools.GetFixedArray(list));
             }
-            */
         }
 
         /// <summary>

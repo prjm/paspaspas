@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Types;
@@ -27,13 +26,7 @@ namespace PasPasPas.Globals.Runtime {
         IList<IVariable> Parameters { get; }
 
         /// <summary>
-        ///     <c>true</c> if this routine is a class item
-        /// </summary>
-        [Obsolete("to be replaced")]
-        bool IsClassItem { get; }
-
-        /// <summary>
-        ///     parent routine
+        ///     parent routine group
         /// </summary>
         IRoutineGroup RoutineGroup { get; }
 
@@ -53,7 +46,27 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     other symbols of this routine
         /// </summary>
-        IDictionary<string, Reference> Symbols { get; }
+        IDictionary<string, ITypeSymbol> Symbols { get; }
+
+        /// <summary>
+        ///     routine flags
+        /// </summary>
+        RoutineFlags Flags { get; }
 
     }
+
+    /// <summary>
+    ///     helper functions for routines
+    /// </summary>
+    public static class RoutineFlagsHelper {
+
+        /// <summary>
+        ///     test if the routine is a class routine
+        /// </summary>
+        /// <param name="routine"></param>
+        /// <returns></returns>
+        public static bool IsClassItem(this IRoutine routine)
+            => (routine.Flags & RoutineFlags.ClassItem) == RoutineFlags.ClassItem;
+    }
+
 }

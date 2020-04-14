@@ -83,7 +83,7 @@ namespace PasPasPas.Typings.Routines {
         ///     symbol kind
         /// </summary>
         public SymbolTypeKind SymbolKind
-            => SymbolTypeKind.IntrinsicRoutine;
+            => SymbolTypeKind.IntrinsicRoutineResult;
 
         /// <summary>
         ///     no type definition

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using PasPasPas.Globals;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
@@ -10,7 +11,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     base class for structured types
     /// </summary>
-    public abstract class StructuredTypeBase : TypeDefinitionBase {
+    public abstract class StructuredTypeBase : TypeDefinitionBase, IStructuredType {
 
         /// <summary>
         ///     create a new structured type
@@ -26,7 +27,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="symbolName">method name</param>
         /// <param name="callables">callable methods</param>
         /// <returns></returns>
-        public virtual void ResolveCall(string symbolName, IList<IRoutine> callables, Signature signature) {
+        public virtual void ResolveCall(string symbolName, IList<IRoutineResult> callables, ISignature signature) {
 
             foreach (var method in Methods)
                 if (string.Equals(method.Name, symbolName, StringComparison.OrdinalIgnoreCase))

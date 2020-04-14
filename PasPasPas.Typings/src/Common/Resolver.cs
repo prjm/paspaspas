@@ -106,7 +106,7 @@ namespace PasPasPas.Typings.Common {
                 baseTypeValue = TypeRegistry.MakeTypeInstanceReference(baseTypeValue.TypeId);
 
             if (baseTypeValue.TypeDefinition.BaseType == BaseType.Unit) {
-                var unit = baseTypeValue.TypeDefinition as UnitType;
+                var unit = baseTypeValue.TypeDefinition as IUnitType;
                 if (unit != default && unit.TryToResolve(name, out var reference)) {
                     return reference;
                 }

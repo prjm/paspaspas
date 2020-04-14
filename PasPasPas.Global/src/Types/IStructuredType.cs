@@ -30,5 +30,13 @@ namespace PasPasPas.Globals.Types {
         /// <param name="classItem"></param>
         /// <returns></returns>
         IRoutineGroup FindMethod(string name, bool classItem);
+        bool InheritsFrom(ITypeDefinition typeId);
+
+        /// <summary>
+        ///     make a constant value for this type
+        /// </summary>
+        /// <returns></returns>
+        IValue MakeConstant();
+        void ResolveCall(string symbolName, IList<IRoutineResult> callables, ISignature signature);
     }
 }

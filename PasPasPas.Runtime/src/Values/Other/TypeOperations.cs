@@ -1,5 +1,5 @@
 ﻿using System;
-using PasPasPas.Globals;
+using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.Dynamic;
@@ -94,17 +94,8 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <param name="returnType"></param>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public ISignature MakeSignature(ITypeSymbol returnType, ISignature signature)
+        public ISignature MakeSignature(ITypeSymbol returnType, IEnumerable<ITypeSymbol> signature)
             => new SignatureN(returnType, signature);
-
-        /// <summary>
-        ///     make a intrinsic result
-        /// </summary>
-        /// <param name="intrinsicRoutine"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public IRoutineResult MakeInvocationResultFromIntrinsic(IRoutineGroup intrinsicRoutine, IValue value)
-            => throw new NotImplementedException();
 
         /// <summary>
         ///     make a signature without any parameters
@@ -113,5 +104,32 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <returns></returns>
         public ISignature MakeSignature(ITypeSymbol returnType)
            => new Signature0(returnType);
+
+        /// <summary>
+        ///     make a signature with two parameters
+        /// </summary>
+        /// <param name="resultType"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public ISignature MakeSignature(IUnspecifiedType resultType, ITypeSymbol left, ITypeSymbol right)
+            => new Signature2(resultType, left, right);
+
+        /// <summary>
+        ///     make an operator result
+        /// </summary>
+        /// <param name="resultType"></param>
+        /// <param name="input"></param>
+        /// <param name="kind">operator kind</param>
+        /// <returns></returns>
+        public ITypeSymbol MakeOperatorResult(OperatorKind kind, ITypeSymbol resultType, ISignature input) {
+            if (input.Count == 1)
+                return new OperatorInvocationResult1(kind, resultType, input[0].TypeDefinition);
+
+            if (input.Count == 2)
+                return new OperatorInvocationResult2(kind, resultType, input[0].TypeDefinition, input[1].TypeDefinition);
+
+            throw new ArgumentOutOfRangeException(nameof(input));
+        }
     }
 }

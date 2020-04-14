@@ -149,7 +149,7 @@ namespace PasPasPas.Typings.Common {
             RegisterAlias(WideCharType, Names.Char);
             RegisterAlias(WideCharType, Names.Ucs2Char);
             RegisterAlias(CardinalType, Names.Ucs4Char);
-            RegisterAlias(UnicodeStringType, Names.String);
+            StringType = RegisterAlias(UnicodeStringType, Names.String);
             RegisterAlias(DoubleType, Names.Real);
             RegisterAlias(PWideCharType, Names.PChar);
             RegisterAlias(PUnicodeStringType, Names.PString);
@@ -412,5 +412,10 @@ namespace PasPasPas.Typings.Common {
         ///     no type at all
         /// </summary>
         public INoType NoType { get; private set; }
+
+        /// <summary>
+        ///     common string type
+        /// </summary>
+        public IAliasedType StringType { get; private set; }
     }
 }

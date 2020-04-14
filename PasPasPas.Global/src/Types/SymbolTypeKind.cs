@@ -31,8 +31,13 @@
         InvocationResult = 4,
 
         /// <summary>
-        ///     intrinsic routine
+        ///     intrinsic routine result
         /// </summary>
-        IntrinsicRoutine = 5,
+        IntrinsicRoutineResult = 5,
+
+        /// <summary>
+        ///     operator result
+        /// </summary>
+        OperatorResult = 6,
     }
 }

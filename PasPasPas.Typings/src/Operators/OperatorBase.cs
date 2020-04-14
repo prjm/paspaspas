@@ -24,7 +24,6 @@ namespace PasPasPas.Typings.Operators {
         /// <summary>
         ///     operator kind
         /// </summary>
-        /// <see cref="DefinedOperators"/>
         public OperatorKind Kind { get; }
 
         /// <summary>
@@ -32,6 +31,9 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         public int Arity { get; }
 
+        /// <summary>
+        ///     invalid operator result
+        /// </summary>
         private readonly Lazy<IValue> invalidResult;
 
         /// <summary>
@@ -73,14 +75,26 @@ namespace PasPasPas.Typings.Operators {
             if (input.Count != Arity)
                 throw new InvalidOperationException();
 
+            var result = default(ITypeSymbol);
+
             switch (Arity) {
                 case 1:
-                    return EvaluateUnaryOperator(input, currentUnit);
+                    result = EvaluateUnaryOperator(input, currentUnit);
+                    break;
+
                 case 2:
-                    return EvaluateBinaryOperator(input, currentUnit);
+                    result = EvaluateBinaryOperator(input, currentUnit);
+                    break;
+
+                default:
+                    result = Invalid;
+                    break;
             }
 
-            return Invalid;
+            if (!result.IsConstant())
+                result = Runtime.Types.MakeOperatorResult(Kind, result, input);
+
+            return result;
         }
 
         /// <summary>

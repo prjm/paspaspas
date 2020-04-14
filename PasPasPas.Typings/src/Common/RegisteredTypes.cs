@@ -128,6 +128,7 @@ namespace PasPasPas.Typings.Common {
             //    KnownTypeIds.GenericPointer)[0].ConstantParam = true;
         }
 
+        */
 
         /// <summary>
         ///     cast one type to another type
@@ -135,90 +136,94 @@ namespace PasPasPas.Typings.Common {
         /// <param name="sourceType">source type</param>
         /// <param name="targetType">target type</param>
         /// <returns></returns>
-        public int Cast(int sourceType, int targetType) {
-            sourceType = ResolveAlias(sourceType);
+        public ITypeSymbol Cast(ITypeSymbol sourceType, ITypeSymbol targetType) {
 
-            if (sourceType == ResolveAlias(targetType))
+            if (sourceType.IsConstant(out var value))
+                return Runtime.Cast(this, value, targetType.TypeDefinition);
+
+            var source = sourceType.TypeDefinition.ResolveAlias();
+            var target = targetType.TypeDefinition.ResolveAlias();
+
+            if (sourceType == targetType)
                 return targetType;
 
-            var sourceTypeKind = GetTypeKindOf(sourceType);
+            var sourceTypeKind = source.BaseType;
 
-            if (sourceTypeKind.IsIntegral())
-                return CastIntTo(targetType);
+            if (sourceTypeKind == BaseType.Integer)
+                return CastIntTo(target);
 
-            if (sourceTypeKind.IsChar())
-                return CastCharTo(targetType);
+            if (sourceTypeKind == BaseType.Char)
+                return CastCharTo(target);
 
-            if (sourceTypeKind == CommonTypeKind.BooleanType)
-                return CastBooleanTo(targetType);
+            if (sourceTypeKind == BaseType.Boolean)
+                return CastBooleanTo(target);
 
-            if (sourceTypeKind == CommonTypeKind.RecordType)
-                return CastRecordTo(sourceType, targetType);
+            if (sourceTypeKind == BaseType.Structured && sourceType is IStructuredType structType && structType.StructTypeKind == StructuredTypeKind.Record)
+                return CastRecordTo(source, target);
 
-            return Ids.Unused;
+            return SystemUnit.ErrorType;
         }
 
-        private int CastIntTo(int targetType) {
-            var targetTypeKind = GetTypeKindOf(targetType);
+        private ITypeSymbol CastIntTo(ITypeDefinition targetType) {
+            var targetTypeKind = targetType.BaseType;
 
-            if (targetTypeKind.IsIntegral())
+            if (targetTypeKind == BaseType.Char)
                 return targetType;
 
-            if (targetTypeKind.IsChar())
+            if (targetTypeKind == BaseType.Integer)
                 return targetType;
 
-            if (targetTypeKind == CommonTypeKind.BooleanType)
+            if (targetTypeKind == BaseType.Boolean)
                 return targetType;
 
-            if (targetTypeKind == CommonTypeKind.EnumerationType)
+            if (targetTypeKind == BaseType.Enumeration)
                 return targetType;
 
-            if (targetTypeKind == CommonTypeKind.SubrangeType)
+            if (targetTypeKind == BaseType.Subrange)
                 return targetType;
 
-            return Ids.Unused;
+            return SystemUnit.ErrorType;
         }
 
-        private int CastRecordTo(int sourceType, int targetType) {
+        private ITypeSymbol CastRecordTo(ITypeDefinition sourceType, ITypeDefinition targetType) {
             if (this.AreRecordTypesCompatible(sourceType, targetType))
                 return targetType;
 
-            return Ids.Unused;
+            return SystemUnit.ErrorType;
         }
 
-        private int CastBooleanTo(int targetType) {
-            var targetTypeKind = GetTypeKindOf(targetType);
+        private ITypeSymbol CastBooleanTo(ITypeDefinition targetType) {
+            var targetTypeKind = targetType.BaseType;
 
-            if (targetTypeKind == CommonTypeKind.BooleanType)
+            if (targetTypeKind == BaseType.Boolean)
                 return targetType;
 
-            return Ids.Unused;
+            return SystemUnit.ErrorType;
         }
 
-        private int CastCharTo(int targetType) {
-            var targetTypeKind = GetTypeKindOf(targetType);
+        private ITypeSymbol CastCharTo(ITypeDefinition targetType) {
+            var targetTypeKind = targetType.BaseType;
 
-            if (targetTypeKind.IsIntegral())
+            if (targetTypeKind == BaseType.Integer)
                 return targetType;
 
-            if (targetTypeKind.IsChar())
+            if (targetTypeKind == BaseType.Char)
                 return targetType;
 
-            if (targetTypeKind.IsString())
+            if (targetTypeKind == BaseType.String)
                 return targetType;
 
-            if (targetTypeKind == CommonTypeKind.BooleanType)
+            if (targetTypeKind == BaseType.Boolean)
                 return targetType;
 
-            if (targetTypeKind == CommonTypeKind.EnumerationType)
+            if (targetTypeKind == BaseType.Enumeration)
                 return targetType;
 
-            if (targetTypeKind == CommonTypeKind.SubrangeType)
+            if (targetTypeKind == BaseType.Subrange)
                 return targetType;
 
-            return Ids.Unused;
+            return SystemUnit.ErrorType;
         }
-        */
 
         /// <summary>
         ///     find an intrinsic routine from the system unit

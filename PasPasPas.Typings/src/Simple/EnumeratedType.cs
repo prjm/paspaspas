@@ -14,8 +14,8 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     list of possible values
         /// </summary>
-        private readonly IList<EnumValue> values
-            = new List<EnumValue>();
+        private readonly IList<IEnumeratedValue> values
+            = new List<IEnumeratedValue>();
 
         /// <summary>
         ///     create an enumerated type
@@ -45,7 +45,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     get enumeration values
         /// </summary>
-        public IList<EnumValue> Values
+        public IList<IEnumeratedValue> Values
             => values;
 
         /// <summary>

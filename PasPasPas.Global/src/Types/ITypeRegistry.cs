@@ -55,5 +55,12 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         ITypeCreator CreateTypeFactory(IUnitType unitType);
 
+        /// <summary>
+        ///     cast a type symbol to another type symbol
+        /// </summary>
+        /// <param name="fromType"></param>
+        /// <param name="toType"></param>
+        /// <returns></returns>
+        ITypeSymbol Cast(ITypeSymbol fromType, ITypeSymbol toType);
     }
 }

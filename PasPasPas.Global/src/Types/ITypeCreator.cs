@@ -43,6 +43,15 @@ namespace PasPasPas.Globals.Types {
         IEnumeratedType CreateEnumType(string name);
 
         /// <summary>
+        ///     create a routine
+        /// </summary>
+        /// <param name="mainRoutineGroup"></param>
+        /// <param name="procedure"></param>
+        /// <param name="signature"></param>
+        /// <returns></returns>
+        IRoutine CreateRoutine(IRoutineGroup mainRoutineGroup, RoutineKind procedure, ISignature signature);
+
+        /// <summary>
         ///     create a new structured type
         /// </summary>
         /// <param name="name">type name</param>
@@ -117,5 +126,6 @@ namespace PasPasPas.Globals.Types {
         /// <param name="baseType"></param>
         /// <returns></returns>
         IMetaType CreateMetaClassType(string name, ITypeDefinition baseType);
+        IRoutineGroup CreateGlobalRoutineGroup(string routineName);
     }
 }

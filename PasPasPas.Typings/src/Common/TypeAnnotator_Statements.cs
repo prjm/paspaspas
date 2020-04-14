@@ -17,8 +17,8 @@ namespace PasPasPas.Typings.Common {
         private void EndVisitAsignment(StructuredStatement element) {
             var left = element.Expressions.Count > 0 ? element.Expressions[0]?.TypeInfo : null;
             var right = element.Expressions.Count > 1 ? element.Expressions[1]?.TypeInfo : null;
-            if (left != null && right != null) {
-                environment.TypeRegistry.GetTypeByIdOrUndefinedType(left.TypeId).CanBeAssignedFrom(environment.TypeRegistry.GetTypeByIdOrUndefinedType(right.TypeId));
+            if (left != default && right != default) {
+                left.TypeDefinition.CanBeAssignedFromType(right.TypeDefinition);
             }
 
         }

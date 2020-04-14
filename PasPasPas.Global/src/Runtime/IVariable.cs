@@ -5,7 +5,7 @@ namespace PasPasPas.Globals.Runtime {
     /// <summary>
     ///     interface for variables
     /// </summary>
-    public interface IVariable {
+    public interface IVariable : ITypeSymbol {
 
         /// <summary>
         ///     visibility
@@ -21,16 +21,6 @@ namespace PasPasPas.Globals.Runtime {
         ///     variable kind
         /// </summary>
         VariableKind Kind { get; }
-
-        /// <summary>
-        ///     class fields
-        /// </summary>
-        bool ClassItem { get; }
-
-        /// <summary>
-        ///     variable type
-        /// </summary>
-        ITypeDefinition TypeDefinition { get; }
 
     }
 }

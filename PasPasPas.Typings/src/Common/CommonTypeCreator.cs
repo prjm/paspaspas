@@ -85,10 +85,10 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     manually create a global routine
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="routineName">routine name</param>
         /// <returns></returns>
-        public IRoutineGroup CreateGlobalRoutine(string name) {
-            var routine = new RoutineGroup(DefiningUnit, name);
+        public IRoutineGroup CreateGlobalRoutineGroup(string routineName) {
+            var routine = new RoutineGroup(DefiningUnit, routineName);
             return routine;
         }
 
@@ -103,6 +103,16 @@ namespace PasPasPas.Typings.Common {
             DefiningUnit.Register(result);
             return result;
         }
+
+        /// <summary>
+        ///     create a new routine
+        /// </summary>
+        /// <param name="mainRoutineGroup"></param>
+        /// <param name="procedure"></param>
+        /// <param name="signature"></param>
+        /// <returns></returns>
+        public IRoutine CreateRoutine(IRoutineGroup mainRoutineGroup, RoutineKind procedure, ISignature signature)
+            => new Routine(mainRoutineGroup, procedure, signature);
 
         /// <summary>
         ///     create a routine type

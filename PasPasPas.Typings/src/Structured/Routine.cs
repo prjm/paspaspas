@@ -18,31 +18,11 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="parent">parent routine group</param>
         /// <param name="procedureKind">procedure kind</param>
-        /// <param name="resultType">result type</param>
-        public Routine(IRoutineGroup parent, RoutineKind procedureKind, ITypeSymbol resultType) {
+        /// <param name="arguments">argument</param>
+        public Routine(IRoutineGroup parent, RoutineKind procedureKind, ISignature arguments) {
             RoutineGroup = parent;
             Kind = procedureKind;
-            ResultType = resultType;
-        }
-
-        /// <summary>
-        ///     read a parameter group from a byte array
-        /// </summary>
-        /// <param name="params"></param>
-        /// <param name="types"></param>
-        public Routine(ImmutableArray<byte> @params, ITypeRegistry types) {
-            Kind = @params[0].ToProcedureKind();
-
-            var iri = @params[1].ToIntrinsicRoutineId();
-
-            if (iri != IntrinsicRoutineId.Unknown) {
-                RoutineGroup = types.GetIntrinsicRoutine(iri);
-            }
-            else {
-                RoutineGroup = default;
-            }
-
-            ResultType = default;
+            Arguments = arguments;
         }
 
         /// <summary>
@@ -53,8 +33,8 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     symbols
         /// </summary>
-        public IDictionary<string, Globals.Types.Reference> Symbols { get; }
-            = new Dictionary<string, Globals.Types.Reference>(StringComparer.OrdinalIgnoreCase);
+        public IDictionary<string, ITypeSymbol> Symbols { get; }
+            = new Dictionary<string, ITypeSymbol>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         ///     routine parameters
@@ -112,10 +92,10 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="signature"></param>
         /// <param name="typeRegistry">type registry</param>
         /// <returns></returns>
-        public bool Matches(ITypeRegistry typeRegistry, Signature signature) {
+        public bool Matches(ITypeRegistry typeRegistry, ISignature signature) {
             var paramCount = Parameters == null ? 0 : Parameters.Count;
 
-            if (paramCount != signature.Length)
+            if (paramCount != signature.Count)
                 return false;
 
             var match = true;

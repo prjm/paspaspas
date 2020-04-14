@@ -10,8 +10,12 @@ namespace PasPasPas.Runtime.Values.Other {
     internal class SignatureN : SignatureBase {
         private readonly ImmutableArray<ITypeSymbol> parameters;
 
-        public SignatureN(ITypeSymbol returnType, ISignature signature) : base(returnType) {
-            var parameterBuilder = ImmutableArray.CreateBuilder<ITypeSymbol>((int)signature.Count);
+        public SignatureN(ITypeSymbol returnType, IEnumerable<ITypeSymbol> signature) : base(returnType) {
+            var count = 1;
+            if (signature is ISignature s)
+                count = s.Count;
+
+            var parameterBuilder = ImmutableArray.CreateBuilder<ITypeSymbol>(count);
             parameterBuilder.AddRange(signature);
             parameters = parameterBuilder.ToImmutableArray();
         }

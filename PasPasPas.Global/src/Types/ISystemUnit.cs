@@ -179,5 +179,15 @@
         ///     no type at all / void
         /// </summary>
         INoType NoType { get; }
+
+        /// <summary>
+        ///     string type
+        /// </summary>
+        IAliasedType StringType { get; }
+
+        /// <summary>
+        ///     TObject type
+        /// </summary>
+        IStructuredType TObjectType { get; }
     }
 }

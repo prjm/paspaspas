@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System.Collections.Generic;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
 
@@ -66,12 +67,30 @@ namespace PasPasPas.Globals.Runtime {
         ISignature MakeSignature(ITypeSymbol returnType, ITypeSymbol parameter);
 
         /// <summary>
+        ///     make an operator result
+        /// </summary>
+        /// <param name="resultType"></param>
+        /// <param name="input"></param>
+        /// <param name="kind">operator kind</param>
+        /// <returns></returns>
+        ITypeSymbol MakeOperatorResult(OperatorKind kind, ITypeSymbol resultType, ISignature input);
+
+        /// <summary>
         ///     make a variadic signature
         /// </summary>
         /// <param name="returnType"></param>
         /// <param name="signature"></param>
         /// <returns></returns>
-        ISignature MakeSignature(ITypeSymbol returnType, ISignature signature);
+        ISignature MakeSignature(ITypeSymbol returnType, IEnumerable<ITypeSymbol> signature);
+
+        /// <summary>
+        ///     make a signature with two arguments
+        /// </summary>
+        /// <param name="resultType"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        ISignature MakeSignature(IUnspecifiedType resultType, ITypeSymbol left, ITypeSymbol right);
 
         /// <summary>
         ///     make a signature of zero parameters
