@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
@@ -12,7 +11,6 @@ using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
@@ -52,13 +50,13 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     token sequence pool
         /// </summary>
-        public IEnvironmentItem TokenSequencePool { get; }
+        public object TokenSequencePool { get; }
             = new TokenSequences();
 
         /// <summary>
         ///     tokenizer patterns
         /// </summary>
-        public IEnvironmentItem Patterns { get; }
+        public object Patterns { get; }
 
         /// <summary>
         ///     log manager
@@ -103,46 +101,21 @@ namespace PasPasPas.Api {
         }
 
         /// <summary>
-        ///     all entries
-        /// </summary>
-        public IEnumerable<IEnvironmentItem> Entries {
-            get {
-                var data = new IEnvironmentItem[] {
-                    IntegerParser,
-                    HexNumberParser,
-                    RealLiteralConverter,
-                    StringBuilderPool,
-                    StringPool,
-                    TokenSequencePool,
-                    Patterns,
-                    Log,
-                    ListPools,
-                    TypeRegistry,
-                    TerminalPool,
-                    IdentifierPool,
-                    TokenArrays,
-                    Histograms.Instance,
-                };
-                return data;
-            }
-        }
-
-        /// <summary>
         ///     terminal pools
         /// </summary>
-        public IEnvironmentItem TerminalPool { get; }
+        public object TerminalPool { get; }
             = new Terminals();
 
         /// <summary>
         ///     identifiers
         /// </summary>
-        public IEnvironmentItem IdentifierPool { get; }
+        public object IdentifierPool { get; }
             = new Identifiers();
 
         /// <summary>
         ///     token array pool
         /// </summary>
-        public IEnvironmentItem TokenArrays { get; }
+        public object TokenArrays { get; }
             = new TokenArrays();
 
         public ITypeRegistry RegisteredTypes

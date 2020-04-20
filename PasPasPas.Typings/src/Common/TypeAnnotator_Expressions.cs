@@ -350,5 +350,40 @@ namespace PasPasPas.Typings.Common {
             element.TypeInfo = baseTypeValue;
         }
 
+        /// <summary>
+        ///     visit a formatted expression
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(FormattedExpression element) {
+            if (element.IsConstant) {
+                using (var list = environment.ListPools.GetList<IValue>()) {
+                    for (var i = 0; i < element.Expressions.Count; i++) {
+                        list.Item.Add(element.Expressions[i].TypeInfo as IValue);
+                    }
+                    element.TypeInfo = Runtime.FormatExpression(environment.ListPools.GetFixedArray(list));
+                }
+            }
+            else {
+                var baseTypeId = element.Expressions[0].TypeInfo?.TypeDefinition ?? SystemUnit.ErrorType;
+                var type = baseTypeId;
+                var baseType = type.GetBaseType();
+
+                switch (baseType) {
+                    case BaseType.Subrange:
+                    case BaseType.Boolean:
+                    case BaseType.Char:
+                    case BaseType.String:
+                    case BaseType.Integer:
+                    case BaseType.Real:
+                        element.TypeInfo = SystemUnit.StringType;
+                        break;
+
+                    default:
+                        MarkWithErrorType(element);
+                        break;
+                }
+            }
+        }
+
     }
 }

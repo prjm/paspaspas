@@ -9,6 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="src\SyntaxTree\Utils\Identifiers.cs~RF151e0410.TMP" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\PasPasPas.Global\PasPasPas.Globals.csproj" />
         <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
     </ItemGroup>

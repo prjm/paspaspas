@@ -30,6 +30,12 @@ namespace PasPasPas.Globals.Types {
         /// <param name="classItem"></param>
         /// <returns></returns>
         IRoutineGroup FindMethod(string name, bool classItem);
+
+        /// <summary>
+        ///     test type inheritance
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
         bool InheritsFrom(ITypeDefinition typeId);
 
         /// <summary>
@@ -37,6 +43,20 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <returns></returns>
         IValue MakeConstant();
+
+        /// <summary>
+        ///     try to resolve a call
+        /// </summary>
+        /// <param name="symbolName"></param>
+        /// <param name="callables"></param>
+        /// <param name="signature"></param>
         void ResolveCall(string symbolName, IList<IRoutineResult> callables, ISignature signature);
+
+
+        /// <summary>
+        ///     add a field definition
+        /// </summary>
+        /// <param name="fieldDef"></param>
+        void AddField(IVariable fieldDef);
     }
 }

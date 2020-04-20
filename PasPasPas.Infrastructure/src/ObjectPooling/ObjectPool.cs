@@ -13,7 +13,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
     ///     have to be returned later. This behavior can be implement with a using
     ///     statement.
     /// </summary>
-    public abstract class ObjectPool : IEnvironmentItem {
+    public abstract class ObjectPool {
 
         /// <summary>
         ///     pool items;

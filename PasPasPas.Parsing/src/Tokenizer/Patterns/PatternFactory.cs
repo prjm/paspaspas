@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
     /// <summary>
     ///     helper class to create tokenizer patterns
     /// </summary>
-    public class PatternFactory : IEnvironmentItem {
+    public class PatternFactory {
 
         /// <summary>
         ///     create a new pattern factory

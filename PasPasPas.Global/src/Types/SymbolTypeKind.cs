@@ -11,22 +11,22 @@
         Undefined = 0,
 
         /// <summary>
-        ///     type definition
+        ///     definition of a type
         /// </summary>
         TypeDefinition = 1,
 
         /// <summary>
-        ///     routine group
+        ///     definition of routine group
         /// </summary>
         RoutineGroup = 2,
 
         /// <summary>
-        ///     constant value
+        ///     definition constant value
         /// </summary>
         Constant = 3,
 
         /// <summary>
-        ///     invocation result
+        ///     invocation result of a routine
         /// </summary>
         InvocationResult = 4,
 
@@ -39,5 +39,10 @@
         ///     operator result
         /// </summary>
         OperatorResult = 6,
+
+        /// <summary>
+        ///     variable
+        /// </summary>
+        Variable = 7,
     }
 }

@@ -189,5 +189,10 @@
         ///     TObject type
         /// </summary>
         IStructuredType TObjectType { get; }
+
+        /// <summary>
+        ///     unspecified file type
+        /// </summary>
+        IFileType UnspecifiedFileType { get; }
     }
 }

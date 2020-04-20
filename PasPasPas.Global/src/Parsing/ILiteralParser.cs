@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Environment;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Parsing {
 
@@ -7,7 +6,7 @@ namespace PasPasPas.Globals.Parsing {
     ///     interface for parser that convert literal values
     ///     to constant values
     /// </summary>
-    public interface IILiteralParser : IEnvironmentItem {
+    public interface IILiteralParser {
 
         /// <summary>
         ///     parse a given literal to a constant value

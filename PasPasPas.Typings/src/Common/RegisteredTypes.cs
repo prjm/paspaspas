@@ -10,7 +10,7 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     common type registry - contains all registered units
     /// </summary>
-    public class RegisteredTypes : ITypeRegistry, IEnvironmentItem {
+    public class RegisteredTypes : ITypeRegistry {
 
         private readonly List<IUnitType> units
             = new List<IUnitType>();
@@ -32,18 +32,6 @@ namespace PasPasPas.Typings.Common {
         ///     list pools
         /// </summary>
         public IListPools ListPools { get; }
-
-        /// <summary>
-        ///     count registered types
-        /// </summary>
-        public int Count {
-            get {
-                var result = 0;
-                foreach (var unit in units)
-                    result += unit.Count;
-                return result;
-            }
-        }
 
         /// <summary>
         ///     registered units
@@ -133,19 +121,19 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     cast one type to another type
         /// </summary>
-        /// <param name="sourceType">source type</param>
-        /// <param name="targetType">target type</param>
+        /// <param name="fromType">source type</param>
+        /// <param name="toType">target type</param>
         /// <returns></returns>
-        public ITypeSymbol Cast(ITypeSymbol sourceType, ITypeSymbol targetType) {
+        public ITypeSymbol Cast(ITypeSymbol fromType, ITypeSymbol toType) {
 
-            if (sourceType.IsConstant(out var value))
-                return Runtime.Cast(this, value, targetType.TypeDefinition);
+            if (fromType.IsConstant(out var value))
+                return Runtime.Cast(this, value, toType.TypeDefinition);
 
-            var source = sourceType.TypeDefinition.ResolveAlias();
-            var target = targetType.TypeDefinition.ResolveAlias();
+            var source = fromType.TypeDefinition.ResolveAlias();
+            var target = toType.TypeDefinition.ResolveAlias();
 
-            if (sourceType == targetType)
-                return targetType;
+            if (fromType == toType)
+                return Runtime.Types.MakeCastResult(fromType, toType);
 
             var sourceTypeKind = source.BaseType;
 
@@ -158,10 +146,10 @@ namespace PasPasPas.Typings.Common {
             if (sourceTypeKind == BaseType.Boolean)
                 return CastBooleanTo(target);
 
-            if (sourceTypeKind == BaseType.Structured && sourceType is IStructuredType structType && structType.StructTypeKind == StructuredTypeKind.Record)
+            if (sourceTypeKind == BaseType.Structured && fromType is IStructuredType structType && structType.StructTypeKind == StructuredTypeKind.Record)
                 return CastRecordTo(source, target);
 
-            return SystemUnit.ErrorType;
+            return Runtime.Types.MakeCastResult(fromType, SystemUnit.ErrorType);
         }
 
         private ITypeSymbol CastIntTo(ITypeDefinition targetType) {

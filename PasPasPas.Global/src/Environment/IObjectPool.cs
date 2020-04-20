@@ -4,7 +4,7 @@
     ///     object pool
     /// </summary>
     /// <typeparam name="T">type of the pooled object</typeparam>
-    public interface IObjectPool<T> : IEnvironmentItem {
+    public interface IObjectPool<T> {
 
         /// <summary>
         ///     borrow an item from the pool

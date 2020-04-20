@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
-using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
@@ -176,7 +175,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
     /// <summary>
     ///     object pooling for token arrays
     /// </summary>
-    public class TokenArrays : IEnvironmentItem {
+    public class TokenArrays {
 
         private readonly HashSet<PooledTokenArray> pool
             = new HashSet<PooledTokenArray>();

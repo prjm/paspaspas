@@ -11,7 +11,7 @@
         ITypeDefinition BaseTypeDefinition { get; }
 
         /// <summary>
-        ///     <c>true</c> if this is a new type
+        ///     <c>true</c> if this is a new type definition
         /// </summary>
         bool IsNewType { get; }
     }

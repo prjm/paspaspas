@@ -11,7 +11,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
     ///     list pool
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ListPool<T> : ObjectPool<List<T>>, IEnvironmentItem {
+    public class ListPool<T> : ObjectPool<List<T>> {
 
         /// <summary>
         ///     pool of lists
@@ -29,17 +29,6 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         private readonly Dictionary<Type, object> pools
             = new Dictionary<Type, object>();
 
-        /// <summary>
-        ///     item count
-        /// </summary>
-        public int Count {
-            get {
-                var result = 0;
-                foreach (var item in pools.Values)
-                    result += (item as IEnvironmentItem).Count;
-                return result;
-            }
-        }
 
         /// <summary>
         ///     get a list pool item

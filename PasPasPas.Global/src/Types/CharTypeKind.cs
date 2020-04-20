@@ -3,8 +3,7 @@
     /// <summary>
     ///     char type kind
     /// </summary>
-    public enum CharTypeKind {
-
+    public enum CharTypeKind : byte {
 
         /// <summary>
         ///     undefined type kind

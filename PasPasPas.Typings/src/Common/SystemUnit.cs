@@ -15,7 +15,7 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     system wide definitions
     /// </summary>
-    public class SystemUnit : UnitType, ISystemUnit {
+    internal class SystemUnit : UnitType, ISystemUnit {
 
         /// <summary>
         ///     create a new system unit
@@ -164,7 +164,7 @@ namespace PasPasPas.Typings.Common {
 
         private void RegisterOtherTypes() {
             RegisterType(new GenericArrayType(Names.TArray, this, default));
-            RegisterType(new FileType(this, Names.File, GenericPointerType));
+            UnspecifiedFileType = RegisterType(new FileType(this, Names.File, GenericPointerType));
             RegisterType(new GenericConstraintType(this, GenericConstraintKind.Class));
             RegisterType(new GenericConstraintType(this, GenericConstraintKind.Record));
             RegisterType(new GenericConstraintType(this, GenericConstraintKind.Constructor));
@@ -205,7 +205,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="definition"></param>
         /// <returns></returns>
         private T RegisterType<T>(T definition) where T : ITypeDefinition {
-            Register(definition);
+            Register(new ReferenceToTypeDefinition(definition));
             return definition;
         }
 
@@ -216,7 +216,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="aliasName"></param>
         private IAliasedType RegisterAlias(ITypeDefinition baseType, string aliasName) {
             var alias = new TypeAlias(this, baseType, aliasName, false);
-            Register(alias);
+            Register(new ReferenceToTypeDefinition(alias));
             return alias;
         }
 
@@ -417,5 +417,15 @@ namespace PasPasPas.Typings.Common {
         ///     common string type
         /// </summary>
         public IAliasedType StringType { get; private set; }
+
+        /// <summary>
+        ///     TObject type
+        /// </summary>
+        public IStructuredType TObjectType { get; private set; }
+
+        /// <summary>
+        ///     unspecified file type
+        /// </summary>
+        public IFileType UnspecifiedFileType { get; private set; }
     }
 }

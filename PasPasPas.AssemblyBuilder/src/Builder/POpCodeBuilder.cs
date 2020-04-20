@@ -6,7 +6,6 @@ using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.AssemblyBuilder.Builder {
 
@@ -37,7 +36,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         /// <summary>
         ///     current routine
         /// </summary>
-        public Routine CurrentRoutine { get; private set; }
+        public IRoutine CurrentRoutine { get; private set; }
 
         private readonly ChildVisitor visitor;
 
@@ -57,7 +56,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         ///     apply this builder
         /// </summary>
         /// <param name="items"></param>
-        public void Apply(List<(Routine, BlockOfStatements)> items) {
+        public void Apply(List<(IRoutine, BlockOfStatements)> items) {
             foreach (var (r, b) in items) {
                 code.Clear();
                 CurrentRoutine = r;

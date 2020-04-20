@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using PasPasPas.Globals.Environment;
 
 namespace PasPasPas.Infrastructure.Utils {
 
@@ -194,7 +193,7 @@ namespace PasPasPas.Infrastructure.Utils {
     /// <summary>
     ///     histograms
     /// </summary>
-    public class Histograms : IEnvironmentItem {
+    public class Histograms {
 
         private readonly IDictionary<string, Histogram> data
             = new Dictionary<string, Histogram>();

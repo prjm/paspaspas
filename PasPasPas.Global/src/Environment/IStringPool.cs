@@ -6,7 +6,7 @@ namespace PasPasPas.Globals.Environment {
     /// <summary>
     ///     interface for a string pooling service
     /// </summary>
-    public interface IStringPool : IEnvironmentItem {
+    public interface IStringPool {
 
         /// <summary>
         ///     maximal length of pooled strings

@@ -6,12 +6,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     routine parameters
     /// </summary>
-    public class Variable : IVariable {
-
-        /// <summary>
-        ///     variable type
-        /// </summary>
-        public ITypeSymbol SymbolType { get; set; }
+    internal class Variable : IVariable {
 
         /// <summary>
         ///     variable name
@@ -25,14 +20,19 @@ namespace PasPasPas.Typings.Structured {
             = MemberVisibility.Public;
 
         /// <summary>
-        ///     class item
-        /// </summary>
-        public bool ClassItem { get; set; }
-
-        /// <summary>
         ///     variable kind
         /// </summary>
         public VariableKind Kind { get; set; }
 
+        /// <summary>
+        ///     type definition
+        /// </summary>
+        public ITypeDefinition TypeDefinition { get; set; }
+
+        /// <summary>
+        ///     symbol type
+        /// </summary>
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.Variable;
     }
 }

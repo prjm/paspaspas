@@ -1,11 +1,9 @@
-﻿using PasPasPas.Globals.Environment;
-
-namespace PasPasPas.Globals.Log {
+﻿namespace PasPasPas.Globals.Log {
 
     /// <summary>
     ///     log message router
     /// </summary>
-    public interface ILogManager : IEnvironmentItem {
+    public interface ILogManager {
 
         /// <summary>
         ///     route a log message

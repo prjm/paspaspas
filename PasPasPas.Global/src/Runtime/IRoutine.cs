@@ -18,7 +18,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     result type
         /// </summary>
-        ITypeSymbol ResultType { get; }
+        ITypeSymbol ResultType { get; set; }
 
         /// <summary>
         ///     parameters
@@ -29,6 +29,14 @@ namespace PasPasPas.Globals.Runtime {
         ///     parent routine group
         /// </summary>
         IRoutineGroup RoutineGroup { get; }
+
+        /// <summary>
+        ///     add a variable
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        IVariable AddParameter(string completeName, ITypeSymbol type);
 
         /// <summary>
         ///     check if the routine matches

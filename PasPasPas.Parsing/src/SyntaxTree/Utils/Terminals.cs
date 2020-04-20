@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using PasPasPas.Globals.Environment;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer;
@@ -191,7 +190,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
     /// <summary>
     ///     object pooling for terminal values
     /// </summary>
-    public class Terminals : IEnvironmentItem {
+    public class Terminals {
 
         private readonly HashSet<PooledTerminal> pool
             = new HashSet<PooledTerminal>();

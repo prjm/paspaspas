@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
 
 namespace PasPasPas.Infrastructure.Log {
@@ -8,7 +7,7 @@ namespace PasPasPas.Infrastructure.Log {
     /// <summary>
     ///     route a message
     /// </summary>
-    public class LogManager : ILogManager, IEnvironmentItem {
+    public class LogManager : ILogManager {
 
         /// <summary>
         ///     log targets

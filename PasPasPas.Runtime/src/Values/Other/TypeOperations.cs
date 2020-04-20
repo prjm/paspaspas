@@ -8,9 +8,9 @@ using PasPasPas.Runtime.Values.Structured.Other;
 namespace PasPasPas.Runtime.Values.Other {
 
     /// <summary>
-    ///     open type
+    ///     type operations
     /// </summary>
-    public class TypeOperations : ITypeOperations {
+    internal class TypeOperations : ITypeOperations {
 
         /// <summary>
         ///     create new type operation
@@ -112,7 +112,7 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ISignature MakeSignature(IUnspecifiedType resultType, ITypeSymbol left, ITypeSymbol right)
+        public ISignature MakeSignature(ITypeSymbol resultType, ITypeSymbol left, ITypeSymbol right)
             => new Signature2(resultType, left, right);
 
         /// <summary>
@@ -124,10 +124,10 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <returns></returns>
         public ITypeSymbol MakeOperatorResult(OperatorKind kind, ITypeSymbol resultType, ISignature input) {
             if (input.Count == 1)
-                return new OperatorInvocationResult1(kind, resultType, input[0].TypeDefinition);
+                return new OperatorInvocationResult1(kind, resultType, input[0]);
 
             if (input.Count == 2)
-                return new OperatorInvocationResult2(kind, resultType, input[0].TypeDefinition, input[1].TypeDefinition);
+                return new OperatorInvocationResult2(kind, resultType, input[0], input[1]);
 
             throw new ArgumentOutOfRangeException(nameof(input));
         }

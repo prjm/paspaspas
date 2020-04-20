@@ -14,7 +14,7 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <param name="resultType"></param>
         /// <param name="typeDefinition1"></param>
         /// <param name="typeDefinition2"></param>
-        public OperatorInvocationResult2(OperatorKind kind, ITypeSymbol resultType, ITypeDefinition typeDefinition1, ITypeDefinition typeDefinition2)
+        public OperatorInvocationResult2(OperatorKind kind, ITypeSymbol resultType, ITypeSymbol typeDefinition1, ITypeSymbol typeDefinition2)
             : base(resultType, typeDefinition1, typeDefinition2)
             => Kind = kind;
 

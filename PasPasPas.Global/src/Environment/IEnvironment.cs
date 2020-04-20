@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 
@@ -29,11 +28,6 @@ namespace PasPasPas.Globals.Environment {
         ///     string builder pool
         /// </summary>
         IObjectPool<StringBuilder> StringBuilderPool { get; }
-
-        /// <summary>
-        ///     enumerated entries (used for statistics)
-        /// </summary>
-        IEnumerable<IEnvironmentItem> Entries { get; }
 
         /// <summary>
         ///     create a new file reference

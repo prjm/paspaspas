@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
@@ -7,7 +6,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     unit type definition
     /// </summary>
-    public class UnitType : IUnitType {
+    internal class UnitType : IUnitType {
 
         /// <summary>
         ///     symbols
@@ -19,6 +18,7 @@ namespace PasPasPas.Typings.Structured {
         ///     create a new unit type
         /// </summary>
         /// <param name="unitName">unit name</param>
+        /// <param name="typeRegistry">type registry</param>
         public UnitType(string unitName, ITypeRegistry typeRegistry) {
             Name = unitName;
             TypeRegistry = typeRegistry;
@@ -62,7 +62,7 @@ namespace PasPasPas.Typings.Structured {
         ///     type size not supported
         /// </summary>
         public uint TypeSizeInBytes
-            => throw new InvalidOperationException();
+            => 0;
 
         /// <summary>
         ///     type definition
@@ -70,11 +70,14 @@ namespace PasPasPas.Typings.Structured {
         public ITypeDefinition TypeDefinition
             => this;
 
+
         /// <summary>
-        ///     type definition
+        ///     unit types can not be assigned
         /// </summary>
-        public SymbolTypeKind SymbolKind
-            => SymbolTypeKind.TypeDefinition;
+        /// <param name="otherType"></param>
+        /// <returns></returns>
+        public bool CanBeAssignedFromType(ITypeDefinition otherType)
+            => false;
 
         /// <summary>
         ///     register a symbol

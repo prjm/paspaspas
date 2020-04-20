@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -339,7 +341,8 @@ namespace PasPasPas.Typings.Common {
             if (typeDef is IEnumeratedType enumType) {
                 var typeID = enumType.CommonTypeId;
                 foreach (var enumValue in enumType.Values) {
-                    enumValue.MakeEnumValue(TypeRegistry, typeID, enumType);
+                    //Runtime.Types.MakeEnumValue(enumType, enumValue);
+                    //enumValue.MakeEnumValue(TypeRegistry, typeID, enumType);
                 }
             }
 
@@ -520,6 +523,149 @@ namespace PasPasPas.Typings.Common {
             }
 
             element.TypeInfo = typeDef;
+        }
+
+        /// <summary>
+        ///     visit a structure field definition
+        /// </summary>
+        /// <param name="element">field definition</param>
+        public void EndVisit(StructureFields element) {
+            var typeInfo = default(ITypeSymbol);
+
+            if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
+                typeInfo = element.TypeValue.TypeInfo;
+            else {
+                typeInfo = SystemUnit.ErrorType;
+            }
+
+            var v = currentTypeDefinition.Peek();
+            var typeDef = v != null ? v.TypeDefinition as IStructuredType : null;
+
+            foreach (var field in element.Fields) {
+                var fieldDef = new Variable() {
+                    Name = field.Name.CompleteName,
+                    SymbolType = typeInfo,
+                    Visibility = element.Visibility,
+                    ClassItem = element.ClassItem
+                };
+
+                if (element.ClassItem) {
+                    typeDef.AddField(fieldDef);
+                }
+                else
+                    typeDef.AddField(fieldDef);
+            }
+        }
+
+
+        /// <summary>
+        ///     visit an class of declaration
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(ClassOfTypeDeclaration element) {
+            if (element.TypeValue?.TypeInfo == default) {
+                element.TypeInfo = SystemUnit.ErrorType;
+                return;
+            }
+
+            var baseType = element.TypeValue.TypeInfo.TypeDefinition;
+
+            if (!(baseType is IStructuredType)) {
+                element.TypeInfo = SystemUnit.ErrorType;
+                return;
+            }
+
+            var alias = TypeCreator.CreateMetaClassType(string.Empty, baseType.TypeDefinition);
+            element.TypeInfo = alias;
+        }
+
+        /// <summary>
+        ///     start visiting a method implementation
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(MethodImplementation element) {
+            var isClassMethod = element.Declaration?.DefiningType != default;
+            var definingType = isClassMethod ? element.Declaration.DefiningType.TypeInfo.TypeDefinition : SystemUnit.ErrorType;
+            var isForward = element.Flags.HasFlag(MethodImplementationFlags.ForwardDeclaration);
+            var routineGroup = default(IRoutineGroup);
+            var routine = default(IRoutine);
+
+            if (!isClassMethod) {
+                var unitType = CurrentUnitType;
+                routineGroup = unitType.Symbols.Where(t => t is IRoutineGroup rg && string.Equals(rg.Name, element.SymbolName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault() as IRoutineGroup;
+
+                if (routineGroup == default) {
+                    routineGroup = new RoutineGroup(CurrentUnitType, element.SymbolName);
+                    unitType.Register(routineGroup);
+                    resolver.AddToScope(element.SymbolName, ReferenceKind.RefToGlobalRoutine, routineGroup);
+                }
+                routine = (routineGroup as RoutineGroup).AddParameterGroup(element.Kind, SystemUnit.NoType);
+                currentMethodParameters.Push(routine);
+            }
+            else if (isClassMethod) {
+                var baseType = definingType as IStructuredType;
+
+                if (baseType != default)
+                    routineGroup = baseType.FindMethod(element.Name.Name, element.Declaration.ClassItem);
+
+            }
+
+            if (routineGroup != default) {
+                resolver.OpenScope();
+                currentMethodImplementation.Push(routine);
+            }
+        }
+
+        /// <summary>
+        ///     file type declaration
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(FileTypeDeclaration element) {
+
+            if (element.TypeValue == default) {
+                element.TypeInfo = SystemUnit.UnspecifiedFileType;
+                return;
+            }
+
+            if (element.TypeValue.TypeInfo == default) {
+                MarkWithErrorType(element);
+                return;
+            }
+
+            var type = TypeCreator.CreateFileType(string.Empty, element.TypeValue.TypeInfo.TypeDefinition);
+            element.TypeInfo = type;
+        }
+
+        /// <summary>
+        ///     visit a generic constraint
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(GenericConstraint element) {
+            if (element.Kind == GenericConstraintKind.Class) {
+                element.TypeInfo = SystemUnit.GenericClassConstraint;
+                return;
+            }
+
+            if (element.Kind == GenericConstraintKind.Record) {
+                element.TypeInfo = SystemUnit.GenericRecordConstraint;
+                return;
+            }
+
+            if (element.Kind == GenericConstraintKind.Constructor) {
+                element.TypeInfo = SystemUnit.GenericConstructorConstraint;
+                return;
+            }
+
+            if (element.Kind == GenericConstraintKind.Identifier) {
+                var reference = resolver.ResolveByName(default, element.SymbolName, 0, ResolverFlags.None);
+
+                if (reference.Kind == ReferenceKind.RefToType) {
+                    element.TypeInfo = reference.Symbol.TypeDefinition;
+                    return;
+                }
+
+                return;
+            }
         }
 
     }

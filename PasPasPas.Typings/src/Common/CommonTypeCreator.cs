@@ -10,14 +10,14 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     common type creator
     /// </summary>
-    public class CommonTypeCreator : ITypeCreator {
+    internal class CommonTypeCreator : ITypeCreator {
 
         /// <summary>
         ///     create a new type creator
         /// </summary>
         /// <param name="registeredTypes"></param>
         /// <param name="definingUnit"></param>
-        public CommonTypeCreator(RegisteredTypes registeredTypes, IUnitType definingUnit) {
+        internal CommonTypeCreator(RegisteredTypes registeredTypes, IUnitType definingUnit) {
             RegisteredTypes = registeredTypes;
             DefiningUnit = definingUnit;
         }
@@ -44,7 +44,7 @@ namespace PasPasPas.Typings.Common {
                 BaseTypeDefinition = baseType,
                 Packed = isPacked
             };
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -55,7 +55,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IEnumeratedType CreateEnumType(string name) {
             var result = new EnumeratedType(DefiningUnit, name);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -67,7 +67,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IFileType CreateFileType(string typeName, ITypeDefinition baseTypeDefinition) {
             var result = new FileType(DefiningUnit, typeName, baseTypeDefinition);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -78,7 +78,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IExtensibleGenericType CreateGenericPlaceholder(string name) {
             var result = new GenericPlaceholderType(name, DefiningUnit);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -100,7 +100,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IMetaType CreateMetaClassType(string name, ITypeDefinition baseType) {
             var result = new MetaClassType(DefiningUnit, name, baseType);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -120,7 +120,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IRoutineType CreateRoutineType(string name) {
             var result = new RoutineType(DefiningUnit, name);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -132,7 +132,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public ISetType CreateSetType(IOrdinalType baseType, string name) {
             var result = new SetType(DefiningUnit, name, baseType);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -143,7 +143,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IShortStringType CreateShortStringType(byte length) {
             var result = new ShortStringType(DefiningUnit, length);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -160,7 +160,7 @@ namespace PasPasPas.Typings.Common {
                 BaseTypeDefinition = baseType,
                 Packed = isPacked
             };
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -172,7 +172,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IStructuredType CreateStructuredType(string name, StructuredTypeKind typeKind) {
             var result = new StructuredTypeDeclaration(DefiningUnit, name, typeKind);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -186,7 +186,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns>new subrange type</returns>
         public ISubrangeType CreateSubrangeType(string name, IOrdinalType baseType, IValue lowerBound, IValue upperBound) {
             var result = new SubrangeType(DefiningUnit, name, baseType, lowerBound, upperBound);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -199,7 +199,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IAliasedType CreateTypeAlias(ITypeDefinition baseType, string aliasName, bool newType) {
             var result = new TypeAlias(DefiningUnit, baseType, aliasName, newType);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -211,7 +211,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IGenericTypeParameter CreateUnboundGenericTypeParameter(string name, ImmutableArray<ITypeDefinition> constraints) {
             var result = new GenericTypeParameter(DefiningUnit, name, constraints);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
 
@@ -221,7 +221,7 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IUnitType CreateUnitType(string name) {
             var result = new UnitType(name, RegisteredTypes);
-            DefiningUnit.Register(result);
+            DefiningUnit.Register(new ReferenceToTypeDefinition(result));
             return result;
         }
     }

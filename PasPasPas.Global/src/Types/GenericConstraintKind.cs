@@ -3,14 +3,30 @@
     /// <summary>
     ///     generic constraint kind
     /// </summary>
-    public enum GenericConstraintKind {
-
+    public enum GenericConstraintKind : byte {
         /// <summary>
-        ///     unknown kind
+        ///     unknown constraint
         /// </summary>
         Unknown = 0,
-        Class = 1,
-        Record = 2,
-        Constructor = 3
+
+        /// <summary>
+        /// record constraint
+        /// </summary>
+        Record = 1,
+
+        /// <summary>
+        ///     class constraint
+        /// </summary>
+        Class = 2,
+
+        /// <summary>
+        ///     constructor constraint
+        /// </summary>
+        Constructor = 3,
+
+        /// <summary>
+        ///     identifier constraint
+        /// </summary>
+        Identifier = 4,
     }
 }

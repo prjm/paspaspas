@@ -7,7 +7,7 @@ namespace PasPasPas.Globals.Types {
     /// <summary>
     ///     interface for the global type registry
     /// </summary>
-    public interface ITypeRegistry : IEnvironmentItem {
+    public interface ITypeRegistry {
 
         /// <summary>
         ///     system unit

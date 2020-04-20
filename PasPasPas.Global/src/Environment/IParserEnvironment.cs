@@ -31,27 +31,27 @@ namespace PasPasPas.Globals.Environment {
         /// <summary>
         ///     object pool for token sequences
         /// </summary>
-        IEnvironmentItem TokenSequencePool { get; }
+        object TokenSequencePool { get; }
 
         /// <summary>
         ///     patters
         /// </summary>
-        IEnvironmentItem Patterns { get; }
+        object Patterns { get; }
 
         /// <summary>
         ///     Terminal pool
         /// </summary>
-        IEnvironmentItem TerminalPool { get; }
+        object TerminalPool { get; }
 
         /// <summary>
         ///     identifier pool
         /// </summary>
-        IEnvironmentItem IdentifierPool { get; }
+        object IdentifierPool { get; }
 
         /// <summary>
         ///     token array pool
         /// </summary>
-        IEnvironmentItem TokenArrays { get; }
+        object TokenArrays { get; }
 
     }
 }

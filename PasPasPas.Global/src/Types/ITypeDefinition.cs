@@ -3,7 +3,7 @@
     /// <summary>
     ///     interface for a type definition
     /// </summary>
-    public interface ITypeDefinition : ITypeSymbol {
+    public interface ITypeDefinition {
 
         /// <summary>
         ///     get base type of this type definition
@@ -11,7 +11,7 @@
         BaseType BaseType { get; }
 
         /// <summary>
-        ///     defining unit
+        ///     defining unit of this type
         /// </summary>
         IUnitType DefiningUnit { get; }
 
@@ -36,6 +36,7 @@
         /// <param name="otherType"></param>
         /// <returns></returns>
         bool CanBeAssignedFromType(ITypeDefinition otherType);
+
     }
 
     /// <summary>

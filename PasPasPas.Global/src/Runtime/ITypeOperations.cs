@@ -90,7 +90,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        ISignature MakeSignature(IUnspecifiedType resultType, ITypeSymbol left, ITypeSymbol right);
+        ISignature MakeSignature(ITypeSymbol resultType, ITypeSymbol left, ITypeSymbol right);
 
         /// <summary>
         ///     make a signature of zero parameters
@@ -98,5 +98,13 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="returnType"></param>
         /// <returns></returns>
         ISignature MakeSignature(ITypeSymbol returnType);
+
+        /// <summary>
+        ///     make a dynamic cast results
+        /// </summary>
+        /// <param name="fromType"></param>
+        /// <param name="toType"></param>
+        /// <returns></returns>
+        ITypeSymbol MakeCastResult(ITypeSymbol fromType, ITypeSymbol toType);
     }
 }
