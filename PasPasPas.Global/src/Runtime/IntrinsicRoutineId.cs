@@ -115,6 +115,11 @@
         ///     <c>abs</c> routine
         /// </summary>
         Abs = 21,
+
+        /// <summary>
+        ///     format expression helper routine
+        /// </summary>
+        FormatExpression = 22,
     }
 
     /// <summary>

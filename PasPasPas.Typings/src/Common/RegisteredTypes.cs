@@ -133,84 +133,84 @@ namespace PasPasPas.Typings.Common {
             var target = toType.TypeDefinition.ResolveAlias();
 
             if (fromType == toType)
-                return Runtime.Types.MakeCastResult(fromType, toType);
+                return Runtime.Types.MakeCastResult(fromType, toType.TypeDefinition);
 
             var sourceTypeKind = source.BaseType;
 
             if (sourceTypeKind == BaseType.Integer)
-                return CastIntTo(target);
+                return CastIntTo(fromType, target);
 
             if (sourceTypeKind == BaseType.Char)
-                return CastCharTo(target);
+                return CastCharTo(fromType, target);
 
             if (sourceTypeKind == BaseType.Boolean)
-                return CastBooleanTo(target);
+                return CastBooleanTo(fromType, target);
 
             if (sourceTypeKind == BaseType.Structured && fromType is IStructuredType structType && structType.StructTypeKind == StructuredTypeKind.Record)
-                return CastRecordTo(source, target);
+                return CastRecordTo(fromType, target);
 
             return Runtime.Types.MakeCastResult(fromType, SystemUnit.ErrorType);
         }
 
-        private ITypeSymbol CastIntTo(ITypeDefinition targetType) {
+        private ITypeSymbol CastIntTo(ITypeSymbol fromType, ITypeDefinition targetType) {
             var targetTypeKind = targetType.BaseType;
 
             if (targetTypeKind == BaseType.Char)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
             if (targetTypeKind == BaseType.Integer)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
             if (targetTypeKind == BaseType.Boolean)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
             if (targetTypeKind == BaseType.Enumeration)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
             if (targetTypeKind == BaseType.Subrange)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
-            return SystemUnit.ErrorType;
+            return Runtime.Types.MakeCastResult(fromType, SystemUnit.ErrorType);
         }
 
-        private ITypeSymbol CastRecordTo(ITypeDefinition sourceType, ITypeDefinition targetType) {
-            if (this.AreRecordTypesCompatible(sourceType, targetType))
-                return targetType;
+        private ITypeSymbol CastRecordTo(ITypeSymbol sourceType, ITypeDefinition targetType) {
+            if (this.AreRecordTypesCompatible(sourceType.TypeDefinition, targetType))
+                return Runtime.Types.MakeCastResult(sourceType, targetType);
 
-            return SystemUnit.ErrorType;
+            return Runtime.Types.MakeCastResult(sourceType, SystemUnit.ErrorType);
         }
 
-        private ITypeSymbol CastBooleanTo(ITypeDefinition targetType) {
+        private ITypeSymbol CastBooleanTo(ITypeSymbol fromType, ITypeDefinition targetType) {
             var targetTypeKind = targetType.BaseType;
 
             if (targetTypeKind == BaseType.Boolean)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
-            return SystemUnit.ErrorType;
+            return Runtime.Types.MakeCastResult(fromType, SystemUnit.ErrorType);
         }
 
-        private ITypeSymbol CastCharTo(ITypeDefinition targetType) {
+        private ITypeSymbol CastCharTo(ITypeSymbol fromType, ITypeDefinition targetType) {
             var targetTypeKind = targetType.BaseType;
 
             if (targetTypeKind == BaseType.Integer)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
             if (targetTypeKind == BaseType.Char)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
             if (targetTypeKind == BaseType.String)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
             if (targetTypeKind == BaseType.Boolean)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
             if (targetTypeKind == BaseType.Enumeration)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
             if (targetTypeKind == BaseType.Subrange)
-                return targetType;
+                return Runtime.Types.MakeCastResult(fromType, targetType);
 
-            return SystemUnit.ErrorType;
+            return Runtime.Types.MakeCastResult(fromType, SystemUnit.ErrorType);
         }
 
         /// <summary>

@@ -4,6 +4,8 @@
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
 
+using System.Diagnostics.CodeAnalysis;
+
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.TypeAnnotator.GetErrorType(PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode)~PasPasPas.Globals.Types.ITypeDefinition")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.TypeAnnotator.GetErrorTypeReference(PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode)~PasPasPas.Globals.Runtime.ITypeReference")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.TypeAnnotator.GetErrorTypeReference(PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode)~PasPasPas.Globals.Runtime.ITypeReference")]
@@ -22,3 +24,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.TypeAnnotator.GetErrorType(PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode)~PasPasPas.Globals.Types.ITypeDefinition")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1502:Avoid excessive complexity", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.RegisteredTypesHelper.GetSmallestIntegralTypeOrNext(PasPasPas.Globals.Types.ITypeRegistry,PasPasPas.Globals.Types.ITypeDefinition,PasPasPas.Globals.Types.ITypeDefinition,System.Int32,System.Boolean)~PasPasPas.Globals.Types.ITypeDefinition")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.RegisteredTypesHelper.GetOperatorId(PasPasPas.Globals.Types.ITypeRegistry,PasPasPas.Parsing.SyntaxTree.Abstract.ExpressionKind,PasPasPas.Globals.Types.ITypeSymbol,PasPasPas.Globals.Types.ITypeSymbol)~System.Int32")]
+[assembly: SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.RegisteredTypesHelper.GetOperatorId(PasPasPas.Globals.Types.ITypeRegistry,PasPasPas.Parsing.SyntaxTree.Abstract.ExpressionKind,PasPasPas.Globals.Types.ITypeSymbol,PasPasPas.Globals.Types.ITypeSymbol)~PasPasPas.Globals.Types.OperatorKind")]

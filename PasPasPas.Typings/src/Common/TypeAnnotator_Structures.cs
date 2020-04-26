@@ -24,9 +24,9 @@ namespace PasPasPas.Typings.Common {
         public void StartVisit(CompilationUnit element) {
             var unitType = TypeCreator.CreateUnitType(element.SymbolName);
             CurrentUnit = element;
-            CurrentUnit.TypeInfo = unitType;
+            CurrentUnit.TypeInfo = new ReferenceToTypeDefinition(unitType);
             resolver.OpenScope();
-            resolver.AddToScope(KnownNames.System, ReferenceKind.RefToUnit, environment.TypeRegistry.SystemUnit);
+            resolver.AddToScope(KnownNames.System, ReferenceKind.RefToUnit, CurrentUnit.TypeInfo);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace PasPasPas.Typings.Common {
             resolver.OpenScope();
             if (currentMethodImplementation.Count < 1) {
                 var mainRoutineGroup = TypeCreator.CreateGlobalRoutineGroup(KnownNames.MainMethod);
-                var signature = Runtime.Types.MakeSignature(TypeRegistry.SystemUnit.NoType);
+                var signature = Runtime.Types.MakeSignature(new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.NoType));
                 var mainRoutine = TypeCreator.CreateRoutine(mainRoutineGroup, RoutineKind.Procedure, signature);
                 currentMethodImplementation.Push(mainRoutine);
                 RegisterRoutine(mainRoutine, element);
@@ -111,13 +111,13 @@ namespace PasPasPas.Typings.Common {
                     else
                         MarkWithErrorType(vardef);
 
-                    variable.SymbolType = vardef.TypeInfo;
+                    variable.TypeDefinition = vardef.TypeInfo.TypeDefinition;
                     continue;
                 }
 
                 fromResult = false;
                 vardef.TypeInfo = element.TypeInfo;
-                variable.SymbolType = vardef.TypeInfo;
+                variable.TypeDefinition = vardef.TypeInfo.TypeDefinition;
             }
 
             if (fromResult && element.Names.Count > 0 && element.Names[0].TypeInfo != default) {
@@ -133,7 +133,7 @@ namespace PasPasPas.Typings.Common {
             var typeReference = currentTypeDefinition.Pop();
             var type = typeReference.TypeDefinition as IStructuredType;
 
-            if (type.IsConstant())
+            if (typeReference.IsConstant())
                 element.TypeInfo = type.MakeConstant();
             else
                 MarkWithErrorType(element);
@@ -146,7 +146,10 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(RecordConstantItem element) {
             var typeReference = currentTypeDefinition.Peek();
             var type = typeReference.TypeDefinition as StructuredTypeDeclaration;
-            type.Fields.Add(new Variable() { Name = element.Name.CompleteName, SymbolType = element.Value.TypeInfo });
+            type.Fields.Add(new Variable() {
+                Name = element.Name.CompleteName,
+                TypeDefinition = element.Value.TypeInfo.TypeDefinition
+            });
         }
 
         /// <summary>
@@ -160,7 +163,7 @@ namespace PasPasPas.Typings.Common {
                 ITypeDefinition typeId;
 
                 if (entry != default && entry.Kind == ReferenceKind.RefToType) {
-                    element.TypeInfo = entry.Symbol.TypeDefinition;
+                    element.TypeInfo = new ReferenceToTypeDefinition(entry.Symbol.TypeDefinition);
                     return;
                 }
 
@@ -172,15 +175,15 @@ namespace PasPasPas.Typings.Common {
                     typeId = TypeRegistry.SystemUnit.ErrorType;
                 }
 
-                element.TypeInfo = typeId;
+                element.TypeInfo = new ReferenceToTypeDefinition(typeId);
             }
 
             else if (element.Kind == MetaTypeKind.StringType) {
-                element.TypeInfo = TypeRegistry.SystemUnit.StringType;
+                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.StringType);
             }
 
             else if (element.Kind == MetaTypeKind.AnsiString) {
-                element.TypeInfo = TypeRegistry.SystemUnit.AnsiStringType;
+                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.AnsiStringType);
             }
 
             else if (element.Kind == MetaTypeKind.ShortString) {
@@ -196,24 +199,24 @@ namespace PasPasPas.Typings.Common {
 
                 var stringLength = (byte)intValue.UnsignedValue;
                 var userType = TypeCreator.CreateShortStringType(stringLength);
-                element.TypeInfo = userType;
+                element.TypeInfo = new ReferenceToTypeDefinition(userType);
             }
 
             else if (element.Kind == MetaTypeKind.ShortStringDefault) {
-                element.TypeInfo = TypeRegistry.SystemUnit.ShortStringType;
+                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.ShortStringType);
             }
 
 
             else if (element.Kind == MetaTypeKind.UnicodeString) {
-                element.TypeInfo = TypeRegistry.SystemUnit.UnicodeStringType;
+                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.UnicodeStringType);
             }
 
             else if (element.Kind == MetaTypeKind.WideString) {
-                element.TypeInfo = TypeRegistry.SystemUnit.WideStringType;
+                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.WideStringType);
             }
 
             else if (element.Kind == MetaTypeKind.PointerType) {
-                element.TypeInfo = TypeRegistry.SystemUnit.GenericPointerType;
+                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.GenericPointerType);
             }
 
         }
@@ -666,6 +669,77 @@ namespace PasPasPas.Typings.Common {
 
                 return;
             }
+        }
+
+
+        /// <summary>
+        ///     visit generic elements
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(GenericTypeNameCollection element) {
+            var hasError = false;
+            var genericTypeRef = currentTypeDefinition.Peek();
+            var genericType = genericTypeRef as IExtensibleGenericType;
+
+            if (genericType == default)
+                return;
+
+            using (var list = environment.ListPools.GetList<ITypeDefinition>()) {
+                foreach (var constraint in element) {
+
+                    if (constraint.TypeInfo != default)
+                        list.Item.Add(constraint.TypeInfo.TypeDefinition);
+                    else
+                        hasError = true;
+                }
+
+                if (hasError)
+                    MarkWithErrorType(element);
+                else if (list.Item.Count < 1)
+                    element.TypeInfo = new ReferenceToTypeDefinition(SystemUnit.UnconstrainedGenericTypeParameter);
+                else {
+                    var typeDef = TypeCreator.CreateUnboundGenericTypeParameter(string.Empty, environment.ListPools.GetFixedArray(list));
+                    element.TypeInfo = new ReferenceToTypeDefinition(typeDef);
+                }
+
+                if (!hasError)
+                    genericType.AddGenericParameter(element.TypeInfo.TypeId);
+            }
+        }
+
+        /// <summary>
+        ///     visit a symbol declaration
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(DeclaredSymbolCollection element) {
+            if (element == CurrentUnit?.InterfaceSymbols) {
+                foreach (var symbol in CurrentUnit.InterfaceSymbols) {
+
+                    var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
+                    var kind = ReferenceKind.Unknown;
+                    var refSymbol = default(IRefSymbol);
+
+                    switch (symbol) {
+                        case ConstantDeclaration constDecl:
+                            refSymbol = constDecl;
+                            kind = ReferenceKind.RefToConstant;
+                            break;
+                    }
+
+                    if (kind != ReferenceKind.Unknown)
+                        unitType.RegisterSymbol(symbol.SymbolName, new Reference(kind, refSymbol), 0);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     use a required unit
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(RequiredUnitName element) {
+            var unitType = resolver.ResolveUnit(element.Name.CompleteName);
+            if (unitType != default)
+                resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToUnit, unitType);
         }
 
     }

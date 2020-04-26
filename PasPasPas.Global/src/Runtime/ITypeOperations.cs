@@ -93,6 +93,16 @@ namespace PasPasPas.Globals.Runtime {
         ISignature MakeSignature(ITypeSymbol resultType, ITypeSymbol left, ITypeSymbol right);
 
         /// <summary>
+        ///     make a signature with two arguments
+        /// </summary>
+        /// <param name="resultType"></param>
+        /// <param name="left"></param>
+        /// <param name="middle"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        ISignature MakeSignature(ITypeSymbol resultType, ITypeSymbol left, ITypeSymbol middle, ITypeSymbol right);
+
+        /// <summary>
         ///     make a signature of zero parameters
         /// </summary>
         /// <param name="returnType"></param>
@@ -100,11 +110,12 @@ namespace PasPasPas.Globals.Runtime {
         ISignature MakeSignature(ITypeSymbol returnType);
 
         /// <summary>
-        ///     make a dynamic cast results
+        ///     make a dynamic cast result
         /// </summary>
         /// <param name="fromType"></param>
         /// <param name="toType"></param>
         /// <returns></returns>
-        ITypeSymbol MakeCastResult(ITypeSymbol fromType, ITypeSymbol toType);
+        ITypeSymbol MakeCastResult(ITypeSymbol fromType, ITypeDefinition toType);
+
     }
 }

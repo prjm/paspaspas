@@ -44,5 +44,10 @@
         ///     variable
         /// </summary>
         Variable = 7,
+
+        /// <summary>
+        ///     cast result
+        /// </summary>
+        CastResult = 8,
     }
 }

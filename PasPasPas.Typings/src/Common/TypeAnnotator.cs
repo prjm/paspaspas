@@ -5,7 +5,6 @@ using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
@@ -58,10 +57,11 @@ namespace PasPasPas.Typings.Common {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
-        private readonly Stack<ITypeSymbol> currentTypeDefinition;
+        private readonly Stack<ITypeDefinition> currentTypeDefinition;
         private readonly Stack<IRoutine> currentMethodParameters;
         private readonly Resolver resolver;
         private readonly List<(IRoutine, BlockOfStatements)> routines;
+        private readonly ReferenceToError errorReference;
 
         /// <summary>
         ///     current unit definition
@@ -89,90 +89,10 @@ namespace PasPasPas.Typings.Common {
             visitor = new ChildVisitor(this);
             environment = env;
             resolver = new Resolver(new Scope(env.TypeRegistry));
-            currentTypeDefinition = new Stack<ITypeSymbol>();
+            currentTypeDefinition = new Stack<ITypeDefinition>();
             currentMethodParameters = new Stack<IRoutine>();
             routines = new List<(IRoutine, BlockOfStatements)>();
+            errorReference = new ReferenceToError(SystemUnit.ErrorType);
         }
-
-
-        /// <summary>
-        ///     visit generic elements
-        /// </summary>
-        /// <param name="element"></param>
-        public void EndVisit(GenericTypeNameCollection element) {
-            var hasError = false;
-            var genericTypeRef = currentTypeDefinition.Peek();
-            var genericType = GetTypeByIdOrUndefinedType(genericTypeRef.TypeId) as IExtensibleGenericType;
-
-            if (genericType == default)
-                return;
-
-            using (var list = environment.ListPools.GetList<int>()) {
-                foreach (var constraint in element) {
-
-                    if (constraint.TypeInfo != default)
-                        list.Item.Add(constraint.TypeInfo.TypeId);
-                    else
-                        hasError = true;
-                }
-
-                if (hasError)
-                    element.TypeInfo = GetErrorTypeReference(default);
-                else if (list.Item.Count < 1)
-                    element.TypeInfo = GetInstanceTypeById(KnownTypeIds.UnconstrainedGenericTypeParameter);
-                else {
-                    var typeDef = TypeRegistry.TypeCreator.CreateUnboundGenericTypeParameter(environment.ListPools.GetFixedArray(list));
-                    element.TypeInfo = GetInstanceTypeById(typeDef.TypeId);
-                }
-
-                if (!hasError)
-                    genericType.AddGenericParameter(element.TypeInfo.TypeId);
-            }
-        }
-
-        private bool AreRecordTypesCompatible(int leftId, int rightId)
-            => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);
-
-        private int GetSmallestTextTypeOrNext(int leftId, int rightId)
-            => environment.TypeRegistry.GetSmallestTextTypeOrNext(leftId, rightId);
-
-        /// <summary>
-        ///     visit a symbol declaration
-        /// </summary>
-        /// <param name="element"></param>
-        public void EndVisit(DeclaredSymbolCollection element) {
-            if (element == CurrentUnit?.InterfaceSymbols) {
-                foreach (var symbol in CurrentUnit.InterfaceSymbols) {
-
-                    var unitType = GetTypeByIdOrUndefinedType(CurrentUnit.TypeInfo.TypeId) as UnitType;
-                    var kind = ReferenceKind.Unknown;
-                    var refSymbol = default(IRefSymbol);
-
-                    switch (symbol) {
-                        case ConstantDeclaration constDecl:
-                            refSymbol = constDecl;
-                            kind = ReferenceKind.RefToConstant;
-                            break;
-                    }
-
-                    if (kind != ReferenceKind.Unknown)
-                        unitType.RegisterSymbol(symbol.SymbolName, new Reference(kind, refSymbol), 0);
-                }
-            }
-        }
-
-        /// <summary>
-        ///     use a required unit
-        /// </summary>
-        /// <param name="element"></param>
-        public void EndVisit(RequiredUnitName element) {
-            var unitType = resolver.ResolveUnit(element.Name.CompleteName);
-            if (unitType != default)
-                resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToUnit, unitType);
-        }
-
-        private ITypeCreator TypeCreator
-            => TypeRegistry.TypeCreator;
-
     }
 }

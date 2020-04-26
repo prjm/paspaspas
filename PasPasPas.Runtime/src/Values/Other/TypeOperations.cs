@@ -131,5 +131,8 @@ namespace PasPasPas.Runtime.Values.Other {
 
             throw new ArgumentOutOfRangeException(nameof(input));
         }
+
+        public ITypeSymbol MakeCastResult(ITypeSymbol fromType, ITypeDefinition toType)
+            => new CastResult(fromType, toType);
     }
 }

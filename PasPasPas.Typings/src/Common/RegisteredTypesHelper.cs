@@ -446,24 +446,24 @@ namespace PasPasPas.Typings.Common {
         /// <param name="baseType"></param>
         /// <param name="elementType"></param>
         /// <returns></returns>
-        public static ITypeSymbol GetBaseTypeForArrayOrSet(this ITypeRegistry types, ITypeSymbol baseType, ITypeSymbol elementType) {
+        public static ITypeDefinition GetBaseTypeForArrayOrSet(this ITypeRegistry types, ITypeSymbol baseType, ITypeSymbol elementType) {
             if (elementType == default)
-                baseType = types.SystemUnit.ErrorType;
+                return types.SystemUnit.ErrorType;
             else if (baseType == default)
-                baseType = elementType.TypeDefinition;
+                return elementType.TypeDefinition;
             else if (baseType.TypeDefinition.BaseType == BaseType.Integer && elementType.TypeDefinition.BaseType == BaseType.Integer)
-                baseType = types.GetSmallestIntegralTypeOrNext(baseType.TypeDefinition, elementType.TypeDefinition);
+                return types.GetSmallestIntegralTypeOrNext(baseType.TypeDefinition, elementType.TypeDefinition);
             else if ((baseType.TypeDefinition.BaseType == BaseType.Char || baseType.TypeDefinition.BaseType == BaseType.String) &&
                 (elementType.TypeDefinition.BaseType == BaseType.Char || elementType.TypeDefinition.BaseType == BaseType.String))
-                baseType = types.GetSmallestTextTypeOrNext(baseType.TypeDefinition, elementType.TypeDefinition);
+                return types.GetSmallestTextTypeOrNext(baseType.TypeDefinition, elementType.TypeDefinition);
             else if (baseType.TypeDefinition is IOrdinalType && baseType.Equals(elementType))
-                baseType = elementType.TypeDefinition;
+                return elementType.TypeDefinition;
             else if (baseType.TypeDefinition.BaseType == BaseType.Real && elementType.TypeDefinition.BaseType == BaseType.Real)
-                baseType = types.SystemUnit.ExtendedType;
+                return types.SystemUnit.ExtendedType;
             else if (baseType.TypeDefinition is IStructuredType structType && structType.StructTypeKind == StructuredTypeKind.Record && types.AreRecordTypesCompatible(baseType.TypeDefinition, elementType.TypeDefinition))
-                baseType = elementType.TypeDefinition;
+                return elementType.TypeDefinition;
 
-            return baseType;
+            return types.SystemUnit.ErrorType;
         }
 
         /// <summary>
@@ -480,7 +480,7 @@ namespace PasPasPas.Typings.Common {
                 return baseType;
 
             if (!newType) {
-                return left.TypeDefinition;
+                return left;
             }
 
             return typeCreator.CreateSetType(baseType as IOrdinalType, string.Empty);
@@ -509,10 +509,10 @@ namespace PasPasPas.Typings.Common {
         public static ITypeDefinition GetMatchingSetBaseType(this ITypeRegistry typeRegistry, ITypeDefinition left, ITypeDefinition right, out bool requireNewType) {
             requireNewType = false;
 
-            if (!(left.TypeDefinition is ISetType leftType))
+            if (!(left is ISetType leftType))
                 return typeRegistry.SystemUnit.ErrorType;
 
-            if (!(right.TypeDefinition is ISetType rightType))
+            if (!(right is ISetType rightType))
                 return typeRegistry.SystemUnit.ErrorType;
 
             if (!(leftType.BaseTypeDefinition.ResolveAlias() is IOrdinalType leftBaseType))

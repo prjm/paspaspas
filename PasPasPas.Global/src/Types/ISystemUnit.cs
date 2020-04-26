@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Types {
+﻿using PasPasPas.Globals.Runtime;
+
+namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     system unit
@@ -194,5 +196,11 @@
         ///     unspecified file type
         /// </summary>
         IFileType UnspecifiedFileType { get; }
+
+        /// <summary>
+        ///     unconstrained generic type parameter
+        /// </summary>
+        IGenericTypeParameter UnconstrainedGenericTypeParameter { get; }
+        IRoutineGroup FormatExpression { get; }
     }
 }

@@ -16,17 +16,25 @@ namespace PasPasPas.Typings.Common {
         private ISystemUnit SystemUnit
             => TypeRegistry.SystemUnit;
 
+        private ITypeCreator TypeCreator { get; set; }
+
         private ITypeDefinition GetSmallestIntegralTypeOrNext(ITypeDefinition leftId, ITypeDefinition rightId)
             => environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId, rightId);
 
         private void MarkWithErrorType(ITypedSyntaxPart node)
-            => node.TypeInfo = TypeRegistry.SystemUnit.ErrorType;
+            => node.TypeInfo = errorReference;
+
+        private bool AreRecordTypesCompatible(ITypeDefinition leftId, ITypeDefinition rightId)
+            => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);
+
+        private ITypeDefinition GetSmallestTextTypeOrNext(ITypeDefinition leftId, ITypeDefinition rightId)
+            => environment.TypeRegistry.GetSmallestTextTypeOrNext(leftId, rightId);
 
         private ITypeSymbol GetTypeOfNode(ITypedSyntaxPart syntaxNode) {
             if (syntaxNode != default && syntaxNode.TypeInfo != default)
                 return syntaxNode.TypeInfo;
 
-            return TypeRegistry.SystemUnit.ErrorType;
+            return errorReference;
         }
 
         private ISignature CreateSignatureFromSymbolPart(SymbolReferencePart part) {
@@ -36,25 +44,25 @@ namespace PasPasPas.Typings.Common {
                     if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)
                         list.Add(part.Expressions[i].TypeInfo);
                     else
-                        list.Add(TypeRegistry.SystemUnit.ErrorType);
+                        list.Add(errorReference);
 
-
-                return TypeRegistry.Runtime.Types.MakeSignature(TypeRegistry.SystemUnit.UnspecifiedType, environment.ListPools.GetFixedArray(list));
+                var unspecType = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.UnspecifiedType);
+                return TypeRegistry.Runtime.Types.MakeSignature(unspecType, environment.ListPools.GetFixedArray(list));
             }
         }
 
         private bool ExpandRangeOperator(ITypedSyntaxPart part, bool requiresArray, List<ITypeSymbol> values, out ITypeSymbol baseTypeId) {
             if (!(part.TypeInfo.TypeDefinition is ISubrangeType subrangeType) || requiresArray) {
-                baseTypeId = TypeRegistry.SystemUnit.ErrorType;
+                baseTypeId = errorReference;
                 return false;
             }
 
-            baseTypeId = subrangeType.SubrangeOfType;
+            baseTypeId = new ReferenceToTypeDefinition(subrangeType.SubrangeOfType);
             var lowerBound = subrangeType.LowestElement;
             var upperBound = subrangeType.HighestElement;
 
             if (!subrangeType.IsValid) {
-                baseTypeId = TypeRegistry.SystemUnit.ErrorType;
+                baseTypeId = errorReference;
                 return false;
             }
 
@@ -64,7 +72,7 @@ namespace PasPasPas.Typings.Common {
                 return true;
 
             if (cardinality > 255) {
-                baseTypeId = TypeRegistry.SystemUnit.ErrorType;
+                baseTypeId = errorReference;
                 return false;
             }
 
@@ -90,7 +98,7 @@ namespace PasPasPas.Typings.Common {
                         !ExpandRangeOperator(part, requiresArray, values, out var setBaseType) ||
                         baseType != default && baseType != setBaseType) {
                         values.Clear();
-                        return TypeRegistry.SystemUnit.ErrorType;
+                        return errorReference;
                     }
                     baseType = setBaseType;
                     continue;
@@ -98,19 +106,19 @@ namespace PasPasPas.Typings.Common {
 
                 if (part.TypeInfo == null || !part.TypeInfo.IsConstant()) {
                     values.Clear();
-                    return TypeRegistry.SystemUnit.ErrorType;
+                    return errorReference;
                 }
 
-                baseType = TypeRegistry.GetBaseTypeForArrayOrSet(baseType, part.TypeInfo);
+                baseType = new ReferenceToTypeDefinition(TypeRegistry.GetBaseTypeForArrayOrSet(baseType, part.TypeInfo));
 
                 if (baseType.TypeDefinition == TypeRegistry.SystemUnit.ErrorType) {
                     values.Clear();
-                    break;
+                    return errorReference;
                 }
 
                 if (!requiresArray && !(baseType.TypeDefinition is IOrdinalType)) {
                     values.Clear();
-                    return TypeRegistry.SystemUnit.ErrorType;
+                    return errorReference;
                 }
 
                 isConstant = isConstant && part.TypeInfo.IsConstant();
@@ -118,7 +126,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             if (baseType == default)
-                baseType = TypeRegistry.SystemUnit.ErrorType;
+                baseType = errorReference;
 
             return baseType;
         }

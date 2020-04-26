@@ -56,6 +56,7 @@ namespace PasPasPas.Typings.Common {
             RegisterRoutine(new Sqr());
             RegisterRoutine(new Swap());
             RegisterRoutine(new Trunc());
+            FormatExpression = RegisterRoutine(new FormatExpression());
 
             // dynamic procedures
             RegisterRoutine(new WriteLn());
@@ -159,7 +160,7 @@ namespace PasPasPas.Typings.Common {
             UnspecifiedType = RegisterType(new UnspecifiedType(this));
             NoType = RegisterType(new VoidType(this));
             NilType = RegisterType(new NilType(this));
-            RegisterType(new GenericTypeParameter(this, string.Empty, ImmutableArray<ITypeDefinition>.Empty));
+            UnconstrainedGenericTypeParameter = RegisterType(new GenericTypeParameter(this, string.Empty, ImmutableArray<ITypeDefinition>.Empty));
         }
 
         private void RegisterOtherTypes() {
@@ -364,6 +365,11 @@ namespace PasPasPas.Typings.Common {
         public ITypeDefinition NilType { get; private set; }
 
         /// <summary>
+        ///     unconstrained generic type parameter
+        /// </summary>
+        public IGenericTypeParameter UnconstrainedGenericTypeParameter { get; private set; }
+
+        /// <summary>
         ///     wide string type
         /// </summary>
         public IStringType WideStringType { get; private set; }
@@ -427,5 +433,10 @@ namespace PasPasPas.Typings.Common {
         ///     unspecified file type
         /// </summary>
         public IFileType UnspecifiedFileType { get; private set; }
+
+        /// <summary>
+        ///     format expression helper routine
+        /// </summary>
+        public IRoutineGroup FormatExpression { get; private set; }
     }
 }
