@@ -166,9 +166,9 @@ namespace PasPasPas.Typings.Common {
         private void RegisterOtherTypes() {
             RegisterType(new GenericArrayType(Names.TArray, this, default));
             UnspecifiedFileType = RegisterType(new FileType(this, Names.File, GenericPointerType));
-            RegisterType(new GenericConstraintType(this, GenericConstraintKind.Class));
-            RegisterType(new GenericConstraintType(this, GenericConstraintKind.Record));
-            RegisterType(new GenericConstraintType(this, GenericConstraintKind.Constructor));
+            GenericClassConstraint = RegisterType(new GenericConstraintType(this, GenericConstraintKind.Class));
+            GenericRecordConstraint = RegisterType(new GenericConstraintType(this, GenericConstraintKind.Record));
+            GenericConstructorConstraint = RegisterType(new GenericConstraintType(this, GenericConstraintKind.Constructor));
         }
 
         /// <summary>
@@ -433,6 +433,21 @@ namespace PasPasPas.Typings.Common {
         ///     unspecified file type
         /// </summary>
         public IFileType UnspecifiedFileType { get; private set; }
+
+        /// <summary>
+        ///     generic class constraint
+        /// </summary>
+        public ITypeDefinition GenericClassConstraint { get; private set; }
+
+        /// <summary>
+        ///     generic record constraint
+        /// </summary>
+        public ITypeDefinition GenericRecordConstraint { get; private set; }
+
+        /// <summary>
+        ///     generic constructor constraint
+        /// </summary>
+        public ITypeDefinition GenericConstructorConstraint { get; private set; }
 
         /// <summary>
         ///     format expression helper routine

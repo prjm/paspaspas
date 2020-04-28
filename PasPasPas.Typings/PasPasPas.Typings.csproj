@@ -9,18 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="src\Common\TypeAnnotator_Expressions.cs~RF1a2788c3.TMP" />
-      <None Remove="src\Simple\BooleanType.cs~RFb6d4cf4.TMP" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\PasPasPas.Global\PasPasPas.Globals.csproj" />
         <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
         <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="src\OpCodes\" />
+        <Folder Include="src\OpCodes\" />
     </ItemGroup>
 
 </Project>

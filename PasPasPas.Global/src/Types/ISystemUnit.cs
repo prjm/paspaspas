@@ -201,6 +201,27 @@ namespace PasPasPas.Globals.Types {
         ///     unconstrained generic type parameter
         /// </summary>
         IGenericTypeParameter UnconstrainedGenericTypeParameter { get; }
+
+        /// <summary>
+        ///     format expression helper routine
+        /// </summary>
         IRoutineGroup FormatExpression { get; }
+
+
+        /// <summary>
+        ///     generic class constraint
+        /// </summary>
+        ITypeDefinition GenericClassConstraint { get; }
+
+        /// <summary>
+        ///     generic record constraint
+        /// </summary>
+        ITypeDefinition GenericRecordConstraint { get; }
+
+        /// <summary>
+        ///     generic constructor constraint
+        /// </summary>
+        ITypeDefinition GenericConstructorConstraint { get; }
+
     }
 }

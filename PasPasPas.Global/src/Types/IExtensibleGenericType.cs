@@ -11,11 +11,11 @@ namespace PasPasPas.Globals.Types {
         ///     add a generic type parameter
         /// </summary>
         /// <param name="typeId"></param>
-        void AddGenericParameter(int typeId);
+        void AddGenericParameter(ITypeDefinition typeId);
 
         /// <summary>
         ///     generic parameters
         /// </summary>
-        List<int> GenericParameters { get; }
+        List<ITypeDefinition> GenericParameters { get; }
     }
 }
