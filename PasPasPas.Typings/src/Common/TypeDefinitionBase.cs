@@ -13,8 +13,14 @@ namespace PasPasPas.Typings.Common {
         ///     create a new type definition
         /// </summary>
         /// <param name="definingUnit"></param>
-        protected TypeDefinitionBase(IUnitType definingUnit)
-            => DefiningUnit = definingUnit;
+        protected TypeDefinitionBase(IUnitType definingUnit) {
+            if (this is IUnitType unit)
+                DefiningUnit = unit;
+            else
+                DefiningUnit = definingUnit;
+
+            Reference = new ReferenceToTypeDefinition(this, 0);
+        }
 
         /// <summary>
         ///     type definition
@@ -58,6 +64,11 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public SymbolTypeKind SymbolKind
             => SymbolTypeKind.TypeDefinition;
+
+        /// <summary>
+        ///     type reference
+        /// </summary>
+        public ITypeSymbol Reference { get; }
 
         private static bool CanBeAssignedFromAlias(IAliasedType alias) {
 

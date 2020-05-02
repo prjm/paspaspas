@@ -53,7 +53,7 @@ namespace PasPasPas.Typings.Common {
                 var m = element as StructureMethod;
                 var classMethod = m?.ClassItem ?? false;
                 var genericTypeId = SystemUnit.ErrorType;
-                var d = v.TypeDefinition;
+                var d = v;
                 /*
                 if (d is RoutineType rt) {
                     d =
@@ -73,8 +73,9 @@ namespace PasPasPas.Typings.Common {
                 method = typeDef.AddOrExtendMethod(element.Name.CompleteName, genericTypeId);
             }
 
-            currentTypeDefinition.Push((RoutineGroup)method);
-            var parameters = ((RoutineGroup)method).AddParameterGroup(element.Kind, SystemUnit.NoType);
+            var parameters = ((RoutineGroup)method).AddParameterGroup(element.Kind, NoType.Reference);
+            //currentTypeDefinition.Push((RoutineGroup)method);
+
             //parameters.IsClassItem = f.IsClassItem();
             currentMethodParameters.Push(parameters);
         }
@@ -95,7 +96,7 @@ namespace PasPasPas.Typings.Common {
                     return;
 
                 var v = currentTypeDefinition.Peek();
-                var typeDef = v != null ? v.TypeDefinition as IStructuredType : null;
+                var typeDef = v != null ? v as IStructuredType : null;
                 var methodParams = currentMethodParameters.Pop();
                 /*
                 if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
@@ -127,10 +128,10 @@ namespace PasPasPas.Typings.Common {
                 var baseTypeDef = routine.RoutineGroup.DefiningType as IStructuredType;
 
                 if (baseTypeDef != default && !routine.IsClassItem())
-                    resolver.AddToScope("Self", ReferenceKind.RefToSelf, baseTypeDef);
+                    resolver.AddToScope("Self", ReferenceKind.RefToSelf, baseTypeDef.Reference);
 
                 if (baseTypeDef != default && routine.IsClassItem()) {
-                    resolver.AddToScope("Self", ReferenceKind.RefToSelfClass, baseTypeDef);
+                    resolver.AddToScope("Self", ReferenceKind.RefToSelfClass, baseTypeDef.Reference);
                 }
             }
         }
@@ -150,7 +151,7 @@ namespace PasPasPas.Typings.Common {
                 if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
                     parameters.ResultType = element.TypeValue.TypeInfo;
                 else
-                    parameters.ResultType = SystemUnit.ErrorType;
+                    parameters.ResultType = ErrorReference;
 
             }
 

@@ -89,8 +89,8 @@ namespace PasPasPas.Typings.Operators {
                 return Invalid;
 
             if (left is ISubrangeType subrangeType)
-                if (subrangeType.TypeDefinition.ResolveAlias() is IOrdinalType subRangeBase)
-                    ordinalType = subrangeType;
+                if (subrangeType.ResolveAlias() is IOrdinalType subRangeBase)
+                    ordinalType = subRangeBase;
                 else
                     return Invalid;
 
@@ -104,7 +104,7 @@ namespace PasPasPas.Typings.Operators {
                 if (left.IsConstant(out var leftValue) && right.IsConstant(out var rightSet))
                     return Runtime.Structured.InSet(TypeRegistry, leftValue, rightSet);
 
-                return TypeRegistry.SystemUnit.BooleanType;
+                return TypeRegistry.SystemUnit.BooleanType.Reference;
             }
 
             return Invalid;
@@ -115,7 +115,7 @@ namespace PasPasPas.Typings.Operators {
                 return Runtime.Structured.SetDifference(TypeRegistry, l, r);
 
             var typeCreator = TypeRegistry.CreateTypeFactory(currentUnit);
-            return TypeRegistry.GetMatchingSetType(typeCreator, left.TypeDefinition, right.TypeDefinition);
+            return TypeRegistry.GetMatchingSetType(typeCreator, left.TypeDefinition, right.TypeDefinition).Reference;
         }
 
         private ITypeSymbol EvaluateSetAddOperator(ITypeSymbol left, ITypeSymbol right, IUnitType currentUnit) {
@@ -123,7 +123,7 @@ namespace PasPasPas.Typings.Operators {
                 return Runtime.Structured.SetUnion(currentUnit, TypeRegistry, leftSet, rightSet);
 
             var typeCreator = TypeRegistry.CreateTypeFactory(currentUnit);
-            return TypeRegistry.GetMatchingSetType(typeCreator, left.TypeDefinition, right.TypeDefinition);
+            return TypeRegistry.GetMatchingSetType(typeCreator, left.TypeDefinition, right.TypeDefinition).Reference;
         }
 
         private ITypeSymbol EvaluateSetIntersectOperator(ITypeSymbol left, ITypeSymbol right, IUnitType currentUnit) {
@@ -131,7 +131,7 @@ namespace PasPasPas.Typings.Operators {
                 return Runtime.Structured.SetIntersection(currentUnit, TypeRegistry, leftSet, rightSet);
 
             var typeCreator = TypeRegistry.CreateTypeFactory(currentUnit);
-            return TypeRegistry.GetMatchingSetType(typeCreator, left.TypeDefinition, right.TypeDefinition);
+            return TypeRegistry.GetMatchingSetType(typeCreator, left.TypeDefinition, right.TypeDefinition).Reference;
         }
     }
 }

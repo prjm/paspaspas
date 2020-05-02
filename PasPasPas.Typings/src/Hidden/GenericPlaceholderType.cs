@@ -21,8 +21,8 @@ namespace PasPasPas.Typings.Hidden {
         /// <summary>
         ///     parameters
         /// </summary>
-        public List<int> GenericParameters { get; }
-        = new List<int>();
+        public List<ITypeDefinition> GenericParameters { get; }
+        = new List<ITypeDefinition>();
 
         /// <summary>
         ///     number of generic parameters
@@ -57,15 +57,16 @@ namespace PasPasPas.Typings.Hidden {
         ///     add a parameter
         /// </summary>
         /// <param name="typeId"></param>
-        public void AddGenericParameter(int typeId)
+        public void AddGenericParameter(ITypeDefinition typeId)
             => GenericParameters.Add(typeId);
 
         /// <summary>
         ///     bind
         /// </summary>
         /// <param name="typeIds"></param>
+        /// <param name="typeCreator"></param>
         /// <returns></returns>
-        public ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds)
+        public ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds, ITypeCreator typeCreator)
             => default;
 
     }

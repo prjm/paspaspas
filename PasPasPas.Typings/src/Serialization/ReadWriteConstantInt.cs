@@ -26,7 +26,7 @@ namespace PasPasPas.Typings.Serialization {
 
         internal void WriteIntValue(IIntegerValue intValue) {
 
-            var typeDef = RegisteredTypes.GetTypeByIdOrUndefinedType(intValue.TypeId) as IIntegralType;
+            var typeDef = intValue as IIntegralType;
             switch (typeDef.TypeSizeInBytes) {
                 case 1:
                     WriteByte((byte)intValue.UnsignedValue);

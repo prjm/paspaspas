@@ -45,7 +45,7 @@ namespace PasPasPas.Typings.Routines {
 
             foreach (var param in signature) {
 
-                if (param.GetBaseType() == BaseType.Integer || param.HasSubrangeType(out var subrangeType) && subrangeType.SubrangeOfType.GetBaseType() == BaseType.Integer)
+                if (param.GetBaseType() == BaseType.Integer || param.HasSubrangeType(out var subrangeType) && subrangeType.SubrangeOfType.BaseType == BaseType.Integer)
                     continue;
 
                 return false;
@@ -93,6 +93,6 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="signature"></param>
         /// <returns></returns>
         public IIntrinsicInvocationResult ResolveCall(ISignature signature)
-            => MakeResult(TypeRegistry.SystemUnit.Int64Type, signature);
+            => MakeResult(TypeRegistry.SystemUnit.Int64Type.Reference, signature);
     }
 }

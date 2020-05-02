@@ -61,7 +61,6 @@ namespace PasPasPas.Typings.Common {
         private readonly Stack<IRoutine> currentMethodParameters;
         private readonly Resolver resolver;
         private readonly List<(IRoutine, BlockOfStatements)> routines;
-        private readonly ReferenceToError errorReference;
 
         /// <summary>
         ///     current unit definition
@@ -92,7 +91,19 @@ namespace PasPasPas.Typings.Common {
             currentTypeDefinition = new Stack<ITypeDefinition>();
             currentMethodParameters = new Stack<IRoutine>();
             routines = new List<(IRoutine, BlockOfStatements)>();
-            errorReference = new ReferenceToError(SystemUnit.ErrorType);
         }
+
+        /// <summary>
+        ///     reference to the error type
+        /// </summary>
+        private ITypeSymbol ErrorReference
+            => SystemUnit.ErrorType.Reference;
+
+        /// <summary>
+        ///     no type
+        /// </summary>
+        private ITypeDefinition NoType
+            => SystemUnit.NoType;
+
     }
 }

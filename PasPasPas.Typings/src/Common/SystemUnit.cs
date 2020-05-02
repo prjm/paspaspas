@@ -206,7 +206,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="definition"></param>
         /// <returns></returns>
         private T RegisterType<T>(T definition) where T : ITypeDefinition {
-            Register(new ReferenceToTypeDefinition(definition));
+            Register(definition.Reference);
             return definition;
         }
 
@@ -217,7 +217,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="aliasName"></param>
         private IAliasedType RegisterAlias(ITypeDefinition baseType, string aliasName) {
             var alias = new TypeAlias(this, baseType, aliasName, false);
-            Register(new ReferenceToTypeDefinition(alias));
+            Register(alias.Reference);
             return alias;
         }
 

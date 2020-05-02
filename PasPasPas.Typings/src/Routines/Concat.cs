@@ -92,9 +92,9 @@ namespace PasPasPas.Typings.Routines {
         public IIntrinsicInvocationResult ResolveCall(ISignature signature) {
             if (signature.Count == 1) {
                 if (signature[0] is ISubrangeType subrangeType)
-                    return MakeResult(subrangeType.SubrangeOfType, subrangeType.SubrangeOfType);
+                    return MakeResult(subrangeType.SubrangeOfType.Reference, subrangeType.SubrangeOfType.Reference);
                 else
-                    return MakeResult(signature[0].TypeDefinition, signature[0].TypeDefinition);
+                    return MakeResult(signature[0], signature[0]);
             }
 
             var useUnicode = false;
@@ -103,7 +103,7 @@ namespace PasPasPas.Typings.Routines {
                 ITypeDefinition baseType;
 
                 if (parameter.TypeDefinition is ISubrangeType subrangeType)
-                    baseType = subrangeType.SubrangeOfType.TypeDefinition;
+                    baseType = subrangeType.SubrangeOfType;
                 else
                     baseType = parameter.TypeDefinition;
 
@@ -115,9 +115,9 @@ namespace PasPasPas.Typings.Routines {
             }
 
             if (useUnicode)
-                return MakeResult(TypeRegistry.SystemUnit.UnicodeStringType, signature);
+                return MakeResult(TypeRegistry.SystemUnit.UnicodeStringType.Reference, signature);
             else
-                return MakeResult(TypeRegistry.SystemUnit.AnsiStringType, signature);
+                return MakeResult(TypeRegistry.SystemUnit.AnsiStringType.Reference, signature);
 
         }
     }

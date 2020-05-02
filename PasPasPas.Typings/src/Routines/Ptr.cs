@@ -61,6 +61,6 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="parameter"></param>
         /// <returns></returns>
         public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
-            => MakeResult(TypeRegistry.SystemUnit.GenericPointerType, parameter);
+            => MakeResult(TypeRegistry.SystemUnit.GenericPointerType.Reference, parameter);
     }
 }

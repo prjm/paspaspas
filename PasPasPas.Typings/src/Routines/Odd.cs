@@ -42,7 +42,7 @@ namespace PasPasPas.Typings.Routines {
                 return true;
 
             if (parameter.HasSubrangeType(out var subrangeType))
-                return subrangeType.SubrangeOfType.GetBaseType() == BaseType.Integer;
+                return subrangeType.SubrangeOfType.BaseType == BaseType.Integer;
 
             return false;
         }
@@ -73,6 +73,6 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="parameter"></param>
         /// <returns></returns>
         public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
-            => MakeResult(TypeRegistry.SystemUnit.BooleanType, parameter);
+            => MakeResult(TypeRegistry.SystemUnit.BooleanType.Reference, parameter);
     }
 }

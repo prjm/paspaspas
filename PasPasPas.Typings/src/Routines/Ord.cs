@@ -59,7 +59,7 @@ namespace PasPasPas.Typings.Routines {
         /// <returns></returns>
         public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter) {
             if (!(parameter.TypeDefinition is IOrdinalType ordinalType))
-                return MakeResult(TypeRegistry.SystemUnit.ErrorType, parameter);
+                return MakeResult(TypeRegistry.SystemUnit.ErrorType.Reference, parameter);
 
             ITypeDefinition GetTypeId() {
                 var numberOfBytes = ordinalType.TypeSizeInBytes;
@@ -81,7 +81,7 @@ namespace PasPasPas.Typings.Routines {
                 return s.ErrorType;
             };
 
-            return MakeResult(GetTypeId(), parameter);
+            return MakeResult(GetTypeId().Reference, parameter);
         }
     }
 }

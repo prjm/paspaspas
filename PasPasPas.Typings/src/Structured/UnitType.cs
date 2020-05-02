@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
     ///     unit type definition
     /// </summary>
-    internal class UnitType : IUnitType {
+    internal class UnitType : TypeDefinitionBase, IUnitType {
 
         /// <summary>
         ///     symbols
@@ -19,26 +20,24 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="unitName">unit name</param>
         /// <param name="typeRegistry">type registry</param>
-        public UnitType(string unitName, ITypeRegistry typeRegistry) {
-            Name = unitName;
-            TypeRegistry = typeRegistry;
-        }
+        public UnitType(string unitName, ITypeRegistry typeRegistry) : base(default)
+            => Name = unitName;
 
         /// <summary>
         ///     type kind
         /// </summary>
-        public BaseType BaseType
+        public override BaseType BaseType
             => BaseType.Unit;
 
         /// <summary>
         ///     unit name
         /// </summary>
-        public string Name { get; }
+        public override string Name { get; }
 
         /// <summary>
         ///     mangled name
         /// </summary>
-        public string MangledName
+        public override string MangledName
             => Name;
 
         /// <summary>
@@ -48,35 +47,17 @@ namespace PasPasPas.Typings.Structured {
             => symbols;
 
         /// <summary>
-        ///     type registry
-        /// </summary>
-        public ITypeRegistry TypeRegistry { get; }
-
-        /// <summary>
-        ///     defining unit
-        /// </summary>
-        public IUnitType DefiningUnit
-            => this;
-
-        /// <summary>
         ///     type size not supported
         /// </summary>
-        public uint TypeSizeInBytes
+        public override uint TypeSizeInBytes
             => 0;
-
-        /// <summary>
-        ///     type definition
-        /// </summary>
-        public ITypeDefinition TypeDefinition
-            => this;
-
 
         /// <summary>
         ///     unit types can not be assigned
         /// </summary>
         /// <param name="otherType"></param>
         /// <returns></returns>
-        public bool CanBeAssignedFromType(ITypeDefinition otherType)
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType)
             => false;
 
         /// <summary>

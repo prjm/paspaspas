@@ -141,21 +141,21 @@ namespace PasPasPas.Typings.Operators {
             if (left.IsConstant(out var l) && right.IsConstant(out var r))
                 return operations.Multiply(l, r);
             else
-                return GetSmallestRealOrIntegralType(left, right, 32);
+                return GetSmallestRealOrIntegralType(left, right, 32).Reference;
         }
 
         private ITypeSymbol EvaluateMinusOperator(ITypeSymbol left, ITypeSymbol right, IArithmeticOperations operations) {
             if (left.IsConstant(out var l) && right.IsConstant(out var r))
                 return operations.Subtract(l, r);
             else
-                return GetSmallestRealOrIntegralType(left, right, 32);
+                return GetSmallestRealOrIntegralType(left, right, 32).Reference;
         }
 
         private ITypeSymbol EvaluatePlusOperator(ITypeSymbol left, ITypeSymbol right, IArithmeticOperations operations) {
             if (left.IsConstant(out var l) && right.IsConstant(out var r))
                 return operations.Add(l, r);
             else
-                return GetSmallestRealOrIntegralType(left, right, 32);
+                return GetSmallestRealOrIntegralType(left, right, 32).Reference;
         }
 
 
@@ -163,21 +163,21 @@ namespace PasPasPas.Typings.Operators {
             if (left.IsConstant(out var l) && right.IsConstant(out var r))
                 return Runtime.RealNumbers.Divide(l, r);
             else
-                return ExtendedType;
+                return ExtendedType.Reference;
         }
 
         private ITypeSymbol EvaluateModOperator(ITypeSymbol left, ITypeSymbol right) {
             if (left.IsConstant(out var l) && right.IsConstant(out var r))
                 return Runtime.Integers.Modulo(l, r);
             else
-                return GetSmallestIntegralType(left, right, 32);
+                return GetSmallestIntegralType(left, right, 32).Reference;
         }
 
         private ITypeSymbol EvaluateDivOperator(ITypeSymbol left, ITypeSymbol right) {
             if (left.IsConstant(out var l) && right.IsConstant(out var r))
                 return Runtime.Integers.Divide(l, r);
             else
-                return GetSmallestIntegralType(left, right, 32);
+                return GetSmallestIntegralType(left, right, 32).Reference;
         }
     }
 }

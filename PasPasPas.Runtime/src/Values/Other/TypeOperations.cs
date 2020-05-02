@@ -71,6 +71,7 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <returns></returns>
         public IValue MakeInvalidValue(SpecialConstantKind invalidResult)
             => new ErrorValue(provider.GetErrorType(), invalidResult);
+
         /// <summary>
         ///     make a new intrinsic invocation result
         /// </summary>
@@ -114,6 +115,18 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <returns></returns>
         public ISignature MakeSignature(ITypeSymbol resultType, ITypeSymbol left, ITypeSymbol right)
             => new Signature2(resultType, left, right);
+
+        /// <summary>
+        ///     create a signature with three parameters
+        /// </summary>
+        /// <param name="resultType"></param>
+        /// <param name="left"></param>
+        /// <param name="middle"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public ISignature MakeSignature(ITypeSymbol resultType, ITypeSymbol left, ITypeSymbol middle, ITypeSymbol right)
+            => new Signature3(resultType, left, middle, right);
+
 
         /// <summary>
         ///     make an operator result

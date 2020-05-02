@@ -159,10 +159,10 @@ namespace PasPasPas.Typings.Operators {
         protected ITypeDefinition GetSmallestBoolOrIntegralType(ITypeSymbol left, ITypeSymbol right, int minBitSize) {
 
             if (left.TypeDefinition.IsSubrangeType(out var subrangeType1))
-                return GetSmallestBoolOrIntegralType(subrangeType1.SubrangeOfType, right, minBitSize);
+                return GetSmallestBoolOrIntegralType(subrangeType1.SubrangeOfType.Reference, right, minBitSize);
 
             if (left.TypeDefinition.IsSubrangeType(out var subrangeType2))
-                return GetSmallestBoolOrIntegralType(left, subrangeType2.SubrangeOfType, minBitSize);
+                return GetSmallestBoolOrIntegralType(left, subrangeType2.SubrangeOfType.Reference, minBitSize);
 
             if (left.TypeDefinition.BaseType == BaseType.Boolean && right.TypeDefinition.BaseType == BaseType.Boolean)
                 return GetSmallestBooleanType(left, right, minBitSize);

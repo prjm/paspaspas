@@ -42,7 +42,7 @@ namespace PasPasPas.Typings.Routines {
                 return true;
 
             if (parameter.HasSubrangeType(out var value))
-                return value.SubrangeOfType.HasNumericType();
+                return value.SubrangeOfType.IsNumericType();
 
             return false;
         }
@@ -74,12 +74,12 @@ namespace PasPasPas.Typings.Routines {
         public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter) {
 
             if (parameter.GetBaseType() == BaseType.Integer)
-                return MakeResult(parameter.TypeDefinition, parameter);
+                return MakeResult(parameter.TypeDefinition.Reference, parameter);
 
             if (parameter.HasSubrangeType(out var _))
-                return MakeResult(parameter.TypeDefinition, parameter);
+                return MakeResult(parameter.TypeDefinition.Reference, parameter);
 
-            return MakeResult(TypeRegistry.SystemUnit.Int64Type, parameter);
+            return MakeResult(TypeRegistry.SystemUnit.Int64Type.Reference, parameter);
         }
     }
 }

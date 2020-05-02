@@ -128,27 +128,27 @@ namespace PasPasPas.Typings.Operators {
             if (right.IsConstant()) {
                 if (right is IIntegerValue intValue && intValue.SignedValue >= 0) {
                     if (intValue.SignedValue <= 32 && intType.TypeSizeInBytes < 4)
-                        return SystemUnit.IntegerType;
+                        return SystemUnit.IntegerType.Reference;
                     if (intValue.SignedValue <= 32 && intType.TypeSizeInBytes == 4)
-                        return baseType;
+                        return baseType.Reference;
                     if (intType.TypeSizeInBytes == 8)
-                        return baseType;
+                        return baseType.Reference;
                 }
 
                 return Invalid;
             }
 
             if (intType.TypeSizeInBytes < 4)
-                return SystemUnit.IntegerType;
+                return SystemUnit.IntegerType.Reference;
 
-            return intType;
+            return intType.Reference;
         }
 
         private ITypeSymbol EvaluateXorOperator(ITypeSymbol left, ITypeSymbol right, ILogicalOperations operations) {
             if (left.IsConstant(out var leftConstant) && right.IsConstant(out var rightConstant))
                 return operations.XorOperator(leftConstant, rightConstant);
             else
-                return GetSmallestBoolOrIntegralType(left, right, 1);
+                return GetSmallestBoolOrIntegralType(left, right, 1).Reference;
         }
 
         private ITypeSymbol EvaluateOrOperator(ITypeSymbol left, ITypeSymbol right, ILogicalOperations operations) {
@@ -159,7 +159,7 @@ namespace PasPasPas.Typings.Operators {
             else if (left.IsConstant() && Runtime.Booleans.FalseValue.Equals(left))
                 return right;
             else
-                return GetSmallestBoolOrIntegralType(left, right, 1);
+                return GetSmallestBoolOrIntegralType(left, right, 1).Reference;
         }
 
         private ITypeSymbol EvaluateAndOperator(ITypeSymbol left, ITypeSymbol right, ILogicalOperations operations) {
@@ -170,7 +170,7 @@ namespace PasPasPas.Typings.Operators {
             else if (left.IsConstant() && Runtime.Booleans.TrueValue.Equals(left))
                 return right;
             else
-                return GetSmallestBoolOrIntegralType(left, right, 1);
+                return GetSmallestBoolOrIntegralType(left, right, 1).Reference;
         }
     }
 }

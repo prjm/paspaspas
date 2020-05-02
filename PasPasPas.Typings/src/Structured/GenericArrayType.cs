@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     generic dynamic array type (<c>TArray&lt;T&gt;)</c>
     /// </summary>
-    public class GenericArrayType : ArrayType, IGenericType {
+    internal class GenericArrayType : ArrayType, IGenericType {
 
         /// <summary>
         ///     create a new generic array type
@@ -15,7 +15,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="baseType"></param>
         /// <param name="definingUnit"></param>
         /// <param name="name"></param>
-        public GenericArrayType(string name, IUnitType definingUnit, ITypeDefinition baseType) : base(definingUnit, definingUnit.TypeRegistry.SystemUnit.IntegerType) {
+        internal GenericArrayType(string name, IUnitType definingUnit, ITypeDefinition baseType) : base(definingUnit, definingUnit.TypeRegistry.SystemUnit.IntegerType) {
             Name = name;
             BaseTypeDefinition = baseType;
         }
@@ -48,11 +48,11 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="typeIds"></param>
         /// <returns></returns>
-        public ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds) {
+        public ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds, ITypeCreator typeCreator) {
             if (typeIds.Length != 1)
                 return default;
 
-            var arrayType = TypeRegistry.TypeCreator.CreateDynamicArrayType(typeIds[0], false);
+            var arrayType = typeCreator.CreateDynamicArrayType(typeIds[0], string.Empty, false);
             return arrayType;
         }
     }

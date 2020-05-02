@@ -48,7 +48,7 @@ namespace PasPasPas.Typings.Operators {
         protected override ITypeSymbol EvaluateBinaryOperator(ISignature input, IUnitType currentUnit) {
             var left = input[0];
             var right = input[1];
-            var operations = Runtime.GetStringOperators(left.TypeDefinition, right.TypeDefinition);
+            var operations = Runtime.GetStringOperators(left, right);
 
             if (operations == null)
                 return Invalid;
@@ -67,18 +67,18 @@ namespace PasPasPas.Typings.Operators {
             var rightType = right.TypeDefinition;
 
             if (leftType is IStringType leftString && leftString.Kind == StringTypeKind.UnicodeString)
-                return leftType;
+                return leftType.Reference;
 
             if (rightType is IStringType rightString && rightString.Kind == StringTypeKind.UnicodeString)
-                return rightType;
+                return rightType.Reference;
 
             if (leftType is ICharType leftChar && leftChar.Kind == CharTypeKind.WideChar)
-                return SystemUnit.UnicodeStringType;
+                return SystemUnit.UnicodeStringType.Reference;
 
             if (rightType is ICharType rightChar && rightChar.Kind == CharTypeKind.WideChar)
-                return SystemUnit.UnicodeStringType;
+                return SystemUnit.UnicodeStringType.Reference;
 
-            return SystemUnit.AnsiStringType;
+            return SystemUnit.AnsiStringType.Reference;
         }
     }
 }

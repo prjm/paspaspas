@@ -65,7 +65,7 @@ namespace PasPasPas.Typings.Common {
             // part of a type definition and references types, not values
             if (element.Kind == ExpressionKind.RangeOperator) {
                 var rangeResult = TypeRegistry.GetTypeForSubrangeType(TypeCreator, left, right);
-                element.TypeInfo = new ReferenceToTypeDefinition(rangeResult);
+                element.TypeInfo = rangeResult.Reference;
                 return;
             }
 
@@ -76,7 +76,7 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            var resultType = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.UnspecifiedType);
+            var resultType = TypeRegistry.SystemUnit.UnspecifiedType.Reference;
             var signature = Runtime.Types.MakeSignature(resultType, left, right);
             element.TypeInfo = binaryOperator.EvaluateOperator(signature, CurrentUnitType);
         }
@@ -128,9 +128,9 @@ namespace PasPasPas.Typings.Common {
             var unaryOperator = TypeRegistry.GetOperator(operatorKind);
 
             if (unaryOperator == default)
-                return errorReference;
+                return ErrorReference;
 
-            var resultType = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.UnspecifiedType);
+            var resultType = TypeRegistry.SystemUnit.UnspecifiedType.Reference;
             var signature = Runtime.Types.MakeSignature(resultType, operand);
             return unaryOperator.EvaluateOperator(signature, CurrentUnitType);
         }
@@ -160,7 +160,7 @@ namespace PasPasPas.Typings.Common {
                     element.TypeInfo = environment.Runtime.Structured.CreateArrayValue(arrayType, baseType.TypeDefinition, ToValueArray(constantValues));
                 }
                 else {
-                    element.TypeInfo = new ReferenceToTypeDefinition(arrayType);
+                    element.TypeInfo = arrayType.Reference;
                 }
             }
         }
@@ -205,13 +205,13 @@ namespace PasPasPas.Typings.Common {
                     if (isConstant)
                         element.TypeInfo = TypeRegistry.Runtime.Structured.CreateSetValue(typdef, ToValueArray(values));
                     else
-                        element.TypeInfo = new ReferenceToTypeDefinition(typdef);
+                        element.TypeInfo = typdef.Reference;
                 }
                 else {
                     if (isConstant)
                         element.TypeInfo = TypeRegistry.Runtime.Structured.CreateArrayValue(typdef, baseType.TypeDefinition, ToValueArray(values));
                     else
-                        element.TypeInfo = new ReferenceToTypeDefinition(typdef);
+                        element.TypeInfo = typdef.Reference;
                 }
             }
         }
@@ -223,7 +223,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element">symbol reference</param>
         public void EndVisit(SymbolReference element) {
-            ITypeSymbol baseTypeValue = new ReferenceToTypeDefinition(SystemUnit.UnspecifiedType);
+            ITypeSymbol baseTypeValue = SystemUnit.UnspecifiedType.Reference;
 
             if (element.TypeValue is ITypedSyntaxPart typeRef)
                 baseTypeValue = typeRef.TypeInfo;
@@ -259,19 +259,19 @@ namespace PasPasPas.Typings.Common {
                 if (part is MetaType metaType) {
 
                     if (metaType.Kind == MetaTypeKind.AnsiString)
-                        baseTypeValue = new ReferenceToTypeDefinition(SystemUnit.AnsiStringType);
+                        baseTypeValue = SystemUnit.AnsiStringType.Reference;
 
                     if (metaType.Kind == MetaTypeKind.ShortString)
-                        baseTypeValue = new ReferenceToTypeDefinition(SystemUnit.ShortStringType);
+                        baseTypeValue = SystemUnit.ShortStringType.Reference;
 
                     if (metaType.Kind == MetaTypeKind.UnicodeString)
-                        baseTypeValue = new ReferenceToTypeDefinition(SystemUnit.UnicodeStringType);
+                        baseTypeValue = SystemUnit.UnicodeStringType.Reference;
 
                     if (metaType.Kind == MetaTypeKind.WideString)
-                        baseTypeValue = new ReferenceToTypeDefinition(SystemUnit.WideStringType);
+                        baseTypeValue = SystemUnit.WideStringType.Reference;
 
                     if (metaType.Kind == MetaTypeKind.StringType)
-                        baseTypeValue = new ReferenceToTypeDefinition(SystemUnit.StringType);
+                        baseTypeValue = SystemUnit.StringType.Reference;
 
                 }
 
@@ -308,7 +308,7 @@ namespace PasPasPas.Typings.Common {
                             var reference = resolver.ResolveByName(baseTypeValue, symRef.Name, 0, ResolverFlags.None);
 
                             if (reference == null) {
-                                baseTypeValue = errorReference;
+                                baseTypeValue = ErrorReference;
                             }
                             else if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
                                 if (reference.Symbol is IRoutineGroup routine) {
@@ -376,7 +376,7 @@ namespace PasPasPas.Typings.Common {
                     case BaseType.Integer:
                     case BaseType.Real:
                         ISignature s;
-                        var st = new ReferenceToTypeDefinition(SystemUnit.StringType);
+                        var st = SystemUnit.StringType.Reference;
 
                         switch (element.Expressions.Count) {
                             case 1:

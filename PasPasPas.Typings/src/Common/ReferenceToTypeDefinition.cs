@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Common {
     /// </summary>
     internal class ReferenceToTypeDefinition : ITypeSymbol {
 
-        internal ReferenceToTypeDefinition(ITypeDefinition definition)
+        internal ReferenceToTypeDefinition(ITypeDefinition definition, int x)
             => TypeDefinition = definition;
 
         public ITypeDefinition TypeDefinition { get; }

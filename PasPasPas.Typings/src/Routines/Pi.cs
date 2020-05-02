@@ -55,6 +55,6 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="signature"></param>
         /// <returns></returns>
         public IIntrinsicInvocationResult ResolveCall(ISignature signature)
-            => MakeResult(TypeRegistry.SystemUnit.ExtendedType);
+            => MakeResult(TypeRegistry.SystemUnit.ExtendedType.Reference);
     }
 }

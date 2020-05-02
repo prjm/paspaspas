@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
 
@@ -27,7 +26,7 @@ namespace PasPasPas.Typings.Operators {
 
             if (type.TypeDefinition.IsSubrangeType(out var subrangeType)) {
                 var baseType = subrangeType.SubrangeOfType;
-                return runtime.GetArithmeticOperators(types, baseType);
+                return runtime.GetArithmeticOperators(types, baseType.Reference);
             }
 
             return null;
@@ -51,7 +50,7 @@ namespace PasPasPas.Typings.Operators {
 
             if (type.TypeDefinition.IsSubrangeType(out var subrangeType)) {
                 var baseType = subrangeType.SubrangeOfType;
-                return runtime.GetLogicalOperators(types, baseType);
+                return runtime.GetLogicalOperators(types, baseType.Reference);
             }
 
             return null;
@@ -80,12 +79,12 @@ namespace PasPasPas.Typings.Operators {
 
             if (leftType.TypeDefinition.IsSubrangeType(out var subrangeType1)) {
                 var baseType = subrangeType1.SubrangeOfType;
-                return GetArithmeticOperators(runtime, types, baseType, rightType);
+                return GetArithmeticOperators(runtime, types, baseType.Reference, rightType);
             }
 
             if (rightType.TypeDefinition.IsSubrangeType(out var subrangeType2)) {
                 var baseType = subrangeType2.SubrangeOfType;
-                return GetArithmeticOperators(runtime, types, leftType, baseType);
+                return GetArithmeticOperators(runtime, types, leftType, baseType.Reference);
             }
 
             return null;
@@ -111,12 +110,12 @@ namespace PasPasPas.Typings.Operators {
 
             if (leftType.TypeDefinition.IsSubrangeType(out var subrangeType1)) {
                 var baseType = subrangeType1.SubrangeOfType;
-                return GetLogicalOperators(runtime, types, baseType, rightType);
+                return GetLogicalOperators(runtime, types, baseType.Reference, rightType);
             }
 
             if (leftType.TypeDefinition.IsSubrangeType(out var subrangeType2)) {
                 var baseType = subrangeType2.SubrangeOfType;
-                return GetLogicalOperators(runtime, types, leftType, baseType);
+                return GetLogicalOperators(runtime, types, leftType, baseType.Reference);
             }
 
             return default;
@@ -151,12 +150,12 @@ namespace PasPasPas.Typings.Operators {
 
             if (leftType.TypeDefinition.IsSubrangeType(out var subrangeType1)) {
                 var baseType = subrangeType1.SubrangeOfType;
-                return GetRelationalOperators(runtime, types, baseType, rightType);
+                return GetRelationalOperators(runtime, types, baseType.Reference, rightType);
             }
 
             if (rightType.TypeDefinition.IsSubrangeType(out var subrangeType2)) {
                 var baseType = subrangeType2.SubrangeOfType;
-                return GetRelationalOperators(runtime, types, leftType, baseType);
+                return GetRelationalOperators(runtime, types, leftType, baseType.Reference);
             }
 
             if (right == BaseType.Set && left == BaseType.Set)

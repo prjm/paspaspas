@@ -124,7 +124,7 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="parameters"></param>
         /// <returns></returns>
         protected IIntrinsicInvocationResult MakeProcedureResult(ISignature parameters)
-            => Types.MakeInvocationResultFromIntrinsic(this, Types.MakeSignature(TypeRegistry.SystemUnit.NoType, parameters));
+            => Types.MakeInvocationResultFromIntrinsic(this, Types.MakeSignature(TypeRegistry.SystemUnit.NoType.Reference, parameters));
 
         /// <summary>
         ///     make a subrange value

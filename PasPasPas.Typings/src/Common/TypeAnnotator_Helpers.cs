@@ -22,7 +22,7 @@ namespace PasPasPas.Typings.Common {
             => environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId, rightId);
 
         private void MarkWithErrorType(ITypedSyntaxPart node)
-            => node.TypeInfo = errorReference;
+            => node.TypeInfo = ErrorReference;
 
         private bool AreRecordTypesCompatible(ITypeDefinition leftId, ITypeDefinition rightId)
             => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);
@@ -34,7 +34,7 @@ namespace PasPasPas.Typings.Common {
             if (syntaxNode != default && syntaxNode.TypeInfo != default)
                 return syntaxNode.TypeInfo;
 
-            return errorReference;
+            return ErrorReference;
         }
 
         private ISignature CreateSignatureFromSymbolPart(SymbolReferencePart part) {
@@ -44,25 +44,25 @@ namespace PasPasPas.Typings.Common {
                     if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)
                         list.Add(part.Expressions[i].TypeInfo);
                     else
-                        list.Add(errorReference);
+                        list.Add(ErrorReference);
 
-                var unspecType = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.UnspecifiedType);
+                var unspecType = TypeRegistry.SystemUnit.UnspecifiedType.Reference;
                 return TypeRegistry.Runtime.Types.MakeSignature(unspecType, environment.ListPools.GetFixedArray(list));
             }
         }
 
         private bool ExpandRangeOperator(ITypedSyntaxPart part, bool requiresArray, List<ITypeSymbol> values, out ITypeSymbol baseTypeId) {
             if (!(part.TypeInfo.TypeDefinition is ISubrangeType subrangeType) || requiresArray) {
-                baseTypeId = errorReference;
+                baseTypeId = ErrorReference;
                 return false;
             }
 
-            baseTypeId = new ReferenceToTypeDefinition(subrangeType.SubrangeOfType);
+            baseTypeId = subrangeType.SubrangeOfType.Reference;
             var lowerBound = subrangeType.LowestElement;
             var upperBound = subrangeType.HighestElement;
 
             if (!subrangeType.IsValid) {
-                baseTypeId = errorReference;
+                baseTypeId = ErrorReference;
                 return false;
             }
 
@@ -72,7 +72,7 @@ namespace PasPasPas.Typings.Common {
                 return true;
 
             if (cardinality > 255) {
-                baseTypeId = errorReference;
+                baseTypeId = ErrorReference;
                 return false;
             }
 
@@ -98,7 +98,7 @@ namespace PasPasPas.Typings.Common {
                         !ExpandRangeOperator(part, requiresArray, values, out var setBaseType) ||
                         baseType != default && baseType != setBaseType) {
                         values.Clear();
-                        return errorReference;
+                        return ErrorReference;
                     }
                     baseType = setBaseType;
                     continue;
@@ -106,19 +106,19 @@ namespace PasPasPas.Typings.Common {
 
                 if (part.TypeInfo == null || !part.TypeInfo.IsConstant()) {
                     values.Clear();
-                    return errorReference;
+                    return ErrorReference;
                 }
 
-                baseType = new ReferenceToTypeDefinition(TypeRegistry.GetBaseTypeForArrayOrSet(baseType, part.TypeInfo));
+                baseType = TypeRegistry.GetBaseTypeForArrayOrSet(baseType, part.TypeInfo).Reference;
 
                 if (baseType.TypeDefinition == TypeRegistry.SystemUnit.ErrorType) {
                     values.Clear();
-                    return errorReference;
+                    return ErrorReference;
                 }
 
                 if (!requiresArray && !(baseType.TypeDefinition is IOrdinalType)) {
                     values.Clear();
-                    return errorReference;
+                    return ErrorReference;
                 }
 
                 isConstant = isConstant && part.TypeInfo.IsConstant();
@@ -126,7 +126,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             if (baseType == default)
-                baseType = errorReference;
+                baseType = ErrorReference;
 
             return baseType;
         }

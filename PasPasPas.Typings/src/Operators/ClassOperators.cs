@@ -73,7 +73,7 @@ namespace PasPasPas.Typings.Operators {
                 return Invalid;
 
             if (classObject.StructTypeKind == StructuredTypeKind.Interface)
-                return SystemUnit.BooleanType;
+                return SystemUnit.BooleanType.Reference;
 
             if (!TypeRegistry.AreCommonBaseClasses(classObject, classType))
                 return Invalid;
@@ -91,7 +91,7 @@ namespace PasPasPas.Typings.Operators {
             if (!TypeRegistry.AreCommonBaseClasses(classObject, classType))
                 return Invalid;
 
-            return classType;
+            return classType.Reference;
         }
 
     }

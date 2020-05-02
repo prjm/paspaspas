@@ -24,7 +24,7 @@ namespace PasPasPas.Typings.Common {
         public void StartVisit(CompilationUnit element) {
             var unitType = TypeCreator.CreateUnitType(element.SymbolName);
             CurrentUnit = element;
-            CurrentUnit.TypeInfo = new ReferenceToTypeDefinition(unitType);
+            CurrentUnit.TypeInfo = unitType.Reference;
             resolver.OpenScope();
             resolver.AddToScope(KnownNames.System, ReferenceKind.RefToUnit, CurrentUnit.TypeInfo);
         }
@@ -46,7 +46,7 @@ namespace PasPasPas.Typings.Common {
             resolver.OpenScope();
             if (currentMethodImplementation.Count < 1) {
                 var mainRoutineGroup = TypeCreator.CreateGlobalRoutineGroup(KnownNames.MainMethod);
-                var signature = Runtime.Types.MakeSignature(new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.NoType));
+                var signature = Runtime.Types.MakeSignature(NoType.Reference);
                 var mainRoutine = TypeCreator.CreateRoutine(mainRoutineGroup, RoutineKind.Procedure, signature);
                 currentMethodImplementation.Push(mainRoutine);
                 RegisterRoutine(mainRoutine, element);
@@ -163,7 +163,7 @@ namespace PasPasPas.Typings.Common {
                 ITypeDefinition typeId;
 
                 if (entry != default && entry.Kind == ReferenceKind.RefToType) {
-                    element.TypeInfo = new ReferenceToTypeDefinition(entry.Symbol.TypeDefinition);
+                    element.TypeInfo = entry.Symbol.TypeDefinition.Reference;
                     return;
                 }
 
@@ -175,15 +175,15 @@ namespace PasPasPas.Typings.Common {
                     typeId = TypeRegistry.SystemUnit.ErrorType;
                 }
 
-                element.TypeInfo = new ReferenceToTypeDefinition(typeId);
+                element.TypeInfo = typeId.Reference;
             }
 
             else if (element.Kind == MetaTypeKind.StringType) {
-                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.StringType);
+                element.TypeInfo = TypeRegistry.SystemUnit.StringType.Reference;
             }
 
             else if (element.Kind == MetaTypeKind.AnsiString) {
-                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.AnsiStringType);
+                element.TypeInfo = TypeRegistry.SystemUnit.AnsiStringType.Reference;
             }
 
             else if (element.Kind == MetaTypeKind.ShortString) {
@@ -199,24 +199,24 @@ namespace PasPasPas.Typings.Common {
 
                 var stringLength = (byte)intValue.UnsignedValue;
                 var userType = TypeCreator.CreateShortStringType(stringLength);
-                element.TypeInfo = new ReferenceToTypeDefinition(userType);
+                element.TypeInfo = userType.Reference;
             }
 
             else if (element.Kind == MetaTypeKind.ShortStringDefault) {
-                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.ShortStringType);
+                element.TypeInfo = TypeRegistry.SystemUnit.ShortStringType.Reference;
             }
 
 
             else if (element.Kind == MetaTypeKind.UnicodeString) {
-                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.UnicodeStringType);
+                element.TypeInfo = TypeRegistry.SystemUnit.UnicodeStringType.Reference;
             }
 
             else if (element.Kind == MetaTypeKind.WideString) {
-                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.WideStringType);
+                element.TypeInfo = TypeRegistry.SystemUnit.WideStringType.Reference;
             }
 
             else if (element.Kind == MetaTypeKind.PointerType) {
-                element.TypeInfo = new ReferenceToTypeDefinition(TypeRegistry.SystemUnit.GenericPointerType);
+                element.TypeInfo = TypeRegistry.SystemUnit.GenericPointerType.Reference;
             }
 
         }
@@ -294,7 +294,7 @@ namespace PasPasPas.Typings.Common {
                     if (entry != default) {
                         var genericType = entry.Symbol.TypeDefinition as IGenericType;
                         if (genericType != default)
-                            entry = new Reference(ReferenceKind.RefToBoundGeneric, new ReferenceToTypeDefinition(genericType.Bind(environment.ListPools.GetFixedArray(list))));
+                            entry = new Reference(ReferenceKind.RefToBoundGeneric, genericType.Bind(environment.ListPools.GetFixedArray(list), TypeCreator).Reference);
                     }
                     else
                         entry = default;
@@ -312,7 +312,7 @@ namespace PasPasPas.Typings.Common {
                 typeId = TypeCreator.CreateTypeAlias(typeId, "", true);
             }
 
-            element.TypeInfo = new ReferenceToTypeDefinition(typeId);
+            element.TypeInfo = typeId.Reference;
         }
 
         /// <summary>
@@ -349,7 +349,7 @@ namespace PasPasPas.Typings.Common {
                 }
             }
 
-            element.TypeInfo = new ReferenceToTypeDefinition(typeReference);
+            element.TypeInfo = typeReference.Reference;
         }
 
         /// <summary>
@@ -395,11 +395,11 @@ namespace PasPasPas.Typings.Common {
             var typeDef = default(ITypeSymbol);
 
             if (left == default)
-                typeDef = errorReference;
+                typeDef = ErrorReference;
             else if (element.RangeEnd == null)
-                typeDef = new ReferenceToTypeDefinition(TypeCreator.CreateSubrangeType(string.Empty, left, left.LowestElement, leftTypeRef as IValue));
+                typeDef = TypeCreator.CreateSubrangeType(string.Empty, left, left.LowestElement, leftTypeRef as IValue).Reference;
             else
-                typeDef = new ReferenceToTypeDefinition(TypeRegistry.GetTypeForSubrangeType(TypeCreator, leftTypeRef, rightTypeRef));
+                typeDef = TypeRegistry.GetTypeForSubrangeType(TypeCreator, leftTypeRef, rightTypeRef).Reference;
 
             element.TypeInfo = typeDef;
         }
@@ -450,7 +450,7 @@ namespace PasPasPas.Typings.Common {
 
             if (element.TypeValue is ITypedSyntaxPart declaredEnum && declaredEnum.TypeInfo != null && declaredEnum.TypeInfo.TypeDefinition is IOrdinalType ot) {
                 var setType = TypeCreator.CreateSetType(ot, string.Empty);
-                element.TypeInfo = new ReferenceToTypeDefinition(setType);
+                element.TypeInfo = setType.Reference;
                 return;
             }
 
@@ -499,7 +499,7 @@ namespace PasPasPas.Typings.Common {
                     }
                 }
 
-                element.TypeInfo = new ReferenceToTypeDefinition(typeDef);
+                element.TypeInfo = typeDef.Reference;
             }
         }
 
@@ -525,7 +525,7 @@ namespace PasPasPas.Typings.Common {
                 typeDef.BaseClass = baseType.TypeInfo.TypeDefinition;
             }
 
-            element.TypeInfo = new ReferenceToTypeDefinition(typeDef);
+            element.TypeInfo = typeDef.Reference;
         }
 
         /// <summary>
@@ -538,7 +538,7 @@ namespace PasPasPas.Typings.Common {
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
                 typeInfo = element.TypeValue.TypeInfo;
             else {
-                typeInfo = errorReference;
+                typeInfo = ErrorReference;
             }
 
             var v = currentTypeDefinition.Peek();
@@ -568,19 +568,19 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(ClassOfTypeDeclaration element) {
             if (element.TypeValue?.TypeInfo == default) {
-                element.TypeInfo = errorReference;
+                element.TypeInfo = ErrorReference;
                 return;
             }
 
             var baseType = element.TypeValue.TypeInfo.TypeDefinition;
 
             if (!(baseType is IStructuredType)) {
-                element.TypeInfo = errorReference;
+                element.TypeInfo = ErrorReference;
                 return;
             }
 
             var alias = TypeCreator.CreateMetaClassType(string.Empty, baseType);
-            element.TypeInfo = new ReferenceToTypeDefinition(alias);
+            element.TypeInfo = alias.Reference;
         }
 
         /// <summary>
@@ -603,7 +603,7 @@ namespace PasPasPas.Typings.Common {
                     unitType.Register(routineGroup);
                     resolver.AddToScope(element.SymbolName, ReferenceKind.RefToGlobalRoutine, routineGroup);
                 }
-                routine = (routineGroup as RoutineGroup).AddParameterGroup(element.Kind, new ReferenceToTypeDefinition(SystemUnit.NoType));
+                routine = (routineGroup as RoutineGroup).AddParameterGroup(element.Kind, NoType.Reference);
                 currentMethodParameters.Push(routine);
             }
             else if (isClassMethod) {
@@ -627,7 +627,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(FileTypeDeclaration element) {
 
             if (element.TypeValue == default) {
-                element.TypeInfo = new ReferenceToTypeDefinition(SystemUnit.UnspecifiedFileType);
+                element.TypeInfo = SystemUnit.UnspecifiedFileType.Reference;
                 return;
             }
 
@@ -637,7 +637,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             var type = TypeCreator.CreateFileType(string.Empty, element.TypeValue.TypeInfo.TypeDefinition);
-            element.TypeInfo = new ReferenceToTypeDefinition(type);
+            element.TypeInfo = type.Reference;
         }
 
         /// <summary>
@@ -646,17 +646,17 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(GenericConstraint element) {
             if (element.Kind == GenericConstraintKind.Class) {
-                element.TypeInfo = new ReferenceToTypeDefinition(SystemUnit.GenericClassConstraint);
+                element.TypeInfo = SystemUnit.GenericClassConstraint.Reference;
                 return;
             }
 
             if (element.Kind == GenericConstraintKind.Record) {
-                element.TypeInfo = new ReferenceToTypeDefinition(SystemUnit.GenericRecordConstraint);
+                element.TypeInfo = SystemUnit.GenericRecordConstraint.Reference;
                 return;
             }
 
             if (element.Kind == GenericConstraintKind.Constructor) {
-                element.TypeInfo = new ReferenceToTypeDefinition(SystemUnit.GenericConstructorConstraint);
+                element.TypeInfo = SystemUnit.GenericConstructorConstraint.Reference;
                 return;
             }
 
@@ -664,7 +664,7 @@ namespace PasPasPas.Typings.Common {
                 var reference = resolver.ResolveByName(default, element.SymbolName, 0, ResolverFlags.None);
 
                 if (reference.Kind == ReferenceKind.RefToType) {
-                    element.TypeInfo = new ReferenceToTypeDefinition(reference.Symbol.TypeDefinition);
+                    element.TypeInfo = reference.Symbol.TypeDefinition.Reference;
                     return;
                 }
 
@@ -697,10 +697,10 @@ namespace PasPasPas.Typings.Common {
                 if (hasError)
                     MarkWithErrorType(element);
                 else if (list.Item.Count < 1)
-                    element.TypeInfo = new ReferenceToTypeDefinition(SystemUnit.UnconstrainedGenericTypeParameter);
+                    element.TypeInfo = SystemUnit.UnconstrainedGenericTypeParameter.Reference;
                 else {
                     var typeDef = TypeCreator.CreateUnboundGenericTypeParameter(string.Empty, environment.ListPools.GetFixedArray(list));
-                    element.TypeInfo = new ReferenceToTypeDefinition(typeDef);
+                    element.TypeInfo = typeDef.Reference;
                 }
 
                 if (!hasError)
@@ -741,7 +741,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(RequiredUnitName element) {
             var unitType = resolver.ResolveUnit(element.Name.CompleteName);
             if (unitType != default)
-                resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToUnit, new ReferenceToTypeDefinition(unitType));
+                resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToUnit, unitType.Reference);
         }
 
     }

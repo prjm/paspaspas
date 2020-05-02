@@ -9,7 +9,7 @@ using PasPasPas.Typings.Serialization;
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
-    ///     class for a parameter group
+    ///     class for a routine (procedure or function)
     /// </summary>
     public class Routine : IRoutine {
 

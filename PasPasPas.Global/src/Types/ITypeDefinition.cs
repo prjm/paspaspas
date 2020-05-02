@@ -37,6 +37,11 @@
         /// <returns></returns>
         bool CanBeAssignedFromType(ITypeDefinition otherType);
 
+        /// <summary>
+        ///     type reference
+        /// </summary>
+        ITypeSymbol Reference { get; }
+
     }
 
     /// <summary>
