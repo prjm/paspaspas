@@ -22,7 +22,6 @@ namespace PasPasPas.Typings.Structured {
         public Routine(IRoutineGroup parent, RoutineKind procedureKind, ISignature arguments) {
             RoutineGroup = parent;
             Kind = procedureKind;
-            Arguments = arguments;
         }
 
         /// <summary>
@@ -62,11 +61,17 @@ namespace PasPasPas.Typings.Structured {
         public RoutineKind Kind { get; }
 
         /// <summary>
+        ///     routine flags
+        /// </summary>
+        public RoutineFlags Flags { get; set; }
+
+        /// <summary>
         ///     add a parameter definition
         /// </summary>
         /// <param name="completeName"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
-        public Variable AddParameter(string completeName) {
+        public IVariable AddParameter(string completeName, ITypeSymbol type) {
             if (Parameters == null)
                 Parameters = new List<IVariable>();
 
@@ -116,19 +121,23 @@ namespace PasPasPas.Typings.Structured {
         ///     create the signature for this parameters
         /// </summary>
         /// <returns></returns>
-        public Signature CreateSignature(ITypeRegistry runtime) {
+        public ISignature CreateSignature(ITypeRegistry runtime) {
             if (Parameters == default || Parameters.Count < 1)
-                return new Signature(ResultType, ImmutableArray<ITypeSymbol>.Empty);
+                return runtime.Runtime.Types.MakeSignature(ResultType);
 
             using (var list = runtime.ListPools.GetList<ITypeSymbol>()) {
                 var values = new ITypeSymbol[Parameters.Count];
                 //for (var i = 0; i < Parameters.Count; i++)
                 //   values[i] = Parameters[i].SymbolType ?? runtime.Runtime.Types.MakeErrorTypeReference();
 
-                return new Signature(ResultType, runtime.ListPools.GetFixedArray(list));
+                return runtime.Runtime.Types.MakeSignature(ResultType, runtime.ListPools.GetFixedArray(list));
             }
         }
 
+        /// <summary>
+        ///     encode the routine
+        /// </summary>
+        /// <returns></returns>
         public ImmutableArray<byte> Encode() {
             var result = new byte[2];
             result[0] = Kind.ToByte();

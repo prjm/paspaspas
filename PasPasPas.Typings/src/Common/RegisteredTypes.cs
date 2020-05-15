@@ -4,6 +4,7 @@ using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Operators;
+using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
@@ -60,6 +61,16 @@ namespace PasPasPas.Typings.Common {
         /// <param name="unitType"></param>
         private void RegisterUnit(IUnitType unitType)
             => units.Add(unitType);
+
+        /// <summary>
+        ///     create a new unit type
+        /// </summary>
+        /// <returns></returns>
+        public IUnitType CreateUnitType(string name) {
+            var result = new UnitType(name, this);
+            RegisterUnit(result);
+            return result;
+        }
 
         /// <summary>
         ///     register common operators

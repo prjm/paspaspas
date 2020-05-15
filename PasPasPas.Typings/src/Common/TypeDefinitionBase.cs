@@ -19,7 +19,7 @@ namespace PasPasPas.Typings.Common {
             else
                 DefiningUnit = definingUnit;
 
-            Reference = new ReferenceToTypeDefinition(this, 0);
+            Reference = new ReferenceToTypeDefinition(this);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     type reference
         /// </summary>
-        public ITypeSymbol Reference { get; }
+        public INamedTypeSymbol Reference { get; }
 
         private static bool CanBeAssignedFromAlias(IAliasedType alias) {
 

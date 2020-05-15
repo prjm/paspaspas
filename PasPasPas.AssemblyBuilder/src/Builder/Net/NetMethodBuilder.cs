@@ -45,7 +45,7 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         /// <summary>
         ///     set the return type
         /// </summary>
-        public int ReturnType { get; set; }
+        public ITypeDefinition ReturnType { get; set; }
 
         /// <summary>
         ///     define the method body
@@ -85,7 +85,7 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         ///     finish the method definition
         /// </summary>
         public void FinishMethod() {
-            if (ReturnType == KnownTypeIds.NoType) {
+            if (ReturnType is INoType) {
                 Generator.Emit(OpCodes.Ret);
                 return;
             }

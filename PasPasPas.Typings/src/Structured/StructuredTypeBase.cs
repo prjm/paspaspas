@@ -11,7 +11,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     base class for structured types
     /// </summary>
-    public abstract class StructuredTypeBase : TypeDefinitionBase, IStructuredType {
+    public abstract class StructuredTypeBase : TypeDefinitionBase {
 
         /// <summary>
         ///     create a new structured type
@@ -62,21 +62,23 @@ namespace PasPasPas.Typings.Structured {
         ///     add a generic parameter
         /// </summary>
         /// <param name="typeId"></param>
-        public void AddGenericParameter(int typeId) {
+        public void AddGenericParameter(ITypeDefinition typeId) {
             GenericParameters.Add(typeId);
         }
 
         /// <summary>
         ///     list of generic parameter
         /// </summary>
-        public virtual List<int> GenericParameters { get; } = new List<int>();
+        public virtual List<ITypeDefinition> GenericParameters { get; }
+            = new List<ITypeDefinition>();
 
         /// <summary>
         ///     bind generic type
         /// </summary>
         /// <param name="typeIds"></param>
+        /// <param name="typeCreator"></param>
         /// <returns></returns>
-        public virtual Reference Bind(ImmutableArray<int> typeIds)
+        public virtual ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds, ITypeCreator typeCreator)
             => default;
 
         /// <summary>

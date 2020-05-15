@@ -49,7 +49,7 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     routine code
         /// </summary>
-        ImmutableArray<OpCode> Code { get; }
+        ImmutableArray<OpCode> Code { get; set; }
 
         /// <summary>
         ///     other symbols of this routine

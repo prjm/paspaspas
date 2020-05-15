@@ -49,5 +49,20 @@
         ///     cast result
         /// </summary>
         CastResult = 8,
+
+        /// <summary>
+        ///     self pointer
+        /// </summary>
+        Self = 9,
+
+        /// <summary>
+        ///     self pointer for class items
+        /// </summary>
+        SelfClass = 10,
+
+        /// <summary>
+        ///     bound generic type
+        /// </summary>
+        BoundGeneric = 11,
     }
 }

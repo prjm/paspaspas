@@ -20,11 +20,12 @@ namespace PasPasPas.Typings.Serialization {
             var toc = ReadTag(new TableOfContents());
             ReadTag(toc.Strings);
             ReadTag(toc.Meta);
+
+            var result = Types.CreateUnitType(toc.Strings[toc.Meta.UnitName]);
+            toc.Routines.TargetUnit = result;
+
             ReadTag(toc.Data);
             ReadTag(toc.Routines);
-
-            var result = Types.TypeCreator.CreateUnitType(toc.Strings[toc.Meta.UnitName]);
-            toc.Routines.AddToUnit(result);
 
             return result;
         }

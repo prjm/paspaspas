@@ -377,7 +377,7 @@ namespace PasPasPas.Runtime.Values {
         private IValue CastRecord(ITypeRegistry types, IValue value, ITypeDefinition typeDef) {
             typeDef = typeDef.ResolveAlias();
 
-            if (!(typeDef is StructuredTypeDeclaration structType) || !types.AreRecordTypesCompatible(value.TypeDefinition, typeDef) || !(value is RecordValue record))
+            if (!(typeDef is IStructuredType structType) || !types.AreRecordTypesCompatible(value.TypeDefinition, typeDef) || !(value is RecordValue record))
                 return invalidCast.Value;
 
 

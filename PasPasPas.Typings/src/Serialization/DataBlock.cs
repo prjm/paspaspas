@@ -47,9 +47,9 @@ namespace PasPasPas.Typings.Serialization {
 
         internal void PrepareData(IUnitType unit) {
             foreach (var symbol in unit.Symbols) {
-                var reference = symbol.Value;
-                if (reference.Kind == ReferenceKind.RefToVariable) {
-                    var variable = reference.Symbol as IVariable;
+                var reference = symbol;
+                if (reference.SymbolKind == SymbolTypeKind.Variable) {
+                    var variable = reference as IVariable;
                     vars.Add(variable);
                     var _ = Strings[variable.Name];
                 }

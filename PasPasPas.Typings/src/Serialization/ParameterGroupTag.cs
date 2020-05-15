@@ -16,7 +16,7 @@ namespace PasPasPas.Typings.Serialization {
             => Constants.ParameterGroupTag;
 
         private RoutineKind procedureKind;
-        private IOldTypeReference resultType;
+        private ITypeSymbol resultType;
 
         internal override void ReadData(uint kind, TypeReader typeReader) {
             procedureKind = (RoutineKind)typeReader.ReadByte();
@@ -30,7 +30,7 @@ namespace PasPasPas.Typings.Serialization {
             => routine.Items.Add(ToParameterGroup(routine));
 
         internal IRoutine ToParameterGroup(IRoutineGroup routine)
-            => new Routine(routine, procedureKind, resultType);
+            => new Routine(routine, procedureKind, routine.TypeDefinition.DefiningUnit.TypeRegistry.Runtime.Types.MakeSignature(resultType));
 
         internal void Initialize(IRoutine parameterGroup)
             => procedureKind = parameterGroup.Kind;

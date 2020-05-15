@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Globals;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -10,7 +11,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     structured type declaration
     /// </summary>
-    public class StructuredTypeDeclaration : StructuredTypeBase, IStructuredType {
+    internal class StructuredTypeDeclaration : StructuredTypeBase, IStructuredType {
 
 
         /// <summary>
@@ -87,9 +88,9 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     add a field definition
         /// </summary>
-        /// <param name="variable">variable name</param>
-        public void AddField(Variable variable)
-            => Fields.Add(variable);
+        /// <param name="fieldDef">variable name</param>
+        public void AddField(IVariable fieldDef)
+            => Fields.Add(fieldDef);
 
         /// <summary>
         ///     resolve a symbol
@@ -98,7 +99,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="entry"></param>
         /// <param name="flags">flags</param>
         /// <returns></returns>
-        public bool TryToResolve(string symbolName, out Reference entry, ResolverFlags flags) {
+        public bool TryToResolve(string symbolName, out ITypeSymbol entry, ResolverFlags flags) {
 
             foreach (var field in Fields) {
 
@@ -114,7 +115,7 @@ namespace PasPasPas.Typings.Structured {
                 if (field.Visibility == MemberVisibility.Protected && flags.MustSkipProtected() && flags.IsResolvingFromAnotherUnit())
                     continue;
 
-                if (!field.ClassItem && (flags & ResolverFlags.RequireClassSymbols) == ResolverFlags.RequireClassSymbols)
+                if (!field.IsClassItem() && (flags & ResolverFlags.RequireClassSymbols) == ResolverFlags.RequireClassSymbols)
                     continue;
 
                 if (string.Equals(field.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
@@ -145,7 +146,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="symbolName"></param>
         /// <param name="callables"></param>
         /// <param name="signature"></param>
-        public override void ResolveCall(string symbolName, IList<IRoutine> callables, ISignature signature) {
+        public override void ResolveCall(string symbolName, IList<IRoutineResult> callables, ISignature signature) {
             base.ResolveCall(symbolName, callables, signature);
 
             var baseClass = BaseClass;
@@ -163,7 +164,7 @@ namespace PasPasPas.Typings.Structured {
 
                 return false;
                 /*
-                foreach (var field in Fields)
+                for each (var field in Fields)
                     if (!field.IsConstant())
                         return false;
 
@@ -188,14 +189,14 @@ namespace PasPasPas.Typings.Structured {
         ///     create a constant record value from this type declaration
         /// </summary>
         /// <returns></returns>
-        public ITypeSymbol MakeConstant() {
-            using (var list = GetList<ITypeSymbol>()) {
+        public IValue MakeConstant() {
+            using (var list = GetList<IValue>()) {
                 foreach (var value in Fields) {
-                    list.Add(value.SymbolType);
-                    ((Variable)value).SymbolType = TypeRegistry.Runtime.Types.MakeTypeInstanceReference(value.SymbolType.TypeId, value.SymbolType.TypeKind);
+                    list.Add(value as IValue);
+                    //((Variable)value).SymbolType = TypeRegistry.Runtime.Types.MakeTypeInstanceReference(value.SymbolType.TypeId, value.SymbolType.TypeKind);
                 }
 
-                return TypeRegistry.Runtime.Structured.CreateRecordValue(TypeId, TypeRegistry.ListPools.GetFixedArray(list));
+                return TypeRegistry.Runtime.Structured.CreateRecordValue(this, TypeRegistry.ListPools.GetFixedArray(list));
             }
         }
 
@@ -230,7 +231,7 @@ namespace PasPasPas.Typings.Structured {
                     continue;
 
                 foreach (var paramGroup in method.Items) {
-                    if (paramGroup.IsClassItem != classItem)
+                    if (paramGroup.IsClassItem() != classItem)
                         continue;
 
                     return method;

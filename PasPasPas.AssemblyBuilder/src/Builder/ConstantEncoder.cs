@@ -29,7 +29,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IOldTypeReference Decode(ImmutableArray<byte> value) {
+        public IValue Decode(ImmutableArray<byte> value) {
             using (var stream = new ImmutableByteArrayStream(value))
             using (var typeReader = Environment.CreateTypeReader(stream)) {
 
@@ -43,7 +43,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public ImmutableArray<byte> Encode(IOldTypeReference value) {
+        public ImmutableArray<byte> Encode(IValue value) {
             using (var stream = new MemoryStream())
             using (var writer = Environment.CreateTypeWriter(stream)) {
 

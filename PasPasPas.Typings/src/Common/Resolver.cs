@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using PasPasPas.Globals.Parsing;
+using PasPasPas.Globals;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
@@ -50,11 +48,11 @@ namespace PasPasPas.Typings.Common {
         /// <param name="name"></param>
         /// <param name="numberOfTypeArguments">number of generic type arguments</param>
         /// <returns></returns>
-        public Reference ResolveReferenceByName(Reference baseTypeValue, string name, int numberOfTypeArguments = 0) {
+        public ITypeSymbol ResolveReferenceByName(ITypeSymbol baseTypeValue, string name, int numberOfTypeArguments = 0) {
             if (baseTypeValue == default)
                 return ResolveByName(default, name, numberOfTypeArguments, ResolverFlags.None);
             else
-                return ResolveByName(baseTypeValue.Symbol, name, numberOfTypeArguments, ResolverFlags.None);
+                return ResolveByName(baseTypeValue, name, numberOfTypeArguments, ResolverFlags.None);
         }
 
         /// <summary>
@@ -65,7 +63,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="numberOfTypeArguments">number of generic type arguments</param>
         /// <param name="flags">flags</param>
         /// <returns></returns>
-        public Reference ResolveByName(ITypeSymbol baseTypeValue, string name, int numberOfTypeArguments, ResolverFlags flags) {
+        public ITypeSymbol ResolveByName(ITypeSymbol baseTypeValue, string name, int numberOfTypeArguments, ResolverFlags flags) {
 
             if (numberOfTypeArguments > 0)
                 name = string.Concat(name, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeArguments);
@@ -79,20 +77,20 @@ namespace PasPasPas.Typings.Common {
                     if (string.Equals(scopeEntry.Key, name, StringComparison.OrdinalIgnoreCase))
                         return scopeEntry.Value;
 
-                    if (scopeEntry.Value.Kind == ReferenceKind.RefToSelf) {
-                        var importedEntry = ResolveByName(scopeEntry.Value.Symbol, name, 0, flags);
+                    if (scopeEntry.Value.SymbolKind == SymbolTypeKind.Self) {
+                        var importedEntry = ResolveByName(scopeEntry.Value, name, 0, flags);
                         if (importedEntry != default)
                             return importedEntry;
                     }
 
-                    if (scopeEntry.Value.Kind == ReferenceKind.RefToSelfClass) {
-                        var importedEntry = ResolveByName(scopeEntry.Value.Symbol, name, 0, flags & ResolverFlags.RequireClassSymbols);
+                    if (scopeEntry.Value.SymbolKind == SymbolTypeKind.SelfClass) {
+                        var importedEntry = ResolveByName(scopeEntry.Value, name, 0, flags & ResolverFlags.RequireClassSymbols);
                         if (importedEntry != default)
                             return importedEntry;
                     }
 
-                    if (scopeEntry.Value.Kind == ReferenceKind.RefToUnit) {
-                        var importedEntry = ResolveByName(scopeEntry.Value.Symbol, name, 0, flags | ResolverFlags.FromAnotherUnit);
+                    if (scopeEntry.Value.GetBaseType() == BaseType.Unit) {
+                        var importedEntry = ResolveByName(scopeEntry.Value, name, 0, flags | ResolverFlags.FromAnotherUnit);
                         if (importedEntry != default)
                             return importedEntry;
                     }
@@ -102,8 +100,8 @@ namespace PasPasPas.Typings.Common {
             if (baseTypeValue == default)
                 return default;
 
-            if (baseTypeValue.TypeKind == CommonTypeKind.Type)
-                baseTypeValue = TypeRegistry.MakeTypeInstanceReference(baseTypeValue.TypeId);
+            //if (baseTypeValue.TypeKind == CommonTypeKind.Type)
+            //    baseTypeValue = TypeRegistry.MakeTypeInstanceReference(baseTypeValue.TypeId);
 
             if (baseTypeValue.TypeDefinition.BaseType == BaseType.Unit) {
                 var unit = baseTypeValue.TypeDefinition as IUnitType;
@@ -112,14 +110,14 @@ namespace PasPasPas.Typings.Common {
                 }
             }
 
-            else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType || baseTypeValue.TypeKind == CommonTypeKind.MetaClassType) {
-                var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as StructuredTypeDeclaration;
+            else if (baseTypeValue.GetBaseType() == BaseType.Structured) {
+                var cls = baseTypeValue.TypeDefinition as StructuredTypeDeclaration;
 
                 if (cls != default && cls.TryToResolve(name, out var reference, flags))
                     return reference;
 
                 while (cls != default) {
-                    var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(cls.BaseClassId) as StructuredTypeDeclaration;
+                    var baseClass = cls.BaseClass as StructuredTypeDeclaration;
 
                     if (baseClass != default && baseClass.TryToResolve(name, out var reference1, ResolverFlags.SkipPrivate))
                         return reference1;
@@ -131,31 +129,33 @@ namespace PasPasPas.Typings.Common {
             return default;
         }
 
-        private ITypeSymbol GetTypeReference(Reference reference) {
-            if (reference == default || reference.Symbol == default)
-                return TypeRegistry.SystemUnit.ErrorType;
+        private ITypeSymbol GetTypeReference(ITypeSymbol reference) {
+            if (reference == default)
+                return TypeRegistry.SystemUnit.ErrorType.Reference;
 
-            if (reference.Kind == ReferenceKind.RefToConstant)
-                return (reference.Symbol as ITypedSyntaxPart)?.TypeInfo;
+            if (reference.SymbolKind == SymbolTypeKind.Constant)
+                return (reference as IValue);
 
-            if (reference.Kind == ReferenceKind.RefToEnumMember)
+            /*
+            if (reference.SymbolKind == SymbolTypeKind.RefToEnumMember)
                 return (reference.Symbol as EnumValue)?.Value;
+                */
 
-            if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
-                if (reference.Symbol is IRoutineGroup routine) {
-                    var callableRoutines = new List<IRoutine>();
-                    var signature = new Signature(TypeRegistry.MakeTypeInstanceReference(KnownTypeIds.UnspecifiedType), ImmutableArray<IOldTypeReference>.Empty);
+            if (reference.SymbolKind == SymbolTypeKind.RoutineGroup) {
+                if (reference is IRoutineGroup routine) {
+                    var callableRoutines = new List<IRoutineResult>();
+                    var signature = TypeRegistry.Runtime.Types.MakeSignature(TypeRegistry.SystemUnit.UnspecifiedType.Reference);
                     routine.ResolveCall(callableRoutines, signature);
                     if (callableRoutines.Count == 1)
-                        return callableRoutines[0].ResultType;
+                        return callableRoutines[0];
                 }
             }
 
-            if (reference.Kind == ReferenceKind.RefToType) {
-                return reference.Symbol;
+            if (reference.SymbolKind == SymbolTypeKind.TypeDefinition) {
+                return reference;
             }
 
-            return reference.Symbol;
+            return reference;
         }
 
         /// <summary>
@@ -175,14 +175,13 @@ namespace PasPasPas.Typings.Common {
         ///     add a symbol to the current scope
         /// </summary>
         /// <param name="symbolName">name of the symbol</param>
-        /// <param name="kind">scope kind</param>
         /// <param name="symbol">referenced symbol</param>
         /// <param name="numberOfTypeParameters">number of type parameters</param>
-        public void AddToScope(string symbolName, ReferenceKind kind, ITypeSymbol symbol, int numberOfTypeParameters = 0) {
+        public void AddToScope(string symbolName, ITypeSymbol symbol, int numberOfTypeParameters = 0) {
             if (numberOfTypeParameters == 0)
-                scope.AddEntry(symbolName, new Reference(kind, symbol));
+                scope.AddEntry(symbolName, symbol);
             else
-                scope.AddEntry(string.Concat(symbolName, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters), new Reference(kind, symbol));
+                scope.AddEntry(string.Concat(symbolName, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters), symbol);
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using PasPasPas.AssemblyBuilder.Builder.Definitions;
-using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.AssemblyBuilder.Builder.Net {
 
@@ -51,7 +51,7 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         /// </summary>
         /// <param name="symbolName"></param>
         /// <param name="typeInfo"></param>
-        public void DefineClassVariable(string symbolName, IOldTypeReference typeInfo)
+        public void DefineClassVariable(string symbolName, ITypeSymbol typeInfo)
             => InternalBuilder.DefineField(symbolName, Mapper.Map(typeInfo), FieldAttributes.Static);
 
     }

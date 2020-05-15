@@ -33,8 +33,8 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     generic parameters
         /// </summary>
-        public List<int> GenericParameters
-            => new List<int>();
+        public List<ITypeDefinition> GenericParameters
+            => new List<ITypeDefinition>();
 
         /// <summary>
         ///     number of generic type parameters
@@ -48,7 +48,7 @@ namespace PasPasPas.Typings.Structured {
         public override string Name { get; }
 
         /// <summary>
-        ///     magled type name
+        ///     mangled type name
         /// </summary>
         public override string MangledName
             => string.Empty;
@@ -57,15 +57,16 @@ namespace PasPasPas.Typings.Structured {
         ///     add a generic parameter
         /// </summary>
         /// <param name="typeId"></param>
-        public void AddGenericParameter(int typeId)
+        public void AddGenericParameter(ITypeDefinition typeId)
             => GenericParameters.Add(typeId);
 
         /// <summary>
         ///     bind the generic type parameter
         /// </summary>
         /// <param name="typeIds"></param>
+        /// <param name="typeCreator"></param>
         /// <returns></returns>
-        public Reference Bind(ImmutableArray<int> typeIds)
+        public ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds, ITypeCreator typeCreator)
             => default;
     }
 }

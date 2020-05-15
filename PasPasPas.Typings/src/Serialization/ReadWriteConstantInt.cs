@@ -4,16 +4,29 @@ using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Serialization {
 
+    internal static class IntegralKindHelper {
+
+        internal static byte ToByte(this IntegralTypeKind kind)
+            => (byte)kind;
+
+        internal static IntegralTypeKind ToIntegralTypeKind(this byte typeKind)
+            => (IntegralTypeKind)typeKind;
+
+    }
+
     internal partial class TypeReader {
 
-        internal IOldTypeReference ReadIntValue(IIntegralType typeDef) {
+        internal IValue ReadIntValue() {
+            var kind = ReadByte().ToIntegralTypeKind();
 
-            switch (typeDef.TypeSizeInBytes) {
-                case 1:
-                    if (typeDef.IsSigned)
-                        return Types.Runtime.Integers.ToIntegerValue((sbyte)ReadByte());
-                    else
-                        return Types.Runtime.Integers.ToIntegerValue(ReadByte());
+            switch (kind) {
+
+                case IntegralTypeKind.Byte:
+                    return Types.Runtime.Integers.ToIntegerValue((sbyte)ReadByte());
+
+                case IntegralTypeKind.ShortInt:
+                    return Types.Runtime.Integers.ToIntegerValue(ReadByte());
+
             }
 
             throw new InvalidOperationException();
@@ -25,7 +38,7 @@ namespace PasPasPas.Typings.Serialization {
     internal partial class TypeWriter {
 
         internal void WriteIntValue(IIntegerValue intValue) {
-
+            WriteByte(intValue.IntegralType.Kind.ToByte());
             var typeDef = intValue as IIntegralType;
             switch (typeDef.TypeSizeInBytes) {
                 case 1:

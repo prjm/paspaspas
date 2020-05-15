@@ -68,9 +68,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
 
             Builder.StartAssembly(projectName);
 
-            foreach (var typeDef in Environment.TypeRegistry.RegisteredTypeDefinitions) {
-                if (!(typeDef is IUnitType unit))
-                    continue;
+            foreach (var unit in Environment.TypeRegistry.Units) {
 
                 if (string.Equals(unit.Name, "System", StringComparison.OrdinalIgnoreCase))
                     continue;
@@ -103,7 +101,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
 
         private void PrepareVariable(IVariable variable) {
             if (CurrentMethod.Count < 1) {
-                UnitType.DefineClassVariable(variable.Name, variable.SymbolType);
+                UnitType.DefineClassVariable(variable.Name, variable);
             }
         }
 
@@ -111,7 +109,7 @@ namespace PasPasPas.AssemblyBuilder.Builder {
             foreach (var p in routine.Items) {
                 var globalMethod = UnitType.StartClassMethodDefinition(routine.Name);
                 globalMethod.Parameters = p;
-                globalMethod.ReturnType = KnownTypeIds.NoType;
+                globalMethod.ReturnType = Environment.TypeRegistry.SystemUnit.NoType;
 
                 globalMethod.DefineMethodBody();
                 CurrentMethod.Push(globalMethod);

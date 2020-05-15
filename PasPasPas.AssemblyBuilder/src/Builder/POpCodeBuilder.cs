@@ -4,6 +4,7 @@ using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -93,10 +94,10 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         public void EndVisit(ConstantValue element) {
             var value = element.TypeInfo;
 
-            if (value.ReferenceKind != TypeReferenceKind.ConstantValue)
+            if (value.SymbolKind != SymbolTypeKind.Constant)
                 return; //??
 
-            code.Add(new OpCode(OpCodeId.LoadConstant, encoder.Encode(value)));
+            code.Add(new OpCode(OpCodeId.LoadConstant, encoder.Encode(value as IValue)));
         }
     }
 }

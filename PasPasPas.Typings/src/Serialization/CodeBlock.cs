@@ -39,6 +39,11 @@ namespace PasPasPas.Typings.Serialization {
         public override uint Kind
             => Constants.CodeBlockTag;
 
+        /// <summary>
+        ///     target unit
+        /// </summary>
+        public IUnitType TargetUnit { get; set; }
+
         private readonly List<IRoutineGroup> routines
             = new List<IRoutineGroup>();
 
@@ -47,11 +52,12 @@ namespace PasPasPas.Typings.Serialization {
         internal override void ReadData(uint kind, TypeReader typeReader) {
             var n = typeReader.ReadUint();
             routines.Capacity = (int)n;
+            var tc = typeReader.Types.CreateTypeFactory(TargetUnit);
 
             for (var i = 0; i < n; i++) {
                 var nameIndex = typeReader.ReadUint();
                 var name = stringData[nameIndex];
-                var routine = typeReader.Types.TypeCreator.CreateGlobalRoutine(name);
+                var routine = tc.CreateGlobalRoutineGroup(name);
                 routines.Add(routine);
                 var paramCount = typeReader.ReadUint();
                 var paramTag = new ParameterGroupTag();
@@ -59,6 +65,10 @@ namespace PasPasPas.Typings.Serialization {
                     typeReader.ReadTag(paramTag);
                     paramTag.AddToRoutine(routine);
                 }
+            }
+
+            foreach (var routine in routines) {
+                TargetUnit.Register(routine);
             }
         }
 
@@ -89,10 +99,5 @@ namespace PasPasPas.Typings.Serialization {
             }
         }
 
-        internal void AddToUnit(IUnitType unit) {
-            foreach (var routine in routines) {
-                unit.Register(routine.Name, routine);
-            }
-        }
     }
 }

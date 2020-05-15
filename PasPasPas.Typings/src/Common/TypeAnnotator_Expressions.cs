@@ -284,7 +284,7 @@ namespace PasPasPas.Typings.Common {
                         var flags = ResolverFlags.None;
                         var classType = baseTypeValue as IStructuredType;
                         var self = resolver.ResolveReferenceByName(default, "Self");
-                        var selfType = (self?.Symbol?.TypeDefinition ?? SystemUnit.ErrorType) as IStructuredType;
+                        var selfType = (self?.TypeDefinition ?? SystemUnit.ErrorType) as IStructuredType;
 
                         if (classType != default && (selfType == default || selfType != classType))
                             flags |= ResolverFlags.SkipPrivate;
@@ -292,7 +292,7 @@ namespace PasPasPas.Typings.Common {
                         if (classType != default && (selfType == default || selfType != default && !selfType.InheritsFrom(classType)))
                             flags |= ResolverFlags.SkipProtected;
 
-                        if (self != default && self.Kind == ReferenceKind.RefToSelfClass)
+                        if (self != default && self.SymbolKind == SymbolTypeKind.SelfClass)
                             flags |= ResolverFlags.RequireClassSymbols;
 
                         baseTypeValue = resolver.ResolveTypeByName(baseTypeValue, symRef.Name, 0, flags);
@@ -310,17 +310,17 @@ namespace PasPasPas.Typings.Common {
                             if (reference == null) {
                                 baseTypeValue = ErrorReference;
                             }
-                            else if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
-                                if (reference.Symbol is IRoutineGroup routine) {
+                            else if (reference.SymbolKind == SymbolTypeKind.RoutineGroup) {
+                                if (reference is IRoutineGroup routine) {
                                     routine.ResolveCall(callableRoutines, signature);
                                 }
                             }
-                            else if (reference.Kind == ReferenceKind.RefToType && signature.Count == 1) {
+                            else if (reference.SymbolKind == SymbolTypeKind.TypeDefinition && signature.Count == 1) {
                                 if (signature[0].IsConstant()) {
-                                    baseTypeValue = environment.Runtime.Cast(TypeRegistry, signature[0] as IValue, ((ITypeDefinition)reference.Symbol));
+                                    baseTypeValue = environment.Runtime.Cast(TypeRegistry, signature[0] as IValue, ((ITypeDefinition)reference));
                                 }
                                 else {
-                                    baseTypeValue = TypeRegistry.Cast(signature[0], reference.Symbol);
+                                    baseTypeValue = TypeRegistry.Cast(signature[0], reference);
                                 }
                             }
 

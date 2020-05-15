@@ -86,12 +86,6 @@ namespace PasPasPas.Globals.Types {
         IShortStringType CreateShortStringType(byte length);
 
         /// <summary>
-        ///     create a new unit type
-        /// </summary>
-        /// <returns></returns>
-        IUnitType CreateUnitType(string name);
-
-        /// <summary>
         ///     create a new file type
         /// </summary>
         /// <param name="typeName"></param>

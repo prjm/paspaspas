@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -57,7 +58,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="resultType">result type</param>
         /// <param name="kind">procedure kind</param>
         public Routine AddParameterGroup(RoutineKind kind, ITypeSymbol resultType) {
-            var result = new Routine(this, kind, resultType);
+            var result = new Routine(this, kind, DefiningType.DefiningUnit.TypeRegistry.Runtime.Types.MakeSignature(resultType));
             Items.Add(result);
             return result;
         }
@@ -71,8 +72,8 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="kind">procedure kind</param>
         /// <returns></returns>
         public Routine AddParameterGroup(string parameterName, RoutineKind kind, ITypeSymbol firstParam, ITypeSymbol resultType) {
-            var result = new Routine(this, kind, resultType);
-            result.AddParameter(parameterName).SymbolType = firstParam;
+            var result = new Routine(this, kind, default);
+            result.AddParameter(parameterName, firstParam);
             Items.Add(result);
             return result;
         }
@@ -82,13 +83,13 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="callableRoutines">list of callable routines</param>
         /// <param name="signature">used signature</param>
-        public void ResolveCall(IList<IRoutine> callableRoutines, Signature signature) {
+        public void ResolveCall(IList<IRoutineResult> callableRoutines, ISignature signature) {
             foreach (var paramGroup in Items) {
 
                 if (!paramGroup.Matches(default, signature))
                     continue;
 
-                callableRoutines.Add(paramGroup);
+                callableRoutines.Add(DefiningType.DefiningUnit.TypeRegistry.Runtime.Types.MakeInvocationResult(paramGroup));
             }
         }
 

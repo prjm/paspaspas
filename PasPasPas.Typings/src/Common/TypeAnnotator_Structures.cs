@@ -22,11 +22,11 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(CompilationUnit element) {
-            var unitType = TypeCreator.CreateUnitType(element.SymbolName);
+            var unitType = TypeRegistry.CreateUnitType(element.SymbolName);
             CurrentUnit = element;
             CurrentUnit.TypeInfo = unitType.Reference;
             resolver.OpenScope();
-            resolver.AddToScope(KnownNames.System, ReferenceKind.RefToUnit, CurrentUnit.TypeInfo);
+            resolver.AddToScope(KnownNames.System, unitType.Reference);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace PasPasPas.Typings.Common {
                     variable.Kind = VariableKind.LocalVariable;
                 }
 
-                resolver.AddToScope(varname, ReferenceKind.RefToVariable, variable);
+                resolver.AddToScope(varname, variable);
 
                 if (vardef is FunctionResult fn) {
                     if (fn.Method.TypeValue != default)
@@ -162,14 +162,14 @@ namespace PasPasPas.Typings.Common {
                 var entry = resolver.ResolveByName(default, element.AsScopedName.ToString(), 0, ResolverFlags.None);
                 ITypeDefinition typeId;
 
-                if (entry != default && entry.Kind == ReferenceKind.RefToType) {
-                    element.TypeInfo = entry.Symbol.TypeDefinition.Reference;
+                if (entry != default && entry.SymbolKind == SymbolTypeKind.TypeDefinition) {
+                    element.TypeInfo = entry.TypeDefinition.Reference;
                     return;
                 }
 
                 if (entry != default) {
-                    typeId = entry.Symbol.TypeDefinition;
-                    element.IsConstant = entry.Kind == ReferenceKind.RefToConstant;
+                    typeId = entry.TypeDefinition;
+                    element.IsConstant = entry.IsConstant();
                 }
                 else {
                     typeId = TypeRegistry.SystemUnit.ErrorType;
@@ -236,7 +236,7 @@ namespace PasPasPas.Typings.Common {
             else
                 element.TypeInfo = TypeRegistry.Runtime.Cast(TypeRegistry, inferredType as IValue, declaredType.TypeDefinition);
 
-            resolver.AddToScope(element.SymbolName, ReferenceKind.RefToConstant, element.TypeInfo);
+            resolver.AddToScope(element.SymbolName, element.TypeInfo);
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            var entry = default(Reference);
+            var entry = default(ITypeSymbol);
             for (var i = 0; i < element.Fragments.Count && (i == 0 || entry != default); i++) {
                 var fragment = element.Fragments[i];
 
@@ -292,9 +292,9 @@ namespace PasPasPas.Typings.Common {
                     entry = resolver.ResolveReferenceByName(entry, fragment.Name, fragment.TypeValues.Count);
 
                     if (entry != default) {
-                        var genericType = entry.Symbol.TypeDefinition as IGenericType;
+                        var genericType = entry.TypeDefinition as IGenericType;
                         if (genericType != default)
-                            entry = new Reference(ReferenceKind.RefToBoundGeneric, genericType.Bind(environment.ListPools.GetFixedArray(list), TypeCreator).Reference);
+                            entry = genericType.Bind(environment.ListPools.GetFixedArray(list), TypeCreator).Reference;
                     }
                     else
                         entry = default;
@@ -303,8 +303,8 @@ namespace PasPasPas.Typings.Common {
 
             var typeId = default(ITypeDefinition);
 
-            if (entry != default && (entry.Kind == ReferenceKind.RefToType || entry.Kind == ReferenceKind.RefToBoundGeneric))
-                typeId = entry.Symbol.TypeDefinition;
+            if (entry != default && (entry.SymbolKind == SymbolTypeKind.TypeDefinition || entry.SymbolKind == SymbolTypeKind.BoundGeneric))
+                typeId = entry.TypeDefinition;
             else
                 typeId = TypeRegistry.SystemUnit.ErrorType;
 
@@ -373,7 +373,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             element.TypeInfo = TypeRegistry.Runtime.MakeEnumValue(typeDef, enumRef.Value);
-            resolver.AddToScope(element.SymbolName, ReferenceKind.RefToEnumMember, enumRef);
+            resolver.AddToScope(element.SymbolName, enumRef);
         }
 
         /// <summary>
@@ -438,7 +438,7 @@ namespace PasPasPas.Typings.Common {
             if (element.TypeValue is ITypedSyntaxPart declaredType && declaredType.TypeInfo != null) {
                 element.TypeInfo = element.TypeValue.TypeInfo;
                 if (element.Name.CompleteName != default)
-                    resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, element.TypeInfo, element.Generics?.Count ?? 0);
+                    resolver.AddToScope(element.Name.CompleteName, element.TypeInfo, element.Generics?.Count ?? 0);
             }
         }
 
@@ -601,7 +601,7 @@ namespace PasPasPas.Typings.Common {
                 if (routineGroup == default) {
                     routineGroup = new RoutineGroup(CurrentUnitType, element.SymbolName);
                     unitType.Register(routineGroup);
-                    resolver.AddToScope(element.SymbolName, ReferenceKind.RefToGlobalRoutine, routineGroup);
+                    resolver.AddToScope(element.SymbolName, routineGroup);
                 }
                 routine = (routineGroup as RoutineGroup).AddParameterGroup(element.Kind, NoType.Reference);
                 currentMethodParameters.Push(routine);
@@ -663,8 +663,8 @@ namespace PasPasPas.Typings.Common {
             if (element.Kind == GenericConstraintKind.Identifier) {
                 var reference = resolver.ResolveByName(default, element.SymbolName, 0, ResolverFlags.None);
 
-                if (reference.Kind == ReferenceKind.RefToType) {
-                    element.TypeInfo = reference.Symbol.TypeDefinition.Reference;
+                if (reference.SymbolKind == SymbolTypeKind.TypeDefinition) {
+                    element.TypeInfo = reference.TypeDefinition.Reference;
                     return;
                 }
 
@@ -717,7 +717,7 @@ namespace PasPasPas.Typings.Common {
                 foreach (var symbol in CurrentUnit.InterfaceSymbols) {
 
                     var unitType = CurrentUnitType;
-                    var kind = ReferenceKind.Unknown;
+                    //var kind = ReferenceKind.Unknown;
                     /*var refSymbol = default(IRefSymbol);
 
                     switch (symbol) {
@@ -741,7 +741,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(RequiredUnitName element) {
             var unitType = resolver.ResolveUnit(element.Name.CompleteName);
             if (unitType != default)
-                resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToUnit, unitType.Reference);
+                resolver.AddToScope(element.Name.CompleteName, unitType.Reference);
         }
 
     }

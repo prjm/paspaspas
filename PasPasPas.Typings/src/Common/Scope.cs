@@ -10,8 +10,8 @@ namespace PasPasPas.Typings.Common {
     /// </summary>
     public class Scope {
 
-        private readonly IOrderedDictionary<string, Reference> entries
-            = new OrderedDictionary<string, Reference>(StringComparer.OrdinalIgnoreCase);
+        private readonly IOrderedDictionary<string, ITypeSymbol> entries
+            = new OrderedDictionary<string, ITypeSymbol>(StringComparer.OrdinalIgnoreCase);
 
         private readonly Scope parent;
         private readonly ITypeRegistry typeRegistry;
@@ -60,7 +60,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     list of entries
         /// </summary>
-        public IEnumerable<KeyValuePair<string, Reference>> AllEntriesInOrder {
+        public IEnumerable<KeyValuePair<string, ITypeSymbol>> AllEntriesInOrder {
             get {
                 var scope = this;
                 while (scope != default) {
@@ -94,7 +94,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="name"></param>
         /// <param name="reference"></param>
         /// <returns></returns>
-        public bool TryToResolve(string name, out Reference reference) {
+        public bool TryToResolve(string name, out ITypeSymbol reference) {
             var result = entries.TryGetValue(name, out reference);
 
             if (!result && Parent != default)
@@ -109,7 +109,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="scopeEntry">scope entry</param>
-        public void AddEntry(string name, Reference scopeEntry)
+        public void AddEntry(string name, ITypeSymbol scopeEntry)
             => entries[name] = scopeEntry;
 
     }

@@ -62,6 +62,12 @@ namespace PasPasPas.Runtime.Values.IntValues {
         }
 
         /// <summary>
+        ///     get the integral type definition
+        /// </summary>
+        public IIntegralType IntegralType
+            => TypeDefinition as IIntegralType;
+
+        /// <summary>
         ///     check for equality
         /// </summary>
         /// <param name="obj"></param>

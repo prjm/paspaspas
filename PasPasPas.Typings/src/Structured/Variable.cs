@@ -34,5 +34,10 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public SymbolTypeKind SymbolKind
             => SymbolTypeKind.Variable;
+
+        /// <summary>
+        ///     flags
+        /// </summary>
+        public VariableFlags Flags { get; set; }
     }
 }

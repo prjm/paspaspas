@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
 
@@ -26,6 +27,11 @@ namespace PasPasPas.Globals.Runtime {
         ///     invert all bits of this value (unary complement)
         /// </summary>
         IValue InvertBits();
+
+        /// <summary>
+        ///     integral type
+        /// </summary>
+        IIntegralType IntegralType { get; }
 
     }
 }

@@ -9,6 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="src\Common\TypeAnnotator_Structures.cs~RF399f2640.TMP" />
+      <None Remove="src\Serialization\ReadWriteConstantInt.cs~RF396c4e23.TMP" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\PasPasPas.Global\PasPasPas.Globals.csproj" />
         <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
         <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />

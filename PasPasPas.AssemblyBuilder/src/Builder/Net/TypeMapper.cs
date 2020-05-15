@@ -1,5 +1,4 @@
 ﻿using System;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -27,57 +26,60 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         /// </summary>
         /// <param name="typeRef"></param>
         /// <returns></returns>
-        internal Type Map(IOldTypeReference typeRef) {
+        internal Type Map(ITypeSymbol typeRef) {
 
-            var type = Types.GetTypeByIdOrUndefinedType(typeRef.TypeId);
-            var baseType = TypeBase.ResolveAlias(type);
-            var value = baseType.TypeId;
+            var type = typeRef.TypeDefinition;
+            var baseType = type.ResolveAlias();
+            var value = baseType.BaseType;
 
-            if (value == KnownTypeIds.NoType)
-                return typeof(void);
+            switch (baseType) {
+                case INoType _:
+                    return typeof(void);
 
-            if (value == KnownTypeIds.ShortInt)
-                return typeof(sbyte);
+                case IIntegralType integralType:
+                    switch (integralType.Kind) {
+                        case IntegralTypeKind.ShortInt:
+                            return typeof(sbyte);
+                        case IntegralTypeKind.SmallInt:
+                            return typeof(short);
+                        case IntegralTypeKind.Integer:
+                            return typeof(int);
+                        case IntegralTypeKind.Int64:
+                            return typeof(long);
+                        case IntegralTypeKind.Byte:
+                            return typeof(byte);
+                        case IntegralTypeKind.Word:
+                            return typeof(ushort);
+                        case IntegralTypeKind.Cardinal:
+                            return typeof(uint);
+                        case IntegralTypeKind.UInt64:
+                            return typeof(ulong);
+                    }
+                    break;
 
-            if (value == KnownTypeIds.SmallInt)
-                return typeof(short);
+                case ICharType charType:
+                    switch (charType.Kind) {
+                        case CharTypeKind.AnsiChar:
+                            return typeof(byte);
+                        case CharTypeKind.WideChar:
+                            return typeof(char);
+                    }
+                    break;
 
-            if (value == KnownTypeIds.IntegerType)
-                return typeof(int);
+                case IBooleanType booleanType:
+                    switch (booleanType.Kind) {
+                        case BooleanTypeKind.Boolean:
+                            return typeof(bool);
+                        case BooleanTypeKind.ByteBool:
+                            return typeof(byte);
+                        case BooleanTypeKind.WordBool:
+                            return typeof(ushort);
+                        case BooleanTypeKind.LongBool:
+                            return typeof(uint);
+                    }
+                    break;
 
-            if (value == KnownTypeIds.Int64Type)
-                return typeof(long);
-
-            if (value == KnownTypeIds.ByteType)
-                return typeof(byte);
-
-            if (value == KnownTypeIds.WordType)
-                return typeof(ushort);
-
-            if (value == KnownTypeIds.CardinalType)
-                return typeof(uint);
-
-            if (value == KnownTypeIds.UInt64Type)
-                return typeof(ulong);
-
-            if (value == KnownTypeIds.WideCharType)
-                return typeof(char);
-
-            if (value == KnownTypeIds.AnsiCharType)
-                return typeof(byte);
-
-            if (value == KnownTypeIds.BooleanType)
-                return typeof(bool);
-
-            if (value == KnownTypeIds.ByteBoolType)
-                return typeof(byte);
-
-            if (value == KnownTypeIds.WordBoolType)
-                return typeof(ushort);
-
-            if (value == KnownTypeIds.LongBoolType)
-                return typeof(uint);
-
+            }
 
             throw new InvalidOperationException();
         }
@@ -87,9 +89,9 @@ namespace PasPasPas.AssemblyBuilder.Builder.Net {
         /// </summary>
         /// <param name="returnType"></param>
         /// <returns></returns>
-        internal int Map(Type returnType) {
+        internal ITypeDefinition Map(Type returnType) {
             if (returnType == typeof(void))
-                return KnownTypeIds.NoType;
+                return Types.SystemUnit.NoType;
 
             throw new InvalidOperationException();
         }

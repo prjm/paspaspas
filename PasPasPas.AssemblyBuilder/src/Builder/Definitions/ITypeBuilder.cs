@@ -1,4 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
 
@@ -24,6 +24,6 @@ namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
         /// </summary>
         /// <param name="symbolName">variable name</param>
         /// <param name="typeInfo">type info</param>
-        void DefineClassVariable(string symbolName, IOldTypeReference typeInfo);
+        void DefineClassVariable(string symbolName, ITypeSymbol typeInfo);
     }
 }

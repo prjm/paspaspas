@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
 
@@ -10,7 +11,11 @@ namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
         /// <summary>
         ///     set the return type
         /// </summary>
-        int ReturnType { get; set; }
+        ITypeDefinition ReturnType { get; set; }
+
+        /// <summary>
+        ///     parameters
+        /// </summary>
         IRoutine Parameters { get; set; }
 
         /// <summary>

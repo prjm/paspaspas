@@ -22,7 +22,7 @@ namespace PasPasPas.Typings.Serialization {
         public override uint Kind
             => Constants.TypeRefTag;
 
-        public IOldTypeReference TypeReference { get; private set; }
+        public ITypeSymbol TypeReference { get; private set; }
 
         public TypeRefKind ToTypeRefKind(byte value)
             => (TypeRefKind)value;
@@ -30,7 +30,7 @@ namespace PasPasPas.Typings.Serialization {
         public byte ToByte(TypeRefKind value)
             => (byte)value;
 
-        internal void Initialize(IOldTypeReference value)
+        internal void Initialize(ITypeSymbol value)
             => TypeReference = value;
 
         internal override void ReadData(uint kind, TypeReader typeReader) {
@@ -39,19 +39,19 @@ namespace PasPasPas.Typings.Serialization {
 
             switch (tkr) {
                 case TypeRefKind.Boolean:
-                    ReadBoolean(typeReader, typeId);
+                    ReadBoolean(typeReader, typeReader.Types.SystemUnit.BooleanType);
                     break;
 
                 case TypeRefKind.ByteBool:
-                    ReadByteBool(typeReader, typeId);
+                    ReadByteBool(typeReader, typeReader.Types.SystemUnit.ByteBoolType);
                     break;
 
                 case TypeRefKind.WordBool:
-                    ReadWordBool(typeReader, typeId);
+                    ReadWordBool(typeReader, typeReader.Types.SystemUnit.WordBoolType);
                     break;
 
                 case TypeRefKind.LongBool:
-                    ReadLongBool(typeReader, typeId);
+                    ReadLongBool(typeReader, typeReader.Types.SystemUnit.LongBoolType);
                     break;
 
                 default:
@@ -59,33 +59,33 @@ namespace PasPasPas.Typings.Serialization {
             }
         }
 
-        private void ReadLongBool(TypeReader typeReader, int typeId) {
+        private void ReadLongBool(TypeReader typeReader, ITypeDefinition typeId) {
             var value = typeReader.ReadUint();
             TypeReference = typeReader.Types.Runtime.Booleans.ToLongBool(value, typeId);
         }
 
-        private void ReadWordBool(TypeReader typeReader, int typeId) {
+        private void ReadWordBool(TypeReader typeReader, ITypeDefinition typeId) {
             var value = typeReader.ReadUshort();
             TypeReference = typeReader.Types.Runtime.Booleans.ToWordBool(value, typeId);
         }
 
-        private void ReadByteBool(TypeReader typeReader, int typeId) {
+        private void ReadByteBool(TypeReader typeReader, ITypeDefinition typeId) {
             var value = typeReader.ReadByte();
             TypeReference = typeReader.Types.Runtime.Booleans.ToByteBool(value, typeId);
         }
 
-        private void ReadBoolean(TypeReader typeReader, int typeId) {
+        private void ReadBoolean(TypeReader typeReader, ITypeDefinition typeId) {
             var value = typeReader.ReadByte();
             TypeReference = typeReader.Types.Runtime.Booleans.ToBoolean(value != 0, typeId);
         }
 
         internal override void WriteData(TypeWriter typeWriter) {
 
-            if (TypeReference.ReferenceKind != TypeReferenceKind.ConstantValue)
+            if (TypeReference.SymbolKind != SymbolTypeKind.Constant)
                 throw new TypeReaderWriteException();
 
             var trk = GetTypeRefKind(typeWriter);
-            var typeId = (uint)TypeReference.TypeId;
+            var typeId = 0u;
             typeWriter.WriteByte(ToByte(trk));
             typeWriter.WriteUint(typeId);
 
@@ -133,7 +133,7 @@ namespace PasPasPas.Typings.Serialization {
         }
 
         private TypeRefKind GetTypeRefKind(TypeWriter typeWriter) {
-            var typeDef = typeWriter.RegisteredTypes.GetTypeByIdOrUndefinedType(TypeReference.TypeId);
+            var typeDef = TypeReference.TypeDefinition;
 
             switch (typeDef) {
                 case IBooleanType booleanType:

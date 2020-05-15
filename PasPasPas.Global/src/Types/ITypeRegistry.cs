@@ -62,5 +62,11 @@ namespace PasPasPas.Globals.Types {
         /// <param name="toType"></param>
         /// <returns></returns>
         ITypeSymbol Cast(ITypeSymbol fromType, ITypeSymbol toType);
+
+        /// <summary>
+        ///     create a new unit type
+        /// </summary>
+        /// <returns></returns>
+        IUnitType CreateUnitType(string name);
     }
 }

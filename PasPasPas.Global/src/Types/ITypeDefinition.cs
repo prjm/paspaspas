@@ -40,7 +40,7 @@
         /// <summary>
         ///     type reference
         /// </summary>
-        ITypeSymbol Reference { get; }
+        INamedTypeSymbol Reference { get; }
 
     }
 

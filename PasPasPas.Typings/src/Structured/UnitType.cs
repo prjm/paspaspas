@@ -12,8 +12,8 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     symbols
         /// </summary>
-        private readonly List<ITypeSymbol>
-            symbols = new List<ITypeSymbol>();
+        private readonly List<INamedTypeSymbol>
+            symbols = new List<INamedTypeSymbol>();
 
         /// <summary>
         ///     create a new unit type
@@ -43,7 +43,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     defined symbols
         /// </summary>
-        public IEnumerable<ITypeSymbol> Symbols
+        public IEnumerable<INamedTypeSymbol> Symbols
             => symbols;
 
         /// <summary>
@@ -65,7 +65,18 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public void Register(ITypeSymbol symbol)
+        public void Register(INamedTypeSymbol symbol)
             => symbols.Add(symbol);
+
+        public bool TryToResolve(string name, out INamedTypeSymbol reference) {
+            foreach (var item in Symbols) {
+                if (string.Equals(item.Name, name, System.StringComparison.OrdinalIgnoreCase)) { }
+                reference = item;
+                return true;
+            }
+
+            reference = default;
+            return false;
+        }
     }
 }

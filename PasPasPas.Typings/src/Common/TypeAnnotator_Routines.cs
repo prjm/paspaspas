@@ -120,7 +120,7 @@ namespace PasPasPas.Typings.Common {
             var parameters = routine.Parameters;
             if (parameters != default) {
                 foreach (var parameter in parameters) {
-                    resolver.AddToScope(parameter.Name, ReferenceKind.RefToParameter, parameter);
+                    resolver.AddToScope(parameter.Name, parameter);
                 }
             }
 
@@ -128,10 +128,10 @@ namespace PasPasPas.Typings.Common {
                 var baseTypeDef = routine.RoutineGroup.DefiningType as IStructuredType;
 
                 if (baseTypeDef != default && !routine.IsClassItem())
-                    resolver.AddToScope("Self", ReferenceKind.RefToSelf, baseTypeDef.Reference);
+                    resolver.AddToScope("Self", baseTypeDef.Reference);
 
                 if (baseTypeDef != default && routine.IsClassItem()) {
-                    resolver.AddToScope("Self", ReferenceKind.RefToSelfClass, baseTypeDef.Reference);
+                    resolver.AddToScope("Self", baseTypeDef.Reference);
                 }
             }
         }
