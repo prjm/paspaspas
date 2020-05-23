@@ -223,5 +223,185 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         ITypeDefinition GenericConstructorConstraint { get; }
 
+        /// <summary>
+        ///     char type
+        /// </summary>
+        IAliasedType CharType { get; }
+
+        /// <summary>
+        ///     ucs2 char type
+        /// </summary>
+        IAliasedType Ucs2CharType { get; }
+
+        /// <summary>
+        ///     ucs4 char type
+        /// </summary>
+        IAliasedType Ucs4CharType { get; }
+
+        /// <summary>
+        ///     pointer to byte type
+        /// </summary>
+        IPointerType PByteType { get; }
+
+        /// <summary>
+        ///     pointer to short int type
+        /// </summary>
+        IPointerType PShortIntType { get; }
+
+        /// <summary>
+        ///     pointer to word type
+        /// </summary>
+        IPointerType PWordType { get; }
+
+        /// <summary>
+        ///     pointer to small int type
+        /// </summary>
+        IPointerType PSmallIntType { get; }
+
+        /// <summary>
+        ///     pointer to cardinal type
+        /// </summary>
+        IPointerType PCardinalType { get; }
+
+        /// <summary>
+        ///     pointer longword type
+        /// </summary>
+        IPointerType PLongwordType { get; }
+
+        /// <summary>
+        ///       pointer to fixed uint type
+        /// </summary>
+        IPointerType PFixedUIntType { get; }
+
+        /// <summary>
+        ///     pointer to integer type
+        /// </summary>
+        IPointerType PIntegerType { get; }
+
+        /// <summary>
+        ///     pointer to long int type
+        /// </summary>
+        IPointerType PLongIntType { get; }
+
+        /// <summary>
+        ///     pointer to int64
+        /// </summary>
+        IPointerType PInt64Type { get; }
+
+        /// <summary>
+        ///     pointer to uint64
+        /// </summary>
+        IPointerType PUInt64Type { get; }
+
+        /// <summary>
+        ///     pointer to fixed integer type
+        /// </summary>
+        IPointerType PFixedIntType { get; }
+
+        /// <summary>
+        ///     pointer to native uint
+        /// </summary>
+        IPointerType PNativeUIntType { get; }
+
+        /// <summary>
+        ///     pointer to native int type
+        /// </summary>
+        IPointerType PNativeIntType { get; }
+
+
+        /// <summary>
+        ///     pointer to single type
+        /// </summary>
+        IPointerType PSingleType { get; }
+
+        /// <summary>
+        ///     pointer to double type
+        /// </summary>
+        IPointerType PDoubleType { get; }
+
+        /// <summary>
+        ///     pointer to extended type
+        /// </summary>
+        IPointerType PExtendedType { get; }
+
+        /// <summary>
+        ///     pointer to ANSI char type
+        /// </summary>
+        IPointerType PAnsiCharType { get; }
+
+        /// <summary>
+        ///     pointer to currency type
+        /// </summary>
+        IPointerType PCurrency { get; }
+
+        /// <summary>
+        ///     pointer to pointer type
+        /// </summary>
+        IPointerType PPointer { get; }
+
+        /// <summary>
+        ///     pointer to word boolean type
+        /// </summary>
+        IPointerType PWordBoolType { get; }
+
+        /// <summary>
+        ///     pointer to long boolean type
+        /// </summary>
+        IPointerType PLongBoolType { get; }
+
+        /// <summary>
+        ///     pointer to boolean type
+        /// </summary>
+        IPointerType PBooleanType { get; }
+
+        /// <summary>
+        ///     pointer to byte boolean type
+        /// </summary>
+        IPointerType PByteBoolType { get; }
+
+        /// <summary>
+        ///     pointer to wide string type
+        /// </summary>
+        IPointerType PWideStringType { get; }
+
+        /// <summary>
+        ///     pointer to short string type
+        /// </summary>
+        IPointerType PShortStringType { get; }
+
+        /// <summary>
+        ///     pointer to ANSI string type
+        /// </summary>
+        IPointerType PAnsiStringType { get; }
+
+        /// <summary>
+        ///     real type
+        /// </summary>
+        IAliasedType RealType { get; }
+
+        /// <summary>
+        ///     pointer to string type
+        /// </summary>
+        IAliasedType PStringType { get; }
+
+        /// <summary>
+        ///     pointer to char type
+        /// </summary>
+        IAliasedType PCharType { get; }
+
+        /// <summary>
+        ///     long word type
+        /// </summary>
+        IAliasedType LongWordType { get; }
+
+        /// <summary>
+        ///     comp type
+        /// </summary>
+        IRealType CompType { get; }
+
+        /// <summary>
+        ///     real48 type
+        /// </summary>
+        IRealType Real48Type { get; }
     }
 }

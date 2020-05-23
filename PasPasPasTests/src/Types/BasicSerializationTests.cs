@@ -1,13 +1,12 @@
 ﻿using System.IO;
+using System.Linq;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Runtime.Values;
 using PasPasPas.Typings.Serialization;
 using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
-using KTI = PasPasPas.Globals.Types.KnownTypeIds;
 using PK = PasPasPas.Globals.Types.RoutineKind;
 
 namespace PasPasPasTests.Types {
@@ -425,9 +424,9 @@ namespace PasPasPasTests.Types {
             using (var stream = new MemoryStream())
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
-                var nt = env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType);
-                var d = new RoutineGroup(env.TypeRegistry, "_");
-                var pg = new Routine(d, PK.Procedure, nt);
+                var nt = env.TypeRegistry.SystemUnit.NoType;
+                var d = new RoutineGroup(env.TypeRegistry.SystemUnit, "_");
+                var pg = new Routine(d, PK.Procedure, env.TypeRegistry.Runtime.Types.MakeSignature(nt.Reference));
                 var t = new ParameterGroupTag();
 
                 t.Initialize(pg);
@@ -435,7 +434,7 @@ namespace PasPasPasTests.Types {
 
                 stream.Seek(0, SeekOrigin.Begin);
                 t = new ParameterGroupTag();
-                d = new RoutineGroup(env.TypeRegistry, "_");
+                d = new RoutineGroup(env.TypeRegistry.SystemUnit, "_");
                 r.ReadTag(t);
                 t.AddToRoutine(d);
 
@@ -454,10 +453,11 @@ namespace PasPasPasTests.Types {
             using (var stream = new MemoryStream())
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
-                var b1 = rt.ToBoolean(true, KTI.BooleanType);
-                var b2 = rt.ToByteBool(2, KTI.ByteBoolType);
-                var b3 = rt.ToWordBool(4433, KTI.WordBoolType);
-                var b4 = rt.ToLongBool(23, KTI.LongBoolType);
+                var su = env.TypeRegistry.SystemUnit;
+                var b1 = rt.ToBoolean(true, su.BooleanType);
+                var b2 = rt.ToByteBool(2, su.ByteBoolType);
+                var b3 = rt.ToWordBool(4433, su.WordBoolType);
+                var b4 = rt.ToLongBool(23, su.LongBoolType);
                 var t = new TypeRefTag();
 
                 foreach (var b in new[] { b1, b2, b3, b4 }) {
@@ -483,10 +483,11 @@ namespace PasPasPasTests.Types {
             using (var stream = new MemoryStream())
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
-                var u = env.TypeRegistry.GetTypeByIdOrUndefinedType(KTI.SystemUnit) as UnitType;
-                var rr = u.Symbols["writeln"].Symbol as IRoutineGroup;
-                var parms = new Routine(rr, PK.Procedure, env.TypeRegistry.MakeTypeInstanceReference(KTI.NoType));
-                var callInfo = new IntrinsicInvocationResult(rr, parms);
+                var u = env.TypeRegistry.SystemUnit;
+                var rr = u.Symbols.Where(tx => string.Equals(tx.Name, "writeln", System.StringComparison.OrdinalIgnoreCase)) as IRoutineGroup;
+                var sgn = env.TypeRegistry.Runtime.Types.MakeSignature(env.TypeRegistry.SystemUnit.NoType.Reference);
+                var parms = new Routine(rr, PK.Procedure, sgn);
+                var callInfo = env.Runtime.Types.MakeInvocationResultFromIntrinsic(rr, env.TypeRegistry.Runtime.Types.MakeSignature(env.TypeRegistry.SystemUnit.NoType.Reference));
                 var op = new OpCode(OpCodeId.Call, parms.Encode());
                 var t = new OpCodeTag();
                 t.Initialize(op);
@@ -497,7 +498,7 @@ namespace PasPasPasTests.Types {
                 r.ReadTag(t);
 
                 Assert.AreEqual(t.OpCode.Id, OpCodeId.Call);
-                var c = new Routine(t.OpCode.Params, env.TypeRegistry);
+                var c = new Routine(rr, PK.Procedure, sgn); // .. t.OpCode.Params,
                 Assert.AreEqual(c.RoutineGroup.RoutineId, IntrinsicRoutineId.WriteLn);
             }
         }

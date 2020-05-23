@@ -83,17 +83,17 @@ namespace PasPasPasTests.Types {
             Assert.IsNotNull(firstParam);
             Assert.IsNotNull(firstParam.TypeInfo);
 
-            var foundTypeId = default(int);
+            var foundTypeId = default(ITypeDefinition);
             var foundTypeName = "";
 
-            if (resolveSubrange && env.TypeRegistry.GetTypeByIdOrUndefinedType(firstParam.TypeInfo.TypeId) is PasPasPas.Typings.Simple.SubrangeType sr) {
-                foundTypeId = sr.BaseType.TypeId;
-                var type = env.TypeRegistry.GetTypeByIdOrUndefinedType(foundTypeId);
+            if (resolveSubrange && firstParam.TypeInfo.TypeDefinition is ISubrangeType sr) {
+                foundTypeId = sr.SubrangeOfType;
+                var type = foundTypeId;
                 foundTypeName = type.ToString();
             }
             else {
-                foundTypeId = firstParam.TypeInfo.TypeId;
-                var type = env.TypeRegistry.GetTypeByIdOrUndefinedType(foundTypeId);
+                foundTypeId = firstParam.TypeInfo.TypeDefinition;
+                var type = foundTypeId;
                 foundTypeName = type.ToString();
             }
 
@@ -111,11 +111,11 @@ namespace PasPasPasTests.Types {
         /// <param name="expression">expression</param>
         /// <param name="typeId">type id to find</param>
         /// <param name="decls">declarations</param>
-        protected void AssertExprType(string expression, int typeId, string decls = "") {
+        protected void AssertExprType(string expression, ITypeDefinition typeId, string decls = "") {
             void tester(IExpression firstParam) {
                 Assert.IsNotNull(firstParam);
                 Assert.IsNotNull(firstParam.TypeInfo);
-                Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
+                Assert.AreEqual(typeId, firstParam.TypeInfo.TypeDefinition);
             }
 
             AssertExprType(expression, decls, tester);
@@ -152,7 +152,7 @@ namespace PasPasPasTests.Types {
         /// <param name="typeId"></param>
         /// <param name="completeSource"></param>
         /// <param name="kind"></param>
-        protected void AssertStatementType(string statemnt, IOldTypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType, string completeSource = null, TypeReferenceKind kind = TypeReferenceKind.Undefined) {
+        protected void AssertStatementType(string statemnt, IValue value, string decls = "", ITypeDefinition typeId = default, string completeSource = null, SymbolTypeKind kind = SymbolTypeKind.Undefined) {
             var file = "SimpleExpr";
             var program = completeSource ?? $"program {file};{decls} begin {statemnt}; end. ";
 
@@ -178,11 +178,11 @@ namespace PasPasPasTests.Types {
             if (value != default)
                 Assert.AreEqual(value, e.TypeInfo);
 
-            if (kind != TypeReferenceKind.Undefined)
-                Assert.AreEqual(kind, e.TypeInfo.ReferenceKind);
+            if (kind != SymbolTypeKind.Undefined)
+                Assert.AreEqual(kind, e.TypeInfo.SymbolKind);
 
-            if (typeId != KnownTypeIds.UnspecifiedType)
-                Assert.AreEqual(typeId, e.TypeInfo.TypeId);
+            if (typeId != default)
+                Assert.AreEqual(typeId, e.TypeInfo.TypeDefinition);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace PasPasPasTests.Types {
         /// <param name="isConstant"></param>
         /// <param name="completeSource"></param>
         /// <param name="decls">addition declarations</param>
-        protected void AssertExprValue(string expression, IOldTypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType, bool isConstant = true, string completeSource = null) {
+        protected void AssertExprValue(string expression, IValue value, string decls = "", ITypeDefinition typeId = default, bool isConstant = true, string completeSource = null) {
             var file = "SimpleExpr";
             var program = completeSource ?? $"program {file};{decls} begin Writeln({expression}); end. ";
 
@@ -212,18 +212,24 @@ namespace PasPasPasTests.Types {
             if (isConstant)
                 Assert.IsTrue(firstParam.TypeInfo.IsConstant());
 
-            if (value.ReferenceKind == TypeReferenceKind.InvocationResult) {
+            if (value.SymbolKind == SymbolTypeKind.InvocationResult) {
                 var r = firstParam.TypeInfo;
-                Assert.AreEqual(value.TypeKind, r.TypeKind);
-                Assert.AreEqual(value.ReferenceKind, r.ReferenceKind);
-                Assert.AreEqual(value.TypeId, r.TypeId);
+                Assert.AreEqual(value.GetBaseType(), r.GetBaseType());
+                Assert.AreEqual(value.SymbolKind, r.SymbolKind);
+                Assert.AreEqual(value.TypeDefinition, r.TypeDefinition);
+            }
+            else if (value.SymbolKind == SymbolTypeKind.IntrinsicRoutineResult) {
+                var r = firstParam.TypeInfo;
+                Assert.AreEqual(value.GetBaseType(), r.GetBaseType());
+                Assert.AreEqual(value.SymbolKind, r.SymbolKind);
+                Assert.AreEqual(value.TypeDefinition, r.TypeDefinition);
             }
             else {
                 Assert.AreEqual(value, firstParam.TypeInfo);
             }
 
-            if (typeId != KnownTypeIds.UnspecifiedType)
-                Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
+            if (typeId != default)
+                Assert.AreEqual(typeId, firstParam.TypeInfo.TypeDefinition);
         }
 
 
@@ -235,26 +241,26 @@ namespace PasPasPasTests.Types {
         /// <param name="intSize"></param>
         /// <param name="typeSize"></param>
         /// <param name="typeKind"></param>
-        protected void AssertDeclType(string declaration, int typeId = KnownTypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
+        protected void AssertDeclType(string declaration, ITypeDefinition typeId = default, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, BaseType typeKind = BaseType.Unkown) {
 
             void tester(ITypeDefinition def) {
 
-                if (typeId != KnownTypeIds.UnspecifiedType)
-                    Assert.AreEqual(typeId, def.TypeId);
+                if (typeId != def)
+                    Assert.AreEqual(typeId, def);
 
-                if (typeKind != CommonTypeKind.UnknownType)
-                    Assert.AreEqual(typeKind, def.TypeKind);
+                if (typeKind != BaseType.Unkown)
+                    Assert.AreEqual(typeKind, def.BaseType);
 
                 if (typeSize > 0) {
                     IFixedSizeType sizedType;
-                    if (def is PasPasPas.Typings.Common.TypeAlias alias) {
-                        sizedType = alias.BaseType as IFixedSizeType;
+                    if (def is IAliasedType alias) {
+                        sizedType = alias.BaseTypeDefinition as IFixedSizeType;
                     }
                     else {
                         sizedType = def as IFixedSizeType;
                     }
                     Assert.IsNotNull(sizedType);
-                    Assert.AreEqual(typeSize, sizedType.BitSize);
+                    Assert.AreEqual(typeSize, sizedType.TypeSizeInBytes);
                 }
 
             }
@@ -271,26 +277,26 @@ namespace PasPasPasTests.Types {
         /// <param name="intSize"></param>
         /// <param name="typeSize"></param>
         /// <param name="typeKind"></param>
-        protected void AssertDeclTypeDef(string declaration, string expression = "x", int typeId = KnownTypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
+        protected void AssertDeclTypeDef(string declaration, string expression = "x", ITypeDefinition typeId = default, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, BaseType typeKind = BaseType.Unkown) {
 
             bool tester(ITypeDefinition def) {
 
-                if (typeId != KnownTypeIds.UnspecifiedType)
-                    Assert.AreEqual(typeId, def.TypeId);
+                if (typeId != def)
+                    Assert.AreEqual(typeId, def);
 
-                if (typeKind != CommonTypeKind.UnknownType)
-                    Assert.AreEqual(typeKind, def.TypeKind);
+                if (typeKind != BaseType.Unkown)
+                    Assert.AreEqual(typeKind, def.BaseType);
 
                 if (typeSize > 0) {
                     IFixedSizeType sizedType;
-                    if (def is PasPasPas.Typings.Common.TypeAlias alias) {
-                        sizedType = alias.BaseType as IFixedSizeType;
+                    if (def is IAliasedType alias) {
+                        sizedType = alias.BaseTypeDefinition as IFixedSizeType;
                     }
                     else {
                         sizedType = def as IFixedSizeType;
                     }
                     Assert.IsNotNull(sizedType);
-                    Assert.AreEqual(typeSize, sizedType.BitSize);
+                    Assert.AreEqual(typeSize, sizedType.TypeSizeInBytes);
                 }
 
                 return true;
@@ -329,7 +335,7 @@ namespace PasPasPasTests.Types {
 
             var v = firstParam.TypeInfo;
             Assert.IsNotNull(v);
-            var t = env.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as T;
+            var t = v.TypeDefinition as T;
             Assert.IsNotNull(t);
             Assert.IsTrue(test(t));
         }
@@ -345,7 +351,7 @@ namespace PasPasPasTests.Types {
             bool test(ITypeDefinition l, ITypeDefinition r) {
                 Assert.IsNotNull(l);
                 Assert.IsNotNull(r);
-                var canBeAssigned = l.CanBeAssignedFrom(r);
+                var canBeAssigned = l.CanBeAssignedFromType(r);
                 return compat && canBeAssigned || !compat && !canBeAssigned;
             }
 
@@ -388,8 +394,8 @@ namespace PasPasPasTests.Types {
             var r = t != null && t.Expressions.Count > 1 ? t.Expressions[1].TypeInfo : null;
             Assert.IsNotNull(t);
 
-            var lt = env.TypeRegistry.GetTypeByIdOrUndefinedType(l.TypeId);
-            var rt = env.TypeRegistry.GetTypeByIdOrUndefinedType(r.TypeId);
+            var lt = l.TypeDefinition;
+            var rt = r.TypeDefinition;
 
             Assert.IsTrue(test(lt, rt));
         }
@@ -409,7 +415,7 @@ namespace PasPasPasTests.Types {
             firstParam = EvaluateExpressionType(file, program, searchfunction, intSize, out var env) as IExpression;
 
             Assert.IsNotNull(firstParam.TypeInfo);
-            var ti = env.TypeRegistry.GetTypeByIdOrUndefinedType(firstParam.TypeInfo.TypeId);
+            var ti = firstParam.TypeInfo.TypeDefinition;
             test(ti);
         }
 

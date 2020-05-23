@@ -1,7 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Runtime.Values.BooleanValues;
-using PasPasPas.Runtime.Values.IntValues;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Runtime {
@@ -11,6 +9,9 @@ namespace PasPasPasTests.Runtime {
     /// </summary>
     public class RuntimeValuesTest : CommonTest {
 
+        private ISystemUnit KnownTypeIds
+            => CreateEnvironment().TypeRegistry.SystemUnit;
+
         /// <summary>
         ///     test integer values
         /// </summary>
@@ -19,51 +20,51 @@ namespace PasPasPasTests.Runtime {
 
             // 1 byte signed
             Assert.AreEqual("127", GetIntegerValue((sbyte)127).ToString());
-            Assert.AreEqual(KnownTypeIds.ShortInt, GetIntegerValue((sbyte)127).TypeId);
+            Assert.AreEqual(KnownTypeIds.ShortIntType, GetIntegerValue((sbyte)127).TypeDefinition);
             Assert.AreEqual("-128", GetIntegerValue((sbyte)-128).ToString());
-            Assert.AreEqual(KnownTypeIds.ShortInt, GetIntegerValue((sbyte)-128).TypeId);
+            Assert.AreEqual(KnownTypeIds.ShortIntType, GetIntegerValue((sbyte)-128).TypeDefinition);
 
             // 1 byte unsigned
             Assert.AreEqual("0", GetIntegerValue((byte)0).ToString());
-            Assert.AreEqual(KnownTypeIds.ShortInt, GetIntegerValue((byte)0).TypeId);
+            Assert.AreEqual(KnownTypeIds.ShortIntType, GetIntegerValue((byte)0).TypeDefinition);
             Assert.AreEqual("255", GetIntegerValue((byte)255).ToString());
-            Assert.AreEqual(KnownTypeIds.ByteType, GetIntegerValue((byte)255).TypeId);
+            Assert.AreEqual(KnownTypeIds.ByteType, GetIntegerValue((byte)255).TypeDefinition);
 
             // 2 byte signed
             Assert.AreEqual("-32768", GetIntegerValue((short)-32768).ToString());
-            Assert.AreEqual(KnownTypeIds.SmallInt, GetIntegerValue((short)-32768).TypeId);
+            Assert.AreEqual(KnownTypeIds.SmallIntType, GetIntegerValue((short)-32768).TypeDefinition);
             Assert.AreEqual("32767", GetIntegerValue((short)32767).ToString());
-            Assert.AreEqual(KnownTypeIds.SmallInt, GetIntegerValue((short)32767).TypeId);
+            Assert.AreEqual(KnownTypeIds.SmallIntType, GetIntegerValue((short)32767).TypeDefinition);
 
             // 2 byte unsigned
             Assert.AreEqual("0", GetIntegerValue((byte)0).ToString());
-            Assert.AreEqual(KnownTypeIds.ShortInt, GetIntegerValue((ushort)0).TypeId);
+            Assert.AreEqual(KnownTypeIds.ShortIntType, GetIntegerValue((ushort)0).TypeDefinition);
             Assert.AreEqual("65535", GetIntegerValue((ushort)65535).ToString());
-            Assert.AreEqual(KnownTypeIds.WordType, GetIntegerValue((ushort)65535).TypeId);
+            Assert.AreEqual(KnownTypeIds.WordType, GetIntegerValue((ushort)65535).TypeDefinition);
 
             // 4 byte signed
             Assert.AreEqual("-2147483648", GetIntegerValue(-2147483648).ToString());
-            Assert.AreEqual(KnownTypeIds.IntegerType, GetIntegerValue(-2147483648).TypeId);
+            Assert.AreEqual(KnownTypeIds.IntegerType, GetIntegerValue(-2147483648).TypeDefinition);
             Assert.AreEqual("2147483647", GetIntegerValue(2147483647).ToString());
-            Assert.AreEqual(KnownTypeIds.IntegerType, GetIntegerValue(2147483647).TypeId);
+            Assert.AreEqual(KnownTypeIds.IntegerType, GetIntegerValue(2147483647).TypeDefinition);
 
             // 4 byte unsigned
             Assert.AreEqual("0", GetIntegerValue((uint)0).ToString());
-            Assert.AreEqual(KnownTypeIds.ShortInt, GetIntegerValue((uint)0).TypeId);
+            Assert.AreEqual(KnownTypeIds.ShortIntType, GetIntegerValue((uint)0).TypeDefinition);
             Assert.AreEqual("4294967295", GetIntegerValue(4294967295).ToString());
-            Assert.AreEqual(KnownTypeIds.CardinalType, GetIntegerValue(4294967295).TypeId);
+            Assert.AreEqual(KnownTypeIds.CardinalType, GetIntegerValue(4294967295).TypeDefinition);
 
             // 8 byte signed
             Assert.AreEqual("-9223372036854775808", GetIntegerValue(-9223372036854775808).ToString());
-            Assert.AreEqual(KnownTypeIds.Int64Type, GetIntegerValue(-9223372036854775808).TypeId);
+            Assert.AreEqual(KnownTypeIds.Int64Type, GetIntegerValue(-9223372036854775808).TypeDefinition);
             Assert.AreEqual("9223372036854775807", GetIntegerValue(9223372036854775807).ToString());
-            Assert.AreEqual(KnownTypeIds.Int64Type, GetIntegerValue(9223372036854775807).TypeId);
+            Assert.AreEqual(KnownTypeIds.Int64Type, GetIntegerValue(9223372036854775807).TypeDefinition);
 
             // 8 byte unsigned
             Assert.AreEqual("0", GetIntegerValue((ulong)0).ToString());
-            Assert.AreEqual(KnownTypeIds.ShortInt, GetIntegerValue((ulong)0).TypeId);
+            Assert.AreEqual(KnownTypeIds.ShortIntType, GetIntegerValue((ulong)0).TypeDefinition);
             Assert.AreEqual("18446744073709551615", GetIntegerValue(18446744073709551615).ToString());
-            Assert.AreEqual(KnownTypeIds.UInt64Type, GetIntegerValue(18446744073709551615).TypeId);
+            Assert.AreEqual(KnownTypeIds.UInt64Type, GetIntegerValue(18446744073709551615).TypeDefinition);
         }
 
         /// <summary>
@@ -71,34 +72,34 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerNegation() {
-            string n(IOldTypeReference v, int typeKind) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string n(IValue v, ITypeDefinition typeKind) {
+                var c = CreateEnvironment().TypeRegistry.Runtime.Integers;
                 var vv = c.Negate(v);
-                Assert.AreEqual(typeKind, vv.TypeId);
+                Assert.AreEqual(typeKind, vv.TypeDefinition);
                 return vv.ToString();
             }
 
             // 1 byte
-            Assert.AreEqual("0", n(GetIntegerValue((sbyte)0), KnownTypeIds.ShortInt));
-            Assert.AreEqual("-127", n(GetIntegerValue((sbyte)127), KnownTypeIds.ShortInt));
-            Assert.AreEqual("127", n(GetIntegerValue((sbyte)-127), KnownTypeIds.ShortInt));
+            Assert.AreEqual("0", n(GetIntegerValue((sbyte)0), KnownTypeIds.ShortIntType));
+            Assert.AreEqual("-127", n(GetIntegerValue((sbyte)127), KnownTypeIds.ShortIntType));
+            Assert.AreEqual("127", n(GetIntegerValue((sbyte)-127), KnownTypeIds.ShortIntType));
             Assert.AreEqual("128", n(GetIntegerValue((sbyte)-128), KnownTypeIds.ByteType));
-            Assert.AreEqual("-128", n(GetIntegerValue((byte)128), KnownTypeIds.ShortInt));
-            Assert.AreEqual("-255", n(GetIntegerValue((byte)255), KnownTypeIds.SmallInt));
+            Assert.AreEqual("-128", n(GetIntegerValue((byte)128), KnownTypeIds.ShortIntType));
+            Assert.AreEqual("-255", n(GetIntegerValue((byte)255), KnownTypeIds.SmallIntType));
             Assert.AreEqual("255", n(GetIntegerValue((short)-255), KnownTypeIds.ByteType));
 
             // 2 byte
-            Assert.AreEqual("0", n(GetIntegerValue((short)0), KnownTypeIds.ShortInt));
-            Assert.AreEqual("-32767", n(GetIntegerValue((short)32767), KnownTypeIds.SmallInt));
-            Assert.AreEqual("32767", n(GetIntegerValue((short)-32767), KnownTypeIds.SmallInt));
+            Assert.AreEqual("0", n(GetIntegerValue((short)0), KnownTypeIds.ShortIntType));
+            Assert.AreEqual("-32767", n(GetIntegerValue((short)32767), KnownTypeIds.SmallIntType));
+            Assert.AreEqual("32767", n(GetIntegerValue((short)-32767), KnownTypeIds.SmallIntType));
             Assert.AreEqual("32768", n(GetIntegerValue((short)-32768), KnownTypeIds.WordType));
-            Assert.AreEqual("-32768", n(GetIntegerValue((ushort)32768), KnownTypeIds.SmallInt));
+            Assert.AreEqual("-32768", n(GetIntegerValue((ushort)32768), KnownTypeIds.SmallIntType));
             Assert.AreEqual("-65535", n(GetIntegerValue((ushort)65535), KnownTypeIds.IntegerType));
             Assert.AreEqual("65535", n(GetIntegerValue(-65535), KnownTypeIds.WordType));
             Assert.AreEqual("32769", n(GetIntegerValue(-32769), KnownTypeIds.WordType));
 
             // 4 byte
-            Assert.AreEqual("0", n(GetIntegerValue(0), KnownTypeIds.ShortInt));
+            Assert.AreEqual("0", n(GetIntegerValue(0), KnownTypeIds.ShortIntType));
             Assert.AreEqual("-2147483647", n(GetIntegerValue(2147483647), KnownTypeIds.IntegerType));
             Assert.AreEqual("2147483647", n(GetIntegerValue(-2147483647), KnownTypeIds.IntegerType));
             Assert.AreEqual("2147483648", n(GetIntegerValue(-2147483648), KnownTypeIds.CardinalType));
@@ -108,7 +109,7 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("2147483649", n(GetIntegerValue(-2147483649), KnownTypeIds.CardinalType));
 
             // 8 byte
-            Assert.AreEqual("0", n(GetIntegerValue((long)0), KnownTypeIds.ShortInt));
+            Assert.AreEqual("0", n(GetIntegerValue((long)0), KnownTypeIds.ShortIntType));
             Assert.AreEqual("-9223372036854775807", n(GetIntegerValue(9223372036854775807), KnownTypeIds.Int64Type));
             Assert.AreEqual("9223372036854775807", n(GetIntegerValue(-9223372036854775807), KnownTypeIds.Int64Type));
             Assert.AreEqual("9223372036854775808", n(GetIntegerValue(-9223372036854775808), KnownTypeIds.UInt64Type));
@@ -122,11 +123,11 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerAddition() {
-            string a(IOldTypeReference v1, IOldTypeReference v2) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string a(IValue v1, IValue v2) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.Add(v1, v2);
                 var vv2 = c.Add(v2, v1);
-                Assert.AreEqual(vv1.TypeId, vv2.TypeId);
+                Assert.AreEqual(vv1.TypeDefinition, vv2.TypeDefinition);
                 Assert.AreEqual(vv1.ToString(), vv2.ToString());
                 return vv1.ToString();
             }
@@ -151,8 +152,8 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerSubtraction() {
-            string s(IOldTypeReference v1, IOldTypeReference v2) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string s(IValue v1, IValue v2) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.Subtract(v1, v2);
                 return vv1.ToString();
             }
@@ -177,8 +178,8 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerMultiplication() {
-            string m(IOldTypeReference v1, IOldTypeReference v2) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string m(IValue v1, IValue v2) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.Multiply(v1, v2);
                 return vv1.ToString();
             }
@@ -198,8 +199,8 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerDivision() {
-            string d(IOldTypeReference v1, IOldTypeReference v2) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string d(IValue v1, IValue v2) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.Divide(v1, v2);
                 return vv1.ToString();
             }
@@ -219,8 +220,8 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerModulo() {
-            string m(IOldTypeReference v1, IOldTypeReference v2) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string m(IValue v1, IValue v2) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.Modulo(v1, v2);
                 return vv1.ToString();
             }
@@ -241,19 +242,19 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerNot() {
-            string m(IOldTypeReference v, int typeKind) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string m(IValue v, ITypeDefinition typeKind) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.NotOperator(v);
-                Assert.AreEqual(typeKind, vv1.TypeId);
+                Assert.AreEqual(typeKind, vv1.TypeDefinition);
                 return vv1.ToString();
             }
 
-            Assert.AreEqual("-128", m(GetIntegerValue(127), KnownTypeIds.ShortInt));
-            Assert.AreEqual("-129", m(GetIntegerValue(128), KnownTypeIds.SmallInt));
+            Assert.AreEqual("-128", m(GetIntegerValue(127), KnownTypeIds.ShortIntType));
+            Assert.AreEqual("-129", m(GetIntegerValue(128), KnownTypeIds.SmallIntType));
             Assert.AreEqual("128", m(GetIntegerValue(-129), KnownTypeIds.ByteType));
             Assert.AreEqual("-9223372036854775808", m(GetIntegerValue(9223372036854775807), KnownTypeIds.Int64Type));
             Assert.AreEqual("9223372036854775807", m(GetIntegerValue(9223372036854775808), KnownTypeIds.Int64Type));
-            Assert.AreEqual("1", m(GetIntegerValue(18446744073709551614), KnownTypeIds.ShortInt));
+            Assert.AreEqual("1", m(GetIntegerValue(18446744073709551614), KnownTypeIds.ShortIntType));
         }
 
         /// <summary>
@@ -261,8 +262,8 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerAnd() {
-            string a(IOldTypeReference v1, IOldTypeReference v2) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string a(IValue v1, IValue v2) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.AndOperator(v1, v2);
                 return vv1.ToString();
             }
@@ -279,8 +280,8 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerOr() {
-            string o(IOldTypeReference v1, IOldTypeReference v2) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string o(IValue v1, IValue v2) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.OrOperator(v1, v2);
                 return vv1.ToString();
             }
@@ -296,8 +297,8 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerXor() {
-            string x(IOldTypeReference v1, IOldTypeReference v2) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string x(IValue v1, IValue v2) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.XorOperator(v1, v2);
                 return vv1.ToString();
             }
@@ -313,8 +314,8 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerShl() {
-            string sl(IOldTypeReference v1, IOldTypeReference v2) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string sl(IValue v1, IValue v2) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.Shl(v1, v2);
                 return vv1.ToString();
             }
@@ -329,8 +330,8 @@ namespace PasPasPasTests.Runtime {
         /// </summary>
         [TestMethod]
         public void TestIntegerShr() {
-            string sr(IOldTypeReference v1, IOldTypeReference v2) {
-                var c = new IntegerOperations(new BooleanOperations(), null);
+            string sr(IValue v1, IValue v2) {
+                var c = CreateEnvironment().Runtime.Integers;
                 var vv1 = c.Shr(v1, v2);
                 return vv1.ToString();
             }

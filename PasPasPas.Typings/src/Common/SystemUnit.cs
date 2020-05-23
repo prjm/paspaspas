@@ -66,11 +66,11 @@ namespace PasPasPas.Typings.Common {
         ///     register real types
         /// </summary>
         private void RegisterRealTypes() {
-            RegisterType(new RealType(this, RealTypeKind.Real48));
+            Real48Type = RegisterType(new RealType(this, RealTypeKind.Real48));
             SingleType = RegisterType(new RealType(this, RealTypeKind.Single));
             DoubleType = RegisterType(new RealType(this, RealTypeKind.Double));
             ExtendedType = RegisterType(new RealType(this, RealTypeKind.Extended));
-            RegisterType(new RealType(this, RealTypeKind.Comp));
+            CompType = RegisterType(new RealType(this, RealTypeKind.Comp));
             CurrencyType = RegisterType(new RealType(this, RealTypeKind.Currency));
         }
 
@@ -111,49 +111,49 @@ namespace PasPasPas.Typings.Common {
 
         private void RegisterPointerTypes() {
             GenericPointerType = RegisterType(new PointerType(this, default, Names.Pointer));
-            RegisterType(new PointerType(this, ByteType, Names.PByte));
-            RegisterType(new PointerType(this, ShortIntType, Names.PShortInt));
-            RegisterType(new PointerType(this, WordType, Names.PWord));
-            RegisterType(new PointerType(this, SmallIntType, Names.PSmallInt));
-            RegisterType(new PointerType(this, CardinalType, Names.PCardinal));
-            RegisterType(new PointerType(this, LongWordType, Names.PLongword));
-            RegisterType(new PointerType(this, FixedUIntType, Names.PFixedUint));
-            RegisterType(new PointerType(this, IntegerType, Names.PInteger));
-            RegisterType(new PointerType(this, LongIntType, Names.PLongInt));
-            RegisterType(new PointerType(this, FixedIntType, Names.PFixedInt));
-            RegisterType(new PointerType(this, UInt64Type, Names.PUInt64));
-            RegisterType(new PointerType(this, Int64Type, Names.PInt64));
-            RegisterType(new PointerType(this, NativeUIntType, Names.PNativeUInt));
-            RegisterType(new PointerType(this, NativeIntType, Names.PNativeInt));
-            RegisterType(new PointerType(this, SingleType, Names.PSingle));
-            RegisterType(new PointerType(this, DoubleType, Names.PDouble));
-            RegisterType(new PointerType(this, ExtendedType, Names.PExtended));
-            RegisterType(new PointerType(this, AnsiCharType, Names.PAnsiChar));
+            PByteType = RegisterType(new PointerType(this, ByteType, Names.PByte));
+            PShortIntType = RegisterType(new PointerType(this, ShortIntType, Names.PShortInt));
+            PWordType = RegisterType(new PointerType(this, WordType, Names.PWord));
+            PSmallIntType = RegisterType(new PointerType(this, SmallIntType, Names.PSmallInt));
+            PCardinalType = RegisterType(new PointerType(this, CardinalType, Names.PCardinal));
+            PLongwordType = RegisterType(new PointerType(this, LongWordType, Names.PLongword));
+            PFixedUIntType = RegisterType(new PointerType(this, FixedUIntType, Names.PFixedUint));
+            PIntegerType = RegisterType(new PointerType(this, IntegerType, Names.PInteger));
+            PLongIntType = RegisterType(new PointerType(this, LongIntType, Names.PLongInt));
+            PFixedIntType = RegisterType(new PointerType(this, FixedIntType, Names.PFixedInt));
+            PUInt64Type = RegisterType(new PointerType(this, UInt64Type, Names.PUInt64));
+            PInt64Type = RegisterType(new PointerType(this, Int64Type, Names.PInt64));
+            PNativeUIntType = RegisterType(new PointerType(this, NativeUIntType, Names.PNativeUInt));
+            PNativeIntType = RegisterType(new PointerType(this, NativeIntType, Names.PNativeInt));
+            PSingleType = RegisterType(new PointerType(this, SingleType, Names.PSingle));
+            PDoubleType = RegisterType(new PointerType(this, DoubleType, Names.PDouble));
+            PExtendedType = RegisterType(new PointerType(this, ExtendedType, Names.PExtended));
+            PAnsiCharType = RegisterType(new PointerType(this, AnsiCharType, Names.PAnsiChar));
             PWideCharType = RegisterType(new PointerType(this, WideCharType, Names.PWideChar));
-            RegisterType(new PointerType(this, AnsiStringType, Names.PAnsiString));
-            RegisterType(new PointerType(this, RawByteStringType, Names.PRawByteString));
+            PAnsiStringType = RegisterType(new PointerType(this, AnsiStringType, Names.PAnsiString));
+            PRawByteStringType = RegisterType(new PointerType(this, RawByteStringType, Names.PRawByteString));
             PUnicodeStringType = RegisterType(new PointerType(this, UnicodeStringType, Names.PUnicodeString));
-            RegisterType(new PointerType(this, ShortStringType, Names.PShortString));
-            RegisterType(new PointerType(this, WideStringType, Names.PWideString));
-            RegisterType(new PointerType(this, BooleanType, Names.PBoolean));
-            RegisterType(new PointerType(this, ByteBoolType, Names.PByteBool));
-            RegisterType(new PointerType(this, LongBoolType, Names.PLongBool));
-            RegisterType(new PointerType(this, WordBoolType, Names.PWordBool));
-            RegisterType(new PointerType(this, GenericPointerType, Names.PPointer));
-            RegisterType(new PointerType(this, CurrencyType, Names.PCurrency));
+            PShortStringType = RegisterType(new PointerType(this, ShortStringType, Names.PShortString));
+            PWideStringType = RegisterType(new PointerType(this, WideStringType, Names.PWideString));
+            PBooleanType = RegisterType(new PointerType(this, BooleanType, Names.PBoolean));
+            PByteBoolType = RegisterType(new PointerType(this, ByteBoolType, Names.PByteBool));
+            PLongBoolType = RegisterType(new PointerType(this, LongBoolType, Names.PLongBool));
+            PWordBoolType = RegisterType(new PointerType(this, WordBoolType, Names.PWordBool));
+            PPointer = RegisterType(new PointerType(this, GenericPointerType, Names.PPointer));
+            PCurrency = RegisterType(new PointerType(this, CurrencyType, Names.PCurrency));
         }
 
         /// <summary>
         ///     register type alias
         /// </summary>
         private void RegisterAliasTypes() {
-            RegisterAlias(WideCharType, Names.Char);
-            RegisterAlias(WideCharType, Names.Ucs2Char);
-            RegisterAlias(CardinalType, Names.Ucs4Char);
+            CharType = RegisterAlias(WideCharType, Names.Char);
+            Ucs2CharType = RegisterAlias(WideCharType, Names.Ucs2Char);
+            Ucs4CharType = RegisterAlias(CardinalType, Names.Ucs4Char);
             StringType = RegisterAlias(UnicodeStringType, Names.String);
-            RegisterAlias(DoubleType, Names.Real);
-            RegisterAlias(PWideCharType, Names.PChar);
-            RegisterAlias(PUnicodeStringType, Names.PString);
+            RealType = RegisterAlias(DoubleType, Names.Real);
+            PCharType = RegisterAlias(PWideCharType, Names.PChar);
+            PStringType = RegisterAlias(PUnicodeStringType, Names.PString);
         }
 
         private void RegisterHiddenTypes() {
@@ -333,6 +333,7 @@ namespace PasPasPas.Typings.Common {
         ///     extended type definition
         /// </summary>
         public IRealType ExtendedType { get; private set; }
+        public IRealType CompType { get; private set; }
 
         /// <summary>
         ///     native integer type
@@ -358,6 +359,15 @@ namespace PasPasPas.Typings.Common {
         ///     generic pointer type
         /// </summary>
         public ITypeDefinition GenericPointerType { get; private set; }
+        public IPointerType PByteType { get; private set; }
+        public IPointerType PShortIntType { get; private set; }
+        public IPointerType PWordType { get; private set; }
+        public IPointerType PSmallIntType { get; private set; }
+        public IPointerType PCardinalType { get; private set; }
+        public IPointerType PLongwordType { get; private set; }
+        public IPointerType PFixedUIntType { get; private set; }
+        public IPointerType PIntegerType { get; private set; }
+        public IPointerType PLongIntType { get; private set; }
 
         /// <summary>
         ///     nil type
@@ -383,6 +393,7 @@ namespace PasPasPas.Typings.Common {
         ///     fixed unsigned int type
         /// </summary>
         public IAliasedType FixedUIntType { get; private set; }
+        public IRealType Real48Type { get; private set; }
 
         /// <summary>
         ///     single type
@@ -393,21 +404,43 @@ namespace PasPasPas.Typings.Common {
         ///     double type
         /// </summary>
         public IRealType DoubleType { get; private set; }
+        public IAliasedType PCharType { get; private set; }
+        public IAliasedType PStringType { get; private set; }
 
         /// <summary>
         ///     currency type
         /// </summary>
         public IRealType CurrencyType { get; private set; }
 
+        public IPointerType PFixedIntType { get; private set; }
+        public IPointerType PUInt64Type { get; private set; }
+        public IPointerType PInt64Type { get; private set; }
+        public IPointerType PNativeUIntType { get; private set; }
+        public IPointerType PNativeIntType { get; private set; }
+        public IPointerType PSingleType { get; private set; }
+        public IPointerType PDoubleType { get; private set; }
+        public IPointerType PExtendedType { get; private set; }
+        public IPointerType PAnsiCharType { get; private set; }
+
         /// <summary>
         ///     pointer to a wide char type
         /// </summary>
         public IPointerType PWideCharType { get; private set; }
+        public IPointerType PAnsiStringType { get; private set; }
+        public IPointerType PRawByteStringType { get; private set; }
 
         /// <summary>
         ///     pointer to a Unicode string type
         /// </summary>
         public IPointerType PUnicodeStringType { get; private set; }
+        public IPointerType PShortStringType { get; private set; }
+        public IPointerType PWideStringType { get; private set; }
+        public IPointerType PBooleanType { get; private set; }
+        public IPointerType PByteBoolType { get; private set; }
+        public IPointerType PLongBoolType { get; private set; }
+        public IPointerType PWordBoolType { get; private set; }
+        public IPointerType PPointer { get; private set; }
+        public IPointerType PCurrency { get; private set; }
 
         /// <summary>
         ///     unspecified type
@@ -420,9 +453,15 @@ namespace PasPasPas.Typings.Common {
         public INoType NoType { get; private set; }
 
         /// <summary>
+        ///     ucs4 char type
+        /// </summary>
+        public IAliasedType Ucs4CharType { get; private set; }
+
+        /// <summary>
         ///     common string type
         /// </summary>
         public IAliasedType StringType { get; private set; }
+        public IAliasedType RealType { get; private set; }
 
         /// <summary>
         ///     TObject type
@@ -453,5 +492,15 @@ namespace PasPasPas.Typings.Common {
         ///     format expression helper routine
         /// </summary>
         public IRoutineGroup FormatExpression { get; private set; }
+
+        /// <summary>
+        ///     char type
+        /// </summary>
+        public IAliasedType CharType { get; private set; }
+
+        /// <summary>
+        ///     ucs2 char type
+        /// </summary>
+        public IAliasedType Ucs2CharType { get; private set; }
     }
 }

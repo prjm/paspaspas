@@ -12,7 +12,7 @@ using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Parser.Standard;
@@ -243,7 +243,7 @@ namespace PasPasPasTests.Parser {
         /// <param name="expr"></param>
         /// <param name="constName"></param>
         /// <param name="typeId"></param>
-        protected void TestConstant(string expr, string constName = "x", int typeId = -1) {
+        protected void TestConstant(string expr, string constName = "x", ITypeDefinition typeId = default) {
             var statement = $"program z.x; const x = {expr}; .";
 
             bool? search(object t) {
@@ -252,8 +252,8 @@ namespace PasPasPasTests.Parser {
                     if (decl == null || decl.Value == null)
                         return null;
 
-                    if (typeId >= 0)
-                        Assert.AreEqual(typeId, decl.Value.TypeInfo.TypeId);
+                    if (typeId != default)
+                        Assert.AreEqual(typeId, decl.Value.TypeInfo.TypeDefinition);
 
                     return decl.Value.TypeInfo.IsConstant();
                 }

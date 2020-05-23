@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
-using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
 using SampleRunner.Scenarios;
 
@@ -47,25 +45,6 @@ namespace SampleRunner {
             status = new SystemInfo(status);
 
             result.WriteLine(new string('.', 80));
-
-            foreach (var entry in environment.Entries) {
-                var name = GetCacheName(entry);
-                if (entry is ILookupFunction fn)
-                    result.WriteLine(name + ": " + fn.Table.Count);
-                else if (entry is ObjectPool pool)
-                    result.WriteLine(name + ": " + pool.Count);
-                else if (entry is Histograms hist)
-                    result.WriteLine(name + ": " + hist.Count);
-                else if (entry is IEnvironmentItem sc) {
-                    var count = sc.Count;
-                    if (count < 0)
-                        result.WriteLine(name);
-                    else
-                        result.WriteLine(name + ": " + sc.Count);
-                }
-                else
-                    result.WriteLine(name);
-            }
 
             if (useHistogram) {
                 Histograms.Print(printer);

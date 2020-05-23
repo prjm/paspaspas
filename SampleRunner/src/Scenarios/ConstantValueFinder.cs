@@ -3,7 +3,7 @@ using System.IO;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
@@ -59,7 +59,7 @@ namespace SampleRunner.Scenarios {
 
         public void StartVisit(ConstantDeclaration element) {
             if (Value == default)
-                if (element.TypeInfo?.ReferenceKind == TypeReferenceKind.DynamicValue)
+                if (element.TypeInfo?.SymbolKind == SymbolTypeKind.Constant)
                     Value = element.TypeInfo?.ToString();
         }
     }

@@ -16,6 +16,7 @@ namespace PasPasPas.Globals.Types {
         ///     provided types
         /// </summary>
         ITypeRegistry TypeRegistry { get; }
+        IPointerType PRawByteStringType { get; }
 
         /// <summary>
         ///     register a symbol
