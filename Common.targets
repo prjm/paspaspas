@@ -27,7 +27,7 @@
         <PackageReference Include="Microsoft.NetCore.Analyzers" Version="3.0.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="IDisposableAnalyzers" Version="3.3.9">
+        <PackageReference Include="IDisposableAnalyzers" Version="3.4.1">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
