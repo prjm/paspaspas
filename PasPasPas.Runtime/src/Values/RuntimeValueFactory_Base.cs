@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -30,7 +29,7 @@ namespace PasPasPas.Runtime.Values {
             Structured = new StructuredTypeOperations(provider, ListPools, Booleans);
             Integers = new IntegerOperations(provider, Booleans, Types);
             RealNumbers = new RealNumberOperations(provider, Booleans, Integers);
-            Strings = new StringOperations(Booleans);
+            Strings = new StringOperations(provider, Booleans);
             formatter = new SimpleFormatter(this);
         }
 

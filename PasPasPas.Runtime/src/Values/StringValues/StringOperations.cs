@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.Other;
@@ -19,19 +18,14 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <summary>
         ///     create a new boolean operation support class
         /// </summary>
-        /// <param name="typeRegistryProvider"></param>
-        public StringOperations(ITypeRegistryProvider typeRegistryProvider) {
+        /// <param name="typeRegistryProvider">type definition provider</param>
+        /// <param name="booleans">boolean operations</param>
+        public StringOperations(ITypeRegistryProvider typeRegistryProvider, IBooleanOperations booleans) {
+            Booleans = booleans;
             provider = typeRegistryProvider;
             invalidString = new Lazy<IValue>(() => new ErrorValue(provider.GetErrorType(), SpecialConstantKind.InvalidString), true);
             emptyString = new Lazy<IValue>(() => new EmptyStringValue(provider.GetShortStringType()));
         }
-
-        /// <summary>
-        ///     create a new string operations helper
-        /// </summary>
-        /// <param name="booleans"></param>
-        public StringOperations(IBooleanOperations booleans)
-            => Booleans = booleans;
 
         /// <summary>
         ///     get a constant text value
@@ -163,10 +157,9 @@ namespace PasPasPas.Runtime.Values.StringValues {
             => new ShortStringValue(provider.GetShortStringType(), text);
 
         /// <summary>
-        ///
+        ///     converts a string value to a wide string
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="tdd"></param>
         /// <returns></returns>
         public IValue ToWideString(string text)
             => new ShortStringValue(provider.GetWideStringType(), text);
