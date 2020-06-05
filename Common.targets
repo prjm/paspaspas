@@ -1,7 +1,7 @@
 ﻿<Project>
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <DocumentationFile>bin\$(Platform)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
         <VersionPrefix>1.0.0</VersionPrefix>
         <VersionSuffix>0</VersionSuffix>
