@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Options.DataTypes;
+﻿#nullable disable
+using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Options.DataTypes;
 
 namespace PasPasPas.Globals.Options {

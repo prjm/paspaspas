@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.AssemblyBuilder.Builder {
+﻿#nullable disable
+namespace PasPasPas.AssemblyBuilder.Builder {
 
     /// <summary>
     ///     

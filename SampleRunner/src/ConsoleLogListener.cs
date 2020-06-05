@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿#nullable disable
+using System.Globalization;
 using System.IO;
 using PasPasPas.Globals.Log;
 using PasPasPas.Infrastructure.Log;

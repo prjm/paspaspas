@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿#nullable disable
+using System.Text;
 using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {

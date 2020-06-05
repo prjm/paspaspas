@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿#nullable disable
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     flag for 48-bit doubles

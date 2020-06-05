@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Files;
+﻿#nullable disable
+using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Options;
 using PasPasPas.Globals.Options.DataTypes;

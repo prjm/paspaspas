@@ -1,4 +1,5 @@
-﻿using PasPasPas.AssemblyBuilder.Builder;
+﻿#nullable disable
+using PasPasPas.AssemblyBuilder.Builder;
 using PasPasPas.Globals.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;

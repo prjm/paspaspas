@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿#nullable disable
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines.Runtime {

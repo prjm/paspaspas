@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿#nullable disable
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     symbol kind

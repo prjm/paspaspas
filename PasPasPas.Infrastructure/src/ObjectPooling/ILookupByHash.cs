@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Infrastructure.ObjectPooling {
+﻿#nullable disable
+namespace PasPasPas.Infrastructure.ObjectPooling {
 
     /// <summary>
     ///     interface for lookup object pools

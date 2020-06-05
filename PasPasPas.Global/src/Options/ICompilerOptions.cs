@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Globals.Options {
+﻿#nullable disable
+namespace PasPasPas.Globals.Options {
 
     /// <summary>
     ///     compiler options

@@ -1,4 +1,5 @@
-﻿using SharpFloat.FloatingPoint;
+﻿#nullable disable
+using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Globals.Runtime {
 

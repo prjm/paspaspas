@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Globals.Parsing {
+﻿#nullable disable
+namespace PasPasPas.Globals.Parsing {
 
     /// <summary>
     ///     common interface for syntax tree elements

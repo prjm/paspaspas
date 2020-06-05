@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Globals.Environment {
+﻿#nullable disable
+namespace PasPasPas.Globals.Environment {
 
     /// <summary>
     ///     interface for an assembly builder environment

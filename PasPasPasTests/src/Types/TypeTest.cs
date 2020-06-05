@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Options.DataTypes;

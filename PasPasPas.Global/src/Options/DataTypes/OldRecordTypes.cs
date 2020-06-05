@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿#nullable disable
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     switch for old packed record types

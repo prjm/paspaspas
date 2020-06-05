@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿#nullable disable
+using System.Collections.Immutable;
 using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {

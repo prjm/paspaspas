@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Globals.Options.DataTypes {
+﻿#nullable disable
+namespace PasPasPas.Globals.Options.DataTypes {
 
     /// <summary>
     ///     option for io call checks

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.IO;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;

@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Globals.CodeGen {
+﻿#nullable disable
+namespace PasPasPas.Globals.CodeGen {
 
     /// <summary>
     ///     op code id

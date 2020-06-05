@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿#nullable disable
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     provides relations operators

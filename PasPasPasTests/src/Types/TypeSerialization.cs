@@ -1,4 +1,5 @@
-﻿namespace PasPasPasTests.Types {
+﻿#nullable disable
+namespace PasPasPasTests.Types {
 
     /// <summary>
     ///     test the serialization of types

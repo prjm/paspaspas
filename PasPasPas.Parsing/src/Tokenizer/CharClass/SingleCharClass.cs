@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Parsing.Tokenizer.CharClass {
+﻿#nullable disable
+namespace PasPasPas.Parsing.Tokenizer.CharClass {
 
     /// <summary>
     ///     character class for a single char

@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Typings.Serialization {
+﻿#nullable disable
+namespace PasPasPas.Typings.Serialization {
 
     /// <summary>
     ///     constant numbers

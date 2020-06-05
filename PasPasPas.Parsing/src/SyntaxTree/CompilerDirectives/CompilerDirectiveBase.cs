@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
+﻿#nullable disable
+namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
     /// <summary>
     ///     base class for compiler directive syntax nodes

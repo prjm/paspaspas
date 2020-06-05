@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿#nullable disable
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     /// /   simple header string to emit in hpp file

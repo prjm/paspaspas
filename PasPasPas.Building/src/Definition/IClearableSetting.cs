@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Building.Definition {
+﻿#nullable disable
+namespace PasPasPas.Building.Definition {
 
     /// <summary>
     ///     setting which can be cleared

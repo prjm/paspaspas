@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Globals.Types {
+﻿#nullable disable
+namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     meta class type

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿#nullable disable
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 

@@ -1,4 +1,5 @@
-﻿namespace SampleRunner.Scenarios {
+﻿#nullable disable
+namespace SampleRunner.Scenarios {
 
     /// <summary>
     ///     sample mode

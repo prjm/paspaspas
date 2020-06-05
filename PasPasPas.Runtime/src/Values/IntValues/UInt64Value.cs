@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿#nullable disable
+using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 

@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿#nullable disable
+namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     structured type definition

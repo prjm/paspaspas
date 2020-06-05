@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#nullable disable
+using System.IO;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Parsing.SyntaxTree.Visitors;

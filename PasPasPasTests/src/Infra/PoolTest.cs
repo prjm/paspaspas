@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.ObjectPooling;
+﻿#nullable disable
+using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Infra {

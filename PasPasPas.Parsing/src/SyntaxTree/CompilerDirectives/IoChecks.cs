@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Options.DataTypes;
+﻿#nullable disable
+using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {

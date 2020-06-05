@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.Text;
 using PasPasPas.Infrastructure.Environment;
 #if DESKTOP

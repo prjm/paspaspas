@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#nullable disable
+using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Globals.Runtime;

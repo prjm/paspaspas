@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Globals.Log {
+﻿#nullable disable
+namespace PasPasPas.Globals.Log {
 
     /// <summary>
     ///     log message router

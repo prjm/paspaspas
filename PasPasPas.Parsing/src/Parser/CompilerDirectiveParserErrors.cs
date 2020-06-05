@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Parsing.Parser {
+﻿#nullable disable
+namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
     ///     compiler directive parser error

@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Visitors {
+﻿#nullable disable
+namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
     /// <summary>
     ///     structural error messages

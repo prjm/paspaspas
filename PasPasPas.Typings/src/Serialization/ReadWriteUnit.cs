@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Log;
+﻿#nullable disable
+using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Serialization {

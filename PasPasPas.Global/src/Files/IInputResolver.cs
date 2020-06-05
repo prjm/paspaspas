@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Api;
+﻿#nullable disable
+using PasPasPas.Globals.Api;
 
 namespace PasPasPas.Globals.Files {
 

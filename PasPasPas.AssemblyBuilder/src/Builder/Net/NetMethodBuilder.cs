@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.Reflection.Emit;
 using PasPasPas.AssemblyBuilder.Builder.Definitions;
 using PasPasPas.Globals.CodeGen;

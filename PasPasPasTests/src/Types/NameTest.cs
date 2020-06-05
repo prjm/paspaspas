@@ -1,4 +1,5 @@
-﻿namespace PasPasPasTests.Types {
+﻿#nullable disable
+namespace PasPasPasTests.Types {
     using PasPasPas.Globals.Types;
     using PasPasPasTests.Common;
 

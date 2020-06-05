@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿#nullable disable
+using System.Reflection;
 using PasPasPas.Globals.Environment;
 
 namespace PasPasPas.AssemblyBuilder.Builder.Net {

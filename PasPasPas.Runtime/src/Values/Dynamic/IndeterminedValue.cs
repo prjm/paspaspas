@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.Dynamic {

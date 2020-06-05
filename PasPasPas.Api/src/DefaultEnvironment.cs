@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#nullable disable
+using System.IO;
 using System.Text;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;

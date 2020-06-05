@@ -1,4 +1,5 @@
-﻿
+﻿#nullable disable
+
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Parsing;
 

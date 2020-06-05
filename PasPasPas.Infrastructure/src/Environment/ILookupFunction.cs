@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Infrastructure.Environment {
+﻿#nullable disable
+namespace PasPasPas.Infrastructure.Environment {
 
     /// <summary>
     ///     interface for lookup functions

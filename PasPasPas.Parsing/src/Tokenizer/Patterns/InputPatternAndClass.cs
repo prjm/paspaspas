@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 
 namespace PasPasPas.Parsing.Tokenizer.Patterns {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#nullable disable
+using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Api;
 using PasPasPas.AssemblyBuilder.Builder;

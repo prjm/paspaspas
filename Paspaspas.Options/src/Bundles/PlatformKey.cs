@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Options.Bundles {
+﻿#nullable disable
+namespace PasPasPas.Options.Bundles {
 
     /// <summary>
     ///     possible platforms

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#nullable disable
+using System.IO;
 using System.Linq;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Log;

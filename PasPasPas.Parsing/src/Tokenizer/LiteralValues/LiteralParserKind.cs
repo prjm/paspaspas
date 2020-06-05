@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
+﻿#nullable disable
+namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
     /// <summary>
     ///     integer literal parser kind

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Utils;
+﻿#nullable disable
+using PasPasPas.Infrastructure.Utils;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Infra {

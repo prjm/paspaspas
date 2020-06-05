@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Environment;
+﻿#nullable disable
+using PasPasPas.Globals.Environment;
 
 namespace PasPasPas.AssemblyBuilder.Builder.Definitions {
 

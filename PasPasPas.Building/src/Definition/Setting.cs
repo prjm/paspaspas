@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Building.Definition {
+﻿#nullable disable
+namespace PasPasPas.Building.Definition {
 
     /// <summary>
     ///     general project setting / variable

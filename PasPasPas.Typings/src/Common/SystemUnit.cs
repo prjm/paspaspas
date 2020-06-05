@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Typings.Common {
+﻿#nullable disable
+namespace PasPasPas.Typings.Common {
     using System.Collections.Immutable;
     using PasPasPas.Globals.Options.DataTypes;
     using PasPasPas.Globals.Runtime;

@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Globals.Files {
+﻿#nullable disable
+namespace PasPasPas.Globals.Files {
 
     /// <summary>
     ///     file reference

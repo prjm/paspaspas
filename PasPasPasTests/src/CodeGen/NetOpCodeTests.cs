@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.Collections.Immutable;
 using System.Reflection;
 using System.Reflection.Emit;

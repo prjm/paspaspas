@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿#nullable disable
+using System.Linq;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;

@@ -1,4 +1,5 @@
-﻿
+﻿#nullable disable
+
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {

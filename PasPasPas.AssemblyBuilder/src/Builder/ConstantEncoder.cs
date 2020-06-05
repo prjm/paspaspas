@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿#nullable disable
+using System.Collections.Immutable;
 using System.IO;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Environment;
