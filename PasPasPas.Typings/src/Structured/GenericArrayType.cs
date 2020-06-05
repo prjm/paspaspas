@@ -13,9 +13,10 @@ namespace PasPasPas.Typings.Structured {
         ///     create a new generic array type
         /// </summary>
         /// <param name="baseType"></param>
+        /// <param name="indexType"></param>
         /// <param name="definingUnit"></param>
         /// <param name="name"></param>
-        internal GenericArrayType(string name, IUnitType definingUnit, ITypeDefinition baseType) : base(definingUnit, definingUnit.TypeRegistry.SystemUnit.IntegerType) {
+        internal GenericArrayType(string name, IUnitType definingUnit, ITypeDefinition baseType, ITypeDefinition indexType) : base(definingUnit, indexType) {
             Name = name;
             BaseTypeDefinition = baseType;
         }

@@ -1,16 +1,14 @@
-﻿using System.Collections.Immutable;
-using PasPasPas.Globals.Options.DataTypes;
-using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Hidden;
-using PasPasPas.Typings.Routines;
-using PasPasPas.Typings.Routines.Runtime;
-using PasPasPas.Typings.Simple;
-using PasPasPas.Typings.Structured;
-
-namespace PasPasPas.Typings.Common {
-
-    using Names = KnownNames;
+﻿namespace PasPasPas.Typings.Common {
+    using System.Collections.Immutable;
+    using PasPasPas.Globals.Options.DataTypes;
+    using PasPasPas.Globals.Runtime;
+    using PasPasPas.Globals.Types;
+    using PasPasPas.Typings.Hidden;
+    using PasPasPas.Typings.Routines;
+    using PasPasPas.Typings.Routines.Runtime;
+    using PasPasPas.Typings.Simple;
+    using PasPasPas.Typings.Structured;
+    using Names = Globals.Types.KnownNames;
 
     /// <summary>
     ///     system wide definitions
@@ -84,12 +82,12 @@ namespace PasPasPas.Typings.Common {
             Int64Type = RegisterType(new IntegralType(this, IntegralTypeKind.Int64));
             UInt64Type = RegisterType(new IntegralType(this, IntegralTypeKind.UInt64));
 
-            RegisterAlias(ByteType, Names.UInt8);
-            RegisterAlias(ShortIntType, Names.Int8);
-            RegisterAlias(WordType, Names.UInt16);
-            RegisterAlias(SmallIntType, Names.Int16);
-            RegisterAlias(CardinalType, Names.UInt32);
-            RegisterAlias(IntegerType, Names.Int32);
+            UInt8Type = RegisterAlias(ByteType, Names.UInt8);
+            Int8Type = RegisterAlias(ShortIntType, Names.Int8);
+            UInt16Type = RegisterAlias(WordType, Names.UInt16);
+            Int16Type = RegisterAlias(SmallIntType, Names.Int16);
+            UInt32Type = RegisterAlias(CardinalType, Names.UInt32);
+            Int32Type = RegisterAlias(IntegerType, Names.Int32);
         }
 
         private void RegisterBooleanTypes() {
@@ -139,8 +137,8 @@ namespace PasPasPas.Typings.Common {
             PByteBoolType = RegisterType(new PointerType(this, ByteBoolType, Names.PByteBool));
             PLongBoolType = RegisterType(new PointerType(this, LongBoolType, Names.PLongBool));
             PWordBoolType = RegisterType(new PointerType(this, WordBoolType, Names.PWordBool));
-            PPointer = RegisterType(new PointerType(this, GenericPointerType, Names.PPointer));
-            PCurrency = RegisterType(new PointerType(this, CurrencyType, Names.PCurrency));
+            PPointerType = RegisterType(new PointerType(this, GenericPointerType, Names.PPointer));
+            PCurrencyType = RegisterType(new PointerType(this, CurrencyType, Names.PCurrency));
         }
 
         /// <summary>
@@ -164,7 +162,7 @@ namespace PasPasPas.Typings.Common {
         }
 
         private void RegisterOtherTypes() {
-            RegisterType(new GenericArrayType(Names.TArray, this, default));
+            RegisterType(new GenericArrayType(Names.TArray, this, UnconstrainedGenericTypeParameter, IntegerType));
             UnspecifiedFileType = RegisterType(new FileType(this, Names.File, GenericPointerType));
             GenericClassConstraint = RegisterType(new GenericConstraintType(this, GenericConstraintKind.Class));
             GenericRecordConstraint = RegisterType(new GenericConstraintType(this, GenericConstraintKind.Record));
@@ -272,12 +270,18 @@ namespace PasPasPas.Typings.Common {
         ///     unsigned int64 type
         /// </summary>
         public IIntegralType UInt64Type { get; private set; }
+        public IAliasedType UInt8Type { get; private set; }
+        public IAliasedType Int8Type { get; private set; }
+        public IAliasedType UInt16Type { get; private set; }
+        public IAliasedType Int16Type { get; private set; }
+        public IAliasedType UInt32Type { get; private set; }
+        public IAliasedType Int32Type { get; private set; }
 
 
         /// <summary>
         ///     error type
         /// </summary>
-        public ITypeDefinition ErrorType { get; }
+        public IErrorType ErrorType { get; }
 
         /// <summary>
         ///     boolean type
@@ -439,8 +443,8 @@ namespace PasPasPas.Typings.Common {
         public IPointerType PByteBoolType { get; private set; }
         public IPointerType PLongBoolType { get; private set; }
         public IPointerType PWordBoolType { get; private set; }
-        public IPointerType PPointer { get; private set; }
-        public IPointerType PCurrency { get; private set; }
+        public IPointerType PPointerType { get; private set; }
+        public IPointerType PCurrencyType { get; private set; }
 
         /// <summary>
         ///     unspecified type
@@ -502,5 +506,7 @@ namespace PasPasPas.Typings.Common {
         ///     ucs2 char type
         /// </summary>
         public IAliasedType Ucs2CharType { get; private set; }
+
+        IRoutineGroup ISystemUnit.FormatExpression => throw new System.NotImplementedException();
     }
 }

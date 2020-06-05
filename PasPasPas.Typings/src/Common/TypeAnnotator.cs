@@ -71,7 +71,7 @@ namespace PasPasPas.Typings.Common {
         ///     current unit type
         /// </summary>
         public IUnitType CurrentUnitType
-            => CurrentUnit?.TypeInfo as IUnitType;
+            => CurrentUnit?.TypeInfo.TypeDefinition as IUnitType;
 
         /// <summary>
         ///     cast this visitor as common visitor

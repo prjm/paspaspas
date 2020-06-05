@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Hidden {
     /// <summary>
     ///     invalid / error type
     /// </summary>
-    public class ErrorType : TypeDefinitionBase {
+    public class ErrorType : TypeDefinitionBase, IErrorType {
 
         /// <summary>
         ///     create a new error type

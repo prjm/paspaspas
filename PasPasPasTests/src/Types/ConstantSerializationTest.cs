@@ -1,4 +1,6 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System;
+using System.Linq;
+using PasPasPas.Globals.Types;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -25,7 +27,7 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestUnitMainMethod() {
             void tester(IUnitType u) {
-                var m = u.Symbols[KnownNames.MainMethod];
+                var m = u.Symbols.Where(t => string.Equals(t.Name, KnownNames.MainMethod, StringComparison.OrdinalIgnoreCase));
                 Assert.IsNotNull(m);
             }
 

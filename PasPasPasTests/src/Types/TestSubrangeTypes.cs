@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -9,12 +8,15 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class TestSubrangeTypes : TypeTest {
 
+        private ISystemUnit KnownTypeIds
+            => CreateEnvironment().TypeRegistry.SystemUnit;
+
         /// <summary>
         ///     test subrange type definitions
         /// </summary>
         [TestMethod]
         public void TestSubrangeTypeDefs() {
-            AssertExprTypeByVar("2..126", "a", KnownTypeIds.ShortInt, true);
+            AssertExprTypeByVar("2..126", "a", KnownTypeIds.ShortIntType, true);
             AssertExprTypeByVar("2..1", "a", KnownTypeIds.ErrorType, true);
             AssertExprTypeByVar("2..250", "a", KnownTypeIds.ByteType, true);
 
@@ -26,7 +28,11 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("false..true", "a", KnownTypeIds.BooleanType, true);
             AssertExprTypeByVar("true..false", "a", KnownTypeIds.ErrorType, true);
 
-            AssertExprTypeByVar("x..z", "a", RegisteredTypes.SmallestUserTypeId + 1, true, "type v = (x,y,z);");
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var et = tc.CreateEnumType("v");
+
+            AssertExprTypeByVar("x..z", "a", et, true, "type v = (x,y,z);");
             AssertExprTypeByVar("z..y", "a", KnownTypeIds.ErrorType, true, "type v = (x,y,z);");
 
         }

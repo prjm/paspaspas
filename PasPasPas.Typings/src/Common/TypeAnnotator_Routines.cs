@@ -52,7 +52,7 @@ namespace PasPasPas.Typings.Common {
                 var v = currentTypeDefinition.Peek();
                 var m = element as StructureMethod;
                 var classMethod = m?.ClassItem ?? false;
-                var genericTypeId = SystemUnit.ErrorType;
+                var genericTypeId = SystemUnit.ErrorType as ITypeDefinition;
                 var d = v;
                 /*
                 if (d is RoutineType rt) {

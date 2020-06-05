@@ -39,7 +39,7 @@ namespace PasPasPas.Typings.Serialization {
 
         internal void WriteIntValue(IIntegerValue intValue) {
             WriteByte(intValue.IntegralType.Kind.ToByte());
-            var typeDef = intValue as IIntegralType;
+            var typeDef = intValue.TypeDefinition as IIntegralType;
             switch (typeDef.TypeSizeInBytes) {
                 case 1:
                     WriteByte((byte)intValue.UnsignedValue);

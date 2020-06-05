@@ -114,9 +114,9 @@ namespace PasPasPas.Typings.Simple {
         public ITypeDefinition CommonTypeId {
             get {
                 var lowestElement = LowestElement;
-                var lowerBaseType = TypeRegistry.SystemUnit.ErrorType;
+                var lowerBaseType = TypeRegistry.SystemUnit.ErrorType as ITypeDefinition;
                 var highestElement = HighestElement;
-                var higherBaseType = TypeRegistry.SystemUnit.ErrorType;
+                var higherBaseType = TypeRegistry.SystemUnit.ErrorType as ITypeDefinition;
 
                 if (lowestElement is IEnumeratedValue lowestEnumValue)
                     lowerBaseType = lowestEnumValue.Value.TypeDefinition;

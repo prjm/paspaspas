@@ -24,8 +24,8 @@ namespace PasPasPasTests.CodeGen {
             var cst = pa.Parse();
             var ast = api.CreateAbstractSyntraxTree(cst);
             api.AnnotateWithTypes(ast);
-            var pf = env.TypeRegistry.RegisteredTypeDefinitions.Where(t => t is IUnitType && t.TypeId != KnownTypeIds.SystemUnit).FirstOrDefault() as IUnitType;
-            var mr = pf.GetSymbol(KnownNames.MainMethod);
+            var pf = env.TypeRegistry.Units.Where(t => t != env.TypeRegistry.SystemUnit).FirstOrDefault() as IUnitType;
+            var mr = pf.Symbols.Where(t => string.Equals(t.Name, KnownNames.MainMethod, System.StringComparison.OrdinalIgnoreCase));
             var r = mr as IRoutineGroup;
             var pr = r.Items[0];
             var c = pr.Code;

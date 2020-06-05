@@ -26,12 +26,21 @@
             => provider.RegisteredTypes.SystemUnit.BooleanType;
 
         /// <summary>
-        ///     resolve the boolean type
+        ///     resolve the wide char type
         /// </summary>
         /// <param name="provider"></param>
         /// <returns></returns>
         public static ICharType GetWideCharType(this ITypeRegistryProvider provider)
             => provider.RegisteredTypes.SystemUnit.WideCharType;
+
+
+        /// <summary>
+        ///     resolve the ANSI char type
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static ICharType GetAnsiCharType(this ITypeRegistryProvider provider)
+            => provider.RegisteredTypes.SystemUnit.AnsiCharType;
 
 
         /// <summary>

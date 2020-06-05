@@ -24,7 +24,7 @@ namespace PasPasPasTests.Types {
         /// <param name="typeId">type id to find</param>
         /// <param name="resolveSubrange"></param>
         /// <param name="decls">declarations</param>
-        protected void AssertExprTypeByVar(string commonType, string expression, int typeId, bool resolveSubrange = false, string decls = "") {
+        protected void AssertExprTypeByVar(string commonType, string expression, ITypeDefinition typeId, bool resolveSubrange = false, string decls = "") {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} var a,b: {commonType}; begin WriteLn({expression}); end. ";
             AssertExprType(file, program, typeId, resolveSubrange, null);
@@ -38,7 +38,7 @@ namespace PasPasPasTests.Types {
         /// <param name="resolveSubrange"></param>
         /// <param name="typeName"></param>
         /// <param name="decls"></param>
-        protected void AssertExprTypeByConst(string expression, int typeId, bool resolveSubrange = false, string typeName = "", string decls = "") {
+        protected void AssertExprTypeByConst(string expression, ITypeDefinition typeId, bool resolveSubrange = false, string typeName = "", string decls = "") {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} const a = {expression}; begin WriteLn(a); end. ";
             AssertExprType(file, program, typeId, resolveSubrange, typeName);
@@ -72,7 +72,7 @@ namespace PasPasPasTests.Types {
         /// <param name="typeId"></param>
         /// <param name="resolveSubrange"></param>
         /// <param name="typeName"></param>
-        protected void AssertExprType(string file, string program, int typeId, bool resolveSubrange, string typeName) {
+        protected void AssertExprType(string file, string program, ITypeDefinition typeId, bool resolveSubrange, string typeName) {
             SymbolReferencePart searchfunction(object x)
                 => x is SymbolReferencePart srp && srp.Kind == SymbolReferencePartKind.CallParameters ? x as SymbolReferencePart : null;
 
@@ -194,7 +194,7 @@ namespace PasPasPasTests.Types {
         /// <param name="isConstant"></param>
         /// <param name="completeSource"></param>
         /// <param name="decls">addition declarations</param>
-        protected void AssertExprValue(string expression, IValue value, string decls = "", ITypeDefinition typeId = default, bool isConstant = true, string completeSource = null) {
+        protected void AssertExprValue(string expression, ITypeSymbol value, string decls = "", ITypeDefinition typeId = default, bool isConstant = true, string completeSource = null) {
             var file = "SimpleExpr";
             var program = completeSource ?? $"program {file};{decls} begin Writeln({expression}); end. ";
 

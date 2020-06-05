@@ -412,7 +412,7 @@ namespace PasPasPas.Typings.Common {
                     return types.SystemUnit.ErrorType;
 
                 var bothUnsinged = types.Runtime.AreValuesUnsigned(lowerBound, upperBound);
-                var baseType = types.SystemUnit.ErrorType;
+                var baseType = types.SystemUnit.ErrorType as ITypeDefinition;
 
                 if (isIntegral)
                     baseType = types.GetSmallestIntegralTypeOrNext(lowerBound.TypeDefinition, upperBound.TypeDefinition, 1, bothUnsinged);

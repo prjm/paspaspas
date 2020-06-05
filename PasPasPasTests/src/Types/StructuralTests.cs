@@ -1,10 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using PasPasPas.Globals.Options.DataTypes;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
-using PasPasPas.Typings.Simple;
-using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -14,7 +11,7 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class StructuralTests : TypeTest {
 
-        private void AssertExprTypeInProc(string proc, string expression, string typeName = "", string decls = "", int typeId = KnownTypeIds.ErrorType, string proc2 = "") {
+        private void AssertExprTypeInProc(string proc, string expression, string typeName = "", string decls = "", ITypeDefinition typeId = default, string proc2 = "") {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} {proc} begin writeln({expression}); end; {proc2} begin end. ";
             AssertExprType(file, program, typeId, false, typeName);
@@ -24,7 +21,10 @@ namespace PasPasPasTests.Types {
             InType, InDerivedType, InExternalType
         }
 
-        private void AssertTypeForAccessModifier(string modifier, string decl, string expression, AccessModifierTestMode mode, int typeId, bool classFunction = false) {
+        private ISystemUnit KnownTypeIds
+            => CreateEnvironment().TypeRegistry.SystemUnit;
+
+        private void AssertTypeForAccessModifier(string modifier, string decl, string expression, AccessModifierTestMode mode, ITypeDefinition typeId, bool classFunction = false) {
             var file = "SimpleExpr";
             var decl1 = string.Empty;
             var decl2 = string.Empty;
@@ -63,7 +63,7 @@ namespace PasPasPasTests.Types {
         public void TestResultDef() {
             AssertExprTypeInProc("function a: Integer;", "a", typeId: KnownTypeIds.IntegerType);
             AssertExprTypeInProc("type x = class function a: string; end; function x.a: string;", "Result", typeId: KnownTypeIds.StringType);
-            AssertExprTypeInProc("function a: string;", "4", typeId: KnownTypeIds.ShortInt);
+            AssertExprTypeInProc("function a: string;", "4", typeId: KnownTypeIds.ShortIntType);
             AssertExprTypeInProc("function a: string;", "Result", typeId: KnownTypeIds.StringType);
             AssertExprTypeInProc("function a: string;", "a", typeId: KnownTypeIds.StringType);
             AssertExprTypeInProc("function a: Integer; function b: string; ", "Result", "", "", KnownTypeIds.StringType, " begin end; ");
@@ -90,7 +90,10 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestSelfPointer() {
-            AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self", typeId: 1 + RegisteredTypes.SmallestUserTypeId);
+            var e = CreateEnvironment();
+            var ct = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var c = ct.CreateStructuredType("x", StructuredTypeKind.Class);
+            AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self", typeId: c);
             AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self.z", typeId: KnownTypeIds.StringType);
             AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "z", typeId: KnownTypeIds.StringType);
             AssertExprTypeInProc("type x = class class var z: string; procedure b; end; procedure x.b;", "Self.z", typeId: KnownTypeIds.StringType);
@@ -103,7 +106,7 @@ namespace PasPasPasTests.Types {
 
         /// <summary>
         ///     test visibility for private members
-        /// </summary>   
+        /// </summary>
         [TestMethod]
         public void TestVisibilityPrivate() {
             var i = AccessModifierTestMode.InType;
@@ -163,9 +166,9 @@ namespace PasPasPasTests.Types {
         public void TestGlobalMethod() {
             var f = "SimpleExpr";
             var p = $"unit {f}; interface procedure a; implementation procedure a; begin WriteLn(x); end; end.";
-            bool v(ErrorType e) => (e.TypeRegistry.GetTypeByIdOrUndefinedType(RegisteredTypes.SmallestUserTypeId) as UnitType)?.GlobalRoutines.Any(t => t.Name == "a") ?? false;
+            bool v(IErrorType e) => (e.DefiningUnit.TypeRegistry.Units.Where(t => string.Equals(f, t.Name, StringComparison.OrdinalIgnoreCase)) as IUnitType)?.Symbols.Any(t => t.Name == "a") ?? false;
 
-            AssertDeclTypeDef<ErrorType>(program: p, f, NativeIntSize.Undefined, v);
+            AssertDeclTypeDef<IErrorType>(program: p, f, NativeIntSize.Undefined, v);
         }
 
         /// <summary>
@@ -174,7 +177,7 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestGlobalMethodInvocation() {
             var p = "WriteLn('a')";
-            AssertStatementType(p, default, kind: TypeReferenceKind.InvocationResult);
+            AssertStatementType(p, default, kind: SymbolTypeKind.IntrinsicRoutineResult);
         }
 
     }

@@ -117,8 +117,8 @@ namespace PasPasPasTests.Types {
             AssertDeclType("PBoolean", KnownTypeIds.PBooleanType);
             AssertDeclType("PLongBool", KnownTypeIds.PLongBoolType);
             AssertDeclType("PWordBool", KnownTypeIds.PWordBoolType);
-            AssertDeclType("PPointer", KnownTypeIds.PPointer);
-            AssertDeclType("PCurrency", KnownTypeIds.PCurrency);
+            AssertDeclType("PPointer", KnownTypeIds.PPointerType);
+            AssertDeclType("PCurrency", KnownTypeIds.PCurrencyType);
             AssertDeclType("System.Pointer", KnownTypeIds.GenericPointerType);
             AssertDeclType("System.PByte", KnownTypeIds.PByteType);
             AssertDeclType("System.PWord", KnownTypeIds.PWordType);
@@ -143,8 +143,8 @@ namespace PasPasPasTests.Types {
             AssertDeclType("System.PBoolean", KnownTypeIds.PBooleanType);
             AssertDeclType("System.PLongBool", KnownTypeIds.PLongBoolType);
             AssertDeclType("System.PWordBool", KnownTypeIds.PWordBoolType);
-            AssertDeclType("System.PPointer", KnownTypeIds.PPointer);
-            AssertDeclType("System.PCurrency", KnownTypeIds.PCurrency);
+            AssertDeclType("System.PPointer", KnownTypeIds.PPointerType);
+            AssertDeclType("System.PCurrency", KnownTypeIds.PCurrencyType);
         }
 
         /// <summary>

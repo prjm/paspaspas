@@ -1,8 +1,6 @@
 ﻿using System;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Runtime.Values.BooleanValues;
-using PasPasPas.Runtime.Values.IntValues;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Tokenizer {
@@ -32,6 +30,7 @@ namespace PasPasPasTests.Tokenizer {
         /// </summary>
         [TestMethod]
         public void TestIntegers() {
+            var e = CreateEnvironment().Runtime.Integers;
             IsInteger("2", 2);
             IsInteger("123", 123);
             IsInteger("0000", 0);
@@ -39,8 +38,8 @@ namespace PasPasPasTests.Tokenizer {
             IsInteger("300", 300);
             IsInteger("1000000", 1000000);
             IsInteger("18446744073709551615", 18446744073709551615);
-            IsInteger("18446744073709551616", new IntegerOperations(new BooleanOperations(), null).Overflow);
-            IsInteger("108446744073709551615", new IntegerOperations(new BooleanOperations(), null).Overflow);
+            IsInteger("18446744073709551616", e.Overflow);
+            IsInteger("108446744073709551615", e.Overflow);
         }
 
         /// <summary>

@@ -12,7 +12,6 @@ using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Parser;
@@ -62,9 +61,9 @@ namespace P3SyntaxTreeViewer {
 
             if (cst is ITypedSyntaxPart typeInfo && typeInfo.TypeInfo != null) {
 
-                var t = env.TypeRegistry.GetTypeByIdOrUndefinedType(typeInfo.TypeInfo.TypeId);
+                var t = typeInfo.TypeInfo.TypeDefinition;
 
-                if (t.TypeId == KnownTypeIds.ErrorType) {
+                if (t is IErrorType) {
                     treeViewItem.Header += " [Type Error]";
                 }
                 else {
@@ -75,11 +74,13 @@ namespace P3SyntaxTreeViewer {
                     treeViewItem.Header += "* " + typeInfo.TypeInfo.ToString();
                 }
 
+                /*
                 if (typeInfo.TypeInfo.IsType()) {
                     treeViewItem.Header += "~ " + typeInfo.TypeInfo.ToString();
                 }
+                */
 
-                if (typeInfo.TypeInfo != null && typeInfo.TypeInfo.TypeId == KnownTypeIds.ErrorType)
+                if (typeInfo.TypeInfo != null && typeInfo.TypeInfo.TypeDefinition is IErrorType)
                     treeViewItem.Foreground = new SolidColorBrush(Colors.Red);
 
             }
@@ -177,13 +178,13 @@ namespace P3SyntaxTreeViewer {
             var enc = new PasPasPas.AssemblyBuilder.Builder.ConstantEncoder(env);
 
             foreach (var symbol in unit.Symbols) {
-                var rf = symbol.Value as Reference;
-                var rftext = rf?.Kind.ToString() ?? symbol.Value.GetType().ToString();
-                var s = new TreeViewItem() { Header = symbol.Key + ": " + rftext };
+                var rf = (symbol as ITypedSyntaxPart)?.TypeInfo;
+                var rftext = rf?.GetBaseType().ToString() ?? symbol.GetType().ToString();
+                var s = new TreeViewItem() { Header = symbol.Name + ": " + rftext };
                 root.Items.Add(s);
                 s.IsExpanded = true;
 
-                if (rf?.Symbol is IRoutineGroup r) {
+                if (rf is PasPasPas.Globals.Runtime.IRoutineGroup r) {
 
                     foreach (var prm in r.Items) {
 
@@ -257,7 +258,7 @@ namespace P3SyntaxTreeViewer {
                 parserApi.AnnotateWithTypes(ast);
 
                 var unit = (ast as ProjectItemCollection)[0] as CompilationUnit;
-                var unitType = env.TypeRegistry.GetTypeByIdOrUndefinedType(unit?.TypeInfo?.TypeId ?? KnownTypeIds.ErrorType) as IUnitType;
+                var unitType = (unit?.TypeInfo?.TypeDefinition ?? env.TypeRegistry.SystemUnit.ErrorType) as IUnitType;
 
                 var tn = new Dictionary<int, string>();
                 return (bst, ast, unitType, tn);

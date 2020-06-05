@@ -1,16 +1,17 @@
 ﻿namespace PasPasPasTests.Types {
+    using PasPasPas.Globals.Types;
     using PasPasPasTests.Common;
-    using KTI = PasPasPas.Globals.Types.KnownTypeIds;
 
     /// <summary>
     ///     test names of types
     /// </summary>
     public class NameTest : TypeTest {
 
-        (string, string) GetInternalTypeName(int typeId) {
-            var env = CreateEnvironment();
-            var type = env.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
-            return (type.LongName, type.ShortName);
+        private ISystemUnit KTI =>
+            CreateEnvironment().TypeRegistry.SystemUnit;
+
+        (string, string) GetInternalTypeName(ITypeDefinition type) {
+            return (type.Name, type.MangledName);
         }
 
 
@@ -19,13 +20,13 @@
         /// </summary>
         [TestMethod]
         public void TestPlatformDependentIntegerTypes() {
-            (string, string) g(int id) => GetInternalTypeName(id);
-            Assert.AreEqual(("FixedInt", "i"), g(KTI.FixedInt));
-            Assert.AreEqual(("FixedUInt", "ui"), g(KTI.FixedUInt));
-            Assert.AreEqual(("NativeInt", "i"), g(KTI.NativeInt));
-            Assert.AreEqual(("NativeUInt", "ui"), g(KTI.NativeUInt));
-            Assert.AreEqual(("LongInt", "i"), g(KTI.LongInt));
-            Assert.AreEqual(("LongWord", "ui"), g(KTI.LongWord));
+            (string, string) g(ITypeDefinition id) => GetInternalTypeName(id);
+            Assert.AreEqual(("FixedInt", "i"), g(KTI.FixedIntType));
+            Assert.AreEqual(("FixedUInt", "ui"), g(KTI.FixedUIntType));
+            Assert.AreEqual(("NativeInt", "i"), g(KTI.NativeIntType));
+            Assert.AreEqual(("NativeUInt", "ui"), g(KTI.NativeUIntType));
+            Assert.AreEqual(("LongInt", "i"), g(KTI.LongIntType));
+            Assert.AreEqual(("LongWord", "ui"), g(KTI.LongWordType));
         }
 
         /// <summary>
@@ -33,13 +34,13 @@
         /// </summary>
         [TestMethod]
         public void TestRealTypes() {
-            (string, string) g(int id) => GetInternalTypeName(id);
+            (string, string) g(ITypeDefinition id) => GetInternalTypeName(id);
             Assert.AreEqual(("Real48", "6real48"), g(KTI.Real48Type));
             Assert.AreEqual(("Single", "f"), g(KTI.SingleType));
             Assert.AreEqual(("Double", "d"), g(KTI.DoubleType));
-            Assert.AreEqual(("Extended", "g"), g(KTI.Extended));
-            Assert.AreEqual(("Comp", "System@Comp"), g(KTI.Comp));
-            Assert.AreEqual(("Currency", "System@Currency"), g(KTI.Currency));
+            Assert.AreEqual(("Extended", "g"), g(KTI.ExtendedType));
+            Assert.AreEqual(("Comp", "System@Comp"), g(KTI.CompType));
+            Assert.AreEqual(("Currency", "System@Currency"), g(KTI.CurrencyType));
         }
 
         /// <summary>
@@ -47,11 +48,11 @@
         /// </summary>
         [TestMethod]
         public void TestStringTypes() {
-            (string, string) g(int id) => GetInternalTypeName(id);
+            (string, string) g(ITypeDefinition id) => GetInternalTypeName(id);
             Assert.AreEqual(("AnsiChar", "c"), g(KTI.AnsiCharType));
             Assert.AreEqual(("WideChar", "b"), g(KTI.WideCharType));
             Assert.AreEqual(("AnsiString", "%AnsiStringT$us$i0$%"), g(KTI.AnsiStringType));
-            Assert.AreEqual(("RawByteString", "%AnsiStringT$us$i65535$%"), g(KTI.RawByteString));
+            Assert.AreEqual(("RawByteString", "%AnsiStringT$us$i65535$%"), g(KTI.RawByteStringType));
             Assert.AreEqual(("ShortString", "System@%SmallString$uc$i255$%"), g(KTI.ShortStringType));
             Assert.AreEqual(("WideString", "System@WideString"), g(KTI.WideStringType));
             Assert.AreEqual(("UnicodeString", "System@UnicodeString"), g(KTI.UnicodeStringType));
@@ -62,21 +63,21 @@
         /// </summary>
         [TestMethod]
         public void TestPlatformInDependentIntegerTypes() {
-            (string, string) g(int id) => GetInternalTypeName(id);
-            Assert.AreEqual(("ShortInt", "zc"), g(KTI.ShortInt));
+            (string, string) g(ITypeDefinition id) => GetInternalTypeName(id);
+            Assert.AreEqual(("ShortInt", "zc"), g(KTI.ShortIntType));
             Assert.AreEqual(("Byte", "uc"), g(KTI.ByteType));
-            Assert.AreEqual(("SmallInt", "s"), g(KTI.SmallInt));
+            Assert.AreEqual(("SmallInt", "s"), g(KTI.SmallIntType));
             Assert.AreEqual(("Word", "us"), g(KTI.WordType));
             Assert.AreEqual(("Integer", "i"), g(KTI.IntegerType));
             Assert.AreEqual(("Cardinal", "ui"), g(KTI.CardinalType));
             Assert.AreEqual(("Int64", "j"), g(KTI.Int64Type));
             Assert.AreEqual(("UInt64", "uj"), g(KTI.UInt64Type));
-            Assert.AreEqual(("Int8", "zc"), g(KTI.Signed8BitInteger));
-            Assert.AreEqual(("UInt8", "uc"), g(KTI.Unsigned8BitInteger));
-            Assert.AreEqual(("Int16", "s"), g(KTI.Signed16BitInteger));
-            Assert.AreEqual(("UInt16", "us"), g(KTI.Unsigned16BitInteger));
-            Assert.AreEqual(("Int32", "i"), g(KTI.Signed32BitInteger));
-            Assert.AreEqual(("UInt32", "ui"), g(KTI.Unsigned32BitInteger));
+            Assert.AreEqual(("Int8", "zc"), g(KTI.Int8Type));
+            Assert.AreEqual(("UInt8", "uc"), g(KTI.UInt8Type));
+            Assert.AreEqual(("Int16", "s"), g(KTI.Int16Type));
+            Assert.AreEqual(("UInt16", "us"), g(KTI.UInt16Type));
+            Assert.AreEqual(("Int32", "i"), g(KTI.Int32Type));
+            Assert.AreEqual(("UInt32", "ui"), g(KTI.UInt32Type));
         }
 
         /// <summary>
@@ -84,7 +85,7 @@
         /// </summary>
         [TestMethod]
         public void TestBooleanTypes() {
-            (string, string) g(int id) => GetInternalTypeName(id);
+            (string, string) g(ITypeDefinition id) => GetInternalTypeName(id);
             Assert.AreEqual(("Boolean", "o"), g(KTI.BooleanType));
             Assert.AreEqual(("ByteBool", "uc"), g(KTI.ByteBoolType));
             Assert.AreEqual(("WordBool", "us"), g(KTI.WordBoolType));
@@ -96,33 +97,33 @@
         /// </summary>
         [TestMethod]
         public void TestPointerTypes() {
-            (string, string) g(int id) => GetInternalTypeName(id);
-            Assert.AreEqual(("Pointer", "pv"), g(KTI.GenericPointer));
-            Assert.AreEqual(("PByte", "puc"), g(KTI.PByte));
-            Assert.AreEqual(("PShortInt", "pzc"), g(KTI.PShortInt));
-            Assert.AreEqual(("PWord", "pus"), g(KTI.PWord));
-            Assert.AreEqual(("PSmallInt", "ps"), g(KTI.PSmallInt));
-            Assert.AreEqual(("PCardinal", "pui"), g(KTI.PCardinal));
-            Assert.AreEqual(("PLongword", "pui"), g(KTI.PLongword));
-            Assert.AreEqual(("PFixedUInt", "pui"), g(KTI.PFixedUint));
-            Assert.AreEqual(("PInteger", "pi"), g(KTI.PInteger));
-            Assert.AreEqual(("PLongInt", "pi"), g(KTI.PLongInt));
-            Assert.AreEqual(("PFixedInt", "pi"), g(KTI.PFixedInt));
-            Assert.AreEqual(("PUInt64", "puj"), g(KTI.PUInt64));
-            Assert.AreEqual(("PInt64", "pj"), g(KTI.PInt64));
-            Assert.AreEqual(("PNativeInt", "pi"), g(KTI.PNativeInt));
-            Assert.AreEqual(("PNativeUInt", "pui"), g(KTI.PNativeUInt));
-            Assert.AreEqual(("PAnsiChar", "pc"), g(KTI.PAnsiChar));
-            Assert.AreEqual(("PWideChar", "pb"), g(KTI.PWideChar));
-            Assert.AreEqual(("PBoolean", "po"), g(KTI.PBoolean));
-            Assert.AreEqual(("PWordBool", "pus"), g(KTI.PWordBool));
-            Assert.AreEqual(("PLongBool", "pi"), g(KTI.PLongBool));
-            Assert.AreEqual(("PPointer", "ppv"), g(KTI.PPointer));
-            Assert.AreEqual(("PCurrency", "pSystem@Currency"), g(KTI.PCurrency));
-            Assert.AreEqual(("PWideString", "pSystem@WideString"), g(KTI.PWideString));
-            Assert.AreEqual(("PUnicodeString", "pSystem@UnicodeString"), g(KTI.PUnicodeString));
-            Assert.AreEqual(("PShortString", "pSystem@%SmallString$uc$i255$%"), g(KTI.PShortString));
-            Assert.AreEqual(("PRawByteString", "p%AnsiStringT$us$i65535$%"), g(KTI.PRawByteString));
+            (string, string) g(ITypeDefinition id) => GetInternalTypeName(id);
+            Assert.AreEqual(("Pointer", "pv"), g(KTI.GenericPointerType));
+            Assert.AreEqual(("PByte", "puc"), g(KTI.PByteType));
+            Assert.AreEqual(("PShortInt", "pzc"), g(KTI.PShortIntType));
+            Assert.AreEqual(("PWord", "pus"), g(KTI.PWordType));
+            Assert.AreEqual(("PSmallInt", "ps"), g(KTI.PSmallIntType));
+            Assert.AreEqual(("PCardinal", "pui"), g(KTI.PCardinalType));
+            Assert.AreEqual(("PLongword", "pui"), g(KTI.PLongwordType));
+            Assert.AreEqual(("PFixedUInt", "pui"), g(KTI.PFixedUIntType));
+            Assert.AreEqual(("PInteger", "pi"), g(KTI.PIntegerType));
+            Assert.AreEqual(("PLongInt", "pi"), g(KTI.PLongIntType));
+            Assert.AreEqual(("PFixedInt", "pi"), g(KTI.PFixedIntType));
+            Assert.AreEqual(("PUInt64", "puj"), g(KTI.PUInt64Type));
+            Assert.AreEqual(("PInt64", "pj"), g(KTI.PInt64Type));
+            Assert.AreEqual(("PNativeInt", "pi"), g(KTI.PNativeIntType));
+            Assert.AreEqual(("PNativeUInt", "pui"), g(KTI.PNativeUIntType));
+            Assert.AreEqual(("PAnsiChar", "pc"), g(KTI.PAnsiCharType));
+            Assert.AreEqual(("PWideChar", "pb"), g(KTI.PWideCharType));
+            Assert.AreEqual(("PBoolean", "po"), g(KTI.PBooleanType));
+            Assert.AreEqual(("PWordBool", "pus"), g(KTI.PWordBoolType));
+            Assert.AreEqual(("PLongBool", "pi"), g(KTI.PLongBoolType));
+            Assert.AreEqual(("PPointer", "ppv"), g(KTI.PPointerType));
+            Assert.AreEqual(("PCurrency", "pSystem@Currency"), g(KTI.PCurrencyType));
+            Assert.AreEqual(("PWideString", "pSystem@WideString"), g(KTI.PWideStringType));
+            Assert.AreEqual(("PUnicodeString", "pSystem@UnicodeString"), g(KTI.PUnicodeStringType));
+            Assert.AreEqual(("PShortString", "pSystem@%SmallString$uc$i255$%"), g(KTI.PShortStringType));
+            Assert.AreEqual(("PRawByteString", "p%AnsiStringT$us$i65535$%"), g(KTI.PRawByteStringType));
         }
 
     }

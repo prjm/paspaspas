@@ -1,5 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPasTests.Common;
 
@@ -16,14 +15,14 @@ namespace PasPasPasTests.Types {
         /// <param name="expr"></param>
         /// <param name="typeId"></param>
         /// <param name="decls"></param>
-        protected void AssertCallExprType(string expr, int typeId, string decls) {
+        protected void AssertCallExprType(string expr, ITypeDefinition typeId, string decls) {
             void tester(IExpression value) {
                 Assert.IsNotNull(value);
 
                 var typeInfo = value.TypeInfo;
                 Assert.IsNotNull(typeInfo);
-                Assert.AreEqual(typeId, typeInfo.TypeId);
-                Assert.AreEqual(TypeReferenceKind.InvocationResult, typeInfo.ReferenceKind);
+                Assert.AreEqual(typeId, typeInfo.TypeDefinition);
+                Assert.AreEqual(SymbolTypeKind.InvocationResult, typeInfo.SymbolKind);
             }
 
             AssertExprType(expr, decls, tester);
@@ -36,7 +35,7 @@ namespace PasPasPasTests.Types {
         /// <param name="typeId"></param>
         /// <param name="kind"></param>
         /// <param name="decls"></param>
-        protected void AssertCallStatementType(string statement, int typeId, string decls, StructuredStatementKind kind) {
+        protected void AssertCallStatementType(string statement, ITypeDefinition typeId, string decls, StructuredStatementKind kind) {
             void tester(StructuredStatement value) {
                 Assert.IsNotNull(value);
 
@@ -47,14 +46,17 @@ namespace PasPasPasTests.Types {
                     var e = value.Expressions[0];
                     var typeInfo = e.TypeInfo;
                     Assert.IsNotNull(typeInfo);
-                    Assert.AreEqual(typeId, typeInfo.TypeId);
-                    Assert.AreEqual(TypeReferenceKind.InvocationResult, typeInfo.ReferenceKind);
+                    Assert.AreEqual(typeId, typeInfo.TypeDefinition);
+                    Assert.AreEqual(SymbolTypeKind.InvocationResult, typeInfo.SymbolKind);
                 }
             }
 
 
             AssertStatementType(statement, decls, tester);
         }
+
+        private ISystemUnit KnownTypeIds
+            => CreateEnvironment().TypeRegistry.SystemUnit;
 
         /// <summary>
         ///     test global method calls

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
@@ -73,11 +74,24 @@ namespace PasPasPasTests.Common {
         ///     make a invocation value
         /// </summary>
         /// <returns></returns>
-        protected static IInvocationResult GetInvocationValue(int typeId, ITypeDefinition typeKind) {
+        protected static IInvocationResult GetInvocationValue(ITypeDefinition typeId, ITypeDefinition typeKind) {
             var fakeRoutine = new RoutineGroup(default, default);
             var _ = fakeRoutine.AddParameterGroup(RoutineKind.Function, typeKind.Reference);
             return MakeRuntime().Types.MakeInvocationResult(_);
         }
+
+        /// <summary>
+        ///     make a invocation value
+        /// </summary>
+        /// <returns></returns>
+        protected static IIntrinsicInvocationResult GetInvocationValue(IntrinsicRoutineId id, ITypeDefinition result, ITypeDefinition param) {
+            var e = CreateEnvironment();
+            var rg = e.TypeRegistry.SystemUnit.Symbols.Where(t => t is IRoutineGroup x && x.RoutineId == id).FirstOrDefault(); ;
+            var _ = CreateEnvironment().Runtime.Types.MakeSignature(result.Reference, param.Reference);
+            return MakeRuntime().Types.MakeInvocationResultFromIntrinsic(rg as IRoutineGroup, _);
+        }
+
+
 
         /// <summary>
         ///     get a subrange value

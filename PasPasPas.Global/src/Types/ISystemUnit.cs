@@ -40,7 +40,7 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     error type
         /// </summary>
-        ITypeDefinition ErrorType { get; }
+        IErrorType ErrorType { get; }
 
         /// <summary>
         /// s   boolean type definition
@@ -332,12 +332,12 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     pointer to currency type
         /// </summary>
-        IPointerType PCurrency { get; }
+        IPointerType PCurrencyType { get; }
 
         /// <summary>
         ///     pointer to pointer type
         /// </summary>
-        IPointerType PPointer { get; }
+        IPointerType PPointerType { get; }
 
         /// <summary>
         ///     pointer to word boolean type
@@ -403,5 +403,12 @@ namespace PasPasPas.Globals.Types {
         ///     real48 type
         /// </summary>
         IRealType Real48Type { get; }
+        IAliasedType UInt8Type { get; }
+        IAliasedType Int8Type { get; }
+        IAliasedType UInt16Type { get; }
+        IAliasedType Int16Type { get; }
+        IAliasedType UInt32Type { get; }
+        IAliasedType Int32Type { get; }
+        IPointerType PRawByteStringType { get; }
     }
 }

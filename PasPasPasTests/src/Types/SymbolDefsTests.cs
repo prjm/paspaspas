@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Options.DataTypes;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPasTests.Common;
@@ -13,6 +13,8 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class SymbolDefsTests : TypeTest {
 
+
+
         private void TestOnUnitType(Func<IUnitType, bool> tester, string decls = "") {
             var env = default(ITypedEnvironment);
             CompilationUnit t(object x) {
@@ -20,9 +22,9 @@ namespace PasPasPasTests.Types {
                 if (unit == default)
                     return default;
 
-                var unitType = env.TypeRegistry.GetTypeByIdOrUndefinedType(unit?.TypeInfo?.TypeId ?? KnownTypeIds.ErrorType) as IUnitType;
+                var unitType = (unit?.TypeInfo?.TypeDefinition ?? env.TypeRegistry.SystemUnit.ErrorType) as IUnitType;
                 Assert.IsNotNull(unitType);
-                Assert.AreEqual(CommonTypeKind.Unit, unitType.TypeKind);
+                Assert.AreEqual(BaseType.Unit, unitType.BaseType);
                 Assert.IsTrue(tester(unitType));
                 return unit;
             }
@@ -36,7 +38,7 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestMainMethodExistence() {
             bool t(IUnitType u) {
-                var s = u.Symbols[KnownNames.MainMethod];
+                var s = u.Symbols.Where(x => string.Equals(x.Name, KnownNames.MainMethod, StringComparison.OrdinalIgnoreCase));
                 return s != default;
             }
             TestOnUnitType(t);
@@ -48,7 +50,7 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestUnitVariable() {
             bool t(IUnitType u) {
-                var s = u.Symbols["a"];
+                var s = u.Symbols.Where(x => string.Equals(x.Name, "a", StringComparison.OrdinalIgnoreCase));
                 return s != default;
             }
             TestOnUnitType(t, "var a: string;");

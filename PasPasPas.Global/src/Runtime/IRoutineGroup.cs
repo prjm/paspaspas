@@ -9,11 +9,6 @@ namespace PasPasPas.Globals.Runtime {
     public interface IRoutineGroup : INamedTypeSymbol {
 
         /// <summary>
-        ///     routine name
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         ///     defining type id
         /// </summary>
         ITypeDefinition DefiningType { get; }

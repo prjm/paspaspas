@@ -36,7 +36,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     type registry
         /// </summary>
-        public ITypeRegistry TypeRegistry
+        public virtual ITypeRegistry TypeRegistry
             => DefiningUnit.TypeRegistry;
 
         /// <summary>

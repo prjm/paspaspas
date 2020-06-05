@@ -14,14 +14,20 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         private readonly List<INamedTypeSymbol>
             symbols = new List<INamedTypeSymbol>();
+        readonly ITypeRegistry typeRegistry;
 
         /// <summary>
         ///     create a new unit type
         /// </summary>
         /// <param name="unitName">unit name</param>
-        /// <param name="typeRegistry">type registry</param>
-        public UnitType(string unitName, ITypeRegistry typeRegistry) : base(default)
-            => Name = unitName;
+        /// <param name="registry">type registry</param>
+        public UnitType(string unitName, ITypeRegistry registry) : base(default) {
+            Name = unitName;
+            typeRegistry = registry;
+        }
+
+        public override ITypeRegistry TypeRegistry
+            => typeRegistry;
 
         /// <summary>
         ///     type kind

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Serialization;
-using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -32,7 +32,7 @@ namespace PasPasPasTests.Types {
                 var ast = api.CreateAbstractSyntraxTree(cst);
                 api.AnnotateWithTypes(ast);
                 var root = (ast as ProjectItemCollection)?[0]?.TypeInfo;
-                var unitType = env.TypeRegistry.GetTypeByIdOrUndefinedType(root.TypeId) as UnitType;
+                var unitType = root.TypeDefinition as IUnitType;
                 using (var s = new MemoryStream()) {
                     using (var w = env.CreateTypeWriter(s)) {
                         w.WriteUnit(unitType);
@@ -53,10 +53,10 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="constant"></param>
         /// <param name="value"></param>
-        protected void AssertSerializedConstant(string constant, IOldTypeReference value) {
+        protected void AssertSerializedConstant(string constant, IValue value) {
             var prg = $"unit a; interface const  B = {constant}; implementation end.";
             void tester(IUnitType t) {
-                var c = (t as UnitType).Symbols["B"].Symbol;
+                var c = t.Symbols.Where(t1 => string.Equals(t1.Name, "B", StringComparison.OrdinalIgnoreCase));
                 Assert.AreEqual(value, c);
             };
 

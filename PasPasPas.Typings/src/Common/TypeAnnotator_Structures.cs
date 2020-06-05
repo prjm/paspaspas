@@ -25,6 +25,7 @@ namespace PasPasPas.Typings.Common {
             var unitType = TypeRegistry.CreateUnitType(element.SymbolName);
             CurrentUnit = element;
             CurrentUnit.TypeInfo = unitType.Reference;
+            TypeCreator = TypeRegistry.CreateTypeFactory(unitType);
             resolver.OpenScope();
             resolver.AddToScope(KnownNames.System, unitType.Reference);
         }
@@ -35,6 +36,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(CompilationUnit element) {
             resolver.CloseScope();
+            TypeCreator = default;
             CurrentUnit = default;
         }
 
@@ -462,7 +464,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(ArrayTypeDeclaration element) {
-            var baseTypeId = SystemUnit.ErrorType;
+            var baseTypeId = SystemUnit.ErrorType as ITypeDefinition;
 
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null) {
                 baseTypeId = element.TypeValue.TypeInfo.TypeDefinition;

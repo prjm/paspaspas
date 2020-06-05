@@ -1,7 +1,6 @@
 ﻿using System;
-using PasPasPas.Globals.Runtime;
+using System.Collections.Immutable;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -11,21 +10,24 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class TypedExpressionTest : TypeTest {
 
+        private ISystemUnit KnownTypeIds
+            => CreateEnvironment().TypeRegistry.SystemUnit;
+
         /// <summary>
         ///     test integer literals
         /// </summary>
         [TestMethod]
         public void TestIntegerLiteralTypes() {
-            AssertExprType("-128", KnownTypeIds.ShortInt);
-            AssertExprType("0", KnownTypeIds.ShortInt);
-            AssertExprType("127", KnownTypeIds.ShortInt);
+            AssertExprType("-128", KnownTypeIds.ShortIntType);
+            AssertExprType("0", KnownTypeIds.ShortIntType);
+            AssertExprType("127", KnownTypeIds.ShortIntType);
             AssertExprType("128", KnownTypeIds.ByteType);
             AssertExprType("255", KnownTypeIds.ByteType);
-            AssertExprType("-129", KnownTypeIds.SmallInt);
-            AssertExprType("256", KnownTypeIds.SmallInt);
-            AssertExprType("-32768", KnownTypeIds.SmallInt);
+            AssertExprType("-129", KnownTypeIds.SmallIntType);
+            AssertExprType("256", KnownTypeIds.SmallIntType);
+            AssertExprType("-32768", KnownTypeIds.SmallIntType);
             AssertExprType("-32769", KnownTypeIds.IntegerType);
-            AssertExprType("32767", KnownTypeIds.SmallInt);
+            AssertExprType("32767", KnownTypeIds.SmallIntType);
             AssertExprType("32768", KnownTypeIds.WordType);
             AssertExprType("65535", KnownTypeIds.WordType);
             AssertExprType("65536", KnownTypeIds.IntegerType);
@@ -70,8 +72,8 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestExtendedLiteralTypes() {
-            AssertExprType("3.5", KnownTypeIds.Extended);
-            AssertExprType("2.33434343", KnownTypeIds.Extended);
+            AssertExprType("3.5", KnownTypeIds.ExtendedType);
+            AssertExprType("2.33434343", KnownTypeIds.ExtendedType);
         }
 
         /// <summary>
@@ -91,14 +93,14 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestArithmeticOperatorsInteger() {
-            AssertExprType("+ 1", KnownTypeIds.ShortInt);
-            AssertExprType("- 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 + 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 - 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 * 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 div 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 mod 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 / 1", KnownTypeIds.Extended);
+            AssertExprType("+ 1", KnownTypeIds.ShortIntType);
+            AssertExprType("- 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 + 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 - 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 * 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 div 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 mod 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 / 1", KnownTypeIds.ExtendedType);
         }
 
         /// <summary>
@@ -112,20 +114,20 @@ namespace PasPasPasTests.Types {
             AssertExprType("4294967296 - 1", KnownTypeIds.CardinalType);
             AssertExprType("4294967296 * 1", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 div 1", KnownTypeIds.Int64Type);
-            AssertExprType("4294967296 mod 1", KnownTypeIds.ShortInt);
-            AssertExprType("4294967296 / 1", KnownTypeIds.Extended);
+            AssertExprType("4294967296 mod 1", KnownTypeIds.ShortIntType);
+            AssertExprType("4294967296 / 1", KnownTypeIds.ExtendedType);
             AssertExprType("1 + 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("1 - 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("1 * 4294967296", KnownTypeIds.Int64Type);
-            AssertExprType("1 div 4294967296", KnownTypeIds.ShortInt);
-            AssertExprType("1 mod 4294967296", KnownTypeIds.ShortInt);
-            AssertExprType("1 / 4294967296", KnownTypeIds.Extended);
+            AssertExprType("1 div 4294967296", KnownTypeIds.ShortIntType);
+            AssertExprType("1 mod 4294967296", KnownTypeIds.ShortIntType);
+            AssertExprType("1 / 4294967296", KnownTypeIds.ExtendedType);
             AssertExprType("4294967296 + 4294967296", KnownTypeIds.Int64Type);
-            AssertExprType("4294967296 - 4294967296", KnownTypeIds.ShortInt);
+            AssertExprType("4294967296 - 4294967296", KnownTypeIds.ShortIntType);
             AssertExprType("4294967296 * 3", KnownTypeIds.Int64Type);
-            AssertExprType("4294967296 div 4294967296", KnownTypeIds.ShortInt);
-            AssertExprType("4294967296 mod 4294967296", KnownTypeIds.ShortInt);
-            AssertExprType("4294967296 / 4294967296", KnownTypeIds.Extended);
+            AssertExprType("4294967296 div 4294967296", KnownTypeIds.ShortIntType);
+            AssertExprType("4294967296 mod 4294967296", KnownTypeIds.ShortIntType);
+            AssertExprType("4294967296 / 4294967296", KnownTypeIds.ExtendedType);
         }
 
         /// <summary>
@@ -133,28 +135,28 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestArithmeticOperatorsReal() {
-            AssertExprType("+ 1.0", KnownTypeIds.Extended);
-            AssertExprType("- 1.0", KnownTypeIds.Extended);
-            AssertExprType("1.0 + 1", KnownTypeIds.Extended);
-            AssertExprType("1.0 - 1", KnownTypeIds.Extended);
-            AssertExprType("1.0 * 1", KnownTypeIds.Extended);
-            AssertExprType("1.0 / 1", KnownTypeIds.Extended);
-            AssertExprType("1 + 1.0", KnownTypeIds.Extended);
-            AssertExprType("1 - 1.0", KnownTypeIds.Extended);
-            AssertExprType("1 * 1.0", KnownTypeIds.Extended);
-            AssertExprType("1 / 1.0", KnownTypeIds.Extended);
-            AssertExprType("1.0 + 1.0", KnownTypeIds.Extended);
-            AssertExprType("1.0 - 1.0", KnownTypeIds.Extended);
-            AssertExprType("1.0 * 1.0", KnownTypeIds.Extended);
-            AssertExprType("1.0 / 1.0", KnownTypeIds.Extended);
-            AssertExprType("1.0 + 4294967296", KnownTypeIds.Extended);
-            AssertExprType("1.0 - 4294967296", KnownTypeIds.Extended);
-            AssertExprType("1.0 * 4294967296", KnownTypeIds.Extended);
-            AssertExprType("1.0 / 4294967296", KnownTypeIds.Extended);
-            AssertExprType("4294967296 + 1.0", KnownTypeIds.Extended);
-            AssertExprType("4294967296 - 1.0", KnownTypeIds.Extended);
-            AssertExprType("4294967296 * 1.0", KnownTypeIds.Extended);
-            AssertExprType("4294967296 / 1.0", KnownTypeIds.Extended);
+            AssertExprType("+ 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("- 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 + 1", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 - 1", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 * 1", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 / 1", KnownTypeIds.ExtendedType);
+            AssertExprType("1 + 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("1 - 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("1 * 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("1 / 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 + 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 - 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 * 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 / 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 + 4294967296", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 - 4294967296", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 * 4294967296", KnownTypeIds.ExtendedType);
+            AssertExprType("1.0 / 4294967296", KnownTypeIds.ExtendedType);
+            AssertExprType("4294967296 + 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("4294967296 - 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("4294967296 * 1.0", KnownTypeIds.ExtendedType);
+            AssertExprType("4294967296 / 1.0", KnownTypeIds.ExtendedType);
         }
 
         /// <summary>
@@ -173,36 +175,36 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestBitwiseOperators() {
-            AssertExprType("not 1", KnownTypeIds.ShortInt);
-            AssertExprType("not 256", KnownTypeIds.SmallInt);
-            AssertExprType("not 4294967295", KnownTypeIds.ShortInt);
+            AssertExprType("not 1", KnownTypeIds.ShortIntType);
+            AssertExprType("not 256", KnownTypeIds.SmallIntType);
+            AssertExprType("not 4294967295", KnownTypeIds.ShortIntType);
             AssertExprType("not 4294967296", KnownTypeIds.Int64Type);
 
-            AssertExprType("1 and 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 and 256", KnownTypeIds.ShortInt);
-            AssertExprType("277 and 256", KnownTypeIds.SmallInt);
-            AssertExprType("1 and 65536", KnownTypeIds.ShortInt);
-            AssertExprType("1 and 4294967296", KnownTypeIds.ShortInt);
-            AssertExprType("1 and 1", KnownTypeIds.ShortInt);
-            AssertExprType("256 and 1", KnownTypeIds.ShortInt);
-            AssertExprType("65536 and 1", KnownTypeIds.ShortInt);
-            AssertExprType("4294967296 and 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 and 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 and 256", KnownTypeIds.ShortIntType);
+            AssertExprType("277 and 256", KnownTypeIds.SmallIntType);
+            AssertExprType("1 and 65536", KnownTypeIds.ShortIntType);
+            AssertExprType("1 and 4294967296", KnownTypeIds.ShortIntType);
+            AssertExprType("1 and 1", KnownTypeIds.ShortIntType);
+            AssertExprType("256 and 1", KnownTypeIds.ShortIntType);
+            AssertExprType("65536 and 1", KnownTypeIds.ShortIntType);
+            AssertExprType("4294967296 and 1", KnownTypeIds.ShortIntType);
 
-            AssertExprType("1 or 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 or 256", KnownTypeIds.SmallInt);
+            AssertExprType("1 or 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 or 256", KnownTypeIds.SmallIntType);
             AssertExprType("1 or 65536", KnownTypeIds.IntegerType);
             AssertExprType("1 or 4294967296", KnownTypeIds.Int64Type);
-            AssertExprType("1 or 1", KnownTypeIds.ShortInt);
-            AssertExprType("256 or 1", KnownTypeIds.SmallInt);
+            AssertExprType("1 or 1", KnownTypeIds.ShortIntType);
+            AssertExprType("256 or 1", KnownTypeIds.SmallIntType);
             AssertExprType("65536 or 1", KnownTypeIds.IntegerType);
             AssertExprType("4294967296 or 1", KnownTypeIds.Int64Type);
 
-            AssertExprType("1 xor 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 xor 256", KnownTypeIds.SmallInt);
+            AssertExprType("1 xor 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 xor 256", KnownTypeIds.SmallIntType);
             AssertExprType("1 xor 65536", KnownTypeIds.IntegerType);
             AssertExprType("1 xor 4294967296", KnownTypeIds.Int64Type);
-            AssertExprType("1 xor 1", KnownTypeIds.ShortInt);
-            AssertExprType("256 xor 1", KnownTypeIds.SmallInt);
+            AssertExprType("1 xor 1", KnownTypeIds.ShortIntType);
+            AssertExprType("256 xor 1", KnownTypeIds.SmallIntType);
             AssertExprType("65536 xor 1", KnownTypeIds.IntegerType);
             AssertExprType("4294967296 xor 1", KnownTypeIds.Int64Type);
         }
@@ -212,14 +214,14 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestShiftingOperators() {
-            AssertExprType("1 shr 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 shr 256", KnownTypeIds.ShortInt);
-            AssertExprType("1 shr 65536", KnownTypeIds.ShortInt);
-            AssertExprType("1 shr 4294967296", KnownTypeIds.ShortInt);
+            AssertExprType("1 shr 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 shr 256", KnownTypeIds.ShortIntType);
+            AssertExprType("1 shr 65536", KnownTypeIds.ShortIntType);
+            AssertExprType("1 shr 4294967296", KnownTypeIds.ShortIntType);
             AssertExprType("256 shr 1", KnownTypeIds.ByteType);
-            AssertExprType("256 shr 256", KnownTypeIds.SmallInt);
-            AssertExprType("256 shr 65536", KnownTypeIds.SmallInt);
-            AssertExprType("256 shr 4294967296", KnownTypeIds.SmallInt);
+            AssertExprType("256 shr 256", KnownTypeIds.SmallIntType);
+            AssertExprType("256 shr 65536", KnownTypeIds.SmallIntType);
+            AssertExprType("256 shr 4294967296", KnownTypeIds.SmallIntType);
             AssertExprType("65536 shr 1", KnownTypeIds.WordType);
             AssertExprType("65536 shr 256", KnownTypeIds.IntegerType);
             AssertExprType("65536 shr 65536", KnownTypeIds.IntegerType);
@@ -229,14 +231,14 @@ namespace PasPasPasTests.Types {
             AssertExprType("4294967296 shr 65536", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 shr 4294967296", KnownTypeIds.Int64Type);
 
-            AssertExprType("1 shl 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 shl 256", KnownTypeIds.ShortInt);
-            AssertExprType("1 shl 65536", KnownTypeIds.ShortInt);
-            AssertExprType("1 shl 4294967296", KnownTypeIds.ShortInt);
-            AssertExprType("256 shl 1", KnownTypeIds.SmallInt);
-            AssertExprType("256 shl 256", KnownTypeIds.SmallInt);
-            AssertExprType("256 shl 65536", KnownTypeIds.SmallInt);
-            AssertExprType("256 shl 4294967296", KnownTypeIds.SmallInt);
+            AssertExprType("1 shl 1", KnownTypeIds.ShortIntType);
+            AssertExprType("1 shl 256", KnownTypeIds.ShortIntType);
+            AssertExprType("1 shl 65536", KnownTypeIds.ShortIntType);
+            AssertExprType("1 shl 4294967296", KnownTypeIds.ShortIntType);
+            AssertExprType("256 shl 1", KnownTypeIds.SmallIntType);
+            AssertExprType("256 shl 256", KnownTypeIds.SmallIntType);
+            AssertExprType("256 shl 65536", KnownTypeIds.SmallIntType);
+            AssertExprType("256 shl 4294967296", KnownTypeIds.SmallIntType);
             AssertExprType("65536 shl 1", KnownTypeIds.IntegerType);
             AssertExprType("65536 shl 256", KnownTypeIds.IntegerType);
             AssertExprType("65536 shl 65536", KnownTypeIds.IntegerType);
@@ -430,15 +432,18 @@ namespace PasPasPasTests.Types {
             };
 
             // subrange types
-            AssertExprTypeByVar("-1..1", "+ a", 1 + RegisteredTypes.SmallestUserTypeId);
-            AssertExprTypeByVar("-1..1", "- a", 1 + RegisteredTypes.SmallestUserTypeId);
+            var e = CreateEnvironment();
+            var ct = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var sr = ct.CreateSubrangeType(string.Empty, KnownTypeIds.IntegerType, GetIntegerValue((sbyte)-1), GetIntegerValue((sbyte)1));
+            AssertExprTypeByVar("-1..1", "+ a", sr);
+            AssertExprTypeByVar("-1..1", "- a", sr);
 
             AssertExprTypeByVar("Byte", "+ a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "+ a", KnownTypeIds.WordType);
             AssertExprTypeByVar("Cardinal", "+ a", KnownTypeIds.CardinalType);
             AssertExprTypeByVar("UInt64", "+ a", KnownTypeIds.UInt64Type);
-            AssertExprTypeByVar("ShortInt", "+ a", KnownTypeIds.ShortInt);
-            AssertExprTypeByVar("SmallInt", "+ a", KnownTypeIds.SmallInt);
+            AssertExprTypeByVar("ShortInt", "+ a", KnownTypeIds.ShortIntType);
+            AssertExprTypeByVar("SmallInt", "+ a", KnownTypeIds.SmallIntType);
             AssertExprTypeByVar("Integer", "+ a", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("Int64", "+ a", KnownTypeIds.Int64Type);
 
@@ -446,19 +451,19 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Word", "- a", KnownTypeIds.WordType);
             AssertExprTypeByVar("Cardinal", "- a", KnownTypeIds.CardinalType);
             AssertExprTypeByVar("UInt64", "- a", KnownTypeIds.UInt64Type);
-            AssertExprTypeByVar("ShortInt", "- a", KnownTypeIds.ShortInt);
-            AssertExprTypeByVar("SmallInt", "- a", KnownTypeIds.SmallInt);
+            AssertExprTypeByVar("ShortInt", "- a", KnownTypeIds.ShortIntType);
+            AssertExprTypeByVar("SmallInt", "- a", KnownTypeIds.SmallIntType);
             AssertExprTypeByVar("Integer", "- a", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("Int64", "- a", KnownTypeIds.Int64Type);
 
 
-            foreach (var e in d) {
-                AssertExprTypeByVar(e.Item1, "a + b", e.Item2);
-                AssertExprTypeByVar(e.Item1, "a - b", e.Item2);
-                AssertExprTypeByVar(e.Item1, "a div b", e.Item2);
-                AssertExprTypeByVar(e.Item1, "a * b", e.Item2);
-                AssertExprTypeByVar(e.Item1, "a mod b", e.Item2);
-                AssertExprTypeByVar(e.Item1, "a / b", KnownTypeIds.Extended);
+            foreach (var e1 in d) {
+                AssertExprTypeByVar(e1.Item1, "a + b", e1.Item2);
+                AssertExprTypeByVar(e1.Item1, "a - b", e1.Item2);
+                AssertExprTypeByVar(e1.Item1, "a div b", e1.Item2);
+                AssertExprTypeByVar(e1.Item1, "a * b", e1.Item2);
+                AssertExprTypeByVar(e1.Item1, "a mod b", e1.Item2);
+                AssertExprTypeByVar(e1.Item1, "a / b", KnownTypeIds.ExtendedType);
             }
 
             // subrange type
@@ -467,7 +472,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("-1..1", "a div b", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("-1..1", "a * b", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("-1..1", "a mod b", KnownTypeIds.IntegerType);
-            AssertExprTypeByVar("-1..1", "a / b", KnownTypeIds.Extended);
+            AssertExprTypeByVar("-1..1", "a / b", KnownTypeIds.ExtendedType);
 
         }
 
@@ -481,35 +486,39 @@ namespace PasPasPasTests.Types {
                 Tuple.Create("Word", KnownTypeIds.WordType),
                 Tuple.Create("Cardinal", KnownTypeIds.CardinalType),
                 Tuple.Create("UInt64", KnownTypeIds.UInt64Type),
-                Tuple.Create("SmallInt", KnownTypeIds.SmallInt),
-                Tuple.Create("ShortInt", KnownTypeIds.ShortInt),
+                Tuple.Create("SmallInt", KnownTypeIds.SmallIntType),
+                Tuple.Create("ShortInt", KnownTypeIds.ShortIntType),
                 Tuple.Create("Integer", KnownTypeIds.IntegerType),
                 Tuple.Create("Int64", KnownTypeIds.Int64Type),
             };
 
             // subrange types
-            AssertExprTypeByVar("-1..1", "not a", 1 + RegisteredTypes.SmallestUserTypeId);
-            AssertExprTypeByVar("-1..1", "not a", 1 + RegisteredTypes.SmallestUserTypeId);
+            var e = CreateEnvironment();
+            var ct = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var sr = ct.CreateSubrangeType(string.Empty, KnownTypeIds.IntegerType, GetIntegerValue((sbyte)-1), GetIntegerValue((sbyte)1));
+
+            AssertExprTypeByVar("-1..1", "not a", sr);
+            AssertExprTypeByVar("-1..1", "not a", sr);
 
             AssertExprTypeByVar("Byte", "not a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "not a", KnownTypeIds.WordType);
             AssertExprTypeByVar("Cardinal", "not a", KnownTypeIds.CardinalType);
             AssertExprTypeByVar("UInt64", "not a", KnownTypeIds.UInt64Type);
-            AssertExprTypeByVar("ShortInt", "not a", KnownTypeIds.ShortInt);
-            AssertExprTypeByVar("SmallInt", "not a", KnownTypeIds.SmallInt);
+            AssertExprTypeByVar("ShortInt", "not a", KnownTypeIds.ShortIntType);
+            AssertExprTypeByVar("SmallInt", "not a", KnownTypeIds.SmallIntType);
             AssertExprTypeByVar("Integer", "not a", KnownTypeIds.IntegerType);
             AssertExprTypeByVar("Int64", "not a", KnownTypeIds.Int64Type);
 
-            foreach (var e in d) {
-                AssertExprTypeByVar(e.Item1, "a or b", e.Item2);
-                AssertExprTypeByVar(e.Item1, "a and b", e.Item2);
-                AssertExprTypeByVar(e.Item1, "a xor b", e.Item2);
+            foreach (var e1 in d) {
+                AssertExprTypeByVar(e1.Item1, "a or b", e1.Item2);
+                AssertExprTypeByVar(e1.Item1, "a and b", e1.Item2);
+                AssertExprTypeByVar(e1.Item1, "a xor b", e1.Item2);
             }
 
             // subrange type
-            AssertExprTypeByVar("-1..1", "a or b", KnownTypeIds.ShortInt);
-            AssertExprTypeByVar("-1..1", "a xor b", KnownTypeIds.ShortInt);
-            AssertExprTypeByVar("-1..1", "a and b", KnownTypeIds.ShortInt);
+            AssertExprTypeByVar("-1..1", "a or b", KnownTypeIds.ShortIntType);
+            AssertExprTypeByVar("-1..1", "a xor b", KnownTypeIds.ShortIntType);
+            AssertExprTypeByVar("-1..1", "a and b", KnownTypeIds.ShortIntType);
         }
 
         /// <summary>
@@ -524,17 +533,20 @@ namespace PasPasPasTests.Types {
             };
 
             // subrange types
-            AssertExprTypeByVar("-1..1", "not a", 1 + RegisteredTypes.SmallestUserTypeId);
-            AssertExprTypeByVar("-1..1", "not a", 1 + RegisteredTypes.SmallestUserTypeId);
+            var e = CreateEnvironment();
+            var ct = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var sr = ct.CreateSubrangeType(string.Empty, KnownTypeIds.IntegerType, GetIntegerValue((sbyte)-1), GetIntegerValue((sbyte)1));
+            AssertExprTypeByVar("-1..1", "not a", sr);
+            AssertExprTypeByVar("-1..1", "not a", sr);
 
             AssertExprTypeByVar("Boolean", "not a", KnownTypeIds.BooleanType);
             AssertExprTypeByVar("ByteBool", "not a", KnownTypeIds.ByteBoolType);
             AssertExprTypeByVar("WordBool", "not a", KnownTypeIds.WordBoolType);
 
-            foreach (var e in d) {
-                AssertExprTypeByVar(e.Item1, "a or b", e.Item2);
-                AssertExprTypeByVar(e.Item1, "a and b", e.Item2);
-                AssertExprTypeByVar(e.Item1, "a xor b", e.Item2);
+            foreach (var e1 in d) {
+                AssertExprTypeByVar(e1.Item1, "a or b", e1.Item2);
+                AssertExprTypeByVar(e1.Item1, "a and b", e1.Item2);
+                AssertExprTypeByVar(e1.Item1, "a xor b", e1.Item2);
             }
 
             // subrange type
@@ -548,7 +560,9 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestPointerOperator() {
-            AssertExprValue("@a", GetPointerValue(GetUnkownValue(KnownTypeIds.IntegerType, PasPasPas.Globals.Runtime.CommonTypeKind.IntegerType)), "var a: integer;", isConstant: false);
+            var r = CreateEnvironment().Runtime;
+            var pv = r.Types.MakeOperatorResult(OperatorKind.AtOperator, KnownTypeIds.PIntegerType.Reference, r.Types.MakeSignature(KnownTypeIds.ErrorType.Reference, KnownTypeIds.IntegerType.Reference));
+            AssertExprValue("@a", pv, "var a: integer;", isConstant: false);
             AssertExprValue("@a", GetPointerValue(GetIntegerValue(4)), "const a = 4;");
         }
 
@@ -628,8 +642,8 @@ namespace PasPasPasTests.Types {
                 Tuple.Create("Word", KnownTypeIds.WordType),
                 Tuple.Create("Cardinal", KnownTypeIds.CardinalType),
                 Tuple.Create("UInt64", KnownTypeIds.UInt64Type),
-                Tuple.Create("SmallInt", KnownTypeIds.SmallInt),
-                Tuple.Create("ShortInt", KnownTypeIds.ShortInt),
+                Tuple.Create("SmallInt", KnownTypeIds.SmallIntType),
+                Tuple.Create("ShortInt", KnownTypeIds.ShortIntType),
                 Tuple.Create("Integer", KnownTypeIds.IntegerType),
                 Tuple.Create("Int64", KnownTypeIds.Int64Type),
             };
@@ -699,7 +713,12 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of System@UnicodeString");
             AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of g");
             AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "static array [Subrange i] of enum zc", "type ta = (a,b);");
-            AssertExprValue("a", GetArrayValue(RegisteredTypes.SmallestUserTypeId, KnownTypeIds.StringType, GetUnicodeStringValue("11"), GetUnicodeStringValue("2")), "const a: array [0 .. 1] of String = ('11', '2');");
+
+            var c = CreateEnvironment();
+            var ct = c.TypeRegistry.CreateTypeFactory(c.TypeRegistry.SystemUnit);
+            var at = ct.CreateStaticArrayType(KnownTypeIds.StringType, string.Empty, KnownTypeIds.IntegerType, false);
+            var av = c.Runtime.Structured.CreateArrayValue(at, KnownTypeIds.StringType, ImmutableArray.Create(GetUnicodeStringValue("11"), GetUnicodeStringValue("2")));
+            AssertExprValue("a", av, "const a: array [0 .. 1] of String = ('11', '2');");
         }
 
         /// <summary>
@@ -714,20 +733,26 @@ namespace PasPasPasTests.Types {
             var b1 = GetBooleanValue(true);
             var b2 = GetBooleanValue(false);
 
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [1,2];");
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [1,2];");
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var soi = tc.CreateSetType(KnownTypeIds.IntegerType, "Ta");
+            var soc = tc.CreateSetType(KnownTypeIds.WideCharType, "Ta");
+            var sob = tc.CreateSetType(KnownTypeIds.BooleanType, "Ta");
 
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['1','2'];");
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['1','2'];");
+            AssertExprValue("a + b", GetSetValue(soi, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
+            AssertExprValue("a + b", GetSetValue(soi, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
+            AssertExprValue("a + b", GetSetValue(soi, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [1,2];");
+            AssertExprValue("a + b", GetSetValue(soi, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [1,2];");
 
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true]; b: Ta = [false];");
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [false];");
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true]; b: Ta = [true,false];");
-            AssertExprValue("a + b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [true,false];");
+            AssertExprValue("a + b", GetSetValue(soc, c1, c2), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
+            AssertExprValue("a + b", GetSetValue(soc, c1, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
+            AssertExprValue("a + b", GetSetValue(soc, c1, c2), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['1','2'];");
+            AssertExprValue("a + b", GetSetValue(soc, c1, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['1','2'];");
+
+            AssertExprValue("a + b", GetSetValue(sob, b1, b2), "type Ta = set of boolean; const a: Ta = [true]; b: Ta = [false];");
+            AssertExprValue("a + b", GetSetValue(sob, b1, b2), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [false];");
+            AssertExprValue("a + b", GetSetValue(sob, b1, b2), "type Ta = set of boolean; const a: Ta = [true]; b: Ta = [true,false];");
+            AssertExprValue("a + b", GetSetValue(sob, b1, b2), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [true,false];");
 
         }
 
@@ -743,20 +768,27 @@ namespace PasPasPasTests.Types {
             var b1 = GetBooleanValue(true);
             var b2 = GetBooleanValue(false);
 
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of integer; const a: Ta = [2]; b: Ta = [2];");
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i2), "type Ta = set of integer; const a: Ta = [2]; b: Ta = [1];");
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var soi = tc.CreateSetType(KnownTypeIds.IntegerType, "Ta");
+            var soc = tc.CreateSetType(KnownTypeIds.WideCharType, "Ta");
+            var sob = tc.CreateSetType(KnownTypeIds.BooleanType, "Ta");
 
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['2'];");
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c2), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['1'];");
 
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1), "type Ta = set of Boolean; const a: Ta = [true,false]; b: Ta = [false];");
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [false];");
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [true];");
-            AssertExprValue("a - b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b2), "type Ta = set of Boolean; const a: Ta = [false]; b: Ta = [true];");
+            AssertExprValue("a - b", GetSetValue(soi, i1), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
+            AssertExprValue("a - b", GetSetValue(soi, i1), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
+            AssertExprValue("a - b", GetSetValue(soi), "type Ta = set of integer; const a: Ta = [2]; b: Ta = [2];");
+            AssertExprValue("a - b", GetSetValue(soi, i2), "type Ta = set of integer; const a: Ta = [2]; b: Ta = [1];");
+
+            AssertExprValue("a - b", GetSetValue(soc, c1), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
+            AssertExprValue("a - b", GetSetValue(soc, c1), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
+            AssertExprValue("a - b", GetSetValue(soc), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['2'];");
+            AssertExprValue("a - b", GetSetValue(soc, c2), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['1'];");
+
+            AssertExprValue("a - b", GetSetValue(sob, b1), "type Ta = set of Boolean; const a: Ta = [true,false]; b: Ta = [false];");
+            AssertExprValue("a - b", GetSetValue(sob, b1), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [false];");
+            AssertExprValue("a - b", GetSetValue(sob), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [true];");
+            AssertExprValue("a - b", GetSetValue(sob, b2), "type Ta = set of Boolean; const a: Ta = [false]; b: Ta = [true];");
         }
 
         /// <summary>
@@ -771,20 +803,26 @@ namespace PasPasPasTests.Types {
             var b1 = GetBooleanValue(true);
             var b2 = GetBooleanValue(false);
 
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [1..5];");
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2,1];");
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var soi = tc.CreateSetType(KnownTypeIds.IntegerType, "Ta");
+            var soc = tc.CreateSetType(KnownTypeIds.WideCharType, "Ta");
+            var sob = tc.CreateSetType(KnownTypeIds.BooleanType, "Ta");
 
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c2), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['1'..'5'];");
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, c1, c2), "type Ta = set of char; const a: Ta = ['2','1']; b: Ta = ['1','2'];");
+            AssertExprValue("a * b", GetSetValue(soi, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
+            AssertExprValue("a * b", GetSetValue(soi), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
+            AssertExprValue("a * b", GetSetValue(soi, i1), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [1..5];");
+            AssertExprValue("a * b", GetSetValue(soi, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2,1];");
 
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b2), "type Ta = set of Boolean; const a: Ta = [true,false]; b: Ta = [false];");
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [false];");
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b2), "type Ta = set of Boolean; const a: Ta = [false]; b: Ta = [true,false];");
-            AssertExprValue("a * b", GetSetValue(1 + RegisteredTypes.SmallestUserTypeId, b1, b2), "type Ta = set of Boolean; const a: Ta = [false,true]; b: Ta = [true,false];");
+            AssertExprValue("a * b", GetSetValue(soc, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
+            AssertExprValue("a * b", GetSetValue(soc), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
+            AssertExprValue("a * b", GetSetValue(soc, c2), "type Ta = set of char; const a: Ta = ['2']; b: Ta = ['1'..'5'];");
+            AssertExprValue("a * b", GetSetValue(soc, c1, c2), "type Ta = set of char; const a: Ta = ['2','1']; b: Ta = ['1','2'];");
+
+            AssertExprValue("a * b", GetSetValue(sob, b2), "type Ta = set of Boolean; const a: Ta = [true,false]; b: Ta = [false];");
+            AssertExprValue("a * b", GetSetValue(sob), "type Ta = set of Boolean; const a: Ta = [true]; b: Ta = [false];");
+            AssertExprValue("a * b", GetSetValue(sob, b2), "type Ta = set of Boolean; const a: Ta = [false]; b: Ta = [true,false];");
+            AssertExprValue("a * b", GetSetValue(sob, b1, b2), "type Ta = set of Boolean; const a: Ta = [false,true]; b: Ta = [true,false];");
         }
 
         /// <summary>
@@ -883,33 +921,43 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestSetOperatorsIndirect() {
-            AssertExprValue("a + b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a + b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a + b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var soi = tc.CreateSetType(KnownTypeIds.IntegerType, "Ta");
+            var soc = tc.CreateSetType(KnownTypeIds.WideCharType, "Ta");
+            var sob = tc.CreateSetType(KnownTypeIds.BooleanType, "Ta");
 
-            AssertExprValue("a - b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a - b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a - b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+            ITypeSymbol goc(OperatorKind kind, ITypeDefinition d) {
+                return e.Runtime.Types.MakeOperatorResult(kind, d.Reference, e.Runtime.Types.MakeSignature(d.Reference, d.Reference)); ;
+            };
 
-            AssertExprValue("a * b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a * b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a * b", GetUnkownValue(1 + RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a + b", goc(OperatorKind.SetAddOperator, soi), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a + b", goc(OperatorKind.SetAddOperator, soc), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a + b", goc(OperatorKind.SetAddOperator, sob), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
 
-            AssertExprValue("a = b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a = b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a = b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a - b", goc(OperatorKind.SetDifferenceOperator, soi), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a - b", goc(OperatorKind.SetDifferenceOperator, soc), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a - b", goc(OperatorKind.SetDifferenceOperator, sob), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
 
-            AssertExprValue("a >= b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a >= b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a >= b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a * b", goc(OperatorKind.SetAddOperator, soi), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a * b", goc(OperatorKind.SetAddOperator, soc), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a * b", goc(OperatorKind.SetAddOperator, sob), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
 
-            AssertExprValue("a <= b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a <= b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a <= b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a = b", goc(OperatorKind.EqualsOperator, KnownTypeIds.BooleanType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a = b", goc(OperatorKind.EqualsOperator, KnownTypeIds.BooleanType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a = b", goc(OperatorKind.EqualsOperator, KnownTypeIds.BooleanType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
 
-            AssertExprValue("a <> b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a <> b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
-            AssertExprValue("a <> b", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a >= b", goc(OperatorKind.GreaterThanOrEqual, KnownTypeIds.BooleanType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a >= b", goc(OperatorKind.GreaterThanOrEqual, KnownTypeIds.BooleanType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a >= b", goc(OperatorKind.GreaterThanOrEqual, KnownTypeIds.BooleanType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+
+            AssertExprValue("a <= b", goc(OperatorKind.LessThanOrEqual, KnownTypeIds.BooleanType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a <= b", goc(OperatorKind.LessThanOrEqual, KnownTypeIds.BooleanType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a <= b", goc(OperatorKind.LessThanOrEqual, KnownTypeIds.BooleanType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+
+            AssertExprValue("a <> b", goc(OperatorKind.NotEqualsOperator, KnownTypeIds.BooleanType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a <> b", goc(OperatorKind.NotEqualsOperator, KnownTypeIds.BooleanType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a <> b", goc(OperatorKind.NotEqualsOperator, KnownTypeIds.BooleanType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
         }
 
         /// <summary>
@@ -926,18 +974,25 @@ namespace PasPasPasTests.Types {
             AssertExprType("a is tb", KnownTypeIds.BooleanType, "type ta = class end; tc = ta; tb = class(tc) end; var a: ta;");
             AssertExprType("a is ta", KnownTypeIds.BooleanType, "type ta = class end; tc = ta; tb = class(tc) end; var a: tb;");
 
-            AssertExprType("a as TObject", KnownTypeIds.TObject, "var a: TObject;");
-            AssertExprType("a as System.TObject", KnownTypeIds.TObject, "var a: TObject;");
-            AssertExprType("a as TObject", KnownTypeIds.TObject, "type ta = class end; var a: ta;");
+            AssertExprType("a as TObject", KnownTypeIds.TObjectType, "var a: TObject;");
+            AssertExprType("a as System.TObject", KnownTypeIds.TObjectType, "var a: TObject;");
+            AssertExprType("a as TObject", KnownTypeIds.TObjectType, "type ta = class end; var a: ta;");
             AssertExprType("a as tb", KnownTypeIds.ErrorType, "type ta = class end; tb = class end; var a: ta;");
-            AssertExprType("a as tb", 2 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tb = class(ta) end; var a: ta;");
-            AssertExprType("a as ta", 1 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tb = class(ta) end; var a: tb;");
-            AssertExprType("a as tb", 2 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tc = ta; tb = class(tc) end; var a: ta;");
-            AssertExprType("a as ta", 1 + RegisteredTypes.SmallestUserTypeId, "type ta = class end; tc = ta; tb = class(tc) end; var a: tb;");
+
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var ta = tc.CreateStructuredType("Ta", StructuredTypeKind.Class);
+            var tb = tc.CreateStructuredType("Tb", StructuredTypeKind.Class);
+            var ia = tc.CreateStructuredType("Ia", StructuredTypeKind.Interface);
+
+            AssertExprType("a as tb", tb, "type ta = class end; tb = class(ta) end; var a: ta;");
+            AssertExprType("a as ta", ta, "type ta = class end; tb = class(ta) end; var a: tb;");
+            AssertExprType("a as tb", ta, "type ta = class end; tc = ta; tb = class(tc) end; var a: ta;");
+            AssertExprType("a as ta", ta, "type ta = class end; tc = ta; tb = class(tc) end; var a: tb;");
 
             AssertExprType("a is TObject", KnownTypeIds.BooleanType, "type ia = interface end; var a: ia;");
-            AssertExprType("a as ia", 1 + RegisteredTypes.SmallestUserTypeId, "type ia = interface end; ta = class(ia) end; var a: ta;");
-            AssertExprType("a as ia", 1 + RegisteredTypes.SmallestUserTypeId, "type ia = interface end; ta = class(tobject, ia) end; var a: ta;");
+            AssertExprType("a as ia", ia, "type ia = interface end; ta = class(ia) end; var a: ta;");
+            AssertExprType("a as ia", ia, "type ia = interface end; ta = class(tobject, ia) end; var a: ta;");
             AssertExprType("a as ia", KnownTypeIds.ErrorType, "type ia = interface end; ta = class end; var a: ta;");
         }
 
@@ -963,16 +1018,21 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestFormattedExressionsIndirect() {
-            AssertExprValue("a : -1", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Char;", isConstant: false);
-            AssertExprValue("a : 4", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Char;", isConstant: false);
-            AssertExprValue("a : 5", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Boolean;", isConstant: false);
-            AssertExprValue("a : 7", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Boolean;", isConstant: false);
-            AssertExprValue("a : -1", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: String;", isConstant: false);
-            AssertExprValue("a : 4", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: String;", isConstant: false);
-            AssertExprValue("a : -1", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Byte;", isConstant: false);
-            AssertExprValue("a : 5", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: Byte;", isConstant: false);
-            AssertExprValue("a : 5 : 2", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: String;", isConstant: false);
-            AssertExprValue("a : 8", GetUnkownValue(KnownTypeIds.StringType, CommonTypeKind.UnicodeStringType), "var a: String;", isConstant: false);
+            ITypeSymbol goc(ITypeDefinition p) {
+                var s = CreateEnvironment().Runtime.Types.MakeSignature(KnownTypeIds.StringType.Reference, p.Reference);
+                return CreateEnvironment().Runtime.Types.MakeInvocationResultFromIntrinsic(KnownTypeIds.FormatExpression, s);
+            }
+
+            AssertExprValue("a : -1", goc(KnownTypeIds.CharType), "var a: Char;", isConstant: false);
+            AssertExprValue("a : 4", goc(KnownTypeIds.CharType), "var a: Char;", isConstant: false);
+            AssertExprValue("a : 5", goc(KnownTypeIds.BooleanType), "var a: Boolean;", isConstant: false);
+            AssertExprValue("a : 7", goc(KnownTypeIds.BooleanType), "var a: Boolean;", isConstant: false);
+            AssertExprValue("a : -1", goc(KnownTypeIds.StringType), "var a: String;", isConstant: false);
+            AssertExprValue("a : 4", goc(KnownTypeIds.StringType), "var a: String;", isConstant: false);
+            AssertExprValue("a : -1", goc(KnownTypeIds.ByteType), "var a: Byte;", isConstant: false);
+            AssertExprValue("a : 5", goc(KnownTypeIds.ByteType), "var a: Byte;", isConstant: false);
+            AssertExprValue("a : 5 : 2", goc(KnownTypeIds.StringType), "var a: String;", isConstant: false);
+            AssertExprValue("a : 8", goc(KnownTypeIds), "var a: String;", isConstant: false);
         }
 
 

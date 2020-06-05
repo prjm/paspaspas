@@ -54,6 +54,14 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <returns></returns>
         public IValue ToWideCharValue(char character)
             => ToWideCharValue(registryProvider.GetWideCharType(), character);
+
+        /// <summary>
+        ///     get an ANSI char
+        /// </summary>
+        /// <param name="character"></param>
+        /// <returns></returns>
+        public IValue ToAnsiCharValue(byte character)
+            => ToAnsiCharValue(registryProvider.GetAnsiCharType(), character);
     }
 
 }
