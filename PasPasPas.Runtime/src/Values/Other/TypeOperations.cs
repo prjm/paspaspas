@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -30,15 +29,6 @@ namespace PasPasPas.Runtime.Values.Other {
 
         private readonly Lazy<IValue> nil;
         private readonly ITypeRegistryProvider provider;
-
-        /// <summary>
-        ///     create a new enumerated type value
-        /// </summary>
-        /// <param name="enumTypeId">enumerated type id</param>
-        /// <param name="value">type value</param>
-        /// <returns></returns>
-        public IIntegerValue MakeEnumValue(ITypeDefinition enumTypeId, IIntegerValue value)
-            => new EnumeratedValue(enumTypeId, value);
 
         /// <summary>
         ///     make a new subrange value

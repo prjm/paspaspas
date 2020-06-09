@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System.Globalization;
 using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -8,9 +8,9 @@ namespace PasPasPas.Runtime.Values.IntValues {
     /// <summary>
     ///     word value
     /// </summary>
-    public class WordValue : IntegerValueBase {
+    internal class WordValue : IntegerValueBase {
 
-        private readonly ushort value;
+        private readonly ushort wordValue;
 
         /// <summary>
         ///     create a new word value
@@ -18,33 +18,33 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="value"></param>
         /// <param name="typeDef"></param>
         public WordValue(ITypeDefinition typeDef, ushort value) : base(typeDef, IntegralTypeKind.Word)
-            => this.value = value;
+            => wordValue = value;
 
         /// <summary>
         ///     word value
         /// </summary>
         public override long SignedValue
-            => value;
+            => wordValue;
 
         /// <summary>
         ///     get this value as big integer value
         /// </summary>
         public override BigInteger AsBigInteger
-            => new BigInteger(value);
+            => new BigInteger(wordValue);
 
         /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => value;
+            => wordValue;
 
         /// <summary>
         ///     invert bits
         /// </summary>
         /// <returns></returns>
         public override IValue InvertBits()
-            => ToScaledIntegerValue(~value);
+            => ToScaledIntegerValue(~wordValue);
 
         /// <summary>
         ///     get the ordinal value
@@ -52,19 +52,33 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="types"></param>
         /// <returns></returns>
         public override IValue GetOrdinalValue(ITypeRegistry types)
-            => ToScaledIntegerValue(value);
+            => ToScaledIntegerValue(wordValue);
 
         /// <summary>
         ///     check if this number is negative
         /// </summary>
         public override bool IsNegative
-            => value < 0;
+            => wordValue < 0;
 
         /// <summary>
         ///     unsigned value
         /// </summary>
         public override ulong UnsignedValue
-            => value;
+            => wordValue;
 
+        /// <summary>
+        ///     convert this value to a value string
+        /// </summary>
+        /// <returns></returns>
+        public override string GetValueString()
+            => wordValue.ToString(CultureInfo.InvariantCulture);
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(IValue? other)
+            => other is WordValue w && w.wordValue == wordValue;
     }
 }

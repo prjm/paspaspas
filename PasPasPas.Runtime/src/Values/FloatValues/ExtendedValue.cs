@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Text;
+﻿using System.Text;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using SharpFloat.FloatingPoint;
@@ -9,7 +8,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
     /// <summary>
     ///     extended value
     /// </summary>
-    public class ExtendedValue : FloatValueBase {
+    internal class ExtendedValue : FloatValueBase {
 
         private readonly ExtF80 value;
 
@@ -18,7 +17,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         /// <param name="typeDef"></param>
         /// <param name="extendedValue"></param>
-        public ExtendedValue(ITypeDefinition typeDef, in ExtF80 extendedValue) : base(typeDef, RealTypeKind.Extended)
+        internal ExtendedValue(ITypeDefinition typeDef, in ExtF80 extendedValue) : base(typeDef, RealTypeKind.Extended)
             => value = extendedValue;
 
         /// <summary>
@@ -34,22 +33,26 @@ namespace PasPasPas.Runtime.Values.FloatValues {
             => value;
 
         /// <summary>
-        ///     compare equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj is IRealNumberValue floatValue)
-                return floatValue.AsExtended == value;
-            return false;
-        }
-
-        /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
             => ExtF80.GetHashCode(value);
+
+        /// <summary>
+        ///     get value string
+        /// </summary>
+        /// <returns></returns>
+        public override string GetValueString()
+            => ToFormattedString;
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(IValue? other)
+            => other is ExtendedValue e && e.value == value;
 
         /// <summary>
         ///     get a formatted string of this value

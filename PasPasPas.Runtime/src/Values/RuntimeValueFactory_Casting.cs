@@ -3,7 +3,6 @@ using System;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Runtime.Values.Other;
 using PasPasPas.Runtime.Values.Structured;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Simple;
@@ -113,7 +112,7 @@ namespace PasPasPas.Runtime.Values {
                 return invalidCast.Value;
 
             if (typeDef is EnumeratedType enumType)
-                return new EnumeratedValue(enumType.TypeDefinition, CastInteger(types, value, enumType.CommonTypeId) as IIntegerValue);
+                return MakeEnumValue(enumType.TypeDefinition, CastInteger(types, value, enumType.CommonTypeId) as IIntegerValue, string.Empty);
 
             if (typeDef is SubrangeType subrangeType) {
                 var castedValue = CastInteger(types, value, subrangeType.SubrangeOfType);
@@ -226,7 +225,7 @@ namespace PasPasPas.Runtime.Values {
                 return invalidCast.Value;
 
             if (typeDef is IEnumeratedType enumType)
-                return new EnumeratedValue(enumType, CastChar(types, value, enumType.CommonTypeId) as IIntegerValue);
+                return MakeEnumValue(enumType, CastChar(types, value, enumType.CommonTypeId) as IIntegerValue, string.Empty);
 
             if (typeDef is SubrangeType subrangeType) {
                 var castedValue = CastChar(types, value, subrangeType.SubrangeOfType);

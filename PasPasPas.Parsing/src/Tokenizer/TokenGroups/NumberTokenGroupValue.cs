@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Globals.Log;
 using PasPasPas.Globals.Parsing;
 using PasPasPas.Parsing.Tokenizer.CharClass;
@@ -55,7 +54,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 if (digitTokenizer.CharClass.Matches(state.LookAhead(2))) {
                     state.NextChar(true);
                     withDot = true;
-                    decimals = digitTokenizer.Tokenize(state).ParsedValue.ToString();
+                    decimals = digitTokenizer.Tokenize(state).ParsedValue.ToValueString();
                 }
             }
 
@@ -74,7 +73,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
                     if (!state.AtEof) {
                         if (digitTokenizer.CharClass.Matches(state.LookAhead())) {
-                            exp = digitTokenizer.Tokenize(state).ParsedValue.ToString();
+                            exp = digitTokenizer.Tokenize(state).ParsedValue.ToValueString();
                         }
                         else {
                             state.Error(MessageNumbers.UnexpectedEndOfToken);

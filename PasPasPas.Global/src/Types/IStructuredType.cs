@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
@@ -23,6 +22,11 @@ namespace PasPasPas.Globals.Types {
         ///     methods
         /// </summary>
         List<IRoutineGroup> Methods { get; }
+
+        /// <summary>
+        ///     list of fields
+        /// </summary>
+        List<IVariable> Fields { get; }
 
         /// <summary>
         ///     find a method

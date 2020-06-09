@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -11,7 +10,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
     /// <summary>
     ///     base class for integer values
     /// </summary>
-    public abstract class IntegerValueBase : RuntimeValueBase, IIntegerValue, IEquatable<IIntegerValue> {
+    internal abstract class IntegerValueBase : RuntimeValueBase, IIntegerValue {
 
         /// <summary>
         ///     create a new integer value
@@ -19,13 +18,16 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="typeDef"></param>
         /// <param name="kind"></param>
         protected IntegerValueBase(ITypeDefinition typeDef, IntegralTypeKind kind) : base(typeDef) {
-            if (typeDef.BaseType != BaseType.Integer)
+            if (typeDef.BaseType != BaseType.Integer && typeDef.BaseType != BaseType.Enumeration)
                 throw new ArgumentException(string.Empty, nameof(typeDef));
 
-            if (!(typeDef is IIntegralType integralType))
+            var intType = typeDef as IIntegralType;
+            var enumType = typeDef as IEnumeratedType;
+
+            if (intType == default && enumType == default)
                 throw new ArgumentException(string.Empty, nameof(typeDef));
 
-            if (integralType.Kind != kind)
+            if (intType != default && intType.Kind != kind)
                 throw new ArgumentException(string.Empty, nameof(typeDef));
 
         }
@@ -66,25 +68,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         ///     get the integral type definition
         /// </summary>
         public IIntegralType IntegralType
-            => TypeDefinition as IIntegralType;
-
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj is IIntegerValue integer)
-                return Equals(integer);
-
-            return false;
-        }
-
-        /// <summary>
-        ///     compute a hash code
-        /// </summary>
-        /// <returns></returns>
-        public abstract override int GetHashCode();
+            => TypeDefinition as IIntegralType ?? throw new InvalidOperationException();
 
         /// <summary>
         ///     convert a big integer value to an integer value
@@ -161,7 +145,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
 
         internal IValue ShlAndScale(IValue overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             BigInteger s;
-            var k1 = (firstOperator.TypeDefinition as IIntegralType).Kind;
+            var k1 = (firstOperator.TypeDefinition as IIntegralType ?? throw new InvalidOperationException()).Kind;
 
             if (k1 == IntegralTypeKind.Int64 || k1 == IntegralTypeKind.UInt64)
                 s = new BigInteger(firstOperator.SignedValue << (int)secondOperator.SignedValue);
@@ -173,7 +157,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
 
         internal IValue ShrAndScale(IValue overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             BigInteger s;
-            var k1 = (firstOperator.TypeDefinition as IIntegralType).Kind;
+            var k1 = (firstOperator.TypeDefinition as IIntegralType ?? throw new InvalidOperationException()).Kind;
 
             if (k1 == IntegralTypeKind.Int64 || k1 == IntegralTypeKind.UInt64)
                 s = new BigInteger((ulong)firstOperator.SignedValue >> (int)secondOperator.SignedValue);
@@ -372,14 +356,6 @@ namespace PasPasPas.Runtime.Values.IntValues {
             => ToIntValue(overflow, value.AsBigInteger + BigInteger.One);
 
         /// <summary>
-        ///     compare to another integer value
-        /// </summary>
-        /// <param name="other">other value</param>
-        /// <returns></returns>
-        public bool Equals(IIntegerValue other)
-            => other.UnsignedValue == UnsignedValue;
-
-        /// <summary>
         ///     absolute value
         /// </summary>
         /// <param name="overflow"></param>
@@ -464,7 +440,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
             var value = b.ToByteArray();
             var typeDef = integerValue.TypeDefinition;
 
-            if (!(typeDef is IIntegralType integralType))
+            if (!(typeDef is IIntegralType))
                 return invalid;
 
             if (typeDef.TypeSizeInBytes < 2)

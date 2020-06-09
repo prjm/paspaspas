@@ -1,5 +1,5 @@
-﻿#nullable disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Runtime;
@@ -36,6 +36,16 @@ namespace PasPasPas.Typings.Common {
         public IListPools ListPools { get; }
 
         /// <summary>
+        ///     string builder pool
+        /// </summary>
+        public IStringPool StringPool { get; }
+
+        /// <summary>
+        ///     string builder pool
+        /// </summary>
+        public IObjectPool<StringBuilder> StringBuilderPool { get; }
+
+        /// <summary>
         ///     registered units
         /// </summary>
         public IEnumerable<IUnitType> Units
@@ -45,11 +55,15 @@ namespace PasPasPas.Typings.Common {
         ///     create a new type registry
         /// </summary>
         /// <param name="intSize">integer size</param>
+        /// <param name="spool"></param>
+        /// <param name="sbpool"></param>
         /// <param name="runtime">runtime values</param>
         /// <param name="listPools">list pools</param>
-        public RegisteredTypes(IRuntimeValueFactory runtime, IListPools listPools, NativeIntSize intSize) {
+        public RegisteredTypes(IRuntimeValueFactory runtime, IListPools listPools, NativeIntSize intSize, IStringPool spool, IObjectPool<StringBuilder> sbpool) {
             Runtime = runtime;
             ListPools = listPools;
+            StringPool = spool;
+            StringBuilderPool = sbpool;
             SystemUnit = new SystemUnit(this, intSize);
 
             RegisterUnit(SystemUnit);
@@ -102,10 +116,10 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="operatorKind">operator kind</param>
         /// <returns></returns>
-        public IOperator GetOperator(OperatorKind operatorKind) {
+        public IOperator? GetOperator(OperatorKind operatorKind) {
             if (operators.TryGetValue(operatorKind, out var result))
                 return result;
-            return null;
+            return default;
         }
 
         /*
@@ -230,7 +244,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="routineId"></param>
         /// <returns></returns>
-        public IRoutineGroup GetIntrinsicRoutine(IntrinsicRoutineId routineId) {
+        public IRoutineGroup? GetIntrinsicRoutine(IntrinsicRoutineId routineId) {
             var system = SystemUnit as IUnitType;
 
             foreach (var reference in system.Symbols) {

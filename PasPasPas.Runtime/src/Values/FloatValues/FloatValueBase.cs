@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using SharpFloat.FloatingPoint;
@@ -9,7 +8,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
     /// <summary>
     ///     base class for float values
     /// </summary>
-    public abstract class FloatValueBase : RuntimeValueBase, IRealNumberValue {
+    internal abstract class FloatValueBase : RuntimeValueBase, IRealNumberValue {
 
         /// <summary>
         ///     generate a new float value
@@ -17,7 +16,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <param name="typeDef"></param>
         /// <param name="kind"></param>
         protected FloatValueBase(ITypeDefinition typeDef, RealTypeKind kind) : base(typeDef) {
-            if (typeDef.BaseType != BaseType.Boolean)
+            if (typeDef.BaseType != BaseType.Real)
                 throw new ArgumentException(string.Empty, nameof(typeDef));
 
             if (!(typeDef is IRealType realType))
@@ -36,19 +35,6 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         ///     get float value
         /// </summary>
         public abstract ExtF80 AsExtended { get; }
-
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public abstract override bool Equals(object obj);
-
-        /// <summary>
-        ///     compute a hash code
-        /// </summary>
-        /// <returns></returns>
-        public abstract override int GetHashCode();
 
         internal static IValue Multiply(ITypeDefinition typeDef, INumericalValue first, INumericalValue second)
             => new ExtendedValue(typeDef, first.AsExtended * second.AsExtended);

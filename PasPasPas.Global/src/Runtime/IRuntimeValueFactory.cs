@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
@@ -28,6 +27,13 @@ namespace PasPasPas.Globals.Runtime {
         ///     provides operations on strings
         /// </summary>
         IStringOperations Strings { get; }
+
+        /// <summary>
+        ///     helper function to provide cached value strings
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        string GetValueString(IValue value);
 
         /// <summary>
         ///     make a pointer value
@@ -63,10 +69,11 @@ namespace PasPasPas.Globals.Runtime {
         /// <summary>
         ///     create a new enumeration value
         /// </summary>
-        /// <param name="typeId"></param>
-        /// <param name="value"></param>
+        /// <param name="typeDefinition">matching type definition</param>
+        /// <param name="value">integral value</param>
+        /// <param name="name">value name</param>
         /// <returns></returns>
-        IValue MakeEnumValue(ITypeDefinition typeId, IIntegerValue value);
+        IEnumeratedValue MakeEnumValue(ITypeDefinition typeDefinition, IIntegerValue value, string name);
 
         /// <summary>
         ///     format a constant expression

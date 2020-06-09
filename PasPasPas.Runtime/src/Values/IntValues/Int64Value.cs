@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System.Globalization;
 using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -8,7 +8,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
     /// <summary>
     ///     int64 value
     /// </summary>
-    public class Int64Value : IntegerValueBase {
+    internal class Int64Value : IntegerValueBase {
 
         private readonly long value;
 
@@ -54,6 +54,21 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <returns></returns>
         public override IValue GetOrdinalValue(ITypeRegistry types)
             => ToScaledIntegerValue(value);
+
+        /// <summary>
+        ///     get the value string
+        /// </summary>
+        /// <returns></returns>
+        public override string GetValueString()
+            => value.ToString(CultureInfo.InvariantCulture);
+
+        /// <summary>
+        ///     compare to another value
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(IValue? other)
+            => other is Int64Value i && i.value == value;
 
         /// <summary>
         ///     check if this number is negative

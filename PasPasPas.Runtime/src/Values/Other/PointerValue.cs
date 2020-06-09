@@ -1,6 +1,4 @@
-﻿#nullable disable
-using System;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.Other {
@@ -8,7 +6,7 @@ namespace PasPasPas.Runtime.Values.Other {
     /// <summary>
     ///     pointer value
     /// </summary>
-    public class PointerValue : RuntimeValueBase, IPointerValue, IEquatable<PointerValue> {
+    internal class PointerValue : RuntimeValueBase, IPointerValue {
 
         /// <summary>
         ///     create a new pointer value
@@ -23,21 +21,9 @@ namespace PasPasPas.Runtime.Values.Other {
         /// </summary>
         public IValue Value { get; }
 
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(PointerValue other)
-            => TypeDefinition.Equals(other.TypeDefinition) && Value.Equals(other.Value);
 
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-            => Equals(obj as PointerValue);
+        public override bool Equals(IValue? other)
+            => other is PointerValue p && p.TypeDefinition.Equals(TypeDefinition) && p.Value.Equals(Value);
 
         /// <summary>
         ///     compute a hash code
@@ -45,5 +31,8 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <returns></returns>
         public override int GetHashCode()
             => unchecked(17 + 31 * TypeDefinition.GetHashCode() + 31 * Value.GetHashCode());
+
+        public override string GetValueString()
+            => "@" + Value.ToValueString();
     }
 }

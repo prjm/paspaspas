@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -55,14 +54,14 @@ namespace PasPasPas.Typings.Simple {
         public IValue HighestElement {
             get {
                 if (values.Count < 1)
-                    return default;
+                    return TypeRegistry.Runtime.Integers.Invalid;
 
                 var highestElement = values[0].Value;
 
                 for (var i = 1; i < values.Count; i++) {
                     var result = TypeRegistry.Runtime.Integers.GreaterThen(values[i].Value, highestElement);
                     if (!(result is IBooleanValue boleanResult))
-                        return default;
+                        return TypeRegistry.Runtime.Integers.Invalid;
 
                     if (boleanResult.AsBoolean)
                         highestElement = values[i].Value;
@@ -78,14 +77,14 @@ namespace PasPasPas.Typings.Simple {
         public IValue LowestElement {
             get {
                 if (values.Count < 1)
-                    return default;
+                    return TypeRegistry.Runtime.Integers.Invalid;
 
                 var lowestElement = values[0].Value;
 
                 for (var i = 1; i < values.Count; i++) {
                     var result = TypeRegistry.Runtime.Integers.LessThen(values[i].Value, lowestElement);
                     if (!(result is IBooleanValue boleanResult))
-                        return default;
+                        return TypeRegistry.Runtime.Integers.Invalid;
 
                     if (boleanResult.AsBoolean)
                         lowestElement = values[i].Value;
@@ -157,7 +156,7 @@ namespace PasPasPas.Typings.Simple {
                 newValue = runtimeValues.Integers.Zero;
 
             if (newValue is IIntegerValue integerValue) {
-                var enumValueDefinition = new EnumValue(symbolName, integerValue);
+                var enumValueDefinition = runtimeValues.MakeEnumValue(this, integerValue, symbolName);
                 values.Add(enumValueDefinition);
                 return enumValueDefinition;
             }

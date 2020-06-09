@@ -1,5 +1,6 @@
 ﻿#nullable disable
 using System.Collections.Generic;
+using System.Text;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 
@@ -43,6 +44,16 @@ namespace PasPasPas.Globals.Types {
         ///     registered units
         /// </summary>
         IEnumerable<IUnitType> Units { get; }
+
+        /// <summary>
+        ///     string builder pool
+        /// </summary>
+        IStringPool StringPool { get; }
+
+        /// <summary>
+        ///     string builder pool
+        /// </summary>
+        IObjectPool<StringBuilder> StringBuilderPool { get; }
 
         /// <summary>
         ///     find a intrinsic routine by id

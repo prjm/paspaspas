@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.Other {
@@ -7,7 +6,7 @@ namespace PasPasPas.Runtime.Values.Other {
     /// <summary>
     ///     special constant values
     /// </summary>
-    public class ErrorValue : RuntimeValueBase {
+    internal class ErrorValue : RuntimeValueBase {
 
         /// <summary>
         ///     create a new special kind
@@ -25,15 +24,10 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <summary>
         ///     check for equality
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj is ErrorValue v) {
-                return v.Kind == Kind;
-            }
-
-            return false;
-        }
+        public override bool Equals(IValue? other)
+            => other is ErrorValue e && e.Kind == Kind;
 
         /// <summary>
         ///     compute a hash code
@@ -42,5 +36,7 @@ namespace PasPasPas.Runtime.Values.Other {
         public override int GetHashCode()
             => unchecked(17 + 31 * (int)Kind);
 
+        public override string GetValueString()
+            => "***";
     }
 }

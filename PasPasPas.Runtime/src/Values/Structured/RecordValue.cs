@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Immutable;
 using System.Linq;
 using PasPasPas.Globals.Runtime;
@@ -10,7 +9,7 @@ namespace PasPasPas.Runtime.Values.Structured {
     /// <summary>
     ///     constant record values
     /// </summary>
-    public class RecordValue : RuntimeValueBase, IEquatable<RecordValue> {
+    internal class RecordValue : RuntimeValueBase {
 
         /// <summary>
         ///     create a new record value
@@ -33,13 +32,8 @@ namespace PasPasPas.Runtime.Values.Structured {
         public bool Equals(RecordValue other)
             => other != default && TypeDefinition.Equals(other.TypeDefinition) && Enumerable.SequenceEqual(Values, other.Values);
 
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-            => Equals(obj as RecordValue);
+        public override bool Equals(IValue? other)
+            => other is RecordValue r && r.Values.SequenceEqual(Values);
 
         /// <summary>
         ///     compute a hash code
@@ -53,6 +47,25 @@ namespace PasPasPas.Runtime.Values.Structured {
                     result = result * 31 + value.GetHashCode();
                 return result;
             }
+        }
+
+        public override string GetValueString() {
+            var recordType = TypeDefinition as IStructuredType ?? throw new InvalidOperationException(); ;
+            using var sbv = TypeDefinition.DefiningUnit.TypeRegistry.StringBuilderPool.Borrow();
+            var sb = sbv.Item;
+            sb.Append("(");
+
+            for (var i = 0; i < recordType.Fields.Count; i++) {
+                if (i > 0)
+                    sb.Append("; ");
+                var field = recordType.Fields[i];
+                sb.Append(field.Name);
+                sb.Append(":");
+                sb.Append(Values[i].ToValueString());
+            }
+
+            sb.Append(")");
+            return sb.ToString();
         }
     }
 }

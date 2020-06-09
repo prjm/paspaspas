@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Globals.Parsing;
@@ -375,7 +374,7 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            element.TypeInfo = TypeRegistry.Runtime.MakeEnumValue(typeDef, enumRef.Value);
+            element.TypeInfo = enumRef;
             resolver.AddToScope(element.SymbolName, enumRef);
         }
 

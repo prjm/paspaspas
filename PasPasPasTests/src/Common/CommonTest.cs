@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Linq;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
@@ -7,6 +6,7 @@ using PasPasPas.Globals.Files;
 using PasPasPas.Globals.Options.DataTypes;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Structured;
 using SharpFloat.FloatingPoint;
 
@@ -26,7 +26,7 @@ namespace PasPasPasTests.Common {
             => Factory.CreateEnvironment(intSize);
 
         /// <summary>
-        ///     create a temp runtime
+        ///     create a temporary runtime
         /// </summary>
         protected static IRuntimeValueFactory MakeRuntime()
             => CreateEnvironment().Runtime;
@@ -72,8 +72,10 @@ namespace PasPasPasTests.Common {
             => MakeRuntime().Integers.ToScaledIntegerValue(number);
 
         /// <summary>
-        ///     make a invocation value
+        ///     create a invocation value
         /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="typeKind"></param>
         /// <returns></returns>
         protected static IInvocationResult GetInvocationValue(ITypeDefinition typeId, ITypeDefinition typeKind) {
             var fakeRoutine = new RoutineGroup(default, default);
@@ -92,7 +94,37 @@ namespace PasPasPasTests.Common {
             return MakeRuntime().Types.MakeInvocationResultFromIntrinsic(rg as IRoutineGroup, _);
         }
 
+        /// <summary>
+        ///     get the nil value
+        /// </summary>
+        /// <returns></returns>
+        protected static IValue GetNilValue()
+            => MakeRuntime().Types.Nil;
 
+        /// <summary>
+        ///     get an error value
+        /// </summary>
+        /// <returns></returns>
+        protected static IValue GetErrorValue()
+            => MakeRuntime().Strings.Invalid;
+
+        /// <summary>
+        ///     get some enumeration values
+        /// </summary>
+        /// <param name="data">enumeration member names</param>
+        /// <returns></returns>
+        protected static IValue[] GetEnumValues(params string[] data) {
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var t = tc.CreateEnumType(string.Empty);
+            var v = 0;
+            var result = new IValue[data.Length];
+            foreach (var value in data) {
+                result[v] = t.DefineEnumValue(e.Runtime, value, true, GetIntegerValue(v));
+                v++;
+            }
+            return result;
+        }
 
         /// <summary>
         ///     get a subrange value
@@ -102,6 +134,20 @@ namespace PasPasPasTests.Common {
         /// <returns></returns>
         protected static IValue GetSubrangeValue(ITypeDefinition typeId, IValue value)
             => MakeRuntime().Types.MakeSubrangeValue(typeId, value);
+
+        /// <summary>
+        ///     make a subragen value
+        /// </summary>
+        /// <param name="lowerBound"></param>
+        /// <param name="upperBound"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static IValue GetSubrangeValue(IValue lowerBound, IValue upperBound, IValue value) {
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var t = tc.CreateSubrangeType(string.Empty, e.TypeRegistry.SystemUnit.SmallIntType, lowerBound, upperBound);
+            return e.Runtime.Types.MakeSubrangeValue(t, value);
+        }
 
         /// <summary>
         ///     make a new pointer value
@@ -133,12 +179,36 @@ namespace PasPasPasTests.Common {
             => MakeRuntime().Structured.CreateArrayValue(typeId, baseTypeId, values.ToImmutableArray());
 
         /// <summary>
+        ///     get an array value
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        protected static IValue GetArrayValue(params IValue[] items) {
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var baseType = items.Length > 0 ? items[0].TypeDefinition.Reference : e.TypeRegistry.SystemUnit.ErrorType.Reference; ;
+
+            foreach (var v in items)
+                baseType = e.TypeRegistry.GetBaseTypeForArrayOrSet(baseType, v).Reference;
+
+            var at = tc.CreateStaticArrayType(baseType.TypeDefinition, string.Empty, e.TypeRegistry.SystemUnit.IntegerType, false);
+            return e.Runtime.Structured.CreateArrayValue(at, baseType.TypeDefinition, ImmutableArray.Create(items));
+        }
+
+        /// <summary>
         ///     get the ANSI string value
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
         protected static IValue GetAnsiStringValue(string text)
             => MakeRuntime().Strings.ToAnsiString(text);
+
+        /// <summary>
+        ///     get the empty string value
+        /// </summary>
+        /// <returns></returns>
+        protected static IValue GetEmptyStringValue()
+            => MakeRuntime().Strings.EmptyString;
 
         /// <summary>
         ///     get the short string value
@@ -259,6 +329,22 @@ namespace PasPasPasTests.Common {
         protected static IValue GetRecordValue(ITypeDefinition typeId, params IValue[] values)
             => MakeRuntime().Structured.CreateRecordValue(typeId, values.ToImmutableArray());
 
+        protected static IValue GetRecordValue(params (string, IValue)[] values) {
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var rt = tc.CreateStructuredType(string.Empty, StructuredTypeKind.Record);
+
+            foreach ((string name, IValue value) in values) {
+                var fieldDef = new Variable();
+                fieldDef.Name = name;
+                fieldDef.TypeDefinition = value.TypeDefinition;
+                rt.AddField(fieldDef);
+            }
+
+            var v = values.Select(t => t.Item2).ToImmutableArray();
+            return e.Runtime.Structured.CreateRecordValue(rt, v);
+        }
+
         /// <summary>
         ///     get a set value
         /// </summary>
@@ -268,6 +354,23 @@ namespace PasPasPasTests.Common {
         protected static IValue GetSetValue(ITypeDefinition typeId, params IValue[] values)
             => MakeRuntime().Structured.CreateSetValue(typeId, values.ToImmutableArray());
 
+        /// <summary>
+        ///     get a set of enumeration values
+        /// </summary>
+        /// <param name="names"></param>
+        /// <returns></returns>
+        protected static IValue GetSetValue(params string[] names) {
+            var e = CreateEnvironment();
+            var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var et = tc.CreateEnumType("");
+            var vals = new IValue[names.Length];
+
+            for (var i = 0; i < names.Length; i++) {
+                vals[i] = et.DefineEnumValue(e.Runtime, names[i], true, GetIntegerValue(i));
+            }
+
+            return e.Runtime.Structured.CreateSetValue(et, ImmutableArray.Create(vals));
+        }
 
         /// <summary>
         ///     create a resolver

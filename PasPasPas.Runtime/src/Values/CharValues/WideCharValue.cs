@@ -1,6 +1,4 @@
-﻿#nullable disable
-using System;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.Other;
 
@@ -9,14 +7,14 @@ namespace PasPasPas.Runtime.Values.CharValues {
     /// <summary>
     ///     wide char (word) value
     /// </summary>
-    public class WideCharValue : CharValueBase, IEquatable<WideCharValue> {
+    internal class WideCharValue : CharValueBase {
 
         /// <summary>
         ///     create a new wide char value
         /// </summary>
         /// <param name="character"></param>
         /// <param name="typeDef">type id</param>
-        public WideCharValue(ITypeDefinition typeDef, char character) : base(typeDef, CharTypeKind.WideChar)
+        internal WideCharValue(ITypeDefinition typeDef, char character) : base(typeDef, CharTypeKind.WideChar)
             => Value = character;
 
         /// <summary>
@@ -26,27 +24,11 @@ namespace PasPasPas.Runtime.Values.CharValues {
             => Value;
 
         /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-            => obj is WideCharValue charValue && charValue.Value == Value;
-
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(WideCharValue other)
-            => Value == other.Value;
-
-        /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => Value.GetHashCode();
+            => Value;
 
         /// <summary>
         ///     ordinal value
@@ -67,6 +49,16 @@ namespace PasPasPas.Runtime.Values.CharValues {
 
             return this;
         }
+
+        /// <summary>
+        ///     get this value as string
+        /// </summary>
+        /// <returns></returns>
+        public override string GetValueString()
+            => new string(Value, 1);
+
+        public override bool Equals(IValue? other)
+            => other is WideCharValue c && c.Value == Value;
 
         /// <summary>
         ///     char value

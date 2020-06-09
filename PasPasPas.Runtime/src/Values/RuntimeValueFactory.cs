@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.Other;
 
@@ -18,9 +17,10 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="value"></param>
+        /// <param name="name">value name</param>
         /// <returns></returns>
-        public IValue MakeEnumValue(ITypeDefinition typeId, IIntegerValue value)
-            => new EnumeratedValue(typeId, value);
+        public IEnumeratedValue MakeEnumValue(ITypeDefinition typeId, IIntegerValue value, string name)
+            => new EnumeratedValue(typeId, value, name);
 
         /// <summary>
         ///     make a pointer value
@@ -29,5 +29,13 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public IValue MakePointerValue(IValue baseValue)
             => new PointerValue(typeRegistryProvider.GetGenericPointerType(), baseValue);
+
+        /// <summary>
+        ///     get the value of value object as string
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public string GetValueString(IValue value)
+            => value.GetValueString();
     }
 }

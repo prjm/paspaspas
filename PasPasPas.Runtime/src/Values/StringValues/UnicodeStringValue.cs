@@ -1,6 +1,4 @@
-﻿#nullable disable
-using System.Linq;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.Other;
@@ -10,7 +8,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
     /// <summary>
     ///     Unicode string
     /// </summary>
-    public class UnicodeStringValue : StringValueBase, IStringValue {
+    internal class UnicodeStringValue : StringValueBase, IStringValue {
 
         private readonly string data;
 
@@ -27,17 +25,6 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         public override string AsUnicodeString
             => data;
-
-        /// <summary>test for equality</summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj is UnicodeStringValue v) {
-                return data.SequenceEqual(v.data);
-            }
-
-            return false;
-        }
 
         /// <summary>
         ///     hash code
@@ -72,5 +59,11 @@ namespace PasPasPas.Runtime.Values.StringValues {
             var wideCharType = TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit.WideCharType;
             return new WideCharValue(wideCharType, data[index]);
         }
+
+        public override string GetValueString()
+            => data;
+
+        public override bool Equals(IValue? other)
+            => other is UnicodeStringValue s && string.Equals(s.data, data, System.StringComparison.Ordinal);
     }
 }

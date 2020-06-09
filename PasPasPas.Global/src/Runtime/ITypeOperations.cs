@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
@@ -13,14 +12,6 @@ namespace PasPasPas.Globals.Runtime {
         ///     constant nil pointer
         /// </summary>
         IValue Nil { get; }
-
-        /// <summary>
-        ///     make an enumerated type value
-        /// </summary>
-        /// <param name="enumTypeId">type id of the enumerated type</param>
-        /// <param name="value">constant value</param>
-        /// <returns>enumerated type value</returns>
-        IIntegerValue MakeEnumValue(ITypeDefinition enumTypeId, IIntegerValue value);
 
         /// <summary>
         ///     invalid value

@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Globals.Runtime {
@@ -42,7 +41,6 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="realValue"></param>
         /// <returns></returns>
         IRealNumberValue ToExtendedValue(in ExtF80 realValue);
-
 
         /// <summary>
         ///     absolute value

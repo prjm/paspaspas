@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -121,6 +120,9 @@ namespace PasPasPas.Typings.Routines {
             if (ordinalType is ISubrangeValue subrangeValue)
                 return types.Runtime.Types.MakeSubrangeValue(parameter.TypeDefinition, PredOrSucc.StaticExecuteCall(types, subrangeValue.WrappedValue, pred));
 
+            if (ordinalType is null)
+                return types.Runtime.Integers.Invalid;
+
             if (pred) {
 
                 if (parameter is IIntegerValue intValue)
@@ -138,7 +140,7 @@ namespace PasPasPas.Typings.Routines {
                 }
 
                 if (parameter is IEnumeratedValue enumValue)
-                    return types.Runtime.Types.MakeEnumValue(enumValue.TypeDefinition, StaticExecuteCall(types, enumValue.Value, pred) as IIntegerValue);
+                    return types.Runtime.MakeEnumValue(enumValue.TypeDefinition, StaticExecuteCall(types, enumValue.Value, pred) as IIntegerValue, string.Empty);
 
             }
 
@@ -159,7 +161,7 @@ namespace PasPasPas.Typings.Routines {
                 }
 
                 if (parameter is IEnumeratedValue enumValue)
-                    return types.Runtime.Types.MakeEnumValue(enumValue.TypeDefinition, StaticExecuteCall(types, enumValue.Value, pred) as IIntegerValue);
+                    return types.Runtime.MakeEnumValue(enumValue.TypeDefinition, StaticExecuteCall(types, enumValue.Value, pred) as IIntegerValue, string.Empty);
 
             }
 

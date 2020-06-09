@@ -1,6 +1,4 @@
-﻿#nullable disable
-using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Linq;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -10,7 +8,7 @@ namespace PasPasPas.Runtime.Values.Structured {
     /// <summary>
     ///     set values
     /// </summary>
-    public class SetValue : RuntimeValueBase, IEquatable<SetValue> {
+    internal class SetValue : RuntimeValueBase {
 
         /// <summary>
         ///     create a new set value
@@ -36,19 +34,11 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(SetValue other)
+        public override bool Equals(IValue? other)
             => //
-            other != default &&
+            other is SetValue s &&
             other.TypeDefinition.Equals(TypeDefinition) &&
-            Values.ToHashSet().SetEquals(other.Values);
-
-        /// <summary>
-        ///     compare for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-            => Equals(obj as SetValue);
+            Values.ToHashSet().SetEquals(s.Values);
 
         /// <summary>
         ///     compute a hash code
@@ -102,5 +92,8 @@ namespace PasPasPas.Runtime.Values.Structured {
 
             return true;
         }
+
+        public override string GetValueString()
+            => "[" + string.Join(",", Values.Select(t => t.ToValueString())) + "]";
     }
 }

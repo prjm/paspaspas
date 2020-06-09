@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPasTests.Common;
@@ -40,7 +39,7 @@ namespace PasPasPasTests.Types {
             var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
             var et = tc.CreateEnumType("e");
             var st = tc.CreateSubrangeType("e", e.TypeRegistry.SystemUnit.IntegerType, GetIntegerValue((sbyte)-2), GetIntegerValue((sbyte)2)); ;
-            var v1 = e.Runtime.Types.MakeEnumValue(et, GetIntegerValue(unchecked((sbyte)384)) as IIntegerValue);
+            var v1 = e.Runtime.MakeEnumValue(et, GetIntegerValue(unchecked((sbyte)384)) as IIntegerValue, string.Empty);
             var v2 = e.Runtime.Types.MakeSubrangeValue(st, GetIntegerValue(1));
 
             AssertExprValue("e(384)", v1, "type e = (e1, e2);", et);
@@ -115,7 +114,7 @@ namespace PasPasPasTests.Types {
             var t1 = ct.CreateEnumType("e");
             var t2 = ct.CreateSubrangeType("e", KnownTypeIds.IntegerType, GetIntegerValue((sbyte)-2), GetIntegerValue((sbyte)2));
 
-            var ev = e.Runtime.MakeEnumValue(t1, GetIntegerValue((sbyte)97) as IIntegerValue);
+            var ev = e.Runtime.MakeEnumValue(t1, GetIntegerValue((sbyte)1) as IIntegerValue, string.Empty);
             var sr = e.Runtime.Types.MakeSubrangeValue(t2, GetIntegerValue((sbyte)97) as IIntegerValue);
 
             AssertExprValue("e('a')", ev, "type e = (e1, e2);", t1);

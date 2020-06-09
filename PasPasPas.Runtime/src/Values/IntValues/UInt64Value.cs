@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System.Globalization;
 using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -8,7 +8,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
     /// <summary>
     ///     unsigned int64 value
     /// </summary>
-    public class UInt64Value : IntegerValueBase {
+    internal class UInt64Value : IntegerValueBase {
 
         private readonly ulong value;
 
@@ -17,7 +17,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="value"></param>
         /// <param name="typeDef"></param>
-        public UInt64Value(ITypeDefinition typeDef, ulong value) : base(typeDef, IntegralTypeKind.UInt64)
+        internal UInt64Value(ITypeDefinition typeDef, ulong value) : base(typeDef, IntegralTypeKind.UInt64)
             => this.value = value;
 
         /// <summary>
@@ -54,6 +54,17 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <returns></returns>
         public override IValue GetOrdinalValue(ITypeRegistry types)
             => ToScaledIntegerValue(value);
+
+        public override string GetValueString()
+            => value.ToString(CultureInfo.InvariantCulture);
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(IValue? other)
+            => other is UInt64Value i && i.value == value;
 
         /// <summary>
         ///     check if this number is negative

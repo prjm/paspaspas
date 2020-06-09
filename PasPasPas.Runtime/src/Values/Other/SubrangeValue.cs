@@ -1,6 +1,4 @@
-﻿#nullable disable
-using System;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.Other {
@@ -8,7 +6,7 @@ namespace PasPasPas.Runtime.Values.Other {
     /// <summary>
     ///     subrange value
     /// </summary>
-    public class SubrangeValue : RuntimeValueBase, ISubrangeValue, IEquatable<SubrangeValue> {
+    internal class SubrangeValue : RuntimeValueBase, ISubrangeValue {
 
         /// <summary>
         ///     create a new subrange value
@@ -23,21 +21,8 @@ namespace PasPasPas.Runtime.Values.Other {
         /// </summary>
         public IValue WrappedValue { get; }
 
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-            => Equals(obj as SubrangeValue);
-
-        /// <summary>
-        ///     test for equality
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(SubrangeValue other)
-            => other.TypeDefinition.Equals(TypeDefinition) && other.WrappedValue.Equals(WrappedValue);
+        public override bool Equals(IValue? other)
+            => other is SubrangeValue s && s.TypeDefinition.Equals(TypeDefinition) && s.WrappedValue.Equals(WrappedValue);
 
         /// <summary>
         ///     compute a hash code
@@ -62,5 +47,8 @@ namespace PasPasPas.Runtime.Values.Other {
                 return ordinal.GetOrdinalValue(types);
             return types.Runtime.Integers.Invalid;
         }
+
+        public override string GetValueString()
+            => WrappedValue.ToValueString();
     }
 }

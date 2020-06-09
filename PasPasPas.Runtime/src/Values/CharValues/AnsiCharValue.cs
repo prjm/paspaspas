@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.Other;
 
@@ -8,14 +7,14 @@ namespace PasPasPas.Runtime.Values.CharValues {
     /// <summary>
     ///     ANSI char value
     /// </summary>
-    public class AnsiCharValue : CharValueBase {
+    internal class AnsiCharValue : CharValueBase {
 
         /// <summary>
         ///     crate a new char value
         /// </summary>
         /// <param name="charValue"></param>
         /// <param name="typeDef">type id</param>
-        public AnsiCharValue(ITypeDefinition typeDef, byte charValue) : base(typeDef, CharTypeKind.AnsiChar)
+        internal AnsiCharValue(ITypeDefinition typeDef, byte charValue) : base(typeDef, CharTypeKind.AnsiChar)
             => Value = charValue;
 
         /// <summary>
@@ -50,6 +49,12 @@ namespace PasPasPas.Runtime.Values.CharValues {
 
             return this;
         }
+
+        public override string GetValueString()
+            => new string((char)Value, 1);
+
+        public override bool Equals(IValue? other)
+            => other is AnsiCharValue c && c.Value == Value;
 
         /// <summary>
         ///     char value

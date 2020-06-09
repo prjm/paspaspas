@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -12,7 +11,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
     /// <summary>
     ///     base class for strings
     /// </summary>
-    public abstract class StringValueBase : RuntimeValueBase, IStringValue, IEquatable<IStringValue> {
+    internal abstract class StringValueBase : RuntimeValueBase, IStringValue {
 
         /// <summary>
         ///     create a new string value
@@ -62,23 +61,6 @@ namespace PasPasPas.Runtime.Values.StringValues {
 
         internal static bool NotEquals(IStringValue string1, IStringValue string2)
             => string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) != 0;
-
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(IStringValue other)
-            => Equal(this, other);
-
-
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-            => obj is IStringValue other ? Equals(other) : false;
 
         /// <summary>
         ///     get a char at a given index

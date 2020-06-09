@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.Other;
 
@@ -8,7 +7,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
     /// <summary>
     ///     constant empty string value
     /// </summary>
-    public class EmptyStringValue : StringValueBase {
+    internal class EmptyStringValue : StringValueBase {
 
         /// <summary>
         ///     create a new empty string value
@@ -36,5 +35,20 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <returns></returns>
         public override IValue CharAt(int index)
             => new ErrorValue(SystemUnit.ErrorType, SpecialConstantKind.InvalidChar);
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(IValue? other)
+            => other is EmptyStringValue;
+
+        /// <summary>
+        ///     get the empty string
+        /// </summary>
+        /// <returns></returns>
+        public override string GetValueString()
+            => string.Empty;
     }
 }

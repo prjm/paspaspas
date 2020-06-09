@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
@@ -47,6 +46,7 @@ namespace PasPasPas.Typings.Simple {
                     case IntegralTypeKind.SmallInt:
                     case IntegralTypeKind.Integer:
                     case IntegralTypeKind.Int64:
+                        return true;
 
                     default:
                         throw new InvalidOperationException();

@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
@@ -9,7 +8,7 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     base class for constant runtime values
     /// </summary>
-    public abstract class RuntimeValueBase : IValue {
+    internal abstract class RuntimeValueBase : IValue {
 
         /// <summary>
         ///     create a new runtime value
@@ -17,14 +16,34 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="typeDefinition"></param>
         protected RuntimeValueBase(ITypeDefinition typeDefinition) {
             TypeDefinition = typeDefinition;
-            LogHistrogram();
+            LogHistogram();
         }
 
         [Conditional("DEBUG")]
-        private void LogHistrogram() {
+        private void LogHistogram() {
             if (Histograms.Enable)
                 Histograms.Value(HistogramKeys.RuntimeValues, GetType().Name);
         }
+
+        /// <summary>
+        ///     retrieve a value string
+        /// </summary>
+        /// <returns></returns>
+        public string ToValueString()
+            => Runtime.GetValueString(this);
+
+        /// <summary>
+        ///     get a value string
+        /// </summary>
+        /// <returns></returns>
+        public abstract string GetValueString();
+
+        /// <summary>
+        ///     compare values
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public abstract bool Equals(IValue? other);
 
         /// <summary>
         ///     type id
@@ -40,7 +59,7 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     base type
         /// </summary>
-        public BaseType BaseType
+        protected BaseType BaseType
             => TypeDefinition.BaseType;
 
         /// <summary>
@@ -48,5 +67,33 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         public SymbolTypeKind SymbolKind
             => SymbolTypeKind.Constant;
+
+        /// <summary>
+        ///     access the runtime object
+        /// </summary>
+        protected IRuntimeValueFactory Runtime
+            => TypeDefinition.DefiningUnit.TypeRegistry.Runtime;
+
+        /// <summary>
+        ///     default equals mechanism
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj) {
+            if (ReferenceEquals(obj, this))
+                return true;
+
+            if (obj is null)
+                return false;
+
+            return Equals(this);
+        }
+
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public abstract override int GetHashCode();
+
     }
 }

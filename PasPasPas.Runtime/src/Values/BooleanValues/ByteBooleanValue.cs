@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System.Globalization;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -7,14 +7,14 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
     /// <summary>
     ///     constant byte boolean (8 bit)
     /// </summary>
-    public class ByteBooleanValue : BooleanValueBase {
+    internal class ByteBooleanValue : BooleanValueBase {
 
         /// <summary>
         ///     create a new byte boolean
         /// </summary>
         /// <param name="byteBoolValue">boolean value</param>
         /// <param name="typeDefinition">type def</param>
-        public ByteBooleanValue(byte byteBoolValue, ITypeDefinition typeDefinition) : base(typeDefinition, BooleanTypeKind.ByteBool)
+        internal ByteBooleanValue(byte byteBoolValue, ITypeDefinition typeDefinition) : base(typeDefinition, BooleanTypeKind.ByteBool)
             => Value = byteBoolValue;
 
         /// <summary>
@@ -35,11 +35,29 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
             => Value;
 
         /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(IValue? other)
+            => other is ByteBooleanValue b && b.Value == Value;
+
+        public override int GetHashCode()
+            => Value;
+
+        /// <summary>
         ///     ordinal value
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
         public override IValue GetOrdinalValue(ITypeRegistry types)
             => types.Runtime.Integers.ToScaledIntegerValue(Value);
+
+        /// <summary>
+        ///     get the value string
+        /// </summary>
+        /// <returns></returns>
+        public override string GetValueString()
+            => Value.ToString(CultureInfo.InvariantCulture);
     }
 }

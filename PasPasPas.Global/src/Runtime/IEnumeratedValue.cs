@@ -1,5 +1,4 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Runtime {
+﻿namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     value of an enumeration

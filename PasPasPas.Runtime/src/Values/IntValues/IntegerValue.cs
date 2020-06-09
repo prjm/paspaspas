@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System.Globalization;
 using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -8,7 +8,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
     /// <summary>
     ///     integer value
     /// </summary>
-    public class IntegerValue : IntegerValueBase {
+    internal class IntegerValue : IntegerValueBase {
 
         private readonly int value;
 
@@ -45,6 +45,14 @@ namespace PasPasPas.Runtime.Values.IntValues {
             => (uint)value;
 
         /// <summary>
+        ///     compare for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(IValue? other)
+            => other is IntegerValue i && i.value == value;
+
+        /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
@@ -66,5 +74,11 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public override IValue InvertBits()
             => ToScaledIntegerValue(~value);
 
+        /// <summary>
+        ///     get the value as string
+        /// </summary>
+        /// <returns></returns>
+        public override string GetValueString()
+            => value.ToString(CultureInfo.InvariantCulture);
     }
 }

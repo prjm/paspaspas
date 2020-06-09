@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -8,7 +7,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
     /// <summary>
     ///     base class for boolean values
     /// </summary>
-    public abstract class BooleanValueBase : RuntimeValueBase, IBooleanValue, IOrdinalValue, IEquatable<IBooleanValue> {
+    internal abstract class BooleanValueBase : RuntimeValueBase, IBooleanValue, IOrdinalValue {
 
         /// <summary>
         ///     create a new boolean value
@@ -40,26 +39,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         ///     boolean value kind
         /// </summary>
         public BooleanTypeKind Kind
-            => (TypeDefinition as IBooleanType).Kind;
-
-        /// <summary>
-        ///     compare to another boolean value
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj is IBooleanValue boolean)
-                return Equals(boolean);
-
-            return false;
-        }
-
-        /// <summary>
-        ///     compute a simple hash code
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-            => AsBoolean ? 1 : 0;
+            => (TypeDefinition as IBooleanType ?? throw new InvalidOperationException()).Kind;
 
         internal static bool And(IBooleanValue boolean1, IBooleanValue boolean2)
             => boolean1.AsBoolean && boolean2.AsBoolean;
@@ -90,14 +70,6 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
 
         internal static bool LessThen(IBooleanValue boolean1, IBooleanValue boolean2)
             => !boolean1.AsBoolean && boolean2.AsBoolean;
-
-        /// <summary>
-        ///     compare this value to another boolean value
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(IBooleanValue other)
-            => AsBoolean == other.AsBoolean;
 
         /// <summary>
         ///     ordinal value

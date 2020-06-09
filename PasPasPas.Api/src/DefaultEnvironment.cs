@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Files;
@@ -95,7 +94,7 @@ namespace PasPasPas.Api {
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
             Patterns = new PatternFactory(StringPool);
             Runtime = new RuntimeValueFactory(ListPools, this);
-            TypeRegistry = new RegisteredTypes(Runtime, ListPools, intSize);
+            TypeRegistry = new RegisteredTypes(Runtime, ListPools, intSize, StringPool, StringBuilderPool);
             IntegerParser = new IntegerParser(Runtime, false);
             HexNumberParser = new IntegerParser(Runtime, true);
             RealLiteralConverter = new RealLiteralConverter(Runtime);

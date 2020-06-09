@@ -1,6 +1,4 @@
-﻿#nullable disable
-using System;
-using System.Numerics;
+﻿using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.IntValues;
@@ -10,15 +8,25 @@ namespace PasPasPas.Runtime.Values.Other {
     /// <summary>
     ///     constant enumerated value
     /// </summary>
-    public class EnumeratedValue : IntegerValueBase, IIntegerValue, IEnumeratedValue, IEquatable<IEnumeratedValue> {
+    internal class EnumeratedValue : IntegerValueBase, IIntegerValue, IEnumeratedValue {
 
         /// <summary>
         ///     create a new enumerated value
         /// </summary>
         /// <param name="typeDef">base type id</param>
         /// <param name="value">constant value</param>
-        public EnumeratedValue(ITypeDefinition typeDef, IIntegerValue value) : base(typeDef, ((IIntegralType)value.TypeDefinition).Kind)
-            => Value = value;
+        /// <param name="name">value name</param>
+        public EnumeratedValue(ITypeDefinition typeDef, IIntegerValue value, string name) : base(typeDef, ((IIntegralType)value.TypeDefinition).Kind) {
+            Value = value;
+            Name = name;
+        }
+
+
+        /// <summary>
+        ///     value name
+        /// </summary>
+        public string Name { get; }
+
 
         /// <summary>
         ///     enumerated value
@@ -80,30 +88,11 @@ namespace PasPasPas.Runtime.Values.Other {
         }
 
         /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj is IEnumeratedValue enumValue)
-                return Equals(enumValue);
-            return false;
-        }
-
-        /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
             => unchecked(17 + 23 * TypeDefinition.GetHashCode() + 11 * Value.GetHashCode());
-
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(IEnumeratedValue other)
-            => other.TypeDefinition.Equals(TypeDefinition) && Value.Equals(other.Value);
 
         /// <summary>
         ///     get the ordinal value
@@ -117,5 +106,14 @@ namespace PasPasPas.Runtime.Values.Other {
             return types.Runtime.Integers.Invalid;
         }
 
+        public override string GetValueString() {
+            if (!string.IsNullOrEmpty(Name))
+                return Name;
+            else
+                return Value.ToValueString();
+        }
+
+        public override bool Equals(IValue? other)
+           => other is EnumeratedValue v && v.Value == Value;
     }
 }

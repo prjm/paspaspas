@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System.Globalization;
 using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -8,43 +8,43 @@ namespace PasPasPas.Runtime.Values.IntValues {
     /// <summary>
     ///     cardinal value
     /// </summary>
-    public class CardinalValue : IntegerValueBase {
+    internal class CardinalValue : IntegerValueBase {
 
-        private readonly uint value;
+        private readonly uint cardinalValue;
 
         /// <summary>
         ///     create a new cardinal value
         /// </summary>
         /// <param name="value"></param>
         /// <param name="typeDef"></param>
-        public CardinalValue(ITypeDefinition typeDef, uint value) : base(typeDef, IntegralTypeKind.Cardinal)
-            => this.value = value;
+        internal CardinalValue(ITypeDefinition typeDef, uint value) : base(typeDef, IntegralTypeKind.Cardinal)
+            => this.cardinalValue = value;
 
         /// <summary>
         ///     value
         /// </summary>
         public override long SignedValue
-            => value;
+            => cardinalValue;
 
         /// <summary>
         ///     get this value as big integer value
         /// </summary>
         public override BigInteger AsBigInteger
-            => new BigInteger(value);
+            => new BigInteger(cardinalValue);
 
         /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => (int)value;
+            => (int)cardinalValue;
 
         /// <summary>
         ///     invert bits
         /// </summary>
         /// <returns></returns>
         public override IValue InvertBits()
-            => ToScaledIntegerValue(~value);
+            => ToScaledIntegerValue(~cardinalValue);
 
         /// <summary>
         ///     get the ordinal value
@@ -52,18 +52,24 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="types"></param>
         /// <returns></returns>
         public override IValue GetOrdinalValue(ITypeRegistry types)
-            => ToScaledIntegerValue(value);
+            => ToScaledIntegerValue(cardinalValue);
+
+        public override string GetValueString()
+            => cardinalValue.ToString(CultureInfo.InvariantCulture);
+
+        public override bool Equals(IValue? other)
+            => other is CardinalValue c && c.cardinalValue == cardinalValue;
 
         /// <summary>
         ///     check if this number is negative
         /// </summary>
         public override bool IsNegative
-            => value < 0;
+            => cardinalValue < 0;
 
         /// <summary>
         ///     unsigned value
         /// </summary>
         public override ulong UnsignedValue
-            => value;
+            => cardinalValue;
     }
 }

@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.BooleanValues {
@@ -7,14 +6,14 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
     /// <summary>
     ///     support for basic boolean values
     /// </summary>
-    public class BooleanValue : BooleanValueBase {
+    internal class BooleanValue : BooleanValueBase {
 
         /// <summary>
         ///     create a new boolean value
         /// </summary>
         /// <param name="aValue">boolean value</param>
         /// <param name="typeDef">type definition</param>
-        public BooleanValue(bool aValue, ITypeDefinition typeDef) : base(typeDef, BooleanTypeKind.Boolean)
+        internal BooleanValue(bool aValue, ITypeDefinition typeDef) : base(typeDef, BooleanTypeKind.Boolean)
             => Value = aValue;
 
         /// <summary>
@@ -35,11 +34,33 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         public bool Value { get; }
 
         /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(IValue? other)
+            => other is BooleanValue b && b.Value == Value;
+
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+            => Value ? 1 : 0;
+
+        /// <summary>
         ///     ordinal value
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
         public override IValue GetOrdinalValue(ITypeRegistry types)
             => types.Runtime.Integers.ToScaledIntegerValue(Value ? 1 : 0);
+
+        /// <summary>
+        ///     get the value string
+        /// </summary>
+        /// <returns></returns>
+        public override string GetValueString()
+            => Value ? KnownNames.True : KnownNames.False;
     }
 }

@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.Other;
@@ -18,7 +17,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         public BooleanOperations(ITypeRegistryProvider typeRegistryProvider) {
             provider = typeRegistryProvider;
             trueValue = new Lazy<IBooleanValue>(() => new BooleanValue(true, provider.GetBooleanType()), true);
-            falseValue = new Lazy<IBooleanValue>(() => new BooleanValue(true, provider.GetBooleanType()), true);
+            falseValue = new Lazy<IBooleanValue>(() => new BooleanValue(false, provider.GetBooleanType()), true);
             invalid = new Lazy<IValue>(() => new ErrorValue(provider.GetErrorType(), SpecialConstantKind.InvalidBool));
         }
 
@@ -82,7 +81,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
             }
         }
 
-        private ITypeDefinition EnlargeType(IBooleanValue t1, IBooleanValue t2)
+        private static ITypeDefinition EnlargeType(IBooleanValue t1, IBooleanValue t2)
             => t2.TypeDefinition.TypeSizeInBytes > t1.TypeDefinition.TypeSizeInBytes ?
             t2.TypeDefinition :
             t1.TypeDefinition;

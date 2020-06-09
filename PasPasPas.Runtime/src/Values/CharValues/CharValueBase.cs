@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -8,7 +7,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
     /// <summary>
     ///     base class for char values
     /// </summary>
-    public abstract class CharValueBase : RuntimeValueBase, ICharValue, IStringValue, IEquatable<ICharValue>, IEquatable<IStringValue> {
+    internal abstract class CharValueBase : RuntimeValueBase, ICharValue, IStringValue {
 
         /// <summary>
         ///     create a new char value
@@ -30,7 +29,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         ///     char type kind
         /// </summary>
         public CharTypeKind Kind
-            => (TypeDefinition as ICharType).Kind;
+            => (TypeDefinition as ICharType ?? throw new InvalidOperationException()).Kind;
 
         /// <summary>
         ///     get the boolean value
@@ -65,40 +64,10 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <summary>
         ///     test for equality
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj is ICharValue charValue)
-                return Equals(charValue);
-
-            if (obj is IStringValue stringValue)
-                return Equals(stringValue);
-
-
-            return false;
-        }
-
-        /// <summary>
-        ///     test for equality
-        /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(ICharValue other)
             => other.AsWideChar == AsWideChar;
-
-        /// <summary>
-        ///     test for equality
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(IStringValue other)
-            => string.Equals(other.AsUnicodeString, AsUnicodeString, StringComparison.Ordinal);
-
-        /// <summary>
-        ///     compute a hash code
-        /// </summary>
-        /// <returns></returns>
-        public abstract override int GetHashCode();
 
         /// <summary>
         ///     get the ordinal value of a char

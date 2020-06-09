@@ -1,5 +1,4 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     well-known type names
@@ -522,7 +521,6 @@ namespace PasPasPas.Globals.Types {
         public const string P = "p";
 
         #endregion
-
         #region Intrinsic routines
 
         /// <summary>
@@ -614,6 +612,24 @@ namespace PasPasPas.Globals.Types {
         ///     <c>sizeof</c> routine
         /// </summary>
         public const string SizeOf = "SizeOf";
+
+        #endregion
+        #region Literal constants
+
+        /// <summary>
+        ///     <c>true</c> constant
+        /// </summary>
+        public const string True = "True";
+
+        /// <summary>
+        ///     <c>false</c> constant
+        /// </summary>
+        public const string False = "False";
+
+        /// <summary>
+        ///     <c>nil</c> constant
+        /// </summary>
+        public const string Nil = "Nil";
 
         #endregion
 
@@ -726,5 +742,6 @@ namespace PasPasPas.Globals.Types {
         ///     <c>&gt;=</c> operator
         /// </summary>
         public const string GreaterThanOrEqual = ">=";
+
     }
 }

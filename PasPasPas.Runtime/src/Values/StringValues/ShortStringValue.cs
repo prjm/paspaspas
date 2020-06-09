@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Text;
+﻿using System.Text;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.CharValues;
@@ -10,7 +9,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
     /// <summary>
     ///     short string values
     /// </summary>
-    public class ShortStringValue : StringValueBase, IStringValue {
+    internal class ShortStringValue : StringValueBase, IStringValue {
 
         private readonly string data;
 
@@ -46,6 +45,21 @@ namespace PasPasPas.Runtime.Values.StringValues {
             var typeDef = TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit.AnsiCharType;
             return new AnsiCharValue(typeDef, unchecked((byte)data[index]));
         }
+
+        /// <summary>
+        ///     get the value of this string
+        /// </summary>
+        /// <returns></returns>
+        public override string GetValueString()
+            => data;
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(IValue? other)
+            => other is ShortStringValue s && string.Equals(s.data, data, System.StringComparison.Ordinal);
 
         /// <summary>
         ///     number of char elements

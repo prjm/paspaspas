@@ -1,6 +1,4 @@
-﻿#nullable disable
-using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Linq;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -10,7 +8,7 @@ namespace PasPasPas.Runtime.Values.Structured {
     /// <summary>
     ///     constant array value
     /// </summary>
-    public class ArrayValue : RuntimeValueBase, IEquatable<IArrayValue>, IArrayValue {
+    internal class ArrayValue : RuntimeValueBase, IArrayValue {
 
         /// <summary>
         ///     create a new array value
@@ -34,22 +32,6 @@ namespace PasPasPas.Runtime.Values.Structured {
         public ImmutableArray<IValue> Values { get; }
 
         /// <summary>
-        ///     compare to another array value
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(IArrayValue other)
-            => other.BaseTypeDefinition.Equals(BaseType) && Enumerable.SequenceEqual(Values, other.Values);
-
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-            => obj is IArrayValue array ? Equals(array) : false;
-
-        /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
@@ -63,5 +45,10 @@ namespace PasPasPas.Runtime.Values.Structured {
             }
         }
 
+        public override bool Equals(IValue? other)
+            => other is ArrayValue r && r.Values.SequenceEqual(Values);
+
+        public override string GetValueString()
+            => "[" + string.Join(",", Values.Select(t => t.ToValueString())) + "]";
     }
 }

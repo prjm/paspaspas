@@ -1,5 +1,4 @@
-﻿#nullable disable
-namespace PasPasPas.Typings.Common {
+﻿namespace PasPasPas.Typings.Common {
     using System.Collections.Immutable;
     using PasPasPas.Globals.Options.DataTypes;
     using PasPasPas.Globals.Runtime;
@@ -338,6 +337,10 @@ namespace PasPasPas.Typings.Common {
         ///     extended type definition
         /// </summary>
         public IRealType ExtendedType { get; private set; }
+
+        /// <summary>
+        ///     comp type
+        /// </summary>
         public IRealType CompType { get; private set; }
 
         /// <summary>
