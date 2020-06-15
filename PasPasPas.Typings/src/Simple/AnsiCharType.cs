@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -8,13 +7,13 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     ANSI char type (1 byte)
     /// </summary>
-    public class AnsiCharType : TypeDefinitionBase, ICharType {
+    internal class AnsiCharType : TypeDefinitionBase, ICharType {
 
         /// <summary>
         ///     create a new char type
         /// </summary>
         /// <param name="definingUnit">defining unit</param>
-        public AnsiCharType(IUnitType definingUnit) : base(definingUnit) { }
+        internal AnsiCharType(IUnitType definingUnit) : base(definingUnit) { }
 
         /// <summary>
         ///     highest element: <c>0xff</c>
@@ -81,5 +80,13 @@ namespace PasPasPas.Typings.Simple {
         public override string MangledName
             => KnownNames.C;
 
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is ICharType c && c.Kind == CharTypeKind.AnsiChar;
     }
 }

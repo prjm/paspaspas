@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.Types;
@@ -9,7 +9,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     procedural type
     /// </summary>
-    public class RoutineType : TypeDefinitionBase, IRoutineType {
+    internal class RoutineType : TypeDefinitionBase, IRoutineType {
 
         /// <summary>
         ///     create a new routine type
@@ -68,6 +68,15 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="typeCreator"></param>
         /// <returns></returns>
         public ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds, ITypeCreator typeCreator)
-            => default;
+            => throw new InvalidOperationException();
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is IRoutineType;
     }
 }

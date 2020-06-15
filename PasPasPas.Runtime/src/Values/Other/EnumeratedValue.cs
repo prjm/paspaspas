@@ -21,12 +21,10 @@ namespace PasPasPas.Runtime.Values.Other {
             Name = name;
         }
 
-
         /// <summary>
         ///     value name
         /// </summary>
         public string Name { get; }
-
 
         /// <summary>
         ///     enumerated value

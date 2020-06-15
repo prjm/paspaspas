@@ -8,7 +8,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     create a new integral type
     /// </summary>
-    public class IntegralType : TypeDefinitionBase, IIntegralType {
+    internal class IntegralType : TypeDefinitionBase, IIntegralType {
 
         /// <summary>
         ///     create a new integral type
@@ -61,34 +61,18 @@ namespace PasPasPas.Typings.Simple {
             get {
                 var f = TypeRegistry.Runtime.Integers;
 
-                switch (Kind) {
-                    case IntegralTypeKind.Byte:
-                        return f.ToIntegerValue(byte.MinValue);
-
-                    case IntegralTypeKind.ShortInt:
-                        return f.ToIntegerValue(sbyte.MinValue);
-
-                    case IntegralTypeKind.Word:
-                        return f.ToIntegerValue(ushort.MinValue);
-
-                    case IntegralTypeKind.SmallInt:
-                        return f.ToIntegerValue(short.MinValue);
-
-                    case IntegralTypeKind.Cardinal:
-                        return f.ToIntegerValue(uint.MinValue);
-
-                    case IntegralTypeKind.Integer:
-                        return f.ToIntegerValue(int.MinValue);
-
-                    case IntegralTypeKind.UInt64:
-                        return f.ToIntegerValue(ulong.MinValue);
-
-                    case IntegralTypeKind.Int64:
-                        return f.ToIntegerValue(long.MinValue);
-
-                    default:
-                        throw new InvalidOperationException();
-                }
+                return Kind switch
+                {
+                    IntegralTypeKind.Byte => f.ToIntegerValue(byte.MinValue),
+                    IntegralTypeKind.ShortInt => f.ToIntegerValue(sbyte.MinValue),
+                    IntegralTypeKind.Word => f.ToIntegerValue(ushort.MinValue),
+                    IntegralTypeKind.SmallInt => f.ToIntegerValue(short.MinValue),
+                    IntegralTypeKind.Cardinal => f.ToIntegerValue(uint.MinValue),
+                    IntegralTypeKind.Integer => f.ToIntegerValue(int.MinValue),
+                    IntegralTypeKind.UInt64 => f.ToIntegerValue(ulong.MinValue),
+                    IntegralTypeKind.Int64 => f.ToIntegerValue(long.MinValue),
+                    _ => throw new InvalidOperationException(),
+                };
             }
         }
 
@@ -99,34 +83,18 @@ namespace PasPasPas.Typings.Simple {
             get {
                 var f = TypeRegistry.Runtime.Integers;
 
-                switch (Kind) {
-                    case IntegralTypeKind.Byte:
-                        return f.ToIntegerValue(byte.MaxValue);
-
-                    case IntegralTypeKind.ShortInt:
-                        return f.ToIntegerValue(sbyte.MaxValue);
-
-                    case IntegralTypeKind.Word:
-                        return f.ToIntegerValue(ushort.MaxValue);
-
-                    case IntegralTypeKind.SmallInt:
-                        return f.ToIntegerValue(short.MaxValue);
-
-                    case IntegralTypeKind.Cardinal:
-                        return f.ToIntegerValue(uint.MaxValue);
-
-                    case IntegralTypeKind.Integer:
-                        return f.ToIntegerValue(int.MaxValue);
-
-                    case IntegralTypeKind.UInt64:
-                        return f.ToIntegerValue(ulong.MaxValue);
-
-                    case IntegralTypeKind.Int64:
-                        return f.ToIntegerValue(long.MaxValue);
-
-                    default:
-                        throw new InvalidOperationException();
-                }
+                return Kind switch
+                {
+                    IntegralTypeKind.Byte => f.ToIntegerValue(byte.MaxValue),
+                    IntegralTypeKind.ShortInt => f.ToIntegerValue(sbyte.MaxValue),
+                    IntegralTypeKind.Word => f.ToIntegerValue(ushort.MaxValue),
+                    IntegralTypeKind.SmallInt => f.ToIntegerValue(short.MaxValue),
+                    IntegralTypeKind.Cardinal => f.ToIntegerValue(uint.MaxValue),
+                    IntegralTypeKind.Integer => f.ToIntegerValue(int.MaxValue),
+                    IntegralTypeKind.UInt64 => f.ToIntegerValue(ulong.MaxValue),
+                    IntegralTypeKind.Int64 => f.ToIntegerValue(long.MaxValue),
+                    _ => throw new InvalidOperationException(),
+                };
             }
         }
 
@@ -220,38 +188,22 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     get the short type name
         /// </summary>
-        public override string MangledName {
-            get {
+        public override string MangledName
+            => Kind switch
+            {
+                IntegralTypeKind.SmallInt => KnownNames.ZC,
+                IntegralTypeKind.Byte => KnownNames.UC,
+                IntegralTypeKind.ShortInt => KnownNames.S,
+                IntegralTypeKind.Word => KnownNames.US,
+                IntegralTypeKind.Cardinal => KnownNames.UI,
+                IntegralTypeKind.Integer => KnownNames.I,
+                IntegralTypeKind.UInt64 => KnownNames.UJ,
+                IntegralTypeKind.Int64 => KnownNames.J,
+                _ => throw new InvalidOperationException(),
+            };
 
-                switch (Kind) {
-                    case IntegralTypeKind.SmallInt:
-                        return KnownNames.ZC;
-
-                    case IntegralTypeKind.Byte:
-                        return KnownNames.UC;
-
-                    case IntegralTypeKind.ShortInt:
-                        return KnownNames.S;
-
-                    case IntegralTypeKind.Word:
-                        return KnownNames.US;
-
-                    case IntegralTypeKind.Cardinal:
-                        return KnownNames.UI;
-
-                    case IntegralTypeKind.Integer:
-                        return KnownNames.I;
-
-                    case IntegralTypeKind.UInt64:
-                        return KnownNames.UJ;
-
-                    case IntegralTypeKind.Int64:
-                        return KnownNames.J;
-
-                    default:
-                        throw new InvalidOperationException();
-                }
-            }
-        }
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is IIntegralType i && i.Kind == Kind;
     }
 }

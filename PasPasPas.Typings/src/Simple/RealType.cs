@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -8,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     real type definition
     /// </summary>
-    public class RealType : TypeDefinitionBase, IRealType {
+    internal class RealType : TypeDefinitionBase, IRealType {
 
         /// <summary>
         ///     real type definition
@@ -48,62 +47,32 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     long type name
         /// </summary>
-        public override string Name {
-            get {
-                switch (Kind) {
-                    case RealTypeKind.Single:
-                        return KnownNames.Single;
-
-                    case RealTypeKind.Double:
-                        return KnownNames.Double;
-
-                    case RealTypeKind.Extended:
-                        return KnownNames.Extended;
-
-                    case RealTypeKind.Real48:
-                        return KnownNames.Real48;
-
-                    case RealTypeKind.Comp:
-                        return KnownNames.Comp;
-
-                    case RealTypeKind.Currency:
-                        return KnownNames.Currency;
-
-                    default:
-                        throw new InvalidOperationException();
-                }
-            }
-        }
+        public override string Name
+            => Kind switch
+            {
+                RealTypeKind.Single => KnownNames.Single,
+                RealTypeKind.Double => KnownNames.Double,
+                RealTypeKind.Extended => KnownNames.Extended,
+                RealTypeKind.Real48 => KnownNames.Real48,
+                RealTypeKind.Comp => KnownNames.Comp,
+                RealTypeKind.Currency => KnownNames.Currency,
+                _ => throw new InvalidOperationException(),
+            };
 
         /// <summary>
         ///     short name for types
         /// </summary>
-        public override string MangledName {
-            get {
-                switch (Kind) {
-                    case RealTypeKind.Single:
-                        return KnownNames.F;
-
-                    case RealTypeKind.Double:
-                        return KnownNames.D;
-
-                    case RealTypeKind.Extended:
-                        return KnownNames.G;
-
-                    case RealTypeKind.Real48:
-                        return KnownNames.SReal48;
-
-                    case RealTypeKind.Comp:
-                        return KnownNames.SystemAtComp;
-
-                    case RealTypeKind.Currency:
-                        return KnownNames.SystemAtCurrency;
-
-                    default:
-                        throw new InvalidOperationException();
-                }
-            }
-        }
+        public override string MangledName
+            => Kind switch
+            {
+                RealTypeKind.Single => KnownNames.F,
+                RealTypeKind.Double => KnownNames.D,
+                RealTypeKind.Extended => KnownNames.G,
+                RealTypeKind.Real48 => KnownNames.SReal48,
+                RealTypeKind.Comp => KnownNames.SystemAtComp,
+                RealTypeKind.Currency => KnownNames.SystemAtCurrency,
+                _ => throw new InvalidOperationException(),
+            };
 
         /// <summary>
         ///     type size in bytes
@@ -135,5 +104,9 @@ namespace PasPasPas.Typings.Simple {
         ///     real type kind
         /// </summary>
         public RealTypeKind Kind { get; }
+
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is IRealType r && r.Kind == Kind;
     }
 }

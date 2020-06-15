@@ -1,20 +1,22 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
     ///     array type definition
     /// </summary>
-    public abstract class ArrayType : StructuredTypeBase, IArrayType {
+    internal abstract class ArrayType : StructuredTypeBase, IArrayType {
 
         /// <summary>
         ///     create a new array type
         /// </summary>
         /// <param name="definingUnit"></param>
         /// <param name="indexType">index types</param>
-        protected ArrayType(IUnitType definingUnit, ITypeDefinition indexType) : base(definingUnit)
-            => IndexType = indexType;
+        /// <param name="baseTypeDefinition">base type definition</param>
+        protected ArrayType(IUnitType definingUnit, ITypeDefinition indexType, ITypeDefinition baseTypeDefinition) : base(definingUnit) {
+            IndexType = indexType;
+            BaseTypeDefinition = baseTypeDefinition;
+        }
 
         /// <summary>
         ///     base type kind
@@ -35,8 +37,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     base type id
         /// </summary>
-        public ITypeDefinition BaseTypeDefinition { get; set; }
-            = default;
+        public ITypeDefinition BaseTypeDefinition { get; }
 
         /// <summary>
         ///     <c>true</c> if packed array
@@ -49,6 +50,12 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public override string MangledName
             => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
+
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+                other is IArrayType a &&
+                a.Kind == Kind &&
+                a.IndexType.Equals(IndexType);
 
         /*
         /// <summary>

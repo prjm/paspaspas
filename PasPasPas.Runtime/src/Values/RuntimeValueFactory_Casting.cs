@@ -1,18 +1,15 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.Structured;
 using PasPasPas.Typings.Common;
-using PasPasPas.Typings.Simple;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Runtime.Values {
 
     public partial class RuntimeValueFactory {
 
-        private Lazy<IValue> invalidCast;
+        private readonly Lazy<IValue> invalidCast;
 
         /// <summary>
         ///     cast values
@@ -76,19 +73,17 @@ namespace PasPasPas.Runtime.Values {
             typeDef = typeDef.ResolveAlias();
 
             if (typeDef is ISetType setType && value is SetValue setValue) {
+                using var list = ListPools.GetList<IValue>();
+                foreach (var sourceValue in setValue.Values) {
+                    var targetValue = Cast(types, sourceValue, setType.BaseTypeDefinition);
 
-                using (var list = ListPools.GetList<IValue>()) {
-                    foreach (var sourceValue in setValue.Values) {
-                        var targetValue = Cast(types, sourceValue, setType.BaseTypeDefinition);
+                    if (!targetValue.TypeDefinition.Equals(setType.BaseTypeDefinition))
+                        return invalidCast.Value;
 
-                        if (!targetValue.TypeDefinition.Equals(setType.BaseTypeDefinition))
-                            return invalidCast.Value;
-
-                        list.Add(targetValue);
-                    }
-
-                    return new SetValue(setType, ListPools.GetFixedArray(list));
+                    list.Add(targetValue);
                 }
+
+                return new SetValue(setType, ListPools.GetFixedArray(list));
             }
 
             return invalidCast.Value;
@@ -111,10 +106,15 @@ namespace PasPasPas.Runtime.Values {
             if (!(value is IIntegerValue integer))
                 return invalidCast.Value;
 
-            if (typeDef is EnumeratedType enumType)
-                return MakeEnumValue(enumType.TypeDefinition, CastInteger(types, value, enumType.CommonTypeId) as IIntegerValue, string.Empty);
+            if (typeDef is IEnumeratedType enumType) {
+                var castResult = CastInteger(types, integer, enumType.CommonTypeId);
+                if (castResult is IIntegerValue ci)
+                    return MakeEnumValue(enumType, ci, string.Empty);
+                else
+                    return invalidCast.Value;
+            }
 
-            if (typeDef is SubrangeType subrangeType) {
+            if (typeDef is ISubrangeType subrangeType) {
                 var castedValue = CastInteger(types, value, subrangeType.SubrangeOfType);
                 return MakeSubrangeValue(typeDef, castedValue);
             }
@@ -200,15 +200,11 @@ namespace PasPasPas.Runtime.Values {
                 }
 
                 if (typeDef is IArrayType arrayType && arrayType.BaseTypeDefinition.BaseType == BaseType.Char) {
+                    using var values = ListPools.GetList<IValue>();
+                    for (var index = 0; index < stringValue.NumberOfCharElements; index++)
+                        values.Item.Add(Cast(types, stringValue.CharAt(index), arrayType.BaseTypeDefinition));
 
-                    using (var values = ListPools.GetList<IValue>()) {
-
-                        for (var index = 0; index < stringValue.NumberOfCharElements; index++)
-                            values.Item.Add(Cast(types, stringValue.CharAt(index), arrayType.BaseTypeDefinition));
-
-                        return Structured.CreateArrayValue(typeDef, arrayType.BaseTypeDefinition, ListPools.GetFixedArray(values));
-
-                    }
+                    return Structured.CreateArrayValue(typeDef, arrayType.BaseTypeDefinition, ListPools.GetFixedArray(values));
 
                 }
 
@@ -224,10 +220,15 @@ namespace PasPasPas.Runtime.Values {
             if (!(value is ICharValue charValue))
                 return invalidCast.Value;
 
-            if (typeDef is IEnumeratedType enumType)
-                return MakeEnumValue(enumType, CastChar(types, value, enumType.CommonTypeId) as IIntegerValue, string.Empty);
+            if (typeDef is IEnumeratedType enumType) {
+                var castResult = CastChar(types, value, enumType.CommonTypeId);
+                if (castResult is IIntegerValue ci)
+                    return MakeEnumValue(enumType, ci, string.Empty);
+                else
+                    return invalidCast.Value;
+            }
 
-            if (typeDef is SubrangeType subrangeType) {
+            if (typeDef is ISubrangeType subrangeType) {
                 var castedValue = CastChar(types, value, subrangeType.SubrangeOfType);
                 return MakeSubrangeValue(typeDef, castedValue);
             }
@@ -350,23 +351,21 @@ namespace PasPasPas.Runtime.Values {
         private IValue CastArray(ITypeRegistry types, IValue value, ITypeDefinition typeDef) {
             typeDef = typeDef.ResolveAlias();
 
-            if (typeDef is ArrayType arrayType) {
+            if (typeDef is IArrayType arrayType) {
 
                 if (value is IArrayValue array) {
-                    var newBaseType = default(ITypeDefinition); // Cast(types, array.BaseTypeDefinition, arrayType.BaseTypeDefinition);
+                    var newBaseType = types.Cast(array.BaseTypeDefinition.Reference, arrayType.BaseTypeDefinition.Reference);
 
-                    if (newBaseType.BaseType == BaseType.Error)
+                    if (newBaseType.GetBaseType() == BaseType.Error)
                         return invalidCast.Value;
 
-                    using (var values = ListPools.GetList<IValue>()) {
-
-                        foreach (var itemValue in array.Values) {
-                            values.Item.Add(Cast(types, itemValue, newBaseType));
-                        }
-
-                        var castedValue = new ArrayValue(typeDef, newBaseType, ListPools.GetFixedArray(values));
-                        return castedValue;
+                    using var values = ListPools.GetList<IValue>();
+                    foreach (var itemValue in array.Values) {
+                        values.Item.Add(Cast(types, itemValue, newBaseType.TypeDefinition));
                     }
+
+                    var castedValue = new ArrayValue(typeDef, newBaseType.TypeDefinition, ListPools.GetFixedArray(values));
+                    return castedValue;
                 }
 
             }
@@ -381,13 +380,12 @@ namespace PasPasPas.Runtime.Values {
                 return invalidCast.Value;
 
 
-            using (var list = ListPools.GetList<IValue>()) {
+            using var list = ListPools.GetList<IValue>();
 
-                //for (var i = 0; i < record.Values.Length; i++)
-                //list.Add(Cast(types, record.Values[i], structType.Fields[i].TypeDefinition));
+            for (var i = 0; i < record.Values.Length; i++)
+                list.Add(Cast(types, record.Values[i], structType.Fields[i].TypeDefinition));
 
-                return types.Runtime.Structured.CreateRecordValue(typeDef, ListPools.GetFixedArray(list));
-            }
+            return types.Runtime.Structured.CreateRecordValue(typeDef, ListPools.GetFixedArray(list));
         }
 
     }

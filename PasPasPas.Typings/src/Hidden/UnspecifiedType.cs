@@ -1,12 +1,11 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Hidden {
 
     /// <summary>
     ///     unspecified type (placeholder)
     /// </summary>
-    public class UnspecifiedType : HiddenIntrinsicType, IUnspecifiedType {
+    internal class UnspecifiedType : HiddenIntrinsicType, IUnspecifiedType {
 
         /// <summary>
         ///     create a new unspecified type
@@ -14,5 +13,9 @@ namespace PasPasPas.Typings.Hidden {
         /// <param name="definingUnit"></param>
         public UnspecifiedType(IUnitType definingUnit) : base(definingUnit) {
         }
+
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is IUnspecifiedType;
     }
 }

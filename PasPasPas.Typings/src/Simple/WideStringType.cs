@@ -1,12 +1,11 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Simple {
 
     /// <summary>
     ///     wide string type definition
     /// </summary>
-    public class WideStringType : StringTypeBase {
+    internal class WideStringType : StringTypeBase {
 
         /// <summary>
         ///     create a new wide string type

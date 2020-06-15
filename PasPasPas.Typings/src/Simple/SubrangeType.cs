@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Numerics;
+﻿using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
@@ -9,7 +8,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     subrange type
     /// </summary>
-    public class SubrangeType : TypeDefinitionBase, ISubrangeType {
+    internal class SubrangeType : TypeDefinitionBase, ISubrangeType {
 
         /// <summary>
         ///     create a new subrange type
@@ -132,5 +131,12 @@ namespace PasPasPas.Typings.Simple {
                 return BigInteger.Add(BigInteger.One, BigInteger.Subtract(h.AsBigInteger, l.AsBigInteger));
             }
         }
+
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is ISubrangeType s &&
+                s.SubrangeOfType.Equals(SubrangeOfType) &&
+                s.LowestElement.Equals(LowestElement) &&
+                s.HighestElement.Equals(HighestElement);
     }
 }

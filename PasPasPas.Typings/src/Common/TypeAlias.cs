@@ -1,12 +1,11 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Common {
 
     /// <summary>
     ///     type alias
     /// </summary>
-    public class TypeAlias : TypeDefinitionBase, IAliasedType {
+    internal class TypeAlias : TypeDefinitionBase, IAliasedType {
 
         /// <summary>
         ///     create a new type alias
@@ -15,7 +14,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="aliasName">alias name</param>
         /// <param name="definingUnit">defining unit</param>
         /// <param name="newType">if <c>true</c>, this alias is treated as new, distinct type</param>
-        public TypeAlias(IUnitType definingUnit, ITypeDefinition baseType, string aliasName, bool newType) : base(definingUnit) {
+        internal TypeAlias(IUnitType definingUnit, ITypeDefinition baseType, string aliasName, bool newType) : base(definingUnit) {
             BaseTypeDefinition = baseType;
             IsNewType = newType;
             AliasName = aliasName;
@@ -35,11 +34,6 @@ namespace PasPasPas.Typings.Common {
         ///     alias name
         /// </summary>
         public string AliasName { get; }
-
-        /// <summary>
-        ///     get the base type id
-        /// </summary>
-        public int BaseTypeId { get; }
 
         /// <summary>
         ///     type size in bytes
@@ -65,5 +59,14 @@ namespace PasPasPas.Typings.Common {
         public override BaseType BaseType
             => BaseType.TypeAlias;
 
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+                other is IAliasedType a &&
+                a.BaseTypeDefinition.Equals(BaseTypeDefinition);
     }
 }

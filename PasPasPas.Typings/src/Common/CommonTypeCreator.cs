@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Hidden;
@@ -41,8 +40,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeName"></param>
         /// <returns></returns>
         public IArrayType CreateDynamicArrayType(ITypeDefinition baseType, string typeName, bool isPacked) {
-            var result = new DynamicArrayType(DefiningUnit, typeName) {
-                BaseTypeDefinition = baseType,
+            var result = new DynamicArrayType(DefiningUnit, typeName, baseType) {
                 Packed = isPacked
             };
             DefiningUnit.Register(result.Reference);
@@ -157,8 +155,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="name">type name</param>
         /// <returns></returns>
         public IArrayType CreateStaticArrayType(ITypeDefinition baseType, string name, IOrdinalType indexType, bool isPacked) {
-            var result = new StaticArrayType(name, DefiningUnit, indexType) {
-                BaseTypeDefinition = baseType,
+            var result = new StaticArrayType(name, DefiningUnit, indexType, baseType) {
                 Packed = isPacked
             };
             DefiningUnit.Register(result.Reference);

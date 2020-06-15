@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-// This file is used by Code Analysis to maintain SuppressMessage
+﻿// This file is used by Code Analysis to maintain SuppressMessage
 // attributes that are applied to this project.
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
@@ -26,3 +24,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1502:Avoid excessive complexity", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.RegisteredTypesHelper.GetSmallestIntegralTypeOrNext(PasPasPas.Globals.Types.ITypeRegistry,PasPasPas.Globals.Types.ITypeDefinition,PasPasPas.Globals.Types.ITypeDefinition,System.Int32,System.Boolean)~PasPasPas.Globals.Types.ITypeDefinition")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.RegisteredTypesHelper.GetOperatorId(PasPasPas.Globals.Types.ITypeRegistry,PasPasPas.Parsing.SyntaxTree.Abstract.ExpressionKind,PasPasPas.Globals.Types.ITypeSymbol,PasPasPas.Globals.Types.ITypeSymbol)~System.Int32")]
 [assembly: SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.RegisteredTypesHelper.GetOperatorId(PasPasPas.Globals.Types.ITypeRegistry,PasPasPas.Parsing.SyntaxTree.Abstract.ExpressionKind,PasPasPas.Globals.Types.ITypeSymbol,PasPasPas.Globals.Types.ITypeSymbol)~PasPasPas.Globals.Types.OperatorKind")]
+[assembly: SuppressMessage("CodeSmell", "EPC11:Suspicious equality implementation: no instance members are used.", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Hidden.ErrorType.Equals(PasPasPas.Globals.Types.ITypeDefinition)~System.Boolean")]
+[assembly: SuppressMessage("CodeSmell", "EPC11:Suspicious equality implementation: no instance members are used.", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Simple.AnsiCharType.Equals(PasPasPas.Globals.Types.ITypeDefinition)~System.Boolean")]
+[assembly: SuppressMessage("CodeSmell", "EPC11:Suspicious equality implementation: no instance members are used.", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Structured.RoutineType.Equals(PasPasPas.Globals.Types.ITypeDefinition)~System.Boolean")]

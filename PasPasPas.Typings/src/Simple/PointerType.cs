@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -7,7 +6,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     pointer type definition
     /// </summary>
-    public class PointerType : TypeDefinitionBase, IPointerType {
+    internal class PointerType : TypeDefinitionBase, IPointerType {
 
         /// <summary>
         ///     create a new pointer type definition
@@ -50,5 +49,14 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override BaseType BaseType
             => BaseType.Pointer;
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is IPointerType p && p.BaseTypeDefinition.Equals(BaseTypeDefinition);
     }
 }

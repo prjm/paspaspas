@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     set type declaration
     /// </summary>
-    public class SetType : StructuredTypeBase, ISetType {
+    internal class SetType : StructuredTypeBase, ISetType {
 
         /// <summary>
         ///     define a new set type
@@ -46,15 +46,15 @@ namespace PasPasPas.Typings.Structured {
                 IValue div8(IValue v)
                     => TypeRegistry.Runtime.Integers.Divide(v, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(8));
 
-                var enumType = BaseTypeDefinition as IOrdinalType;
-                var lowest = enumType.LowestElement as IOrdinalValue;
-                var highest = enumType.HighestElement as IOrdinalValue;
+                var enumType = BaseTypeDefinition;
+                var lowest = enumType.LowestElement as IOrdinalValue ?? throw new InvalidOperationException();
+                var highest = enumType.HighestElement as IOrdinalValue ?? throw new InvalidOperationException();
                 var l = lowest.GetOrdinalValue(TypeRegistry);
                 var h = highest.GetOrdinalValue(TypeRegistry);
 
                 var size0 = TypeRegistry.Runtime.Integers.Subtract(div8(h), div8(l));
                 var size1 = TypeRegistry.Runtime.Integers.Add(size0, TypeRegistry.Runtime.Integers.One) as IIntegerValue;
-                return System.Math.Max(0, (uint)size1.SignedValue);
+                return System.Math.Max(0, ((uint?)size1?.SignedValue) ?? 0u);
             }
         }
 
@@ -62,6 +62,10 @@ namespace PasPasPas.Typings.Structured {
         ///     base type id
         /// </summary>
         public IOrdinalType BaseTypeDefinition { get; }
+
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is ISetType s && s.BaseTypeDefinition.Equals(BaseTypeDefinition);
 
         /*
         /// <summary>

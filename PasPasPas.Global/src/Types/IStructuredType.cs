@@ -34,7 +34,7 @@ namespace PasPasPas.Globals.Types {
         /// <param name="name"></param>
         /// <param name="classItem"></param>
         /// <returns></returns>
-        IRoutineGroup FindMethod(string name, bool classItem);
+        IRoutineGroup? FindMethod(string name, bool classItem);
 
         /// <summary>
         ///     test type inheritance

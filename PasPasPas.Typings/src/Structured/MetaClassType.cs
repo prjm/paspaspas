@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -7,7 +6,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     meta class type
     /// </summary>
-    public class MetaClassType : TypeDefinitionBase, IMetaType {
+    internal class MetaClassType : TypeDefinitionBase, IMetaType {
 
         /// <summary>
         ///     create a new meta class type
@@ -43,6 +42,10 @@ namespace PasPasPas.Typings.Structured {
         ///     mangled type name
         /// </summary>
         public override string MangledName
-                        => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
+            => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
+
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is IMetaType m && m.BaseTypeDefinition.Equals(BaseTypeDefinition);
     }
 }

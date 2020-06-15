@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
@@ -9,14 +8,14 @@ namespace PasPasPas.Typings.Hidden {
     /// <summary>
     ///     generic placeholder type
     /// </summary>
-    public class GenericPlaceholderType : TypeDefinitionBase, IExtensibleGenericType {
+    internal class GenericPlaceholderType : TypeDefinitionBase, IExtensibleGenericType {
 
         /// <summary>
         ///     create a new generic placeholder type
         /// </summary>
         /// <param name="definingUnit"></param>
         /// <param name="name"></param>
-        public GenericPlaceholderType(string name, IUnitType definingUnit) : base(definingUnit)
+        internal GenericPlaceholderType(string name, IUnitType definingUnit) : base(definingUnit)
             => Name = name;
 
         /// <summary>
@@ -68,7 +67,10 @@ namespace PasPasPas.Typings.Hidden {
         /// <param name="typeCreator"></param>
         /// <returns></returns>
         public ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds, ITypeCreator typeCreator)
-            => default;
+            => default!;
 
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is GenericPlaceholderType && string.Equals(Name, other.Name, System.StringComparison.OrdinalIgnoreCase);
     }
 }

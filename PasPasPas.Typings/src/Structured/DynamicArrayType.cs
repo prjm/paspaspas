@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -7,14 +6,15 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     dynamic array type
     /// </summary>
-    public class DynamicArrayType : ArrayType {
+    internal class DynamicArrayType : ArrayType {
 
         /// <summary>
         ///     create a new dynamic array type
         /// </summary>
         /// <param name="definingUnit"></param>
         /// <param name="typeName"></param>
-        public DynamicArrayType(IUnitType definingUnit, string typeName) : base(definingUnit, definingUnit.TypeRegistry.SystemUnit.IntegerType)
+        /// <param name="baseTypeDefinition"></param>
+        public DynamicArrayType(IUnitType definingUnit, string typeName, ITypeDefinition baseTypeDefinition) : base(definingUnit, definingUnit.TypeRegistry.SystemUnit.IntegerType, baseTypeDefinition)
             => Name = typeName;
 
         /// <summary>
@@ -33,6 +33,5 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public override uint TypeSizeInBytes
             => TypeRegistry.GetPointerSize();
-
     }
 }

@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using SharpFloat.FloatingPoint;
@@ -18,8 +17,10 @@ namespace PasPasPasTests.Common {
         /// <param name="expected"></param>
         /// <param name="actual"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AreEqual(object expected, object actual)
-            => A.Equal(expected, actual);
+        public static bool AreEqual<T>(T expected, T actual) {
+            A.Equal<T>(expected, actual);
+            return true;
+        }
 
         /// <summary>
         ///     check equality
@@ -29,7 +30,7 @@ namespace PasPasPasTests.Common {
         /// <param name="comp"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AreEqual(string expected, string actual, StringComparer comp = default) {
+        public static bool AreEqual(string expected, string actual, StringComparer? comp = default) {
             if (comp == default)
                 comp = StringComparer.OrdinalIgnoreCase;
 

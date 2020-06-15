@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -7,15 +7,16 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     static array type
     /// </summary>
-    public class StaticArrayType : ArrayType {
+    internal class StaticArrayType : ArrayType {
 
         /// <summary>
         ///     create a new static array type
         /// </summary>
         /// <param name="name"></param>
         /// <param name="definingUnit"></param>
+        /// <param name="baseTypeDefinition"></param>
         /// <param name="indexType"></param>
-        public StaticArrayType(string name, IUnitType definingUnit, ITypeDefinition indexType) : base(definingUnit, indexType)
+        public StaticArrayType(string name, IUnitType definingUnit, ITypeDefinition indexType, ITypeDefinition baseTypeDefinition) : base(definingUnit, indexType, baseTypeDefinition)
             => Name = name;
 
         /// <summary>
@@ -24,8 +25,8 @@ namespace PasPasPas.Typings.Structured {
         public override uint TypeSizeInBytes {
             get {
                 var index = IndexType as IOrdinalType;
-                var lowerBound = index.LowestElement as IOrdinalValue;
-                var upperBound = index.HighestElement as IOrdinalValue;
+                var lowerBound = index?.LowestElement as IOrdinalValue;
+                var upperBound = index?.HighestElement as IOrdinalValue;
 
                 if (lowerBound == default || upperBound == default)
                     return 0;
@@ -33,7 +34,7 @@ namespace PasPasPas.Typings.Structured {
                 var l = lowerBound.GetOrdinalValue(TypeRegistry);
                 var h = upperBound.GetOrdinalValue(TypeRegistry);
                 var size = TypeRegistry.Runtime.Integers.Subtract(h, l);
-                var value = size as IIntegerValue;
+                var value = size as IIntegerValue ?? throw new InvalidOperationException();
                 return (uint)(BaseTypeDefinition.TypeSizeInBytes * value.SignedValue);
             }
         }

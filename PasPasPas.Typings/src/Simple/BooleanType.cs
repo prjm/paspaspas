@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
@@ -9,7 +8,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     boolean type
     /// </summary>
-    public class BooleanType : TypeDefinitionBase, IBooleanType {
+    internal class BooleanType : TypeDefinitionBase, IBooleanType {
 
         /// <summary>
         ///     create a new boolean type
@@ -34,26 +33,15 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     type size in bytes
         /// </summary>
-        public override uint TypeSizeInBytes {
-            get {
-                switch (Kind) {
-                    case BooleanTypeKind.Boolean:
-                        return 1;
-
-                    case BooleanTypeKind.ByteBool:
-                        return 1;
-
-                    case BooleanTypeKind.WordBool:
-                        return 2;
-
-                    case BooleanTypeKind.LongBool:
-                        return 4;
-
-                    default:
-                        throw new InvalidOperationException();
-                }
-            }
-        }
+        public override uint TypeSizeInBytes
+            => Kind switch
+            {
+                BooleanTypeKind.Boolean => 1,
+                BooleanTypeKind.ByteBool => 1,
+                BooleanTypeKind.WordBool => 2,
+                BooleanTypeKind.LongBool => 4,
+                _ => throw new InvalidOperationException(),
+            };
 
         /// <summary>
         ///     type kind
@@ -79,49 +67,29 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     short type name
         /// </summary>
-        public override string MangledName {
-            get {
-                switch (Kind) {
-                    case BooleanTypeKind.Boolean:
-                        return KnownNames.O;
-
-                    case BooleanTypeKind.ByteBool:
-                        return KnownNames.UC;
-
-                    case BooleanTypeKind.WordBool:
-                        return KnownNames.US;
-
-                    case BooleanTypeKind.LongBool:
-                        return KnownNames.I;
-                }
-
-                throw new InvalidOperationException();
-            }
-        }
+        public override string MangledName
+            => Kind switch
+            {
+                BooleanTypeKind.Boolean => KnownNames.O,
+                BooleanTypeKind.ByteBool => KnownNames.UC,
+                BooleanTypeKind.WordBool => KnownNames.US,
+                BooleanTypeKind.LongBool => KnownNames.I,
+                _ => throw new InvalidOperationException(),
+            };
 
 
         /// <summary>
         ///     long type name
         /// </summary>
-        public override string Name {
-            get {
-                switch (Kind) {
-                    case BooleanTypeKind.Boolean:
-                        return KnownNames.Boolean;
-
-                    case BooleanTypeKind.ByteBool:
-                        return KnownNames.ByteBool;
-
-                    case BooleanTypeKind.WordBool:
-                        return KnownNames.WordBool;
-
-                    case BooleanTypeKind.LongBool:
-                        return KnownNames.LongBool;
-                }
-
-                throw new InvalidOperationException();
-            }
-        }
+        public override string Name
+            => Kind switch
+            {
+                BooleanTypeKind.Boolean => KnownNames.Boolean,
+                BooleanTypeKind.ByteBool => KnownNames.ByteBool,
+                BooleanTypeKind.WordBool => KnownNames.WordBool,
+                BooleanTypeKind.LongBool => KnownNames.LongBool,
+                _ => throw new InvalidOperationException(),
+            };
 
         /// <summary>
         ///     highest element
@@ -129,22 +97,14 @@ namespace PasPasPas.Typings.Simple {
         public IValue HighestElement {
             get {
                 var values = TypeRegistry.Runtime.Booleans;
-                switch (Kind) {
-                    case BooleanTypeKind.Boolean:
-                        return values.Booleans.TrueValue;
-
-                    case BooleanTypeKind.ByteBool:
-                        return values.ToByteBool(0xff, this);
-
-                    case BooleanTypeKind.WordBool:
-                        return values.ToWordBool(0xff_ff, this);
-
-                    case BooleanTypeKind.LongBool:
-                        return values.ToLongBool(0xff_ff_ff_ff, this);
-
-                    default:
-                        throw new InvalidOperationException();
-                }
+                return Kind switch
+                {
+                    BooleanTypeKind.Boolean => values.Booleans.TrueValue,
+                    BooleanTypeKind.ByteBool => values.ToByteBool(0xff, this),
+                    BooleanTypeKind.WordBool => values.ToWordBool(0xff_ff, this),
+                    BooleanTypeKind.LongBool => values.ToLongBool(0xff_ff_ff_ff, this),
+                    _ => throw new InvalidOperationException(),
+                };
             }
         }
 
@@ -154,23 +114,24 @@ namespace PasPasPas.Typings.Simple {
         public IValue LowestElement {
             get {
                 var values = TypeRegistry.Runtime.Booleans;
-                switch (Kind) {
-                    case BooleanTypeKind.Boolean:
-                        return values.Booleans.FalseValue;
-
-                    case BooleanTypeKind.ByteBool:
-                        return values.ToByteBool(0, this);
-
-                    case BooleanTypeKind.WordBool:
-                        return values.ToWordBool(0, this);
-
-                    case BooleanTypeKind.LongBool:
-                        return values.ToLongBool(0, this);
-
-                    default:
-                        throw new InvalidOperationException();
-                }
+                return Kind switch
+                {
+                    BooleanTypeKind.Boolean => values.Booleans.FalseValue,
+                    BooleanTypeKind.ByteBool => values.ToByteBool(0, this),
+                    BooleanTypeKind.WordBool => values.ToWordBool(0, this),
+                    BooleanTypeKind.LongBool => values.ToLongBool(0, this),
+                    _ => throw new InvalidOperationException(),
+                };
             }
         }
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is IBooleanType b && b.Kind == Kind;
     }
 }

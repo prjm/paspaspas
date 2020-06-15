@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
 

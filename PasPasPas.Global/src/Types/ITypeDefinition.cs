@@ -1,10 +1,12 @@
-﻿#nullable disable
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
 namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     interface for a type definition
     /// </summary>
-    public interface ITypeDefinition {
+    public interface ITypeDefinition : IEquatable<ITypeDefinition> {
 
         /// <summary>
         ///     get base type of this type definition
@@ -72,7 +74,7 @@ namespace PasPasPas.Globals.Types {
         /// <param name="typeDef">type definition</param>
         /// <param name="subrangeType">subrange type</param>
         /// <returns></returns>
-        public static bool IsSubrangeType(this ITypeDefinition typeDef, out ISubrangeType subrangeType) {
+        public static bool IsSubrangeType(this ITypeDefinition typeDef, [NotNullWhen(returnValue: true)] out ISubrangeType? subrangeType) {
             if (typeDef.BaseType == BaseType.Subrange && typeDef is ISubrangeType subrange) {
                 subrangeType = subrange;
                 return true;

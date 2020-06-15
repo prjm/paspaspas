@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -7,7 +6,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     generic constraint type
     /// </summary>
-    public class GenericConstraintType : TypeDefinitionBase {
+    internal class GenericConstraintType : TypeDefinitionBase {
 
         /// <summary>
         ///     create a new generic constraint type
@@ -43,5 +42,10 @@ namespace PasPasPas.Typings.Structured {
             => string.Empty;
 
         public GenericConstraintKind Kind { get; }
+
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+                other is GenericConstraintType g &&
+                g.Kind == Kind;
     }
 }

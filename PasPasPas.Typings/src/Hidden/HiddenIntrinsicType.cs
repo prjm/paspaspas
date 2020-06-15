@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Hidden {
@@ -7,13 +6,13 @@ namespace PasPasPas.Typings.Hidden {
     /// <summary>
     ///     hidden type
     /// </summary>
-    public class HiddenIntrinsicType : TypeDefinitionBase {
+    internal abstract class HiddenIntrinsicType : TypeDefinitionBase {
 
         /// <summary>
         ///     create a new hidden type
         /// </summary>
         /// <param name="definingUnit"></param>
-        public HiddenIntrinsicType(IUnitType definingUnit) : base(definingUnit) {
+        internal HiddenIntrinsicType(IUnitType definingUnit) : base(definingUnit) {
         }
 
         /// <summary>

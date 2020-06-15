@@ -1,12 +1,11 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Hidden {
 
     /// <summary>
     ///     create a new void type
     /// </summary>
-    public class VoidType : HiddenIntrinsicType, INoType {
+    internal class VoidType : HiddenIntrinsicType, INoType {
 
         /// <summary>
         ///     create a new void type
@@ -14,5 +13,14 @@ namespace PasPasPas.Typings.Hidden {
         /// <param name="definingUnit"></param>
         public VoidType(IUnitType definingUnit) : base(definingUnit) {
         }
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is INoType;
     }
 }

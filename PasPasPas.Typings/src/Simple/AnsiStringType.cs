@@ -1,12 +1,11 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Simple {
 
     /// <summary>
     ///     string type definition
     /// </summary>
-    public class AnsiStringType : StringTypeBase, IAnsiStringType {
+    internal class AnsiStringType : StringTypeBase, IAnsiStringType {
 
         /// <summary>
         ///     default system code page

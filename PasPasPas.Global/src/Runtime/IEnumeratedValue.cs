@@ -10,5 +10,9 @@
         /// </summary>
         IIntegerValue Value { get; }
 
+        /// <summary>
+        ///     enumerated value name
+        /// </summary>
+        string Name { get; }
     }
 }

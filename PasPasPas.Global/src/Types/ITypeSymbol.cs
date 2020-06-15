@@ -1,4 +1,5 @@
-﻿#nullable disable
+﻿using System.Diagnostics.CodeAnalysis;
+
 namespace PasPasPas.Globals.Types {
 
     /// <summary>
@@ -46,7 +47,7 @@ namespace PasPasPas.Globals.Types {
         /// <param name="typeSymbol"></param>
         /// <param name="subrangeType"></param>
         /// <returns></returns>
-        public static bool HasSubrangeType(this ITypeSymbol typeSymbol, out ISubrangeType subrangeType)
+        public static bool HasSubrangeType(this ITypeSymbol typeSymbol, [NotNullWhen(returnValue: true)] out ISubrangeType? subrangeType)
             => typeSymbol.TypeDefinition.IsSubrangeType(out subrangeType);
 
         /// <summary>

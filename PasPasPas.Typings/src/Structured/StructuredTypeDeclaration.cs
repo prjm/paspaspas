@@ -1,6 +1,7 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using PasPasPas.Globals;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
@@ -24,6 +25,7 @@ namespace PasPasPas.Typings.Structured {
         public StructuredTypeDeclaration(IUnitType definingUnit, string name, StructuredTypeKind kind) : base(definingUnit) {
             Name = name;
             StructTypeKind = kind;
+            BaseClass = definingUnit.TypeRegistry.SystemUnit.ErrorType;
         }
 
 
@@ -100,7 +102,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="entry"></param>
         /// <param name="flags">flags</param>
         /// <returns></returns>
-        public bool TryToResolve(string symbolName, out ITypeSymbol entry, ResolverFlags flags) {
+        public bool TryToResolve(string symbolName, [NotNullWhen(returnValue: true)] out ITypeSymbol? entry, ResolverFlags flags) {
 
             foreach (var field in Fields) {
 
@@ -120,16 +122,14 @@ namespace PasPasPas.Typings.Structured {
                     continue;
 
                 if (string.Equals(field.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
-                    //entry = new Reference(ReferenceKind.RefToField, field);
-                    entry = default;
+                    entry = field;
                     return true;
                 }
             }
 
             foreach (var method in Methods)
                 if (string.Equals(method.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
-                    //entry = new Reference(ReferenceKind.RefToMethod, method);
-                    entry = default;
+                    entry = method;
                     return true;
                 }
 
@@ -137,7 +137,7 @@ namespace PasPasPas.Typings.Structured {
             if (baseClass is StructuredTypeDeclaration baseType)
                 return baseType.TryToResolve(symbolName, out entry, flags | ResolverFlags.SkipPrivate);
 
-            entry = null;
+            entry = default;
             return false;
         }
 
@@ -191,14 +191,13 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <returns></returns>
         public IValue MakeConstant() {
-            using (var list = GetList<IValue>()) {
-                foreach (var value in Fields) {
-                    list.Add(value as IValue);
-                    //((Variable)value).SymbolType = TypeRegistry.Runtime.Types.MakeTypeInstanceReference(value.SymbolType.TypeId, value.SymbolType.TypeKind);
-                }
-
-                return TypeRegistry.Runtime.Structured.CreateRecordValue(this, TypeRegistry.ListPools.GetFixedArray(list));
+            using var list = GetList<IValue>();
+            foreach (var value in Fields) {
+                list.Add(value as IValue);
+                //((Variable)value).SymbolType = TypeRegistry.Runtime.Types.MakeTypeInstanceReference(value.SymbolType.TypeId, value.SymbolType.TypeKind);
             }
+
+            return TypeRegistry.Runtime.Structured.CreateRecordValue(this, TypeRegistry.ListPools.GetFixedArray(list));
         }
 
         /// <summary>
@@ -226,7 +225,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="name"></param>
         /// <param name="classItem"></param>
         /// <returns></returns>
-        public IRoutineGroup FindMethod(string name, bool classItem) {
+        public IRoutineGroup? FindMethod(string name, bool classItem) {
             foreach (var method in Methods) {
                 if (!string.Equals(name, method.Name, StringComparison.OrdinalIgnoreCase))
                     continue;
@@ -242,5 +241,31 @@ namespace PasPasPas.Typings.Structured {
             return default;
         }
 
+        public override bool Equals(ITypeDefinition? other) {
+            if (!(other is IStructuredType t))
+                return false;
+
+            if (!KnownNames.SameIdentifier(Name, other?.Name))
+                return false;
+
+            if (t.StructTypeKind != StructTypeKind)
+                return false;
+
+            if (t.Fields.Count != Fields.Count)
+                return false;
+
+            if (t.Methods.Count != Methods.Count)
+                return false;
+
+            foreach (var f in Fields)
+                if (!f.Equals(t.Fields.FirstOrDefault(x => string.Equals(x.Name, f.Name, StringComparison.OrdinalIgnoreCase))))
+                    return false;
+
+            foreach (var m in Methods)
+                if (!m.Equals(t.Methods.FirstOrDefault(x => string.Equals(x.Name, m.Name, StringComparison.OrdinalIgnoreCase))))
+                    return false;
+
+            return true;
+        }
     }
 }

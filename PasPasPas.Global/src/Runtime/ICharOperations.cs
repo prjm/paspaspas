@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
 
@@ -32,7 +31,6 @@ namespace PasPasPas.Globals.Runtime {
         ///     convert a ANSI char to a runtime value object
         /// </summary>
         /// <param name="character">ANSI character (8 bits)</param>
-        /// <param name="typeDef"></param>
         /// <returns></returns>
         IValue ToAnsiCharValue(byte character);
 

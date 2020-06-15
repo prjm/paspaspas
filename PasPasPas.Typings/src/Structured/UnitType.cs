@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
@@ -67,6 +67,10 @@ namespace PasPasPas.Typings.Structured {
         public override bool CanBeAssignedFromType(ITypeDefinition otherType)
             => false;
 
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is IUnitType u && string.Equals(u.Name, Name, StringComparison.OrdinalIgnoreCase);
+
         /// <summary>
         ///     register a symbol
         /// </summary>
@@ -75,7 +79,7 @@ namespace PasPasPas.Typings.Structured {
         public void Register(INamedTypeSymbol symbol)
             => symbols.Add(symbol);
 
-        public bool TryToResolve(string name, out INamedTypeSymbol reference) {
+        public bool TryToResolve(string name, out INamedTypeSymbol? reference) {
             foreach (var item in Symbols) {
                 if (string.Equals(item.Name, name, System.StringComparison.OrdinalIgnoreCase)) { }
                 reference = item;

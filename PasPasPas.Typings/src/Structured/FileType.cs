@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -7,7 +6,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     file types
     /// </summary>
-    public class FileType : StructuredTypeBase, IFileType {
+    internal class FileType : StructuredTypeBase, IFileType {
 
         /// <summary>
         ///     create a new file type
@@ -46,6 +45,10 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     base type id
         /// </summary>
-        public ITypeDefinition BaseTypeDefinition { get; set; }
+        public ITypeDefinition BaseTypeDefinition { get; }
+
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is IFileType f && f.BaseTypeDefinition.Equals(BaseTypeDefinition);
     }
 }

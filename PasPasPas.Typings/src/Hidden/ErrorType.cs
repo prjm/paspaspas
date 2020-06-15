@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Hidden {
@@ -7,7 +6,7 @@ namespace PasPasPas.Typings.Hidden {
     /// <summary>
     ///     invalid / error type
     /// </summary>
-    public class ErrorType : TypeDefinitionBase, IErrorType {
+    internal class ErrorType : TypeDefinitionBase, IErrorType {
 
         /// <summary>
         ///     create a new error type
@@ -38,5 +37,14 @@ namespace PasPasPas.Typings.Hidden {
         /// </summary>
         public override string MangledName
             => KnownNames.Error;
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is IErrorType;
     }
 }

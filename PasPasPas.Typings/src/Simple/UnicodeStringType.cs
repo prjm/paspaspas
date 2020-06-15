@@ -1,12 +1,11 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Simple {
 
     /// <summary>
     ///     string type definition
     /// </summary>
-    public class UnicodeStringType : StringTypeBase {
+    internal class UnicodeStringType : StringTypeBase {
 
         /// <summary>
         ///     create a new string type

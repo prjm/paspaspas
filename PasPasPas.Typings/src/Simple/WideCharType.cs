@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -8,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     wide char type
     /// </summary>
-    public class WideCharType : TypeDefinitionBase, ICharType {
+    internal class WideCharType : TypeDefinitionBase, ICharType {
 
         /// <summary>
         ///     wide char type
@@ -81,5 +80,8 @@ namespace PasPasPas.Typings.Simple {
         public override string MangledName
             => KnownNames.B;
 
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is ICharType c && c.Kind == Kind;
     }
 }

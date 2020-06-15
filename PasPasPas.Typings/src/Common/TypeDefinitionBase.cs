@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Types;
@@ -8,20 +8,27 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     base class for type definitions
     /// </summary>
-    public abstract class TypeDefinitionBase : ITypeDefinition {
+    internal abstract class TypeDefinitionBase : ITypeDefinition {
 
         /// <summary>
         ///     create a new type definition
         /// </summary>
         /// <param name="definingUnit"></param>
-        protected TypeDefinitionBase(IUnitType definingUnit) {
+        protected TypeDefinitionBase(IUnitType? definingUnit) {
             if (this is IUnitType unit)
                 DefiningUnit = unit;
             else
-                DefiningUnit = definingUnit;
+                DefiningUnit = definingUnit ?? throw new InvalidOperationException();
 
             Reference = new ReferenceToTypeDefinition(this);
         }
+
+        /// <summary>
+        ///     format this type as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => string.IsNullOrWhiteSpace(Name) ? GetType().FullName ?? string.Empty : Name;
 
         /// <summary>
         ///     type definition
@@ -59,12 +66,6 @@ namespace PasPasPas.Typings.Common {
         ///     mangled type name
         /// </summary>
         public abstract string MangledName { get; }
-
-        /// <summary>
-        ///     type symbol kind
-        /// </summary>
-        public SymbolTypeKind SymbolKind
-            => SymbolTypeKind.TypeDefinition;
 
         /// <summary>
         ///     type reference
@@ -149,5 +150,11 @@ namespace PasPasPas.Typings.Common {
         protected IPoolItem<List<T>> GetList<T>()
             => TypeRegistry.ListPools.GetList<T>();
 
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public abstract bool Equals(ITypeDefinition? other);
     }
 }

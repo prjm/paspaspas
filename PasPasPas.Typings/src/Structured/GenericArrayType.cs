@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System;
 using System.Collections.Immutable;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
@@ -17,10 +17,8 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="indexType"></param>
         /// <param name="definingUnit"></param>
         /// <param name="name"></param>
-        internal GenericArrayType(string name, IUnitType definingUnit, ITypeDefinition baseType, ITypeDefinition indexType) : base(definingUnit, indexType) {
-            Name = name;
-            BaseTypeDefinition = baseType;
-        }
+        internal GenericArrayType(string name, IUnitType definingUnit, ITypeDefinition baseType, ITypeDefinition indexType) : base(definingUnit, indexType, baseType)
+            => Name = name;
 
         /// <summary>
         ///     reference type / pointer type
@@ -49,10 +47,11 @@ namespace PasPasPas.Typings.Structured {
         ///     bind to a generic type
         /// </summary>
         /// <param name="typeIds"></param>
+        /// <param name="typeCreator"></param>
         /// <returns></returns>
-        public ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds, ITypeCreator typeCreator) {
+        public override ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds, ITypeCreator typeCreator) {
             if (typeIds.Length != 1)
-                return default;
+                throw new InvalidOperationException();
 
             var arrayType = typeCreator.CreateDynamicArrayType(typeIds[0], string.Empty, false);
             return arrayType;

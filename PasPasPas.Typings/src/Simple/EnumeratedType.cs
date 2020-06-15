@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -9,7 +10,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     enumerated type
     /// </summary>
-    public class EnumeratedType : TypeDefinitionBase, IEnumeratedType {
+    internal class EnumeratedType : TypeDefinitionBase, IEnumeratedType {
 
         /// <summary>
         ///     list of possible values
@@ -162,6 +163,28 @@ namespace PasPasPas.Typings.Simple {
             }
 
             return runtimeValues.Integers.Invalid;
+        }
+
+        public override bool Equals(ITypeDefinition? other) {
+            var otherEnum = other as IEnumeratedType;
+            if (otherEnum == default)
+                return false;
+
+            if (KnownNames.SameIdentifier(Name, other?.Name))
+                return false;
+
+            if (otherEnum.Values.Count != values.Count)
+                return false;
+
+            for (var i = 0; i < values.Count; i++) {
+                if (!string.Equals(values[i].Name, otherEnum.Values[i].Name, StringComparison.OrdinalIgnoreCase))
+                    return false;
+
+                if (!values[i].Equals(otherEnum.Values[i]))
+                    return false;
+            }
+
+            return true;
         }
 
         /*

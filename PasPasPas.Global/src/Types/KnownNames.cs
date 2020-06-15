@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Types {
+﻿using System;
+
+namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     well-known type names
@@ -81,6 +83,15 @@
         ///     type alias for short int
         /// </summary>
         public const string Int16 = "Int16";
+
+        /// <summary>
+        ///     compare to pascal identifiers
+        /// </summary>
+        /// <param name="name1"></param>
+        /// <param name="name2"></param>
+        /// <returns></returns>
+        public static bool SameIdentifier(string? name1, string? name2)
+            => string.Equals(name1, name2, StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
         ///  type alias for cardinal

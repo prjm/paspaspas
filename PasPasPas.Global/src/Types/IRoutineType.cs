@@ -1,5 +1,4 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     routine type

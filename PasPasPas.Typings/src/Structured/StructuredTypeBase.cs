@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals;
@@ -12,7 +11,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     base class for structured types
     /// </summary>
-    public abstract class StructuredTypeBase : TypeDefinitionBase {
+    internal abstract class StructuredTypeBase : TypeDefinitionBase {
 
         /// <summary>
         ///     create a new structured type
@@ -43,7 +42,7 @@ namespace PasPasPas.Typings.Structured {
 
         /// <summary>
         ///     add a method definition
-        /// </summary>
+        /// </summary   >
         /// <param name="completeName">method name</param>
         /// <param name="genericTypeId">generic type id</param>
         public IRoutineGroup AddOrExtendMethod(string completeName, ITypeDefinition genericTypeId) {
@@ -63,9 +62,8 @@ namespace PasPasPas.Typings.Structured {
         ///     add a generic parameter
         /// </summary>
         /// <param name="typeId"></param>
-        public void AddGenericParameter(ITypeDefinition typeId) {
-            GenericParameters.Add(typeId);
-        }
+        public void AddGenericParameter(ITypeDefinition typeId)
+            => GenericParameters.Add(typeId);
 
         /// <summary>
         ///     list of generic parameter
@@ -80,7 +78,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="typeCreator"></param>
         /// <returns></returns>
         public virtual ITypeDefinition Bind(ImmutableArray<ITypeDefinition> typeIds, ITypeCreator typeCreator)
-            => default;
+            => throw new InvalidOperationException();
 
         /// <summary>
         ///     number of type parameters

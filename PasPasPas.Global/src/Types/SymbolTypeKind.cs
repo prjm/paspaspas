@@ -1,5 +1,4 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     symbol type kind
@@ -12,7 +11,7 @@ namespace PasPasPas.Globals.Types {
         Undefined = 0,
 
         /// <summary>
-        ///     definition of a type
+        ///     reference to a type definition
         /// </summary>
         TypeDefinition = 1,
 

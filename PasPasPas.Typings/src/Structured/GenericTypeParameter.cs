@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System;
 using System.Collections.Immutable;
 using PasPasPas.Globals.Types;
 
@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     generic type parameter
     /// </summary>
-    public class GenericTypeParameter : StructuredTypeBase, IGenericTypeParameter {
+    internal class GenericTypeParameter : StructuredTypeBase, IGenericTypeParameter {
 
         /// <summary>
         ///     create a new generic type parameter
@@ -47,5 +47,9 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public override string MangledName
             => string.Empty;
+
+        public override bool Equals(ITypeDefinition? other)
+            => KnownNames.SameIdentifier(Name, other?.Name) &&
+               other is GenericTypeParameter p && string.Equals(p.Name, Name, StringComparison.OrdinalIgnoreCase);
     }
 }

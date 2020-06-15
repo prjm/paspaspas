@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace PasPasPas.Globals.Types {
 
@@ -22,5 +21,6 @@ namespace PasPasPas.Globals.Types {
         ///     cardinality
         /// </summary>
         BigInteger Cardinality { get; }
+
     }
 }

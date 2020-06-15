@@ -23,6 +23,8 @@
         public SystemUnit(ITypeRegistry types, NativeIntSize intSize) : base(KnownNames.System, types) {
             ErrorType = RegisterType(new ErrorType(this));
 
+            RegisterHiddenTypes();
+
             RegisterIntegralTypes();
             RegisterRealTypes();
             RegisterBooleanTypes();
@@ -30,7 +32,6 @@
             RegisterPointerTypes();
             RegisterNativeIntTypes(intSize);
             RegisterAliasTypes();
-            RegisterHiddenTypes();
             RegisterOtherTypes();
 
             // intrinsic functions
@@ -108,7 +109,7 @@
         }
 
         private void RegisterPointerTypes() {
-            GenericPointerType = RegisterType(new PointerType(this, default, Names.Pointer));
+            GenericPointerType = RegisterType(new PointerType(this, NilType, Names.Pointer));
             PByteType = RegisterType(new PointerType(this, ByteType, Names.PByte));
             PShortIntType = RegisterType(new PointerType(this, ShortIntType, Names.PShortInt));
             PWordType = RegisterType(new PointerType(this, WordType, Names.PWord));
@@ -235,48 +236,66 @@
         ///     byte type
         /// </summary>
         public IIntegralType ByteType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     short int type
         /// </summary>
         public IIntegralType ShortIntType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     word type
         /// </summary>
         public IIntegralType WordType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     small int type
         /// </summary>
         public IIntegralType SmallIntType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     cardinal type
         /// </summary>
         public IIntegralType CardinalType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     integer type
         /// </summary>
         public IIntegralType IntegerType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     int64 type
         /// </summary>
         public IIntegralType Int64Type { get; private set; }
+            = default!;
 
         /// <summary>
         ///     unsigned int64 type
         /// </summary>
         public IIntegralType UInt64Type { get; private set; }
-        public IAliasedType UInt8Type { get; private set; }
-        public IAliasedType Int8Type { get; private set; }
-        public IAliasedType UInt16Type { get; private set; }
-        public IAliasedType Int16Type { get; private set; }
-        public IAliasedType UInt32Type { get; private set; }
-        public IAliasedType Int32Type { get; private set; }
+            = default!;
 
+        public IAliasedType UInt8Type { get; private set; }
+                    = default!;
+        public IAliasedType Int8Type { get; private set; }
+                    = default!;
+
+        public IAliasedType UInt16Type { get; private set; }
+                    = default!;
+
+        public IAliasedType Int16Type { get; private set; }
+                    = default!;
+
+        public IAliasedType UInt32Type { get; private set; }
+                    = default!;
+
+        public IAliasedType Int32Type { get; private set; }
+                    = default!;
 
         /// <summary>
         ///     error type
@@ -287,229 +306,331 @@
         ///     boolean type
         /// </summary>
         public IBooleanType BooleanType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     byte boolean type
         /// </summary>
         public IBooleanType ByteBoolType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     word boolean type
         /// </summary>
         public IBooleanType WordBoolType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     long boolean type
         /// </summary>
         public IBooleanType LongBoolType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     wide char type
         /// </summary>
         public ICharType WideCharType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     ANSI char type
         /// </summary>
         public ICharType AnsiCharType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     Unicode string type
         /// </summary>
         public IStringType UnicodeStringType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     ANSI string type
         /// </summary>
         public IStringType AnsiStringType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     raw byte string type
         /// </summary>
         public IStringType RawByteStringType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     short string type
         /// </summary>
         public IStringType ShortStringType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     extended type definition
         /// </summary>
         public IRealType ExtendedType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     comp type
         /// </summary>
         public IRealType CompType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     native integer type
         /// </summary>
         public IAliasedType NativeIntType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     native unsigned integer type
         /// </summary>
         public IAliasedType NativeUIntType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     native long int type
         /// </summary>
         public IAliasedType LongIntType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     native long word type
         /// </summary>
         public IAliasedType LongWordType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     generic pointer type
         /// </summary>
         public ITypeDefinition GenericPointerType { get; private set; }
+            = default!;
+
         public IPointerType PByteType { get; private set; }
+            = default!;
+
         public IPointerType PShortIntType { get; private set; }
+            = default!;
+
         public IPointerType PWordType { get; private set; }
+            = default!;
+
         public IPointerType PSmallIntType { get; private set; }
+            = default!;
+
         public IPointerType PCardinalType { get; private set; }
+            = default!;
+
         public IPointerType PLongwordType { get; private set; }
+            = default!;
+
         public IPointerType PFixedUIntType { get; private set; }
+            = default!;
+
         public IPointerType PIntegerType { get; private set; }
+            = default!;
+
         public IPointerType PLongIntType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     nil type
         /// </summary>
         public ITypeDefinition NilType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     unconstrained generic type parameter
         /// </summary>
         public IGenericTypeParameter UnconstrainedGenericTypeParameter { get; private set; }
+            = default!;
 
         /// <summary>
         ///     wide string type
         /// </summary>
         public IStringType WideStringType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     fixed integer type
         /// </summary>
         public IAliasedType FixedIntType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     fixed unsigned int type
         /// </summary>
         public IAliasedType FixedUIntType { get; private set; }
+            = default!;
+
         public IRealType Real48Type { get; private set; }
+            = default!;
 
         /// <summary>
         ///     single type
         /// </summary>
         public IRealType SingleType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     double type
         /// </summary>
         public IRealType DoubleType { get; private set; }
+            = default!;
+
         public IAliasedType PCharType { get; private set; }
+            = default!;
+
         public IAliasedType PStringType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     currency type
         /// </summary>
         public IRealType CurrencyType { get; private set; }
+            = default!;
 
         public IPointerType PFixedIntType { get; private set; }
+            = default!;
+
         public IPointerType PUInt64Type { get; private set; }
+            = default!;
+
         public IPointerType PInt64Type { get; private set; }
+            = default!;
+
         public IPointerType PNativeUIntType { get; private set; }
+            = default!;
+
         public IPointerType PNativeIntType { get; private set; }
+            = default!;
+
         public IPointerType PSingleType { get; private set; }
+            = default!;
+
         public IPointerType PDoubleType { get; private set; }
+            = default!;
+
         public IPointerType PExtendedType { get; private set; }
+            = default!;
+
         public IPointerType PAnsiCharType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     pointer to a wide char type
         /// </summary>
         public IPointerType PWideCharType { get; private set; }
+            = default!;
+
         public IPointerType PAnsiStringType { get; private set; }
+            = default!;
+
         public IPointerType PRawByteStringType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     pointer to a Unicode string type
         /// </summary>
         public IPointerType PUnicodeStringType { get; private set; }
+            = default!;
+
         public IPointerType PShortStringType { get; private set; }
+            = default!;
+
         public IPointerType PWideStringType { get; private set; }
+            = default!;
+
         public IPointerType PBooleanType { get; private set; }
+            = default!;
+
         public IPointerType PByteBoolType { get; private set; }
+            = default!;
+
         public IPointerType PLongBoolType { get; private set; }
+            = default!;
+
         public IPointerType PWordBoolType { get; private set; }
+            = default!;
+
         public IPointerType PPointerType { get; private set; }
+            = default!;
+
         public IPointerType PCurrencyType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     unspecified type
         /// </summary>
         public IUnspecifiedType UnspecifiedType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     no type at all
         /// </summary>
         public INoType NoType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     ucs4 char type
         /// </summary>
         public IAliasedType Ucs4CharType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     common string type
         /// </summary>
         public IAliasedType StringType { get; private set; }
+            = default!;
+
         public IAliasedType RealType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     TObject type
         /// </summary>
         public IStructuredType TObjectType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     unspecified file type
         /// </summary>
         public IFileType UnspecifiedFileType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     generic class constraint
         /// </summary>
         public ITypeDefinition GenericClassConstraint { get; private set; }
+            = default!;
 
         /// <summary>
         ///     generic record constraint
         /// </summary>
         public ITypeDefinition GenericRecordConstraint { get; private set; }
+            = default!;
 
         /// <summary>
         ///     generic constructor constraint
         /// </summary>
         public ITypeDefinition GenericConstructorConstraint { get; private set; }
+            = default!;
 
         /// <summary>
         ///     format expression helper routine
         /// </summary>
         public IRoutineGroup FormatExpression { get; private set; }
+            = default!;
 
         /// <summary>
         ///     char type
         /// </summary>
         public IAliasedType CharType { get; private set; }
+            = default!;
 
         /// <summary>
         ///     ucs2 char type
         /// </summary>
         public IAliasedType Ucs2CharType { get; private set; }
+            = default!;
 
         IRoutineGroup ISystemUnit.FormatExpression => throw new System.NotImplementedException();
     }
