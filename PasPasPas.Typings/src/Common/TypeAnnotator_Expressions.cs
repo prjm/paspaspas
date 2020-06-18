@@ -278,7 +278,7 @@ namespace PasPasPas.Typings.Common {
 
                 else if (part is SymbolReferencePart symRef) {
 
-                    if (baseTypeValue.GetBaseType() == BaseType.Error)
+                    if (baseTypeValue.GetBaseType() == BaseType.Error && !(baseTypeValue.TypeDefinition is IUnspecifiedType))
                         break;
 
                     if (symRef.Kind == SymbolReferencePartKind.SubItem) {

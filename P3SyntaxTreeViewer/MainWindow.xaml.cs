@@ -68,11 +68,16 @@ namespace P3SyntaxTreeViewer {
                     treeViewItem.Header += " [Type Error]";
                 }
                 else {
-                    treeViewItem.Header += " [" + t.ToString() + "]";
+                    var n = t.Name;
+                    if (!string.IsNullOrWhiteSpace(n))
+                        n += "/";
+
+                    n += t.GetType().Name;
+                    treeViewItem.Header += " [" + n + "]";
                 }
 
-                if (typeInfo.TypeInfo.IsConstant()) {
-                    treeViewItem.Header += "* " + typeInfo.TypeInfo.ToString();
+                if (typeInfo.TypeInfo.IsConstant(out var value)) {
+                    treeViewItem.Header += "* " + value.ToValueString();
                 }
 
                 /*

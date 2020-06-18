@@ -81,9 +81,10 @@ namespace PasPasPas.Typings.Structured {
 
         public bool TryToResolve(string name, out INamedTypeSymbol? reference) {
             foreach (var item in Symbols) {
-                if (string.Equals(item.Name, name, System.StringComparison.OrdinalIgnoreCase)) { }
-                reference = item;
-                return true;
+                if (string.Equals(item.Name, name, System.StringComparison.OrdinalIgnoreCase)) {
+                    reference = item;
+                    return true;
+                }
             }
 
             reference = default;

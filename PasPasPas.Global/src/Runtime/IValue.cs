@@ -31,8 +31,7 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        bool Equals(object? value)
-            => Equals(value as IValue);
+        bool Equals(object? value);
 
     }
 }

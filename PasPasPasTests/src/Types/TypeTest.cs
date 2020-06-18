@@ -246,7 +246,7 @@ namespace PasPasPasTests.Types {
 
             void tester(ITypeDefinition def) {
 
-                if (typeId != def)
+                if (typeId != default)
                     Assert.AreEqual(typeId, def);
 
                 if (typeKind != BaseType.Unkown)

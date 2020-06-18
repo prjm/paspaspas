@@ -27,7 +27,7 @@ namespace PasPasPas.Typings.Common {
             CurrentUnit.TypeInfo = unitType.Reference;
             TypeCreator = TypeRegistry.CreateTypeFactory(unitType);
             resolver.OpenScope();
-            resolver.AddToScope(KnownNames.System, unitType.Reference);
+            resolver.AddToScope(KnownNames.System, TypeRegistry.SystemUnit.Reference);
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element">item to visit</param>
         public void EndVisit(ConstantDeclaration element) {
             var declaredType = GetTypeOfNode(element.TypeValue);
-            var inferredType = GetTypeOfNode(element.TypeValue);
+            var inferredType = GetTypeOfNode(element.Value);
 
             if (inferredType == default)
                 MarkWithErrorType(element);
@@ -475,7 +475,7 @@ namespace PasPasPas.Typings.Common {
                     var typeInfo = indexDef.TypeInfo;
 
                     if (typeInfo != null) {
-                        if (typeInfo.GetBaseType() != BaseType.TypeAlias)
+                        if (!(typeInfo.TypeDefinition.ResolveAlias() is IOrdinalType))
                             list.Item.Add(SystemUnit.ErrorType);
                         else
                             list.Item.Add(typeInfo.TypeDefinition);

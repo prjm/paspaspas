@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using System;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
@@ -17,10 +16,13 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestEnumTypes() {
+            static Action<ITypeDefinition> t(Action<IEnumeratedType?> a) => t => a(t as IEnumeratedType);
+            static long? v(IEnumeratedType? a, int index) => a?.Values[index]?.Value?.SignedValue;
+
             AssertDeclType("(en1, en2)", typeKind: BaseType.Enumeration);
-            AssertDeclType("(en1, en2)", (td) => Assert.AreEqual(2, (td as EnumeratedType).Values.Count));
-            AssertDeclType("(en1, en2)", (td) => Assert.AreEqual(0L, (((td as EnumeratedType).Values[0].Value as IEnumeratedValue)?.Value as IIntegerValue)?.SignedValue));
-            AssertDeclType("(en1, en2)", (td) => Assert.AreEqual(1L, (((td as EnumeratedType).Values[1].Value as IEnumeratedValue)?.Value as IIntegerValue)?.SignedValue));
+            AssertDeclType("(en1, en2)", t((td) => Assert.AreEqual(2, td?.Values.Count)));
+            AssertDeclType("(en1, en2)", t((td) => Assert.AreEqual(0L, v(td, 0))));
+            AssertDeclType("(en1, en2)", t((td) => Assert.AreEqual(1L, v(td, 1))));
         }
 
         /// <summary>
@@ -58,22 +60,16 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestArrayTypes() {
 
-            ITypeDefinition GetIndexType(ArrayType array) {
-                if (array == null)
-                    return default;
+            static ITypeDefinition? GetIndexType(ArrayType? array)
+                => array?.IndexType;
 
-                return array.IndexType;
-            }
-
-            BaseType GetIndexTypeKind(ArrayType array) {
-                var t = GetIndexType(array);
-                return t != null ? t.BaseType : BaseType.Unkown;
-            };
+            static BaseType GetIndexTypeKind(ArrayType? array)
+                => GetIndexType(array)?.BaseType ?? BaseType.Unkown; ;
 
             AssertDeclType("array [1..4] of Integer", typeKind: BaseType.Array);
-            AssertDeclType("array [1..4] of Integer", (td) => Assert.AreEqual(BaseType.Integer, (td as ArrayType)?.BaseType));
-            AssertDeclType("array [1..4] of Integer", (td) => Assert.AreEqual(BaseType.Integer, (GetIndexType(td as ArrayType) as SubrangeType)?.BaseType));
-            AssertDeclType("array [false..true] of Integer", (td) => Assert.AreEqual(BaseType.Boolean, (GetIndexType(td as ArrayType) as SubrangeType)?.BaseType));
+            AssertDeclType("array [1..4] of Integer", (td) => Assert.AreEqual(BaseType.Integer, (td as ArrayType)?.BaseTypeDefinition?.BaseType));
+            AssertDeclType("array [1..4] of Integer", (td) => Assert.AreEqual(BaseType.Subrange, (GetIndexType(td as ArrayType) as SubrangeType)?.BaseType));
+            AssertDeclType("array [false..true] of Integer", (td) => Assert.AreEqual(BaseType.Subrange, (GetIndexType(td as ArrayType) as SubrangeType)?.BaseType));
             AssertDeclType("array [Boolean] of Integer", (td) => Assert.AreEqual(BaseType.Boolean, GetIndexTypeKind(td as ArrayType)));
             AssertDeclType("array [System.Boolean] of Integer", (td) => Assert.AreEqual(BaseType.Boolean, GetIndexTypeKind(td as ArrayType)));
         }
