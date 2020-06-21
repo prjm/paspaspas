@@ -48,3 +48,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>", Scope = "type", Target = "~T:PasPasPas.Globals.Types.IOperatorInvocationResult")]
 [assembly: SuppressMessage("Design", "CA1028:Enum Storage should be Int32", Justification = "<Pending>", Scope = "type", Target = "~T:PasPasPas.Globals.Types.CharTypeKind")]
 [assembly: SuppressMessage("Design", "CA1028:Enum Storage should be Int32", Justification = "<Pending>", Scope = "type", Target = "~T:PasPasPas.Globals.Types.GenericConstraintKind")]
+[assembly: SuppressMessage("Design", "CA1028:Enum Storage should be Int32", Justification = "<Pending>", Scope = "type", Target = "~T:PasPasPas.Globals.Runtime.SpecialConstantKind")]

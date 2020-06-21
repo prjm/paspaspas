@@ -13,7 +13,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     create a new routine
         /// </summary>
-        public RoutineGroup(ITypeDefinition definingType, string name, ITypeDefinition genericType = default) {
+        public RoutineGroup(ITypeDefinition definingType, string name, ITypeDefinition? genericType = default) {
             Name = name;
             DefiningType = definingType;
         }
@@ -44,7 +44,7 @@ namespace PasPasPas.Typings.Structured {
         ///     type definition
         /// </summary>
         public ITypeDefinition TypeDefinition
-            => default;
+            => DefiningType.DefiningUnit.TypeRegistry.SystemUnit.RoutineGroupType;
 
         /// <summary>
         ///     symbol type kind

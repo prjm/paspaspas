@@ -1,14 +1,16 @@
-﻿namespace PasPasPas.Typings.Common {
-    using System.Collections.Immutable;
-    using PasPasPas.Globals.Options.DataTypes;
-    using PasPasPas.Globals.Runtime;
-    using PasPasPas.Globals.Types;
-    using PasPasPas.Typings.Hidden;
-    using PasPasPas.Typings.Routines;
-    using PasPasPas.Typings.Routines.Runtime;
-    using PasPasPas.Typings.Simple;
-    using PasPasPas.Typings.Structured;
-    using Names = Globals.Types.KnownNames;
+﻿
+using System.Collections.Immutable;
+using PasPasPas.Globals.Options.DataTypes;
+using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Hidden;
+using PasPasPas.Typings.Routines;
+using PasPasPas.Typings.Routines.Runtime;
+using PasPasPas.Typings.Simple;
+using PasPasPas.Typings.Structured;
+using Names = PasPasPas.Globals.Types.KnownNames;
+
+namespace PasPasPas.Typings.Common {
 
     /// <summary>
     ///     system wide definitions
@@ -160,6 +162,7 @@
             NoType = RegisterType(new VoidType(this));
             NilType = RegisterType(new NilType(this));
             UnconstrainedGenericTypeParameter = RegisterType(new GenericTypeParameter(this, string.Empty, ImmutableArray<ITypeDefinition>.Empty));
+            RoutineGroupType = new RoutineGroupType(this);
         }
 
         private void RegisterOtherTypes() {
@@ -441,6 +444,12 @@
         ///     unconstrained generic type parameter
         /// </summary>
         public IGenericTypeParameter UnconstrainedGenericTypeParameter { get; private set; }
+            = default!;
+
+        /// <summary>
+        ///     routine group type
+        /// </summary>
+        public IRoutineGroupType RoutineGroupType { get; private set; }
             = default!;
 
         /// <summary>

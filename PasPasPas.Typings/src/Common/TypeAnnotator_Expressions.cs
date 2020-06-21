@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals;
 using PasPasPas.Globals.Environment;
@@ -137,11 +136,15 @@ namespace PasPasPas.Typings.Common {
         }
 
         private ImmutableArray<IValue> ToValueArray(IPoolItem<List<ITypeSymbol>> elements) {
-            using (var constants = environment.ListPools.GetList<IValue>()) {
-                foreach (var value in elements.Item)
-                    constants.Add(value as IValue);
-                return environment.ListPools.GetFixedArray(constants);
-            }
+            using var constants = environment.ListPools.GetList<IValue>();
+
+            foreach (var value in elements.Item)
+                if (value is IValue constant)
+                    constants.Add(constant);
+                else
+                    constants.Add(environment.Runtime.Types.MakeInvalidValue(SpecialConstantKind.InvalidValue));
+
+            return environment.ListPools.GetFixedArray(constants);
         }
 
         /// <summary>
@@ -217,8 +220,6 @@ namespace PasPasPas.Typings.Common {
             }
         }
 
-
-
         /// <summary>
         ///     end visiting a symbol reference
         /// </summary>
@@ -240,7 +241,7 @@ namespace PasPasPas.Typings.Common {
                     var callableRoutines = new List<IRoutineResult>();
 
                     var bdef = impl.RoutineGroup.DefiningType as IStructuredType;
-                    var idef = bdef.BaseClass as IStructuredType;
+                    var idef = bdef?.BaseClass as IStructuredType;
 
                     if (idef == default)
                         continue;
@@ -317,8 +318,8 @@ namespace PasPasPas.Typings.Common {
                                 }
                             }
                             else if (reference.SymbolKind == SymbolTypeKind.TypeDefinition && signature.Count == 1) {
-                                if (signature[0].IsConstant()) {
-                                    baseTypeValue = environment.Runtime.Cast(TypeRegistry, signature[0] as IValue, ((ITypeDefinition)reference));
+                                if (signature[0].IsConstant(out var value)) {
+                                    baseTypeValue = environment.Runtime.Cast(TypeRegistry, value, (ITypeDefinition)reference);
                                 }
                                 else {
                                     baseTypeValue = TypeRegistry.Cast(signature[0], reference);
@@ -335,8 +336,7 @@ namespace PasPasPas.Typings.Common {
                             if (callableRoutines[0] is IIntrinsicInvocationResult _) {
                                 baseTypeValue = Runtime.Types.MakeInvocationResultFromIntrinsic(callableRoutines[0].Routine, signature);
                             }
-                            else {
-                                var targetRoutine = callableRoutines[0] as IInvocationResult;
+                            else if (callableRoutines[0] is IInvocationResult targetRoutine) {
                                 baseTypeValue = Runtime.Types.MakeInvocationResult(targetRoutine.RoutineIndex);
                             }
                         }

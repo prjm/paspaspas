@@ -1,10 +1,9 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Runtime {
+﻿namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     kinds special constants
     /// </summary>
-    public enum SpecialConstantKind {
+    public enum SpecialConstantKind : byte {
 
         /// <summary>
         ///     unknown constant
@@ -57,8 +56,13 @@ namespace PasPasPas.Globals.Runtime {
         InvalidCast = 11,
 
         /// <summary>
-        ///     invalid other resul
+        ///     invalid other result
         /// </summary>
-        InvalidResult = 12
+        InvalidResult = 12,
+
+        /// <summary>
+        ///     common invalid value
+        /// </summary>
+        InvalidValue = 13
     }
 }

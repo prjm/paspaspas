@@ -135,7 +135,7 @@ namespace PasPasPas.Typings.Common {
             var typeReference = currentTypeDefinition.Pop();
             var type = typeReference as IStructuredType;
 
-            if (element.TypeInfo.IsConstant())
+            if (type != default && element.TypeInfo.IsConstant())
                 element.TypeInfo = type.MakeConstant();
             else
                 MarkWithErrorType(element);
@@ -195,6 +195,16 @@ namespace PasPasPas.Typings.Common {
                     length = element.Value.TypeInfo;
 
                 if (!(length is IIntegerValue intValue)) {
+                    MarkWithErrorType(element);
+                    return;
+                }
+
+                if (intValue.IsNegative) {
+                    MarkWithErrorType(element);
+                    return;
+                }
+
+                if (intValue.UnsignedValue > byte.MaxValue) {
                     MarkWithErrorType(element);
                     return;
                 }

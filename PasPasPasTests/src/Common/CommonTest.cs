@@ -219,6 +219,17 @@ namespace PasPasPasTests.Common {
             => MakeRuntime().Strings.ToShortString(text);
 
         /// <summary>
+        ///     crate a short string type
+        /// </summary>
+        /// <param name="len"></param>
+        /// <returns></returns>
+        protected static IShortStringType GetShortStringType(byte len) {
+            var e = CreateEnvironment();
+            var ct = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            return ct.CreateShortStringType(len);
+        }
+
+        /// <summary>
         ///     get the Unicode char value
         /// </summary>
         /// <param name="character"></param>

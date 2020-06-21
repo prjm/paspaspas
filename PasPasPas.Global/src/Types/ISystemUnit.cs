@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
 
@@ -404,12 +403,45 @@ namespace PasPasPas.Globals.Types {
         ///     real48 type
         /// </summary>
         IRealType Real48Type { get; }
+
+        /// <summary>
+        ///     uint8 type
+        /// </summary>
         IAliasedType UInt8Type { get; }
+
+        /// <summary>
+        ///     int8 type
+        /// </summary>
         IAliasedType Int8Type { get; }
+
+        /// <summary>
+        ///     uint16 type
+        /// </summary>
         IAliasedType UInt16Type { get; }
+
+        /// <summary>
+        ///     int16 type
+        /// </summary>
         IAliasedType Int16Type { get; }
+
+        /// <summary>
+        ///     uint32 type
+        /// </summary>
         IAliasedType UInt32Type { get; }
+
+        /// <summary>
+        ///     int32 type
+        /// </summary>
         IAliasedType Int32Type { get; }
+
+        /// <summary>
+        ///     raw byte string type
+        /// </summary>
         IPointerType PRawByteStringType { get; }
+
+        /// <summary>
+        ///     common routine group type
+        /// </summary>
+        IRoutineGroupType RoutineGroupType { get; }
     }
 }

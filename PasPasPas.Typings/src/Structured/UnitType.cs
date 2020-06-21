@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using PasPasPas.Globals.Types;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -81,7 +83,13 @@ namespace PasPasPas.Typings.Structured {
 
         public bool TryToResolve(string name, out INamedTypeSymbol? reference) {
             foreach (var item in Symbols) {
-                if (string.Equals(item.Name, name, System.StringComparison.OrdinalIgnoreCase)) {
+                var itemName = item.Name;
+
+                if (item is ReferenceToTypeDefinition && item.TypeDefinition is IGenericType gt && gt.NumberOfTypeParameters > 0) {
+                    itemName = string.Concat(itemName, AbstractSyntaxPartBase.GenericSeparator, gt.NumberOfTypeParameters.ToString(CultureInfo.InvariantCulture));
+                }
+
+                if (string.Equals(itemName, name, System.StringComparison.OrdinalIgnoreCase)) {
                     reference = item;
                     return true;
                 }
