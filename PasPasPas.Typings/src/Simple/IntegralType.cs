@@ -191,9 +191,9 @@ namespace PasPasPas.Typings.Simple {
         public override string MangledName
             => Kind switch
             {
-                IntegralTypeKind.SmallInt => KnownNames.ZC,
+                IntegralTypeKind.SmallInt => KnownNames.S,
                 IntegralTypeKind.Byte => KnownNames.UC,
-                IntegralTypeKind.ShortInt => KnownNames.S,
+                IntegralTypeKind.ShortInt => KnownNames.ZC,
                 IntegralTypeKind.Word => KnownNames.US,
                 IntegralTypeKind.Cardinal => KnownNames.UI,
                 IntegralTypeKind.Integer => KnownNames.I,

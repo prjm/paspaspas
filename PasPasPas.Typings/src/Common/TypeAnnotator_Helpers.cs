@@ -1,4 +1,5 @@
 ﻿#nullable disable
+using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Parsing;
@@ -137,6 +138,15 @@ namespace PasPasPas.Typings.Common {
 
         private IRuntimeValueFactory Runtime
             => environment.Runtime;
+
+        private T PopTypeFromStack<T>() where T : class, ITypeDefinition
+            => (currentType.Count > 0 ? currentType.Pop() as T : default(T)) ?? throw new InvalidOperationException(typeof(T).ToString());
+
+        private T PeekTypeFromStack<T>() where T : class, ITypeDefinition
+            => (currentType.Count > 0 ? currentType.Peek() as T : default(T)) ?? throw new InvalidOperationException(typeof(T).ToString());
+
+        private void PushTypeToStack(ITypeDefinition type)
+            => currentType.Push(type);
 
     }
 }

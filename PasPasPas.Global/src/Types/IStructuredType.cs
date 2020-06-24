@@ -63,5 +63,14 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="fieldDef"></param>
         void AddField(IVariable fieldDef);
+
+        /// <summary>
+        ///     add or extend a method
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="genericTypeId"></param>
+        /// <returns></returns>
+        IRoutineGroup AddOrExtendMethod(string completeName, ITypeDefinition genericTypeId);
+
     }
 }

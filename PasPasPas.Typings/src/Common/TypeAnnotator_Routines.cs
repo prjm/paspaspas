@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -50,7 +49,7 @@ namespace PasPasPas.Typings.Common {
                 }
             }
             else {
-                var v = currentTypeDefinition.Peek();
+                var v = PeekTypeFromStack<IStructuredType>();
                 var m = element as StructureMethod;
                 var classMethod = m?.ClassItem ?? false;
                 var genericTypeId = SystemUnit.ErrorType as ITypeDefinition;
@@ -61,7 +60,7 @@ namespace PasPasPas.Typings.Common {
                 }
                 */
 
-                var typeDef = v != null ? d as StructuredTypeDeclaration : null;
+                var typeDef = v;
 
                 if (m != default && m.Generics != default && m.Generics.Count > 0) {
                     var functionType = TypeCreator.CreateRoutineType(string.Empty);
@@ -75,7 +74,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             var parameters = ((RoutineGroup)method).AddParameterGroup(element.Kind, NoType.Reference);
-            //currentTypeDefinition.Push((RoutineGroup)method);
+            PushTypeToStack(method.TypeDefinition);
 
             //parameters.IsClassItem = f.IsClassItem();
             currentMethodParameters.Push(parameters);
@@ -89,16 +88,16 @@ namespace PasPasPas.Typings.Common {
             if (element.Name == default)
                 return;
 
-            var method = currentTypeDefinition.Pop() as RoutineGroup;
+            var method = PopTypeFromStack<IRoutineGroupType>();
 
             if (element.Kind == RoutineKind.Function) {
 
-                if (currentTypeDefinition.Count < 1)
-                    return;
+                //if (currentTypeDefinition.Count < 1)
+                //    return;
 
-                var v = currentTypeDefinition.Peek();
-                var typeDef = v != null ? v as IStructuredType : null;
-                var methodParams = currentMethodParameters.Pop();
+                //var v = currentTypeDefinition.Peek();
+                //var typeDef = v != null ? v as IStructuredType : null;
+                //var methodParams = currentMethodParameters.Pop();
                 /*
                 if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
                     methodParams.ResultType = element.TypeValue.TypeInfo;

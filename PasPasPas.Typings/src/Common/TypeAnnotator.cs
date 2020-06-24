@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Parsing;
@@ -58,7 +58,7 @@ namespace PasPasPas.Typings.Common {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
-        private readonly Stack<ITypeDefinition> currentTypeDefinition;
+        private readonly Stack<ITypeDefinition> currentType;
         private readonly Stack<IRoutine> currentMethodParameters;
         private readonly Resolver resolver;
         private readonly List<(IRoutine, BlockOfStatements)> routines;
@@ -66,13 +66,13 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     current unit definition
         /// </summary>
-        public CompilationUnit CurrentUnit { get; set; }
+        public CompilationUnit? CurrentUnit { get; set; }
 
         /// <summary>
         ///     current unit type
         /// </summary>
         public IUnitType CurrentUnitType
-            => CurrentUnit?.TypeInfo.TypeDefinition as IUnitType;
+            => CurrentUnit?.TypeInfo.TypeDefinition as IUnitType ?? throw new InvalidOperationException();
 
         /// <summary>
         ///     cast this visitor as common visitor
@@ -89,7 +89,7 @@ namespace PasPasPas.Typings.Common {
             visitor = new ChildVisitor(this);
             environment = env;
             resolver = new Resolver(new Scope(env.TypeRegistry));
-            currentTypeDefinition = new Stack<ITypeDefinition>();
+            currentType = new Stack<ITypeDefinition>();
             currentMethodParameters = new Stack<IRoutine>();
             routines = new List<(IRoutine, BlockOfStatements)>();
         }

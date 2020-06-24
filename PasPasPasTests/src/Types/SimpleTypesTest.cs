@@ -99,15 +99,15 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestDeclaredSymbols() {
-            var kti = CreateEnvironment().TypeRegistry.SystemUnit;
+            var systemUnit = CreateEnvironment().TypeRegistry.SystemUnit;
             var p1 = "unit p; interface const A = 5; implementation procedure x; begin writeln(A); end; end;";
             var p2 = "unit p; interface implementation const A = 5; procedure x; begin writeln(A); end; end;";
             var p3 = "unit p; interface implementation procedure x; const A = 5; begin writeln(A); end; end;";
             var p4 = "unit p; interface type TA = class const A = 5; procedure X; end; implementation procedure TA.x; begin writeln(A); end; end;";
-            AssertExprValue("", GetIntegerValue((sbyte)5), "", kti.UnspecifiedType, true, p1);
-            AssertExprValue("", GetIntegerValue((sbyte)5), "", kti.UnspecifiedType, true, p2);
-            AssertExprValue("", GetIntegerValue((sbyte)5), "", kti.UnspecifiedType, true, p3);
-            AssertExprValue("", GetIntegerValue((sbyte)5), "", kti.UnspecifiedType, true, p4);
+            AssertExprValue("", GetIntegerValue((sbyte)5), "", systemUnit.ShortIntType, true, p1);
+            AssertExprValue("", GetIntegerValue((sbyte)5), "", systemUnit.ShortIntType, true, p2);
+            AssertExprValue("", GetIntegerValue((sbyte)5), "", systemUnit.ShortIntType, true, p3);
+            AssertExprValue("", GetIntegerValue((sbyte)5), "", systemUnit.ShortIntType, true, p4);
         }
 
     }

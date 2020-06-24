@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
+using PasPasPas.Typings.Hidden;
 
 namespace PasPasPas.Typings.Simple {
 
@@ -37,7 +38,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override string MangledName {
             get {
-                if (BaseTypeDefinition == default)
+                if (BaseTypeDefinition is NilType)
                     return KnownNames.PV;
                 else
                     return string.Concat(KnownNames.P, BaseTypeDefinition.MangledName);

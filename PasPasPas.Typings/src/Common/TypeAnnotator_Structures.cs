@@ -132,11 +132,10 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(RecordConstant element) {
-            var typeReference = currentTypeDefinition.Pop();
-            var type = typeReference as IStructuredType;
+            var typeReference = PopTypeFromStack<IStructuredType>();
 
-            if (type != default && element.TypeInfo.IsConstant())
-                element.TypeInfo = type.MakeConstant();
+            if (element.TypeInfo.IsConstant())
+                element.TypeInfo = typeReference.MakeConstant();
             else
                 MarkWithErrorType(element);
         }
@@ -146,9 +145,8 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(RecordConstantItem element) {
-            var typeReference = currentTypeDefinition.Peek();
-            var type = typeReference as StructuredTypeDeclaration;
-            type.Fields.Add(new Variable() {
+            var typeReference = PopTypeFromStack<IStructuredType>();
+            typeReference.Fields.Add(new Variable() {
                 Name = element.Name.CompleteName,
                 TypeDefinition = element.Value.TypeInfo.TypeDefinition
             });
@@ -241,9 +239,9 @@ namespace PasPasPas.Typings.Common {
             var declaredType = GetTypeOfNode(element.TypeValue);
             var inferredType = GetTypeOfNode(element.Value);
 
-            if (inferredType == default)
+            if (inferredType.TypeDefinition is IErrorType)
                 MarkWithErrorType(element);
-            else if (declaredType == default)
+            else if (declaredType.TypeDefinition is IErrorType)
                 element.TypeInfo = inferredType;
             else
                 element.TypeInfo = TypeRegistry.Runtime.Cast(TypeRegistry, inferredType as IValue, declaredType.TypeDefinition);
@@ -333,7 +331,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element">enumeration type definition</param>
         public void StartVisit(EnumTypeCollection element) {
             var typeDef = TypeCreator.CreateEnumType(string.Empty);
-            currentTypeDefinition.Push(typeDef);
+            PushTypeToStack(typeDef);
         }
 
         /// <summary>
@@ -342,7 +340,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void StartVisit(RecordConstant element) {
             var typeDef = TypeCreator.CreateStructuredType(string.Empty, StructuredTypeKind.Record);
-            currentTypeDefinition.Push(typeDef);
+            PushTypeToStack(typeDef);
         }
 
         /// <summary>
@@ -350,18 +348,15 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(EnumTypeCollection element) {
-            var typeReference = currentTypeDefinition.Pop();
-            var typeDef = typeReference;
+            var enumType = PopTypeFromStack<IEnumeratedType>();
 
-            if (typeDef is IEnumeratedType enumType) {
-                var typeID = enumType.CommonTypeId;
-                foreach (var enumValue in enumType.Values) {
-                    //Runtime.Types.MakeEnumValue(enumType, enumValue);
-                    //enumValue.MakeEnumValue(TypeRegistry, typeID, enumType);
-                }
+            var typeID = enumType.CommonTypeId;
+            foreach (var enumValue in enumType.Values) {
+                //Runtime.Types.MakeEnumValue(enumType, enumValue);
+                //enumValue.MakeEnumValue(TypeRegistry, typeID, enumType);
             }
 
-            element.TypeInfo = typeReference.Reference;
+            element.TypeInfo = enumType.Reference;
         }
 
         /// <summary>
@@ -369,13 +364,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(EnumTypeValue element) {
-            var value = currentTypeDefinition.Peek();
-            var typeDef = value != default ? value as IEnumeratedType : null;
-            if (typeDef == null) {
-                MarkWithErrorType(element);
-                return;
-            }
-
+            var typeDef = PeekTypeFromStack<IEnumeratedType>();
             var itemValue = element.TypeInfo as IValue;
             var enumRef = typeDef.DefineEnumValue(environment.Runtime, element.SymbolName, false, itemValue) as IEnumeratedValue;
 
@@ -424,7 +413,7 @@ namespace PasPasPas.Typings.Common {
         public void StartVisit(TypeDeclaration element) {
             if (element.Generics != default && element.Generics.Count > 0) {
                 var placeholder = TypeCreator.CreateGenericPlaceholder(string.Empty);
-                currentTypeDefinition.Push(placeholder);
+                PushTypeToStack(placeholder);
             }
         }
 
@@ -435,8 +424,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(TypeDeclaration element) {
 
             if (element.Generics != default && element.Generics.Count > 0) {
-                var placeholderRef = currentTypeDefinition.Pop();
-                var placeholder = placeholderRef as IExtensibleGenericType;
+                var placeholder = PeekTypeFromStack<IExtensibleGenericType>();
 
                 if (element.TypeValue is ITypedSyntaxPart type && type.TypeInfo != null) {
                     var typedef = type.TypeInfo.TypeDefinition as IExtensibleGenericType;
@@ -522,7 +510,7 @@ namespace PasPasPas.Typings.Common {
         public void StartVisit(StructuredType element) {
             var typeDef = TypeCreator.CreateStructuredType(string.Empty, element.Kind);
             typeDef.BaseClass = SystemUnit.TObjectType;
-            currentTypeDefinition.Push(typeDef);
+            PushTypeToStack(typeDef);
         }
 
         /// <summary>
@@ -530,8 +518,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(StructuredType element) {
-            var value = currentTypeDefinition.Pop();
-            var typeDef = value != null ? value as IStructuredType : null;
+            var typeDef = PopTypeFromStack<IStructuredType>();
 
             foreach (var baseType in element.BaseTypes) {
                 typeDef.BaseClass = baseType.TypeInfo.TypeDefinition;
@@ -553,8 +540,7 @@ namespace PasPasPas.Typings.Common {
                 typeInfo = ErrorReference;
             }
 
-            var v = currentTypeDefinition.Peek();
-            var typeDef = v != null ? v as IStructuredType : null;
+            var type = PeekTypeFromStack<IStructuredType>();
 
             foreach (var field in element.Fields) {
                 var fieldDef = new Variable() {
@@ -566,10 +552,10 @@ namespace PasPasPas.Typings.Common {
                 };
 
                 if (element.ClassItem) {
-                    typeDef.AddField(fieldDef);
+                    type.AddField(fieldDef);
                 }
                 else
-                    typeDef.AddField(fieldDef);
+                    type.AddField(fieldDef);
             }
         }
 
@@ -624,9 +610,11 @@ namespace PasPasPas.Typings.Common {
                 if (baseType != default)
                     routineGroup = baseType.FindMethod(element.Name.Name, element.Declaration.ClassItem);
 
+                if (routineGroup != default && routineGroup.Items.Count > 0)
+                    routine = routineGroup.Items[0];
             }
 
-            if (routineGroup != default) {
+            if (routine != default) {
                 resolver.OpenScope();
                 currentMethodImplementation.Push(routine);
             }
@@ -691,8 +679,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(GenericTypeNameCollection element) {
             var hasError = false;
-            var genericTypeRef = currentTypeDefinition.Peek();
-            var genericType = genericTypeRef as IExtensibleGenericType;
+            var genericType = PeekTypeFromStack<IExtensibleGenericType>();
 
             if (genericType == default)
                 return;
