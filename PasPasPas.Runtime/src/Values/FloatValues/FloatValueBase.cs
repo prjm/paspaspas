@@ -36,6 +36,12 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         public abstract ExtF80 AsExtended { get; }
 
+        /// <summary>
+        ///     real type
+        /// </summary>
+        public IRealType RealType
+            => TypeDefinition as IRealType ?? throw new InvalidOperationException();
+
         internal static IValue Multiply(ITypeDefinition typeDef, INumericalValue first, INumericalValue second)
             => new ExtendedValue(typeDef, first.AsExtended * second.AsExtended);
 

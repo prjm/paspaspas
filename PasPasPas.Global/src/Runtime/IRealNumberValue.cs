@@ -1,5 +1,4 @@
-﻿#nullable disable
-using SharpFloat.FloatingPoint;
+﻿using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
 
@@ -8,6 +7,10 @@ namespace PasPasPas.Globals.Runtime {
     /// </summary>
     public interface IRealNumberValue : INumericalValue {
 
+        /// <summary>
+        ///     get the real type for this constant
+        /// </summary>
+        IRealType RealType { get; }
 
     }
 }

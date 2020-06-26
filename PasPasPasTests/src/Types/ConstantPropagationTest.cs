@@ -49,7 +49,6 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestAbs() {
-
             var e = CreateEnvironment();
             var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
             var et = tc.CreateEnumType("e");

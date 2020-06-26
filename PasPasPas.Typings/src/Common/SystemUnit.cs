@@ -230,6 +230,9 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         private T RegisterRoutine<T>(T definition) where T : IRoutineGroup {
             Register(definition);
+            if (definition is IntrinsicRoutine ir)
+                ir.TypeRegistry = this.TypeRegistry;
+
             return definition;
         }
 

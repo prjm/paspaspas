@@ -136,7 +136,7 @@ namespace PasPasPasTests.Common {
             => MakeRuntime().Types.MakeSubrangeValue(typeId, value);
 
         /// <summary>
-        ///     make a subragen value
+        ///     make a subrange value
         /// </summary>
         /// <param name="lowerBound"></param>
         /// <param name="upperBound"></param>

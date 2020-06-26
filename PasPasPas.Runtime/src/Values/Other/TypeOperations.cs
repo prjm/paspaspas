@@ -69,7 +69,8 @@ namespace PasPasPas.Runtime.Values.Other {
         /// <param name="routine"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public IIntrinsicInvocationResult MakeInvocationResultFromIntrinsic(IRoutineGroup routine, ISignature parameters) => throw new NotImplementedException();
+        public IIntrinsicInvocationResult MakeInvocationResultFromIntrinsic(IRoutineGroup routine, ISignature parameters)
+            => new IntrinsicInvocationResult(routine, parameters);
 
         /// <summary>
         ///     create an unary signature

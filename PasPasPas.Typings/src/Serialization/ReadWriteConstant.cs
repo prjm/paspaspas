@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Typings.Serialization {
@@ -11,6 +10,8 @@ namespace PasPasPas.Typings.Serialization {
             switch (value) {
                 case IIntegerValue _:
                     return StoredConstantKind.IntegerConstant;
+                case IRealNumberValue _:
+                    return StoredConstantKind.RealConstant;
             }
 
             return StoredConstantKind.Undefined;
@@ -38,6 +39,8 @@ namespace PasPasPas.Typings.Serialization {
             switch (typeId) {
                 case StoredConstantKind.IntegerConstant:
                     return ReadIntValue();
+                case StoredConstantKind.RealConstant:
+                    return ReadRealValue();
             }
 
             throw new InvalidOperationException();
@@ -57,8 +60,13 @@ namespace PasPasPas.Typings.Serialization {
 
             switch (kind) {
                 case StoredConstantKind.IntegerConstant:
-                    WriteIntValue(value as IIntegerValue);
+                    WriteIntValue((IIntegerValue)value);
                     return;
+
+                case StoredConstantKind.RealConstant:
+                    WriteRealValue((IRealNumberValue)value);
+                    return;
+
             }
 
             throw new InvalidOperationException();

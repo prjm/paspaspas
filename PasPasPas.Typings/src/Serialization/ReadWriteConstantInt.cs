@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
@@ -40,7 +39,7 @@ namespace PasPasPas.Typings.Serialization {
 
         internal void WriteIntValue(IIntegerValue intValue) {
             WriteByte(intValue.IntegralType.Kind.ToByte());
-            var typeDef = intValue.TypeDefinition as IIntegralType;
+            var typeDef = intValue.TypeDefinition;
             switch (typeDef.TypeSizeInBytes) {
                 case 1:
                     WriteByte((byte)intValue.UnsignedValue);

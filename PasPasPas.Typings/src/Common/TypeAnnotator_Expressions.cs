@@ -306,13 +306,13 @@ namespace PasPasPas.Typings.Common {
                         var callableRoutines = new List<IRoutineResult>();
                         var signature = CreateSignatureFromSymbolPart(symRef);
 
-                        if (baseTypeValue is IUnspecifiedType) {
+                        if (baseTypeValue.TypeDefinition is IUnspecifiedType) {
                             var reference = resolver.ResolveByName(baseTypeValue, symRef.Name, 0, ResolverFlags.None);
 
                             if (reference == null) {
                                 baseTypeValue = ErrorReference;
                             }
-                            else if (reference.SymbolKind == SymbolTypeKind.RoutineGroup) {
+                            else if (reference.SymbolKind == SymbolTypeKind.IntrinsicRoutineResult || reference.SymbolKind == SymbolTypeKind.InvocationResult) {
                                 if (reference is IRoutineGroup routine) {
                                     routine.ResolveCall(callableRoutines, signature);
                                 }
@@ -333,8 +333,11 @@ namespace PasPasPas.Typings.Common {
                         }
 
                         if (callableRoutines.Count == 1) {
-                            if (callableRoutines[0] is IIntrinsicInvocationResult _) {
-                                baseTypeValue = Runtime.Types.MakeInvocationResultFromIntrinsic(callableRoutines[0].Routine, signature);
+                            if (callableRoutines[0] is IIntrinsicInvocationResult result) {
+                                if (result.Parameters.ReturnType.IsConstant(out var constantResult))
+                                    baseTypeValue = constantResult;
+                                else
+                                    baseTypeValue = Runtime.Types.MakeInvocationResultFromIntrinsic(callableRoutines[0].Routine, signature);
                             }
                             else if (callableRoutines[0] is IInvocationResult targetRoutine) {
                                 baseTypeValue = Runtime.Types.MakeInvocationResult(targetRoutine.RoutineIndex);

@@ -1,5 +1,4 @@
-﻿#nullable disable
-namespace PasPasPas.Typings.Serialization {
+﻿namespace PasPasPas.Typings.Serialization {
 
     /// <summary>
     ///     stored constant kind
@@ -16,5 +15,9 @@ namespace PasPasPas.Typings.Serialization {
         /// </summary>
         IntegerConstant = 1,
 
+        /// <summary>
+        ///     real constant
+        /// </summary>
+        RealConstant = 2,
     }
 }
