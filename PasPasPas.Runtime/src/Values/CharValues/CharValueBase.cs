@@ -37,6 +37,13 @@ namespace PasPasPas.Runtime.Values.CharValues {
         public abstract char AsWideChar { get; }
 
         /// <summary>
+        ///     string type
+        /// </summary>
+        StringTypeKind IStringValue.Kind
+            => StringTypeKind.Undefined;
+
+
+        /// <summary>
         ///     get a char at
         /// </summary>
         /// <param name="index"></param>

@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.IO;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Environment;
@@ -31,12 +30,11 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         /// <param name="value"></param>
         /// <returns></returns>
         public IValue Decode(ImmutableArray<byte> value) {
-            using (var stream = new ImmutableByteArrayStream(value))
-            using (var typeReader = Environment.CreateTypeReader(stream)) {
-
-                return typeReader.ReadConstant();
-
-            }
+            using var stream = new ImmutableByteArrayStream(value);
+            using var typeReader = Environment.CreateTypeReader(stream);
+            var strings = Environment.CreateStringRegistry();
+            typeReader.ReadStrings(strings);
+            return typeReader.ReadConstant(strings);
         }
 
         /// <summary>
@@ -45,13 +43,13 @@ namespace PasPasPas.AssemblyBuilder.Builder {
         /// <param name="value"></param>
         /// <returns></returns>
         public ImmutableArray<byte> Encode(IValue value) {
-            using (var stream = new MemoryStream())
-            using (var writer = Environment.CreateTypeWriter(stream)) {
-
-                writer.WriteConstant(value);
-                return ImmutableArray.Create(stream.ToArray());
-            }
-
+            using var stream = new MemoryStream();
+            using var writer = Environment.CreateTypeWriter(stream);
+            var strings = Environment.CreateStringRegistry();
+            writer.PrepareConstant(value, strings);
+            writer.WriteStrings(strings);
+            writer.WriteConstant(value, strings);
+            return ImmutableArray.Create(stream.ToArray());
         }
 
     }

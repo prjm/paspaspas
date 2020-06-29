@@ -1,8 +1,9 @@
-﻿#nullable disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Serialization {
-    internal class StringRegistry : Tag {
+
+    internal class StringRegistry : Tag, IStringRegistry {
 
         public override uint Kind
             => Constants.StringRegistryTag;
@@ -40,7 +41,7 @@ namespace PasPasPas.Typings.Serialization {
             }
         }
 
-        internal uint this[string v] {
+        public uint this[string v] {
             get {
                 if (!mapping.TryGetValue(v, out var result)) {
                     result = count;
@@ -52,7 +53,8 @@ namespace PasPasPas.Typings.Serialization {
             }
         }
 
-        internal string this[uint v] => reverseMapping[v];
+        public string this[uint v]
+            => reverseMapping[v];
 
     }
 }

@@ -35,12 +35,18 @@ namespace PasPasPas.Runtime.Values.StringValues {
         public abstract string AsUnicodeString { get; }
 
         /// <summary>
+        ///     string type kind
+        /// </summary>
+        public StringTypeKind Kind
+            => ((IStringType)TypeDefinition).Kind;
+
+        /// <summary>
         ///     number of characters
         /// </summary>
         public abstract int NumberOfCharElements { get; }
 
-        internal IValue Concat(IStringValue string1, IStringValue string2) {
-            var typeDef = TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit.UnicodeStringType;
+        internal static IStringValue Concat(IStringValue string1, IStringValue string2) {
+            var typeDef = string1.TypeDefinition.DefiningUnit.TypeRegistry.SystemUnit.UnicodeStringType;
             return new UnicodeStringValue(typeDef, string.Concat(string1.AsUnicodeString, string2.AsUnicodeString));
         }
 

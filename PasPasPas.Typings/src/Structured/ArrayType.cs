@@ -55,7 +55,8 @@ namespace PasPasPas.Typings.Structured {
             => KnownNames.SameIdentifier(Name, other?.Name) &&
                 other is IArrayType a &&
                 a.Kind == Kind &&
-                a.IndexType.Equals(IndexType);
+                a.IndexType.Equals(IndexType) &&
+                a.BaseTypeDefinition.Equals(BaseTypeDefinition);
 
         /*
         /// <summary>

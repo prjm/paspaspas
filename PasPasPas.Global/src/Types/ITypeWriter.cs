@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
@@ -19,6 +18,20 @@ namespace PasPasPas.Globals.Types {
         ///     write a constant value
         /// </summary>
         /// <param name="value"></param>
-        void WriteConstant(IValue value);
+        /// <param name="strings">string registry</param>
+        void WriteConstant(IValue value, IStringRegistry strings);
+
+        /// <summary>
+        ///     write string values
+        /// </summary>
+        /// <param name="strings"></param>
+        void WriteStrings(IStringRegistry strings);
+
+        /// <summary>
+        ///     prepare constants
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="strings"></param>
+        void PrepareConstant(IValue value, IStringRegistry strings);
     }
 }

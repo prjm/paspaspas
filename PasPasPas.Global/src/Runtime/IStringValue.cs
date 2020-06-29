@@ -1,4 +1,5 @@
-﻿#nullable disable
+﻿using PasPasPas.Globals.Types;
+
 namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
@@ -15,6 +16,11 @@ namespace PasPasPas.Globals.Runtime {
         ///     string length (measured in characters of the underlying char type)
         /// </summary>
         int NumberOfCharElements { get; }
+
+        /// <summary>
+        ///     string type
+        /// </summary>
+        StringTypeKind Kind { get; }
 
         /// <summary>
         ///     char value at a given index

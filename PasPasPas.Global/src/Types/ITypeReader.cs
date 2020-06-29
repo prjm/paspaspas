@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
@@ -19,6 +18,12 @@ namespace PasPasPas.Globals.Types {
         ///     read a constant value
         /// </summary>
         /// <returns></returns>
-        IValue ReadConstant();
+        IValue ReadConstant(IStringRegistry strings);
+
+        /// <summary>
+        ///     read string values
+        /// </summary>
+        /// <param name="strings"></param>
+        void ReadStrings(IStringRegistry strings);
     }
 }

@@ -55,7 +55,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
                 if (value1 is EmptyStringValue)
                     return value2;
 
-                return Concat(string1, string2);
+                return StringValueBase.Concat(string1, string2);
             }
 
             return invalidString.Value;

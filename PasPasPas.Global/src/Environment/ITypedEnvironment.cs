@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.IO;
+﻿using System.IO;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Environment {
@@ -28,5 +27,10 @@ namespace PasPasPas.Globals.Environment {
         /// <returns></returns>
         ITypeReader CreateTypeReader(Stream readableStream);
 
+        /// <summary>
+        ///     string registry
+        /// </summary>
+        /// <returns></returns>
+        IStringRegistry CreateStringRegistry();
     }
 }

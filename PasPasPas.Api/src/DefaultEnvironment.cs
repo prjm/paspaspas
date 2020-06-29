@@ -129,5 +129,8 @@ namespace PasPasPas.Api {
 
         public ITypeReader CreateTypeReader(Stream readableStream)
             => new TypeReader(readableStream, Log, StringPool, TypeRegistry);
+
+        public IStringRegistry CreateStringRegistry()
+            => new StringRegistry(new Reference());
     }
 }

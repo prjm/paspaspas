@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPasTests.Common;
 using SharpFloat.FloatingPoint;
@@ -55,8 +54,6 @@ namespace PasPasPasTests.Types {
             var st = tc.CreateSubrangeType("e", e.TypeRegistry.SystemUnit.IntegerType, GetIntegerValue((sbyte)-4), GetIntegerValue((sbyte)8)); ;
             IValue sv(int x)
                 => e.Runtime.Types.MakeSubrangeValue(st, e.Runtime.Integers.ToScaledIntegerValue(x));
-            //            ITypeSymbol ir(ITypeDefinition t)
-            //                => e.Runtime.Types.MakeInvocationResultFromIntrinsic(e.TypeRegistry.SystemUnit.Abs, );
 
             AssertExprValue("Abs(5)", GetIntegerValue(5));
             AssertExprValue("Abs(0)", GetIntegerValue(0));
@@ -266,7 +263,7 @@ namespace PasPasPasTests.Types {
 
 
         /// <summary>
-        ///     test concat operator
+        ///     test concatenation operator
         /// </summary>
         [TestMethod]
         public void TestConcat() {
@@ -537,14 +534,13 @@ namespace PasPasPasTests.Types {
             var r1 = GetRecordValue(rt, GetUnicodeStringValue("a"), GetIntegerValue(2));
             var r2 = GetRecordValue(rt, GetUnicodeStringValue("b"), GetIntegerValue(4));
             var v = GetArrayValue(at, rt, r1, r2);
-            var e = ev.TypeRegistry.SystemUnit.ErrorType;
             var a = GetArrayValue(at, KnownTypeIds.StringType, GetUnicodeStringValue("aa"), GetUnicodeStringValue("b"), GetUnicodeStringValue("cc"));
 
             AssertExprValue("c", a, "const c: array of string = ['aa','b','cc']");
             AssertExprValue("c", a, "const c: array of string = ['aa','b']+['cc']");
             AssertExprValue("c", v, "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));");
-            AssertExprValue("c", e.Reference, "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 2;b:'b'),(a: 'b';b: 4));", isConstant: false);
-            AssertExprValue("c", e.Reference, "type Ta = record a: integer; b: string; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));", isConstant: false);
+            AssertExprValue("c", GetErrorValue(), "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 2;b:'b'),(a: 'b';b: 4));", isConstant: false);
+            AssertExprValue("c", GetErrorValue(), "type Ta = record a: integer; b: string; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));", isConstant: false);
 
             v = GetArrayValue(rt, KnownTypeIds.StringType, GetUnicodeStringValue("a"), GetUnicodeStringValue("b"));
             AssertExprValue("c", v, "type Ta = (a1, a2); const c: array[Ta] of string = ('a','b'); ");

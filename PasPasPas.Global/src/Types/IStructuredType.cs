@@ -57,7 +57,6 @@ namespace PasPasPas.Globals.Types {
         /// <param name="signature"></param>
         void ResolveCall(string symbolName, IList<IRoutineResult> callables, ISignature signature);
 
-
         /// <summary>
         ///     add a field definition
         /// </summary>
@@ -71,6 +70,13 @@ namespace PasPasPas.Globals.Types {
         /// <param name="genericTypeId"></param>
         /// <returns></returns>
         IRoutineGroup AddOrExtendMethod(string completeName, ITypeDefinition genericTypeId);
+
+        /// <summary>
+        ///     test if this is a constant structured type
+        ///     (example: record constant)
+        /// </summary>
+        /// <returns></returns>
+        bool IsConstant();
 
     }
 }

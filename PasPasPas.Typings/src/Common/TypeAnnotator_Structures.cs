@@ -134,7 +134,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(RecordConstant element) {
             var typeReference = PopTypeFromStack<IStructuredType>();
 
-            if (element.TypeInfo.IsConstant())
+            if (typeReference.IsConstant())
                 element.TypeInfo = typeReference.MakeConstant();
             else
                 MarkWithErrorType(element);
@@ -145,7 +145,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(RecordConstantItem element) {
-            var typeReference = PopTypeFromStack<IStructuredType>();
+            var typeReference = PeekTypeFromStack<IStructuredType>();
             typeReference.Fields.Add(new Variable() {
                 Name = element.Name.CompleteName,
                 TypeDefinition = element.Value.TypeInfo.TypeDefinition

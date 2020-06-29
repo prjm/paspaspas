@@ -158,20 +158,16 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     check if this is a constant record value
         /// </summary>
-        public bool IsConstant {
-            get {
-                if (StructTypeKind != StructuredTypeKind.Record)
+        public bool IsConstant() {
+
+            if (StructTypeKind != StructuredTypeKind.Record)
+                return false;
+
+            foreach (var field in Fields)
+                if (!field.IsConstant())
                     return false;
 
-                return false;
-                /*
-                for each (var field in Fields)
-                    if (!field.IsConstant())
-                        return false;
-
-                return true;
-                */
-            }
+            return true;
         }
 
         /// <summary>

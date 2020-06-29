@@ -19,5 +19,20 @@
         ///     real constant
         /// </summary>
         RealConstant = 2,
+
+        /// <summary>
+        ///     boolean constant
+        /// </summary>
+        BooleanConstant = 3,
+
+        /// <summary>
+        ///     char constant
+        /// </summary>
+        CharConstant = 4,
+
+        /// <summary>
+        ///     string constant
+        /// </summary>
+        StringConstant = 5,
     }
 }
