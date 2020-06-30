@@ -319,7 +319,7 @@ namespace PasPasPas.Typings.Common {
                             }
                             else if (reference.SymbolKind == SymbolTypeKind.TypeDefinition && signature.Count == 1) {
                                 if (signature[0].IsConstant(out var value)) {
-                                    baseTypeValue = environment.Runtime.Cast(TypeRegistry, value, (ITypeDefinition)reference);
+                                    baseTypeValue = environment.Runtime.Cast(TypeRegistry, value, reference.TypeDefinition);
                                 }
                                 else {
                                     baseTypeValue = TypeRegistry.Cast(signature[0], reference);

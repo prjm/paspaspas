@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
@@ -40,5 +39,10 @@ namespace PasPasPas.Typings.Structured {
         ///     flags
         /// </summary>
         public VariableFlags Flags { get; set; }
+
+        /// <summary>
+        ///     initial value of the variable
+        /// </summary>
+        public IValue InitialValue { get; set; }
     }
 }

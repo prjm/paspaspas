@@ -117,7 +117,7 @@ namespace PasPasPas.Typings.Routines {
 
             var ordinalType = parameter.TypeDefinition as IOrdinalType;
 
-            if (ordinalType is ISubrangeValue subrangeValue)
+            if (parameter is ISubrangeValue subrangeValue)
                 return types.Runtime.Types.MakeSubrangeValue(parameter.TypeDefinition, PredOrSucc.StaticExecuteCall(types, subrangeValue.WrappedValue, pred));
 
             if (ordinalType is null)

@@ -97,7 +97,7 @@ namespace PasPasPas.Typings.Routines {
             if (typeDefinition is IOrdinalType)
                 return true;
 
-            if (TypeDefinition is IStringType stringType && stringType.Kind == StringTypeKind.ShortString)
+            if (typeDefinition is IStringType stringType && stringType.Kind == StringTypeKind.ShortString)
                 return true;
 
             if (typeDefinition is IArrayType)
@@ -111,15 +111,15 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public IValue ExecuteCall(IValue parameter) {
+        public IValue ExecuteCall(ITypeDefinition parameter) {
 
-            if (parameter.TypeDefinition is IOrdinalType ordinalType)
+            if (parameter is IOrdinalType ordinalType)
                 return Low ? ordinalType.LowestElement : ordinalType.HighestElement;
 
             if (parameter is IShortStringType shortStringType)
                 return Low ? Integers.ToScaledIntegerValue(1) : Integers.ToScaledIntegerValue(shortStringType.Size);
 
-            if (parameter.TypeDefinition is IArrayType arrayType &&  //
+            if (parameter is IArrayType arrayType &&  //
                 arrayType.IndexType is IOrdinalType ordinalIndexType)
                 return Low ? ordinalIndexType.LowestElement : ordinalIndexType.HighestElement;
 
@@ -127,11 +127,19 @@ namespace PasPasPas.Typings.Routines {
         }
 
         /// <summary>
+        ///     execute a call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public IValue ExecuteCall(IValue parameter)
+            => ExecuteCall(parameter.TypeDefinition);
+
+        /// <summary>
         ///     resolve a call
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
         public IIntrinsicInvocationResult ResolveCall(ITypeSymbol parameter)
-            => MakeResult(ExecuteCall(parameter as IValue), parameter);
+            => MakeResult(ExecuteCall(parameter.TypeDefinition), parameter);
     }
 }

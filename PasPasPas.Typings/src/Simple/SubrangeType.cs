@@ -98,10 +98,10 @@ namespace PasPasPas.Typings.Simple {
                 if (LowestElement == default || HighestElement == default)
                     return false;
 
-                if (!(LowestElement is IOrdinalType _))
+                if (!(LowestElement?.TypeDefinition is IOrdinalType _))
                     return false;
 
-                if (!(HighestElement is IOrdinalValue _))
+                if (!(HighestElement?.TypeDefinition is IOrdinalType _))
                     return false;
 
                 return true;

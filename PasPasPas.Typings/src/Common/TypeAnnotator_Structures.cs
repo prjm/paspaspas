@@ -148,7 +148,8 @@ namespace PasPasPas.Typings.Common {
             var typeReference = PeekTypeFromStack<IStructuredType>();
             typeReference.Fields.Add(new Variable() {
                 Name = element.Name.CompleteName,
-                TypeDefinition = element.Value.TypeInfo.TypeDefinition
+                InitialValue = element.Value?.TypeInfo as IValue,
+                TypeDefinition = element.Value?.TypeInfo?.TypeDefinition
             });
         }
 

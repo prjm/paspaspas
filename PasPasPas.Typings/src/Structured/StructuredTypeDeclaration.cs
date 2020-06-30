@@ -164,7 +164,7 @@ namespace PasPasPas.Typings.Structured {
                 return false;
 
             foreach (var field in Fields)
-                if (!field.IsConstant())
+                if (!(field.InitialValue?.IsConstant() ?? false))
                     return false;
 
             return true;

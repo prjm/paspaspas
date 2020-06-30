@@ -365,7 +365,8 @@ namespace PasPasPasTests.Types {
             var e = CreateEnvironment();
             var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
             var st = tc.CreateSubrangeType("Te", KnownTypeIds.IntegerType, GetIntegerValue(-3), GetIntegerValue(3));
-            AssertExprValue("Succ(a)", st.Reference, "type Te = -3..3; const a: Te = -2;");
+            var sv = e.Runtime.Types.MakeSubrangeValue(st, GetIntegerValue(-1));
+            AssertExprValue("Succ(a)", sv, "type Te = -3..3; const a: Te = -2;");
         }
 
         /// <summary>

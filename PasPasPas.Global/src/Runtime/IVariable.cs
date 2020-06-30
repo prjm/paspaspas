@@ -22,6 +22,10 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         VariableFlags Flags { get; }
 
+        /// <summary>
+        ///     initial value
+        /// </summary>
+        IValue InitialValue { get; }
     }
 
     /// <summary>

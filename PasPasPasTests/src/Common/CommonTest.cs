@@ -78,9 +78,10 @@ namespace PasPasPasTests.Common {
         /// <param name="typeKind"></param>
         /// <returns></returns>
         protected static IInvocationResult GetInvocationValue(ITypeDefinition typeId, ITypeDefinition typeKind) {
-            var fakeRoutine = new RoutineGroup(default, default);
-            var _ = fakeRoutine.AddParameterGroup(RoutineKind.Function, typeKind.Reference);
-            return MakeRuntime().Types.MakeInvocationResult(_);
+            var e = CreateEnvironment();
+            var fakeRoutine = new RoutineGroup(e.TypeRegistry.SystemUnit, string.Empty);
+            var parms = fakeRoutine.AddParameterGroup(RoutineKind.Function, typeKind.Reference);
+            return MakeRuntime().Types.MakeInvocationResult(parms);
         }
 
         /// <summary>

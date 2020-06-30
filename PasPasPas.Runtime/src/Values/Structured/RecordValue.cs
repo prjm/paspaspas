@@ -55,7 +55,7 @@ namespace PasPasPas.Runtime.Values.Structured {
             var sb = sbv.Item;
             sb.Append("(");
 
-            for (var i = 0; i < recordType.Fields.Count; i++) {
+            for (var i = 0; i < recordType.Fields.Count - 1; i++) {
                 if (i > 0)
                     sb.Append("; ");
                 var field = recordType.Fields[i];
