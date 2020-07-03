@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.Dynamic {
@@ -20,7 +19,7 @@ namespace PasPasPas.Runtime.Values.Dynamic {
         ///     result type
         /// </summary>
         public ITypeDefinition TypeDefinition
-            => Routine.DefiningType;
+            => RoutineIndex.ResultType.TypeDefinition;
 
         /// <summary>
         ///     referenced routine
@@ -39,6 +38,5 @@ namespace PasPasPas.Runtime.Values.Dynamic {
         /// </summary>
         public IRoutine RoutineIndex { get; }
 
-        IRoutine IInvocationResult.RoutineIndex => throw new System.NotImplementedException();
     }
 }

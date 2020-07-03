@@ -48,8 +48,8 @@ namespace PasPasPas.Typings.Common {
             resolver.OpenScope();
             if (currentMethodImplementation.Count < 1) {
                 var mainRoutineGroup = TypeCreator.CreateGlobalRoutineGroup(KnownNames.MainMethod);
-                var signature = Runtime.Types.MakeSignature(NoType.Reference);
-                var mainRoutine = TypeCreator.CreateRoutine(mainRoutineGroup, RoutineKind.Procedure, signature);
+                var mainRoutine = TypeCreator.CreateRoutine(mainRoutineGroup, RoutineKind.Procedure);
+                mainRoutine.ResultType = NoType.Reference;
                 currentMethodImplementation.Push(mainRoutine);
                 RegisterRoutine(mainRoutine, element);
             }
@@ -383,7 +383,6 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(SubrangeType element) {
-
             var leftTypeRef = element.RangeStart?.TypeInfo;
             var rightTypeRef = element.RangeEnd?.TypeInfo;
             var left = (leftTypeRef?.TypeDefinition ?? SystemUnit.ErrorType) as IOrdinalType;
@@ -602,7 +601,8 @@ namespace PasPasPas.Typings.Common {
                     unitType.Register(routineGroup);
                     resolver.AddToScope(element.SymbolName, routineGroup);
                 }
-                routine = (routineGroup as RoutineGroup).AddParameterGroup(element.Kind, NoType.Reference);
+                routine = new Routine(routineGroup, element.Kind);
+                routine.ResultType = NoType.Reference;
                 currentMethodParameters.Push(routine);
             }
             else if (isClassMethod) {

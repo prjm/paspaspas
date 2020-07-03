@@ -41,5 +41,9 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public override int GetHashCode()
             => TypeDefinition.GetHashCode();
+
+        public override string ToString()
+            => string.Concat(Name, "|", TypeDefinition.Name, "|", TypeDefinition.GetType().Name);
+
     }
 }

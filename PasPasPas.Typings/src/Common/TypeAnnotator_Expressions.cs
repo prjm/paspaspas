@@ -337,7 +337,7 @@ namespace PasPasPas.Typings.Common {
                                 if (result.Parameters.ReturnType.IsConstant(out var constantResult))
                                     baseTypeValue = constantResult;
                                 else
-                                    baseTypeValue = Runtime.Types.MakeInvocationResultFromIntrinsic(callableRoutines[0].Routine, signature);
+                                    baseTypeValue = callableRoutines[0];
                             }
                             else if (callableRoutines[0] is IInvocationResult targetRoutine) {
                                 baseTypeValue = Runtime.Types.MakeInvocationResult(targetRoutine.RoutineIndex);

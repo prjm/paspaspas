@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Structured;
 
@@ -31,7 +30,7 @@ namespace PasPasPas.Typings.Serialization {
             => routine.Items.Add(ToParameterGroup(routine));
 
         internal IRoutine ToParameterGroup(IRoutineGroup routine)
-            => new Routine(routine, procedureKind, routine.TypeDefinition.DefiningUnit.TypeRegistry.Runtime.Types.MakeSignature(resultType));
+            => new Routine(routine, procedureKind);
 
         internal void Initialize(IRoutine parameterGroup)
             => procedureKind = parameterGroup.Kind;

@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.CodeGen;
@@ -19,10 +18,12 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="parent">parent routine group</param>
         /// <param name="procedureKind">procedure kind</param>
-        /// <param name="arguments">argument</param>
-        public Routine(IRoutineGroup parent, RoutineKind procedureKind, ISignature arguments) {
+        public Routine(IRoutineGroup parent, RoutineKind procedureKind) {
             RoutineGroup = parent;
             Kind = procedureKind;
+            var errorType = parent.DefiningType.DefiningUnit.TypeRegistry.SystemUnit.ErrorType;
+            ResultType = errorType.Reference;
+            Parameters = new List<IVariable>();
         }
 
         /// <summary>
@@ -77,7 +78,8 @@ namespace PasPasPas.Typings.Structured {
                 Parameters = new List<IVariable>();
 
             var result = new Variable {
-                Name = completeName
+                Name = completeName,
+                TypeDefinition = type?.TypeDefinition ?? RoutineGroup.DefiningType.DefiningUnit.TypeRegistry.SystemUnit.ErrorType,
             };
 
             Parameters.Add(result);

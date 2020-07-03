@@ -32,7 +32,7 @@ namespace PasPasPasTests.CodeGen {
             var tMapper = new TypeMapper(env.TypeRegistry);
             var m = new NetMethodBuilder(mmBuilder, tMapper);
             var rt = new RoutineGroup(env.TypeRegistry.SystemUnit, "A");
-            var p = new Routine(rt, RoutineKind.Procedure, default);
+            var p = new Routine(rt, RoutineKind.Procedure);
             m.ReturnType = env.TypeRegistry.SystemUnit.NoType;
             p.Code = ImmutableArray.Create<POpCode>(code);
             m.DefineMethodBody();
@@ -50,7 +50,7 @@ namespace PasPasPasTests.CodeGen {
         public void TestCallIntrinsinc() {
             var env = CreateEnvironment();
             var r = default(IRoutineGroup);
-            var p = new Routine(r, RoutineKind.Procedure, default);
+            var p = new Routine(r, RoutineKind.Procedure);
             var i = env.Runtime.Types.MakeInvocationResultFromIntrinsic(r, env.Runtime.Types.MakeSignature(env.TypeRegistry.SystemUnit.NoType.Reference));
             var c = new POpCode(OpCodeId.Call);
             OpCodeTest(env, c);

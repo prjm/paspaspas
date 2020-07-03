@@ -53,32 +53,6 @@ namespace PasPasPas.Typings.Structured {
             => SymbolTypeKind.RoutineGroup;
 
         /// <summary>
-        ///     add a parameter group
-        /// </summary>
-        /// <param name="resultType">result type</param>
-        /// <param name="kind">procedure kind</param>
-        public Routine AddParameterGroup(RoutineKind kind, ITypeSymbol resultType) {
-            var result = new Routine(this, kind, DefiningType.DefiningUnit.TypeRegistry.Runtime.Types.MakeSignature(resultType));
-            Items.Add(result);
-            return result;
-        }
-
-        /// <summary>
-        ///     add a parameter group
-        /// </summary>
-        /// <param name="firstParam">first parameter</param>
-        /// <param name="resultType">result type</param>
-        /// <param name="parameterName">parameter name</param>
-        /// <param name="kind">procedure kind</param>
-        /// <returns></returns>
-        public Routine AddParameterGroup(string parameterName, RoutineKind kind, ITypeSymbol firstParam, ITypeSymbol resultType) {
-            var result = new Routine(this, kind, default);
-            result.AddParameter(parameterName, firstParam);
-            Items.Add(result);
-            return result;
-        }
-
-        /// <summary>
         ///     find a matching parameter group
         /// </summary>
         /// <param name="callableRoutines">list of callable routines</param>

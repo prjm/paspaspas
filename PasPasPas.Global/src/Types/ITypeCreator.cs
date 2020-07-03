@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
@@ -48,9 +47,8 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         /// <param name="mainRoutineGroup"></param>
         /// <param name="procedure"></param>
-        /// <param name="signature"></param>
         /// <returns></returns>
-        IRoutine CreateRoutine(IRoutineGroup mainRoutineGroup, RoutineKind procedure, ISignature signature);
+        IRoutine CreateRoutine(IRoutineGroup mainRoutineGroup, RoutineKind procedure);
 
         /// <summary>
         ///     create a new structured type
@@ -118,9 +116,16 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     meta class type
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="baseType"></param>
         /// <returns></returns>
         IMetaType CreateMetaClassType(string name, ITypeDefinition baseType);
+
+        /// <summary>
+        /// ^create a routine group
+        /// </summary>
+        /// <param name="routineName"></param>
+        /// <returns></returns>
         IRoutineGroup CreateGlobalRoutineGroup(string routineName);
     }
 }

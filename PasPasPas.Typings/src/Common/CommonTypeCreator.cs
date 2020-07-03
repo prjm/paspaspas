@@ -108,10 +108,9 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="mainRoutineGroup"></param>
         /// <param name="procedure"></param>
-        /// <param name="signature"></param>
         /// <returns></returns>
-        public IRoutine CreateRoutine(IRoutineGroup mainRoutineGroup, RoutineKind procedure, ISignature signature)
-            => new Routine(mainRoutineGroup, procedure, signature);
+        public IRoutine CreateRoutine(IRoutineGroup mainRoutineGroup, RoutineKind procedure)
+            => new Routine(mainRoutineGroup, procedure);
 
         /// <summary>
         ///     create a routine type

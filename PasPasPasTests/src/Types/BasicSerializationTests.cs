@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using PasPasPas.Globals.CodeGen;
 using PasPasPas.Globals.Log;
@@ -427,7 +426,8 @@ namespace PasPasPasTests.Types {
             using (var r = CreateReader(env, stream)) {
                 var nt = env.TypeRegistry.SystemUnit.NoType;
                 var d = new RoutineGroup(env.TypeRegistry.SystemUnit, "_");
-                var pg = new Routine(d, PK.Procedure, env.TypeRegistry.Runtime.Types.MakeSignature(nt.Reference));
+                var pg = new Routine(d, PK.Procedure);
+                pg.ResultType = nt.Reference;
                 var t = new ParameterGroupTag();
 
                 t.Initialize(pg);
@@ -485,9 +485,9 @@ namespace PasPasPasTests.Types {
             using (var w = CreateWriter(env, stream))
             using (var r = CreateReader(env, stream)) {
                 var u = env.TypeRegistry.SystemUnit;
-                var rr = u.Symbols.Where(tx => string.Equals(tx.Name, "writeln", System.StringComparison.OrdinalIgnoreCase)) as IRoutineGroup;
-                var sgn = env.TypeRegistry.Runtime.Types.MakeSignature(env.TypeRegistry.SystemUnit.NoType.Reference);
-                var parms = new Routine(rr, PK.Procedure, sgn);
+                var rr = u.Symbols.Where(tx => string.Equals(tx.Name, "writeln", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault() as IRoutineGroup;
+                var parms = new Routine(rr, PK.Procedure);
+                parms.ResultType = env.TypeRegistry.SystemUnit.NoType.Reference;
                 var callInfo = env.Runtime.Types.MakeInvocationResultFromIntrinsic(rr, env.TypeRegistry.Runtime.Types.MakeSignature(env.TypeRegistry.SystemUnit.NoType.Reference));
                 var op = new OpCode(OpCodeId.Call, parms.Encode());
                 var t = new OpCodeTag();
@@ -499,7 +499,7 @@ namespace PasPasPasTests.Types {
                 r.ReadTag(t);
 
                 Assert.AreEqual(t.OpCode.Id, OpCodeId.Call);
-                var c = new Routine(rr, PK.Procedure, sgn); // .. t.OpCode.Params,
+                var c = new Routine(rr, PK.Procedure); // .. t.OpCode.Params,
                 Assert.AreEqual(c.RoutineGroup.RoutineId, IntrinsicRoutineId.WriteLn);
             }
         }

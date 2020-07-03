@@ -28,7 +28,7 @@ namespace PasPasPas.Runtime.Values.Dynamic {
         ///     registered type id
         /// </summary>
         public ITypeDefinition TypeDefinition
-            => Routine.DefiningType;
+            => Parameters.ReturnType.TypeDefinition;
 
         /// <summary>
         ///     target routine

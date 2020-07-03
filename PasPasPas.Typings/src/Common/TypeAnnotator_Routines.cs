@@ -73,7 +73,7 @@ namespace PasPasPas.Typings.Common {
                 method = typeDef.AddOrExtendMethod(element.Name.CompleteName, genericTypeId);
             }
 
-            var parameters = ((RoutineGroup)method).AddParameterGroup(element.Kind, NoType.Reference);
+            var parameters = new Routine(method, element.Kind);
             PushTypeToStack(method.TypeDefinition);
 
             //parameters.IsClassItem = f.IsClassItem();
@@ -92,18 +92,16 @@ namespace PasPasPas.Typings.Common {
 
             if (element.Kind == RoutineKind.Function) {
 
-                //if (currentTypeDefinition.Count < 1)
-                //    return;
+                if (currentType.Count < 1)
+                    return;
 
-                //var v = currentTypeDefinition.Peek();
-                //var typeDef = v != null ? v as IStructuredType : null;
-                //var methodParams = currentMethodParameters.Pop();
-                /*
+                var typeDef = PeekTypeFromStack<IStructuredType>();
+                var methodParams = currentMethodParameters.Pop();
+
                 if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
                     methodParams.ResultType = element.TypeValue.TypeInfo;
                 else
-                    methodParams.ResultType = SystemUnit.ErrorType;
-                    */
+                    methodParams.ResultType = SystemUnit.ErrorType.Reference;
             }
         }
 

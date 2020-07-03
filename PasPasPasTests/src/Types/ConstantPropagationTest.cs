@@ -62,7 +62,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Abs(a)", sv(0), "type Ta=-4..8; const a: Ta = 0;");
             AssertExprValue("Abs(a)", sv(-3), "type Ta=-4..8; const a: Ta = -3;");
             AssertExprValue("Abs(a)", GetInvocationValue(IntrinsicRoutineId.Abs, KnownTypeIds.IntegerType, KnownTypeIds.IntegerType), "var a: integer;", isConstant: false);
-            AssertExprValue("Abs(-a)", GetInvocationValue(IntrinsicRoutineId.Abs, KnownTypeIds.IntegerType, st), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(-a)", GetInvocationValue(IntrinsicRoutineId.Abs, st, st), "type Ta = -4..4; var a: Ta;", isConstant: false);
             AssertExprValue("Abs(a)", GetInvocationValue(IntrinsicRoutineId.Abs, KnownTypeIds.IntegerType, st), "type Ta = -4..4; var a: Ta;", isConstant: false);
             AssertExprValue("Abs(-a)", GetInvocationValue(IntrinsicRoutineId.Abs, KnownTypeIds.IntegerType, st), "type Ta = -4..4; var a: Ta;", isConstant: false);
 
