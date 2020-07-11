@@ -1,10 +1,9 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     real type definition
     /// </summary>
-    public interface IRealType : IFixedSizeType {
+    public interface IRealType : IFixedSizeType, IMangledNameTypeSymbol {
 
         /// <summary>
         ///     real type kind

@@ -43,7 +43,6 @@ namespace PasPasPas.Typings.Common {
             var result = new DynamicArrayType(DefiningUnit, typeName, baseType) {
                 Packed = isPacked
             };
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 
@@ -54,7 +53,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IEnumeratedType CreateEnumType(string name) {
             var result = new EnumeratedType(DefiningUnit, name);
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 
@@ -65,8 +63,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeName"></param>
         /// <returns></returns>
         public IFileType CreateFileType(string typeName, ITypeDefinition baseTypeDefinition) {
-            var result = new FileType(DefiningUnit, typeName, baseTypeDefinition);
-            DefiningUnit.Register(result.Reference);
+            var result = new FileType(DefiningUnit, baseTypeDefinition);
             return result;
         }
 
@@ -77,7 +74,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IExtensibleGenericType CreateGenericPlaceholder(string name) {
             var result = new GenericPlaceholderType(name, DefiningUnit);
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 
@@ -99,7 +95,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IMetaType CreateMetaClassType(string name, ITypeDefinition baseType) {
             var result = new MetaClassType(DefiningUnit, name, baseType);
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 
@@ -118,7 +113,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IRoutineType CreateRoutineType(string name) {
             var result = new RoutineType(DefiningUnit, name);
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 
@@ -130,7 +124,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public ISetType CreateSetType(IOrdinalType baseType, string name) {
             var result = new SetType(DefiningUnit, name, baseType);
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 
@@ -141,7 +134,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IShortStringType CreateShortStringType(byte length) {
             var result = new ShortStringType(DefiningUnit, length);
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 
@@ -153,13 +145,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="isPacked"></param>
         /// <param name="name">type name</param>
         /// <returns></returns>
-        public IArrayType CreateStaticArrayType(ITypeDefinition baseType, string name, IOrdinalType indexType, bool isPacked) {
-            var result = new StaticArrayType(name, DefiningUnit, indexType, baseType) {
+        public IArrayType CreateStaticArrayType(ITypeDefinition baseType, string name, IOrdinalType indexType, bool isPacked)
+            => new StaticArrayType(name, DefiningUnit, indexType, baseType) {
                 Packed = isPacked
             };
-            DefiningUnit.Register(result.Reference);
-            return result;
-        }
 
         /// <summary>
         ///     create a new structured type
@@ -169,7 +158,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IStructuredType CreateStructuredType(string name, StructuredTypeKind typeKind) {
             var result = new StructuredTypeDeclaration(DefiningUnit, name, typeKind);
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 
@@ -183,7 +171,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns>new subrange type</returns>
         public ISubrangeType CreateSubrangeType(string name, IOrdinalType baseType, IValue lowerBound, IValue upperBound) {
             var result = new SubrangeType(DefiningUnit, name, baseType, lowerBound, upperBound);
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 
@@ -196,7 +183,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IAliasedType CreateTypeAlias(ITypeDefinition baseType, string aliasName, bool newType) {
             var result = new TypeAlias(DefiningUnit, baseType, aliasName, newType);
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 
@@ -208,7 +194,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public IGenericTypeParameter CreateUnboundGenericTypeParameter(string name, ImmutableArray<ITypeDefinition> constraints) {
             var result = new GenericTypeParameter(DefiningUnit, name, constraints);
-            DefiningUnit.Register(result.Reference);
             return result;
         }
 

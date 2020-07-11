@@ -1,10 +1,9 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     string type definition
     /// </summary>
-    public interface IStringType : ITypeDefinition {
+    public interface IStringType : ITypeDefinition, IMangledNameTypeSymbol {
 
         /// <summary>
         ///     string type kind

@@ -27,16 +27,5 @@ namespace PasPasPas.Typings.Hidden {
         public override BaseType BaseType
             => BaseType.Error;
 
-        /// <summary>
-        ///     type name (empty)
-        /// </summary>
-        public override string Name
-            => string.Empty;
-
-        /// <summary>
-        ///     mangled name
-        /// </summary>
-        public override string MangledName
-            => string.Empty;
     }
 }

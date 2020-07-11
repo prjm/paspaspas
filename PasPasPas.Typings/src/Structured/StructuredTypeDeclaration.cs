@@ -28,11 +28,10 @@ namespace PasPasPas.Typings.Structured {
             BaseClass = definingUnit.TypeRegistry.SystemUnit.ErrorType;
         }
 
-
         /// <summary>
         ///     type name
         /// </summary>
-        public override string Name { get; }
+        public string Name { get; }
 
         /// <summary>
         ///     structured type kind
@@ -176,11 +175,8 @@ namespace PasPasPas.Typings.Structured {
         public override BaseType BaseType
             => BaseType.Structured;
 
-        /// <summary>
-        ///     mangled type name
-        /// </summary>
-        public override string MangledName
-            => string.Empty;
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.TypeDefinition;
 
         /// <summary>
         ///     create a constant record value from this type declaration
@@ -241,7 +237,7 @@ namespace PasPasPas.Typings.Structured {
             if (!(other is IStructuredType t))
                 return false;
 
-            if (!KnownNames.SameIdentifier(Name, other?.Name))
+            if (!KnownNames.SameIdentifier(Name, t.Name))
                 return false;
 
             if (t.StructTypeKind != StructTypeKind)

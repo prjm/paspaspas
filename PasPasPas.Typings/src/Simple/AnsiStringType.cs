@@ -21,12 +21,9 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new string type
         /// </summary>
         /// <param name="withCodePage">code page</param>
-        /// <param name="longTypeName">long type name</param>
         /// <param name="definingUnit">defining unit</param>
-        public AnsiStringType(IUnitType definingUnit, string longTypeName, ushort withCodePage) : base(definingUnit) {
-            WithCodePage = withCodePage;
-            Name = longTypeName;
-        }
+        public AnsiStringType(IUnitType definingUnit, ushort withCodePage) : base(definingUnit)
+            => WithCodePage = withCodePage;
 
         /// <summary>
         ///     ANSI string
@@ -52,16 +49,19 @@ namespace PasPasPas.Typings.Simple {
         public ushort WithCodePage { get; }
 
         /// <summary>
-        ///     long type name
+        ///     type name
         /// </summary>
-        public override string Name { get; }
+        public override string Name
+            => WithCodePage == NoCodePage ? KnownNames.RawByteString : KnownNames.AnsiString;
+
+        public override string MangledName
+            => GetMangledName(WithCodePage);
 
         /// <summary>
         ///     short type name
         /// </summary>
-        public override string MangledName
-            => $"%AnsiStringT$us$i{WithCodePage}$%";
-
+        internal static string GetMangledName(ushort codePage)
+            => $"%AnsiStringT$us$i{codePage}$%";
     }
 
 

@@ -26,15 +26,9 @@ namespace PasPasPas.Typings.Simple {
         }
 
         /// <summary>
-        ///     mangled name
-        /// </summary>
-        public override string MangledName
-            => SubrangeOfType.MangledName;
-
-        /// <summary>
         ///     type name
         /// </summary>
-        public override string Name { get; }
+        public string Name { get; }
 
         /// <summary>
         ///     get the type kind
@@ -133,8 +127,7 @@ namespace PasPasPas.Typings.Simple {
         }
 
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is ISubrangeType s &&
+            => other is ISubrangeType s &&
                 s.SubrangeOfType.Equals(SubrangeOfType) &&
                 s.LowestElement.Equals(LowestElement) &&
                 s.HighestElement.Equals(HighestElement);

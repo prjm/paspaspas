@@ -29,12 +29,12 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     type name
         /// </summary>
-        public override string Name { get; }
+        public string Name { get; }
 
         /// <summary>
         ///     mangled type name
         /// </summary>
-        public override string MangledName
+        public string MangledName
             => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
 
         /// <summary>
@@ -168,9 +168,6 @@ namespace PasPasPas.Typings.Simple {
         public override bool Equals(ITypeDefinition? other) {
             var otherEnum = other as IEnumeratedType;
             if (otherEnum == default)
-                return false;
-
-            if (KnownNames.SameIdentifier(Name, other?.Name))
                 return false;
 
             if (otherEnum.Values.Count != values.Count)

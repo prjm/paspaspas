@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     base class for string types
     /// </summary>
-    internal abstract class StringTypeBase : TypeDefinitionBase, IStringType {
+    internal abstract class StringTypeBase : CompilerDefinedType, IStringType {
 
         /// <summary>
         ///     create a new string type declaration
@@ -21,8 +21,9 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is StringTypeBase s && s.Kind == Kind;
+            => other is StringTypeBase s &&
+                s.Kind == Kind &&
+                KnownNames.SameIdentifier(Name, s.Name);
 
         /// <summary>
         ///     string type kind

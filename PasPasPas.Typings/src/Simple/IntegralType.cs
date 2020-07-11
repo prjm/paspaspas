@@ -8,7 +8,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     create a new integral type
     /// </summary>
-    internal class IntegralType : TypeDefinitionBase, IIntegralType {
+    internal class IntegralType : CompilerDefinedType, IIntegralType {
 
         /// <summary>
         ///     create a new integral type
@@ -203,7 +203,6 @@ namespace PasPasPas.Typings.Simple {
             };
 
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is IIntegralType i && i.Kind == Kind;
+            => other is IIntegralType i && i.Kind == Kind;
     }
 }

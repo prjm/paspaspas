@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     real type definition
     /// </summary>
-    internal class RealType : TypeDefinitionBase, IRealType {
+    internal class RealType : CompilerDefinedType, IRealType {
 
         /// <summary>
         ///     real type definition
@@ -106,7 +106,6 @@ namespace PasPasPas.Typings.Simple {
         public RealTypeKind Kind { get; }
 
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is IRealType r && r.Kind == Kind;
+            => other is IRealType r && r.Kind == Kind;
     }
 }

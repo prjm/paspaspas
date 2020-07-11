@@ -1,10 +1,9 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     interface for boolean types
     /// </summary>
-    public interface IBooleanType : IOrdinalType {
+    public interface IBooleanType : IOrdinalType, IMangledNameTypeSymbol {
 
         /// <summary>
         ///     boolean type kind

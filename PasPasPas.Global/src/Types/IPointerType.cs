@@ -8,6 +8,6 @@
         /// <summary>
         ///     base type definition
         /// </summary>
-        ITypeDefinition BaseTypeDefinition { get; }
+        ITypeDefinition? BaseTypeDefinition { get; }
     }
 }

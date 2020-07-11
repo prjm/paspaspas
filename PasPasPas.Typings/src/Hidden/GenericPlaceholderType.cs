@@ -45,13 +45,7 @@ namespace PasPasPas.Typings.Hidden {
         /// <summary>
         ///     type name
         /// </summary>
-        public override string Name { get; }
-
-        /// <summary>
-        ///     mangled name
-        /// </summary>
-        public override string MangledName
-            => string.Empty;
+        public string Name { get; }
 
         /// <summary>
         ///     add a parameter
@@ -70,7 +64,6 @@ namespace PasPasPas.Typings.Hidden {
             => default!;
 
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is GenericPlaceholderType && string.Equals(Name, other.Name, System.StringComparison.OrdinalIgnoreCase);
+            => other is GenericPlaceholderType o && string.Equals(Name, o.Name, System.StringComparison.OrdinalIgnoreCase);
     }
 }

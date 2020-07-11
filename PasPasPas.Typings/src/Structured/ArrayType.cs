@@ -45,15 +45,8 @@ namespace PasPasPas.Typings.Structured {
         public bool Packed { get; set; }
             = false;
 
-        /// <summary>
-        ///     mangled name
-        /// </summary>
-        public override string MangledName
-            => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
-
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-                other is IArrayType a &&
+            => other is IArrayType a &&
                 a.Kind == Kind &&
                 a.IndexType.Equals(IndexType) &&
                 a.BaseTypeDefinition.Equals(BaseTypeDefinition);

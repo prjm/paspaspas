@@ -1,12 +1,11 @@
-﻿#nullable disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     interface for a unit type definition
     /// </summary>
-    public interface IUnitType : ITypeDefinition {
+    public interface IUnitType : ITypeDefinition, INamedTypeSymbol {
 
         /// <summary>
         ///     registered symbols

@@ -11,7 +11,7 @@
             CreateEnvironment().TypeRegistry.SystemUnit;
 
         (string name, string mangledName) GetInternalTypeName(ITypeDefinition type)
-            => (type.Name, type.MangledName);
+            => ((type as INamedTypeSymbol)?.Name ?? string.Empty, (type as IMangledNameTypeSymbol)?.MangledName ?? string.Empty);
 
 
         /// <summary>

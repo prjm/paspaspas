@@ -8,7 +8,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     boolean type
     /// </summary>
-    internal class BooleanType : TypeDefinitionBase, IBooleanType {
+    internal class BooleanType : CompilerDefinedType, IBooleanType {
 
         /// <summary>
         ///     create a new boolean type
@@ -131,7 +131,6 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is IBooleanType b && b.Kind == Kind;
+            => other is IBooleanType b && b.Kind == Kind;
     }
 }

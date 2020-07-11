@@ -95,7 +95,7 @@ namespace PasPasPas.Globals.Types {
         /// <summary>
         ///     generic pointer type
         /// </summary>
-        ITypeDefinition GenericPointerType { get; }
+        IPointerType GenericPointerType { get; }
 
         /// <summary>
         ///     nil type

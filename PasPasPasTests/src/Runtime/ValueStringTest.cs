@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Runtime {
@@ -10,7 +11,7 @@ namespace PasPasPasTests.Runtime {
     public class ValueStringTest : CommonTest {
 
         private void AssertValueString(string expected, string typeName, IValue value) {
-            Assert.AreEqual(typeName, value.TypeDefinition.Name, StringComparer.InvariantCultureIgnoreCase);
+            Assert.AreEqual(typeName, (value.TypeDefinition as INamedTypeSymbol)?.Name ?? string.Empty, StringComparer.InvariantCultureIgnoreCase);
             Assert.AreEqual(expected, value.ToValueString());
         }
 

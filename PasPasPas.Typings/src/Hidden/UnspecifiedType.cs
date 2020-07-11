@@ -15,7 +15,6 @@ namespace PasPasPas.Typings.Hidden {
         }
 
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is IUnspecifiedType;
+            => other is IUnspecifiedType;
     }
 }

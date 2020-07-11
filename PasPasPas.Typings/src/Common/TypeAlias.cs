@@ -44,14 +44,8 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     alias name
         /// </summary>
-        public override string Name
+        public string Name
             => AliasName;
-
-        /// <summary>
-        ///     short name
-        /// </summary>
-        public override string MangledName
-            => BaseTypeDefinition.MangledName;
 
         /// <summary>
         ///     base type: <c>type alias</c>
@@ -59,14 +53,19 @@ namespace PasPasPas.Typings.Common {
         public override BaseType BaseType
             => BaseType.TypeAlias;
 
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.TypeDefinition;
+
+        public string MangledName
+            => (BaseTypeDefinition as IMangledNameTypeSymbol)?.MangledName ?? string.Concat(DefiningUnit.Name, "@", Name);
+
         /// <summary>
         ///     check for equality
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-                other is IAliasedType a &&
+            => other is IAliasedType a &&
                 a.BaseTypeDefinition.Equals(BaseTypeDefinition);
     }
 }

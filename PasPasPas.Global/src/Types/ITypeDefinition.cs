@@ -19,19 +19,9 @@ namespace PasPasPas.Globals.Types {
         IUnitType DefiningUnit { get; }
 
         /// <summary>
-        ///     type name
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         ///     type size in bytes
         /// </summary>
         uint TypeSizeInBytes { get; }
-
-        /// <summary>
-        ///     mangled type name
-        /// </summary>
-        string MangledName { get; }
 
         /// <summary>
         ///     test if this type can be assigned from a value of another type
@@ -41,9 +31,9 @@ namespace PasPasPas.Globals.Types {
         bool CanBeAssignedFromType(ITypeDefinition otherType);
 
         /// <summary>
-        ///     type reference
+        ///     reference to this type
         /// </summary>
-        INamedTypeSymbol Reference { get; }
+        ITypeSymbol Reference { get; }
 
     }
 

@@ -46,13 +46,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     type name
         /// </summary>
-        public override string Name { get; }
-
-        /// <summary>
-        ///     mangled type name
-        /// </summary>
-        public override string MangledName
-            => string.Empty;
+        public string Name { get; }
 
         /// <summary>
         ///     add a generic parameter
@@ -76,7 +70,6 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is IRoutineType;
+            => other is IRoutineType;
     }
 }

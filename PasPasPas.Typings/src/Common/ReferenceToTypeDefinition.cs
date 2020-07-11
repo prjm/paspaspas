@@ -17,7 +17,7 @@ namespace PasPasPas.Typings.Common {
             => SymbolTypeKind.TypeDefinition;
 
         public string Name
-            => TypeDefinition.Name;
+            => TypeDefinition is INamedTypeSymbol nt ? nt.Name : string.Empty;
 
         /// <summary>
         ///     check for equality
@@ -43,7 +43,7 @@ namespace PasPasPas.Typings.Common {
             => TypeDefinition.GetHashCode();
 
         public override string ToString()
-            => string.Concat(Name, "|", TypeDefinition.Name, "|", TypeDefinition.GetType().Name);
+            => string.Concat(Name, "|", Name, "|", TypeDefinition.GetType().Name);
 
     }
 }

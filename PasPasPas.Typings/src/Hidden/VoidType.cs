@@ -20,7 +20,6 @@ namespace PasPasPas.Typings.Hidden {
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is INoType;
+            => other is INoType;
     }
 }

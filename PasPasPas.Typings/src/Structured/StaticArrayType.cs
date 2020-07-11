@@ -48,7 +48,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     type name
         /// </summary>
-        public override string Name { get; }
+        public string Name { get; }
 
     }
 }

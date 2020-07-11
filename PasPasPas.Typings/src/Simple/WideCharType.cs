@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     wide char type
     /// </summary>
-    internal class WideCharType : TypeDefinitionBase, ICharType {
+    internal class WideCharType : CompilerDefinedType, ICharType {
 
         /// <summary>
         ///     wide char type
@@ -81,7 +81,7 @@ namespace PasPasPas.Typings.Simple {
             => KnownNames.B;
 
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is ICharType c && c.Kind == Kind;
+            => other is ICharType c && c.Kind == Kind &&
+                KnownNames.SameIdentifier(Name, c.Name);
     }
 }

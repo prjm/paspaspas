@@ -14,8 +14,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="definingUnit"></param>
         /// <param name="name"></param>
         /// <param name="baseTypeDef"></param>
-        public FileType(IUnitType definingUnit, string name, ITypeDefinition baseTypeDef) : base(definingUnit) {
-            Name = name;
+        public FileType(IUnitType definingUnit, ITypeDefinition baseTypeDef) : base(definingUnit) {
             BaseTypeDefinition = baseTypeDef;
         }
 
@@ -32,15 +31,12 @@ namespace PasPasPas.Typings.Structured {
             => TypeRegistry.GetPointerSize();
 
         /// <summary>
-        ///     type name
-        /// </summary>
-        public override string Name { get; }
-
-        /// <summary>
         ///     mangled name
         /// </summary>
-        public override string MangledName
-            => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
+        /// <param name="definingUnit">defining unit</param>
+        /// <param name="name">file type name</param>
+        public static string GetMangledName(IUnitType definingUnit, string name)
+            => string.Concat(definingUnit.Name, KnownNames.AtSymbol, name);
 
         /// <summary>
         ///     base type id
@@ -48,7 +44,6 @@ namespace PasPasPas.Typings.Structured {
         public ITypeDefinition BaseTypeDefinition { get; }
 
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is IFileType f && f.BaseTypeDefinition.Equals(BaseTypeDefinition);
+               => other is IFileType f && f.BaseTypeDefinition.Equals(BaseTypeDefinition);
     }
 }

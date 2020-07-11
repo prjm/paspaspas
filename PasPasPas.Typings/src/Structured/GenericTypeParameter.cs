@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
@@ -35,21 +34,14 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     parameter name
         /// </summary>
-        public override string Name { get; }
+        public string Name { get; }
 
         /// <summary>
         ///     type constraints
         /// </summary>
         public ImmutableArray<ITypeDefinition> Constraints { get; }
 
-        /// <summary>
-        ///     mangled name
-        /// </summary>
-        public override string MangledName
-            => string.Empty;
-
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is GenericTypeParameter p && string.Equals(p.Name, Name, StringComparison.OrdinalIgnoreCase);
+            => other is GenericTypeParameter p && KnownNames.SameIdentifier(p.Name, Name);
     }
 }

@@ -1,10 +1,9 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     interface for type aliases
     /// </summary>
-    public interface IAliasedType : ITypeDefinition {
+    public interface IAliasedType : ITypeDefinition, IMangledNameTypeSymbol {
 
         /// <summary>
         ///     base type (aliased type)

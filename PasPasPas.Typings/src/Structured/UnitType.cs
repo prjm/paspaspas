@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -17,6 +16,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         private readonly List<INamedTypeSymbol>
             symbols = new List<INamedTypeSymbol>();
+
         readonly ITypeRegistry typeRegistry;
 
         /// <summary>
@@ -41,13 +41,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     unit name
         /// </summary>
-        public override string Name { get; }
-
-        /// <summary>
-        ///     mangled name
-        /// </summary>
-        public override string MangledName
-            => Name;
+        public string Name { get; }
 
         /// <summary>
         ///     defined symbols
@@ -61,6 +55,9 @@ namespace PasPasPas.Typings.Structured {
         public override uint TypeSizeInBytes
             => 0;
 
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.TypeDefinition;
+
         /// <summary>
         ///     unit types can not be assigned
         /// </summary>
@@ -70,8 +67,7 @@ namespace PasPasPas.Typings.Structured {
             => false;
 
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is IUnitType u && string.Equals(u.Name, Name, StringComparison.OrdinalIgnoreCase);
+            => other is IUnitType u && KnownNames.SameIdentifier(u.Name, Name);
 
         /// <summary>
         ///     register a symbol
@@ -85,11 +81,11 @@ namespace PasPasPas.Typings.Structured {
             foreach (var item in Symbols) {
                 var itemName = item.Name;
 
-                if (item is ReferenceToTypeDefinition && item.TypeDefinition is IGenericType gt && gt.NumberOfTypeParameters > 0) {
+                if (item.TypeDefinition is IGenericType gt && gt.NumberOfTypeParameters > 0) {
                     itemName = string.Concat(itemName, AbstractSyntaxPartBase.GenericSeparator, gt.NumberOfTypeParameters.ToString(CultureInfo.InvariantCulture));
                 }
 
-                if (string.Equals(itemName, name, System.StringComparison.OrdinalIgnoreCase)) {
+                if (KnownNames.SameIdentifier(itemName, name)) {
                     reference = item;
                     return true;
                 }

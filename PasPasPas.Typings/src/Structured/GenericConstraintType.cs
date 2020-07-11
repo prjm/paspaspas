@@ -29,23 +29,10 @@ namespace PasPasPas.Typings.Structured {
         public override uint TypeSizeInBytes
             => 0;
 
-        /// <summary>
-        ///     type name
-        /// </summary>
-        public override string Name
-            => string.Empty;
-
-        /// <summary>
-        ///     mangled type name
-        /// </summary>
-        public override string MangledName
-            => string.Empty;
-
         public GenericConstraintKind Kind { get; }
 
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-                other is GenericConstraintType g &&
+            => other is GenericConstraintType g &&
                 g.Kind == Kind;
     }
 }

@@ -8,7 +8,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     generic dynamic array type (<c>TArray&lt;T&gt;)</c>
     /// </summary>
-    internal class GenericArrayType : ArrayType, IGenericType {
+    internal class GenericArrayType : ArrayType, IGenericType, INamedTypeSymbol {
 
         /// <summary>
         ///     create a new generic array type
@@ -35,13 +35,19 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     type name
         /// </summary>
-        public override string Name { get; }
+        public string Name { get; }
 
         /// <summary>
         ///     generic array
         /// </summary>
         public override ArrayTypeKind Kind
             => ArrayTypeKind.GenericArray;
+
+        /// <summary>
+        ///     symbol type kind
+        /// </summary>
+        public SymbolTypeKind SymbolKind
+            => SymbolTypeKind.TypeDefinition;
 
         /// <summary>
         ///     bind to a generic type

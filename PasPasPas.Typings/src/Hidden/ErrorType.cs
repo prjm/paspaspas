@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Hidden {
     /// <summary>
     ///     invalid / error type
     /// </summary>
-    internal class ErrorType : TypeDefinitionBase, IErrorType {
+    internal class ErrorType : CompilerDefinedType, IErrorType {
 
         /// <summary>
         ///     create a new error type
@@ -33,7 +33,7 @@ namespace PasPasPas.Typings.Hidden {
             => KnownNames.Error;
 
         /// <summary>
-        ///     mangled name
+        ///     error name
         /// </summary>
         public override string MangledName
             => KnownNames.Error;
@@ -44,7 +44,6 @@ namespace PasPasPas.Typings.Hidden {
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is IErrorType;
+            => other is IErrorType;
     }
 }

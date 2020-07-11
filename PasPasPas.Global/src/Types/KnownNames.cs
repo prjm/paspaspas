@@ -527,6 +527,11 @@ namespace PasPasPas.Globals.Types {
         public const string PV = "pv";
 
         /// <summary>
+        ///     pointer to pointer
+        /// </summary>
+        public const string PPV = "ppv";
+
+        /// <summary>
         ///     shorthand for pointer type
         /// </summary>
         public const string P = "p";

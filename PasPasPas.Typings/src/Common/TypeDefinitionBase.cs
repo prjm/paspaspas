@@ -27,8 +27,8 @@ namespace PasPasPas.Typings.Common {
         ///     format this type as string
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-            => string.IsNullOrWhiteSpace(Name) ? GetType().FullName ?? string.Empty : Name;
+        public override string? ToString()
+            => GetType().FullName;
 
         /// <summary>
         ///     type definition
@@ -58,19 +58,9 @@ namespace PasPasPas.Typings.Common {
         public abstract uint TypeSizeInBytes { get; }
 
         /// <summary>
-        ///     type name
-        /// </summary>
-        public abstract string Name { get; }
-
-        /// <summary>
-        ///     mangled type name
-        /// </summary>
-        public abstract string MangledName { get; }
-
-        /// <summary>
         ///     type reference
         /// </summary>
-        public INamedTypeSymbol Reference { get; }
+        public ITypeSymbol Reference { get; }
 
         private static bool CanBeAssignedFromAlias(IAliasedType alias) {
 

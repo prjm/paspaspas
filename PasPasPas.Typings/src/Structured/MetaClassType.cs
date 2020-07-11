@@ -25,7 +25,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     type name
         /// </summary>
-        public override string Name { get; }
+        public string Name { get; }
 
         /// <summary>
         ///     base type definition
@@ -41,11 +41,11 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     mangled type name
         /// </summary>
-        public override string MangledName
+        public string MangledName
             => string.Concat(DefiningUnit.Name, KnownNames.AtSymbol, Name);
 
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is IMetaType m && m.BaseTypeDefinition.Equals(BaseTypeDefinition);
+            => other is IMetaType m && m.BaseTypeDefinition.Equals(BaseTypeDefinition);
+
     }
 }

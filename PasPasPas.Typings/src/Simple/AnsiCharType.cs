@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     ANSI char type (1 byte)
     /// </summary>
-    internal class AnsiCharType : TypeDefinitionBase, ICharType {
+    internal class AnsiCharType : CompilerDefinedType, ICharType {
 
         /// <summary>
         ///     create a new char type
@@ -86,7 +86,6 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
-            => KnownNames.SameIdentifier(Name, other?.Name) &&
-               other is ICharType c && c.Kind == CharTypeKind.AnsiChar;
+            => other is ICharType c && c.Kind == CharTypeKind.AnsiChar;
     }
 }
