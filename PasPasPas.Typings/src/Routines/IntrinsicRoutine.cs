@@ -182,5 +182,14 @@ namespace PasPasPas.Typings.Routines {
 
             callableRoutines.Add(result);
         }
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ITypeSymbol? other)
+            => other is IntrinsicRoutine i &&
+                i.RoutineId == RoutineId;
     }
 }

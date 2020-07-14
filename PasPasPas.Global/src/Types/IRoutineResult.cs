@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals {
@@ -13,7 +12,6 @@ namespace PasPasPas.Globals {
         ///     get the called routine
         /// </summary>
         IRoutineGroup Routine { get; }
-
     }
 }
 

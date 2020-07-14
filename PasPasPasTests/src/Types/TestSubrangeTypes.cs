@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -32,6 +31,9 @@ namespace PasPasPasTests.Types {
             var e = CreateEnvironment();
             var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
             var et = tc.CreateEnumType("v");
+            et.DefineEnumValue(e.Runtime, "x", true, GetIntegerValue(0));
+            et.DefineEnumValue(e.Runtime, "y", true, GetIntegerValue(1));
+            et.DefineEnumValue(e.Runtime, "z", true, GetIntegerValue(2));
 
             AssertExprTypeByVar("x..z", "a", et, true, "type v = (x,y,z);");
             AssertExprTypeByVar("z..y", "a", KnownTypeIds.ErrorType, true, "type v = (x,y,z);");

@@ -29,7 +29,7 @@ namespace PasPasPas.Typings.Common {
                     return;
 
                 case ConstantValueKind.False:
-                    element.TypeInfo = Runtime.Booleans.TrueValue;
+                    element.TypeInfo = Runtime.Booleans.FalseValue;
                     return;
 
 

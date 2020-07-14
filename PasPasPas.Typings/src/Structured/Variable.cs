@@ -44,5 +44,10 @@ namespace PasPasPas.Typings.Structured {
         ///     initial value of the variable
         /// </summary>
         public IValue InitialValue { get; set; }
+
+        public bool Equals(ITypeSymbol? other)
+            => other is IVariable v &&
+                TypeDefinition.Equals(v.TypeDefinition) &&
+                KnownNames.SameIdentifier(Name, v.Name);
     }
 }

@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
 
@@ -24,7 +23,7 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestMethodDeclaration() {
-            AssertDeclTypeDef<StructuredTypeDeclaration>("class procedure x(); end", (d) => d.Methods[0].Items[0].Parameters == null);
+            AssertDeclTypeDef<StructuredTypeDeclaration>("class procedure x(); end", (d) => d.Methods[0].Items[0].Parameters.Count == 0);
             AssertDeclTypeDef<StructuredTypeDeclaration>("class function x(): String; end", (d) => d.Methods[0].Items[0].ResultType?.TypeDefinition == d.TypeRegistry.SystemUnit.StringType);
             AssertDeclTypeDef<StructuredTypeDeclaration>("class procedure x(a: Integer): String; end", (d) => d.Methods[0].Items[0].Parameters[0]?.TypeDefinition == d.TypeRegistry.SystemUnit.IntegerType);
             AssertDeclTypeDef("class function z(): integer; end", "x.z()", typeKind: BaseType.Integer);

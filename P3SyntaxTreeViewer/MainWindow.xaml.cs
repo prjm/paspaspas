@@ -5,31 +5,38 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using PasPasPas.Api;
+using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Log;
+using PasPasPas.Globals.Parsing;
+using PasPasPas.Globals.Types;
+using PasPasPas.Infrastructure.Log;
+using PasPasPas.Parsing.Parser;
+using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 
-namespace P3SyntaxTreeViewer
-{
+namespace P3SyntaxTreeViewer {
 
-    internal class NodeVisitor : IStartEndVisitor
-    {
+    internal class NodeVisitor : IStartEndVisitor {
 
         private readonly Stack<TreeViewItem> items = new Stack<TreeViewItem>();
         private readonly ITypedEnvironment env;
         private readonly TreeView tv;
 
-        public NodeVisitor(TreeView tv, ITypedEnvironment env)
-        {
+        public NodeVisitor(TreeView tv, ITypedEnvironment env) {
             this.tv = tv;
             this.env = env;
         }
 
-        public void StartVisit<VisitorType>(VisitorType cst)
-        {
+        public void StartVisit<VisitorType>(VisitorType cst) {
             var parent = items.Count != 0 ? items.Peek() : null;
 
             var treeViewItem = new TreeViewItem();
 
-            if (cst is Terminal terminal)
-            {
+            if (cst is Terminal terminal) {
                 treeViewItem.Header = terminal.Token.Value;
                 treeViewItem.Background = MainWindow.Black;
                 treeViewItem.Foreground = MainWindow.Green;
@@ -45,25 +52,21 @@ namespace P3SyntaxTreeViewer
                             treeViewItem.Items.Add(new Label() { Content = p.Value.ToString(CultureInfo.CurrentCulture), Background = MainWindow.Grey });
 
             }
-            else
-            {
+            else {
                 treeViewItem.Header = cst.GetType().Name;
             }
 
             if (cst is ISymbolTableEntry symbol)
                 treeViewItem.Header += ": " + symbol.SymbolName;
 
-            if (cst is ITypedSyntaxPart typeInfo && typeInfo.TypeInfo != null)
-            {
+            if (cst is ITypedSyntaxPart typeInfo && typeInfo.TypeInfo != null) {
 
                 var t = typeInfo.TypeInfo.TypeDefinition;
 
-                if (t is IErrorType)
-                {
+                if (t is IErrorType) {
                     treeViewItem.Header += " [Type Error]";
                 }
-                else
-                {
+                else {
                     var n = (t as INamedTypeSymbol)?.Name;
                     if (!string.IsNullOrWhiteSpace(n))
                         n += "/";
@@ -72,8 +75,7 @@ namespace P3SyntaxTreeViewer
                     treeViewItem.Header += " [" + n + "]";
                 }
 
-                if (typeInfo.TypeInfo.IsConstant(out var value))
-                {
+                if (typeInfo.TypeInfo.IsConstant(out var value)) {
                     treeViewItem.Header += "* " + value.ToValueString();
                 }
 
@@ -88,17 +90,14 @@ namespace P3SyntaxTreeViewer
 
             }
 
-            if (cst is SymbolReferencePart srp)
-            {
+            if (cst is SymbolReferencePart srp) {
                 treeViewItem.Header += " " + srp.Kind.ToString();
             }
 
-            if (parent != null)
-            {
+            if (parent != null) {
                 parent.Items.Add(treeViewItem);
             }
-            else
-            {
+            else {
                 tv.Items.Add(treeViewItem);
             }
 
@@ -113,17 +112,13 @@ namespace P3SyntaxTreeViewer
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
+    public partial class MainWindow : Window {
 
-        public MainWindow()
-        {
+        public MainWindow() {
             InitializeComponent();
 
-            foreach (var font in Fonts.SystemFontFamilies)
-            {
-                if (string.Equals("hack", font.Source, StringComparison.OrdinalIgnoreCase))
-                {
+            foreach (var font in Fonts.SystemFontFamilies) {
+                if (string.Equals("hack", font.Source, StringComparison.OrdinalIgnoreCase)) {
                     Code.FontFamily = font;
                     Code.FontSize = 14;
                     break;
@@ -136,8 +131,7 @@ namespace P3SyntaxTreeViewer
                 Code.Text = File.ReadAllText(@"d:\temp\editor.pas", Encoding.UTF8);
         }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
+        protected override void OnClosing(CancelEventArgs e) {
             File.WriteAllText(@"d:\temp\editor.pas", Code.Text, Encoding.UTF8);
             base.OnClosing(e);
         }
@@ -150,19 +144,15 @@ namespace P3SyntaxTreeViewer
         private void Button_Click(object sender, RoutedEventArgs e)
             => UpdateTrees();
 
-        private void UpdateTrees()
-        {
+        private void UpdateTrees() {
             var code = Code.Text;
-            var task = new Task(() =>
-            {
+            var task = new Task(() => {
                 var env = CreateEnvironment();
                 var listLog = new ListLogTarget();
                 env.Log.RegisterTarget(listLog);
 
-                if (string.IsNullOrWhiteSpace(code))
-                {
-                    Dispatcher.Invoke(() =>
-                    {
+                if (string.IsNullOrWhiteSpace(code)) {
+                    Dispatcher.Invoke(() => {
                         StandardTreeView.Items.Clear();
                         AbstractTreeView.Items.Clear();
                         SymbolView.Items.Clear();
@@ -172,8 +162,7 @@ namespace P3SyntaxTreeViewer
                 }
 
                 (var bst, var ast, var unit, var typeNames) = Parse(env, code);
-                Dispatcher.Invoke(() =>
-                {
+                Dispatcher.Invoke(() => {
                     DisplayTree(StandardTreeView, env, bst);
                     DisplayTree(AbstractTreeView, env, ast);
                     DisplayUnit(SymbolView, env, unit);
@@ -183,8 +172,7 @@ namespace P3SyntaxTreeViewer
             task.Start();
         }
 
-        private void DisplayUnit(TreeView tv, ITypedEnvironment env, IUnitType unit)
-        {
+        private void DisplayUnit(TreeView tv, ITypedEnvironment env, IUnitType unit) {
             tv.Items.Clear();
             tv.FontFamily = Code.FontFamily;
             tv.FontSize = Code.FontSize;
@@ -194,26 +182,22 @@ namespace P3SyntaxTreeViewer
             root.IsExpanded = true;
             var enc = new PasPasPas.AssemblyBuilder.Builder.ConstantEncoder(env);
 
-            foreach (var symbol in unit.Symbols)
-            {
+            foreach (var symbol in unit.Symbols) {
                 var rf = (symbol as ITypedSyntaxPart)?.TypeInfo;
                 var rftext = rf?.GetBaseType().ToString() ?? symbol.GetType().ToString();
                 var s = new TreeViewItem() { Header = symbol.Name + ": " + rftext };
                 root.Items.Add(s);
                 s.IsExpanded = true;
 
-                if (rf is PasPasPas.Globals.Runtime.IRoutineGroup r)
-                {
+                if (rf is PasPasPas.Globals.Runtime.IRoutineGroup r) {
 
-                    foreach (var prm in r.Items)
-                    {
+                    foreach (var prm in r.Items) {
 
                         var p = new TreeViewItem() { Header = prm.ToString() };
                         s.Items.Add(p);
                         p.IsExpanded = true;
 
-                        foreach (var code in prm.Code)
-                        {
+                        foreach (var code in prm.Code) {
 
                             var c = new TreeViewItem() { Header = code.ToOpCodeString(enc) };
                             p.Items.Add(c);
@@ -224,12 +208,10 @@ namespace P3SyntaxTreeViewer
             }
         }
 
-        private void DisplayLog(IList<ILogMessage> messages)
-        {
+        private void DisplayLog(IList<ILogMessage> messages) {
             Messages.Items.Clear();
 
-            foreach (var logentry in messages)
-            {
+            foreach (var logentry in messages) {
                 var block = new TextBlock();
                 var key = "m_" + logentry.MessageID.ToString("X4", CultureInfo.InvariantCulture);
                 var m = key;
@@ -243,8 +225,7 @@ namespace P3SyntaxTreeViewer
                     foreach (var data in logentry.Data)
                         block.Text += " " + (data ?? string.Empty).ToString();
 
-                var item = new ListBoxItem()
-                {
+                var item = new ListBoxItem() {
                     Content = block,
                     Tag = logentry
                 };
@@ -252,8 +233,7 @@ namespace P3SyntaxTreeViewer
             }
         }
 
-        private void DisplayTree(TreeView tv, ITypedEnvironment env, ISyntaxPart cst)
-        {
+        private void DisplayTree(TreeView tv, ITypedEnvironment env, ISyntaxPart cst) {
             tv.FontFamily = Code.FontFamily;
             tv.FontSize = Code.FontSize;
             tv.Items.Clear();
@@ -271,15 +251,13 @@ namespace P3SyntaxTreeViewer
         /// <param name="env"></param>
         /// <param name="code"></param>
         /// <returns></returns>
-        private static (ISyntaxPart bst, ISyntaxPart ast, IUnitType unit, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code)
-        {
+        private static (ISyntaxPart bst, ISyntaxPart ast, IUnitType unit, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code) {
             var path = env.CreateFileReference("z.x.pas");
             var resolver = CommonApi.CreateResolverForSingleString(path, code);
             var options = Factory.CreateOptions(resolver, env);
             var parserApi = Factory.CreateParserApi(options);
 
-            using (var parser = parserApi.CreateParser(path))
-            {
+            using (var parser = parserApi.CreateParser(path)) {
                 var bst = parser.Parse();
                 var ast = parserApi.CreateAbstractSyntraxTree(bst);
                 parserApi.AnnotateWithTypes(ast);
@@ -298,8 +276,7 @@ namespace P3SyntaxTreeViewer
         private void Code_TextChanged(object sender, TextChangedEventArgs e)
             => UpdateTrees();
 
-        private void Messages_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
+        private void Messages_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             var selected = Messages.SelectedItem as ListBoxItem;
 
             if (selected == default)
@@ -315,8 +292,7 @@ namespace P3SyntaxTreeViewer
             if (info == default || info1 == default)
                 return;
 
-            if (info1.Position >= 0 && info1.Position < Code.Text.Length)
-            {
+            if (info1.Position >= 0 && info1.Position < Code.Text.Length) {
                 Code.CaretIndex = info1.Position;
                 Code.Focus();
             }

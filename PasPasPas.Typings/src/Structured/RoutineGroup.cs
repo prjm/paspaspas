@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using PasPasPas.Globals;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -8,7 +10,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     callable routine
     /// </summary>
-    public class RoutineGroup : IRoutineGroup {
+    public class RoutineGroup : IRoutineGroup, IEquatable<IRoutineGroup> {
 
         /// <summary>
         ///     create a new routine
@@ -51,6 +53,24 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public SymbolTypeKind SymbolKind
             => SymbolTypeKind.RoutineGroup;
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ITypeSymbol? other)
+            => Equals(other as IRoutineGroup);
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(IRoutineGroup? other)
+            => RoutineId.Equals(other?.RoutineId) &&
+                DefiningType.Equals(other?.DefiningType) &&
+                Items.SequenceEqual(other?.Items);
 
         /// <summary>
         ///     find a matching parameter group

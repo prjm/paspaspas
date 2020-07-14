@@ -9,5 +9,10 @@
         ///     base type definition
         /// </summary>
         ITypeDefinition? BaseTypeDefinition { get; }
+
+        /// <summary>
+        ///     base named symbol
+        /// </summary>
+        IMangledNameTypeSymbol? BaseNameSymbol { get; }
     }
 }

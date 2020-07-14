@@ -67,5 +67,9 @@ namespace PasPasPas.Typings.Common {
         public override bool Equals(ITypeDefinition? other)
             => other is IAliasedType a &&
                 a.BaseTypeDefinition.Equals(BaseTypeDefinition);
+
+        public bool Equals(ITypeSymbol? other)
+            => other is IAliasedType a &&
+                BaseTypeDefinition.Equals(a.BaseTypeDefinition);
     }
 }

@@ -34,6 +34,7 @@ namespace PasPasPas.Typings.Common {
             RegisterPointerTypes();
             RegisterAliasTypes();
             RegisterOtherTypes();
+            RegisterTObjectType();
 
             // intrinsic functions
             RegisterRoutine(new Abs());
@@ -60,6 +61,26 @@ namespace PasPasPas.Typings.Common {
 
             // dynamic procedures
             RegisterRoutine(new WriteLn());
+        }
+
+        private void RegisterTObjectType() {
+            var def = new StructuredTypeDeclaration(this, Names.TObject, StructuredTypeKind.Class);
+            //var meta = new MetaStructuredTypeDeclaration(KnownTypeIds.TClass, KnownTypeIds.TObject);
+            //var alias = TypeCreator.CreateTypeAlias(KnownTypeIds.TClass, false, KnownTypeIds.TClassAlias);
+            Register(def);
+            //RegisterSystemType(meta, "TObject");
+            //RegisterSystemType(alias, "TClass");
+            //def.MetaType = Runtime.Types.MakeTypeInstanceReference(meta.TypeId, CommonTypeKind.MetaClassType);
+            //def.AddOrExtendMethod("Create", ProcedureKind.Constructor).AddParameterGroup();
+            //def.AddOrExtendMethod("Free", ProcedureKind.Procedure).AddParameterGroup();
+            //def.AddOrExtendMethod("DisposeOf", ProcedureKind.Procedure).AddParameterGroup();
+            //def.AddOrExtendMethod("CleanupInstance", ProcedureKind.Procedure).AddParameterGroup();
+            //def.AddOrExtendMethod("ClassType", ProcedureKind.Function).AddParameterGroup(KnownTypeIds.TClass);
+            //def.AddOrExtendMethod("FieldAddress", ProcedureKind.Function).AddParameterGroup(//
+            //   "Name",
+            //    KnownTypeIds.ShortStringType, //
+            //    KnownTypeIds.GenericPointer)[0].ConstantParam = true;
+
         }
 
         /// <summary>
@@ -254,7 +275,7 @@ namespace PasPasPas.Typings.Common {
         private T RegisterRoutine<T>(T definition) where T : IRoutineGroup {
             Register(definition);
             if (definition is IntrinsicRoutine ir)
-                ir.TypeRegistry = this.TypeRegistry;
+                ir.TypeRegistry = TypeRegistry;
 
             return definition;
         }

@@ -59,6 +59,9 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
-            => other is IPointerType p && object.Equals(p.BaseTypeDefinition, BaseTypeDefinition);
+            => other is IPointerType p &&
+            ((BaseNameSymbol is null && p.BaseNameSymbol is null) ||
+            (!(BaseNameSymbol is null) && BaseNameSymbol.Equals(p.BaseNameSymbol)));
+
     }
 }

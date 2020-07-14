@@ -19,8 +19,6 @@ namespace PasPasPas.Typings.Simple {
             MangledName = mangledName;
         }
 
-
-
         /// <summary>
         ///     type name
         /// </summary>
@@ -41,5 +39,10 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public SymbolTypeKind SymbolKind
             => SymbolTypeKind.TypeDefinition;
+
+        public bool Equals(ITypeSymbol? typeSymbol)
+            => typeSymbol is INamedTypeSymbol n &&
+                KnownNames.SameIdentifier(Name, n.Name) &&
+                n.TypeDefinition.Equals(TypeDefinition);
     }
 }

@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.Other {
@@ -6,7 +6,7 @@ namespace PasPasPas.Runtime.Values.Other {
     /// <summary>
     ///     result of a dynamic cast
     /// </summary>
-    internal class CastResult : ITypeSymbol {
+    internal class CastResult : ITypeSymbol, IEquatable<CastResult> {
 
         /// <summary>
         ///     create a new cast result
@@ -39,5 +39,18 @@ namespace PasPasPas.Runtime.Values.Other {
         /// </summary>
         public SymbolTypeKind SymbolKind
             => SymbolTypeKind.CastResult;
+
+        public bool Equals(CastResult? other)
+            => FromType.Equals(other?.FromType) &&
+                ToType.Equals(other?.ToType);
+
+        public bool Equals(ITypeSymbol? other)
+            => Equals(other as CastResult);
+
+        public override bool Equals(object? obj)
+            => Equals(obj as CastResult);
+
+        public override int GetHashCode()
+            => HashCode.Combine(FromType, ToType);
     }
 }

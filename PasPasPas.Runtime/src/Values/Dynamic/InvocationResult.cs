@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.Dynamic {
@@ -6,7 +7,7 @@ namespace PasPasPas.Runtime.Values.Dynamic {
     /// <summary>
     ///     make a new invocation result
     /// </summary>
-    public class InvocationResult : IInvocationResult {
+    public class InvocationResult : IInvocationResult, IEquatable<IInvocationResult> {
 
         /// <summary>
         ///     create a new invocation result
@@ -38,5 +39,21 @@ namespace PasPasPas.Runtime.Values.Dynamic {
         /// </summary>
         public IRoutine RoutineIndex { get; }
 
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ITypeSymbol? other)
+            => Equals(other as IInvocationResult);
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(IInvocationResult? other)
+            => RoutineIndex.Equals(other?.RoutineIndex) &&
+                Routine.Equals(other?.Routine);
     }
 }

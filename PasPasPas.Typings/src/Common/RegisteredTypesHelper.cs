@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Operators;
@@ -572,19 +571,19 @@ namespace PasPasPas.Typings.Common {
             var leftClass = leftTypeId as IStructuredType;
             var rightClass = rightTypeId as IStructuredType;
 
-            if (leftClass.Equals(rightClass))
+            if (leftClass.Equals(rightClass as INamedTypeSymbol))
                 return true;
 
             var baseClass = leftClass.BaseClass as IStructuredType;
             while (baseClass != default) {
-                if (baseClass.Equals(rightClass))
+                if (baseClass.Equals(rightClass as INamedTypeSymbol))
                     return true;
                 baseClass = baseClass.BaseClass as IStructuredType;
             }
 
             baseClass = rightClass.BaseClass as IStructuredType;
             while (baseClass != default) {
-                if (baseClass.Equals(leftClass))
+                if (baseClass.Equals(leftClass as INamedTypeSymbol))
                     return true;
                 baseClass = baseClass.BaseClass as IStructuredType;
             }

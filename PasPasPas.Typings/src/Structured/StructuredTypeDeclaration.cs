@@ -25,7 +25,11 @@ namespace PasPasPas.Typings.Structured {
         public StructuredTypeDeclaration(IUnitType definingUnit, string name, StructuredTypeKind kind) : base(definingUnit) {
             Name = name;
             StructTypeKind = kind;
-            BaseClass = definingUnit.TypeRegistry.SystemUnit.ErrorType;
+
+            if (definingUnit is ISystemUnit system)
+                BaseClass = system.ErrorType;
+            else
+                BaseClass = definingUnit.TypeRegistry.SystemUnit.ErrorType;
         }
 
         /// <summary>
@@ -259,5 +263,13 @@ namespace PasPasPas.Typings.Structured {
 
             return true;
         }
+
+        /// <summary>
+        ///     check for quality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ITypeSymbol other)
+            => Equals(other as ITypeDefinition);
     }
 }

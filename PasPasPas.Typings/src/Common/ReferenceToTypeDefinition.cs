@@ -36,6 +36,14 @@ namespace PasPasPas.Typings.Common {
             => Equals(obj as ReferenceToTypeDefinition);
 
         /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ITypeSymbol? other)
+            => Equals(other as ReferenceToTypeDefinition);
+
+        /// <summary>
         ///     generate a hash code
         /// </summary>
         /// <returns></returns>

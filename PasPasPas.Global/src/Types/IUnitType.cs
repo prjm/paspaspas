@@ -29,6 +29,6 @@ namespace PasPasPas.Globals.Types {
         /// <param name="name"></param>
         /// <param name="reference"></param>
         /// <returns></returns>
-        bool TryToResolve(string name, out INamedTypeSymbol reference);
+        bool TryToResolve(string name, out INamedTypeSymbol? reference);
     }
 }

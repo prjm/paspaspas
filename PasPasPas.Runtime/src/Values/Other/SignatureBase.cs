@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using PasPasPas.Globals.Types;
@@ -8,7 +8,7 @@ namespace PasPasPas.Runtime.Values.Other {
     /// <summary>
     ///     base class for signatures
     /// </summary>
-    internal abstract class SignatureBase : ISignature {
+    internal abstract class SignatureBase : ISignature, IEquatable<ISignature>, IEquatable<ITypeSymbol> {
 
         public abstract ITypeSymbol this[int index] { get; }
 
@@ -28,8 +28,8 @@ namespace PasPasPas.Runtime.Values.Other {
             }
         }
 
-        public bool Equals(ISignature other) {
-            if (other.Count != Count)
+        public bool Equals(ISignature? other) {
+            if (other?.Count != Count)
                 return false;
 
             for (var i = 0; i < Count; i++)
@@ -44,7 +44,7 @@ namespace PasPasPas.Runtime.Values.Other {
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object? obj) {
             if (obj is ISignature signature)
                 return Equals(signature);
             return false;
@@ -61,5 +61,13 @@ namespace PasPasPas.Runtime.Values.Other {
 
         public abstract IEnumerator<ITypeSymbol> GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ITypeSymbol? other)
+            => Equals(other as ISignature);
     }
 }

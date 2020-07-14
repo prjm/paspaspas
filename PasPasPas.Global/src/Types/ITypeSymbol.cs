@@ -1,11 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     a typed symbol
     /// </summary>
-    public interface ITypeSymbol {
+    public interface ITypeSymbol : IEquatable<ITypeSymbol> {
 
         /// <summary>
         ///     get the matching type definition

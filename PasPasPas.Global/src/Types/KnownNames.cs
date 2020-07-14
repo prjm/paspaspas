@@ -7,6 +7,15 @@ namespace PasPasPas.Globals.Types {
     /// </summary>
     public static class KnownNames {
 
+        /// <summary>
+        ///     compare to pascal identifiers
+        /// </summary>
+        /// <param name="name1"></param>
+        /// <param name="name2"></param>
+        /// <returns></returns>
+        public static bool SameIdentifier(string? name1, string? name2)
+            => string.Equals(name1, name2, StringComparison.OrdinalIgnoreCase);
+
         #region Types
 
         /// <summary>
@@ -83,15 +92,6 @@ namespace PasPasPas.Globals.Types {
         ///     type alias for short int
         /// </summary>
         public const string Int16 = "Int16";
-
-        /// <summary>
-        ///     compare to pascal identifiers
-        /// </summary>
-        /// <param name="name1"></param>
-        /// <param name="name2"></param>
-        /// <returns></returns>
-        public static bool SameIdentifier(string? name1, string? name2)
-            => string.Equals(name1, name2, StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
         ///  type alias for cardinal
@@ -422,6 +422,11 @@ namespace PasPasPas.Globals.Types {
         ///     generic file type
         /// </summary>
         public const string File = "File";
+
+        /// <summary>
+        ///     object base class
+        /// </summary>
+        public const string TObject = "TObject";
 
         #endregion
         #region Short Type names

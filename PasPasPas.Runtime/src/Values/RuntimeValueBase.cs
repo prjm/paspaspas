@@ -95,5 +95,7 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public abstract override int GetHashCode();
 
+        public bool Equals(ITypeSymbol? other)
+            => Equals(other as IValue);
     }
 }

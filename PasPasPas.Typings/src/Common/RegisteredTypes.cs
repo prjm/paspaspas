@@ -122,28 +122,6 @@ namespace PasPasPas.Typings.Common {
             return default;
         }
 
-        /*
-        private void RegisterTObject() {
-            var def = new StructuredTypeDeclaration(Ids.TObject, StructuredTypeKind.Class);
-            //var meta = new MetaStructuredTypeDeclaration(KnownTypeIds.TClass, KnownTypeIds.TObject);
-            //var alias = TypeCreator.CreateTypeAlias(KnownTypeIds.TClass, false, KnownTypeIds.TClassAlias);
-            RegisterSystemType(def, "TObject");
-            //RegisterSystemType(meta, "TObject");
-            //RegisterSystemType(alias, "TClass");
-            //def.MetaType = Runtime.Types.MakeTypeInstanceReference(meta.TypeId, CommonTypeKind.MetaClassType);
-            //def.AddOrExtendMethod("Create", ProcedureKind.Constructor).AddParameterGroup();
-            //def.AddOrExtendMethod("Free", ProcedureKind.Procedure).AddParameterGroup();
-            //def.AddOrExtendMethod("DisposeOf", ProcedureKind.Procedure).AddParameterGroup();
-            //def.AddOrExtendMethod("CleanupInstance", ProcedureKind.Procedure).AddParameterGroup();
-            //def.AddOrExtendMethod("ClassType", ProcedureKind.Function).AddParameterGroup(KnownTypeIds.TClass);
-            //def.AddOrExtendMethod("FieldAddress", ProcedureKind.Function).AddParameterGroup(//
-            //   "Name",
-            //    KnownTypeIds.ShortStringType, //
-            //    KnownTypeIds.GenericPointer)[0].ConstantParam = true;
-        }
-
-        */
-
         /// <summary>
         ///     cast one type to another type
         /// </summary>

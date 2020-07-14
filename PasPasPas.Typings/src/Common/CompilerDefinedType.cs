@@ -21,5 +21,9 @@ namespace PasPasPas.Typings.Common {
         ///     mangled type name
         /// </summary>
         public abstract string MangledName { get; }
+
+        public bool Equals(ITypeSymbol? other)
+            => other is CompilerDefinedType t &&
+                KnownNames.SameIdentifier(Name, t.Name);
     }
 }

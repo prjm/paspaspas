@@ -69,6 +69,10 @@ namespace PasPasPas.Typings.Structured {
         public override bool Equals(ITypeDefinition? other)
             => other is IUnitType u && KnownNames.SameIdentifier(u.Name, Name);
 
+        public bool Equals(ITypeSymbol? other)
+            => other is IUnitType u &&
+                KnownNames.SameIdentifier(Name, u.Name);
+
         /// <summary>
         ///     register a symbol
         /// </summary>

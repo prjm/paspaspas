@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.Dynamic {
@@ -41,5 +40,14 @@ namespace PasPasPas.Runtime.Values.Dynamic {
         public SymbolTypeKind SymbolKind
             => SymbolTypeKind.InvocationResult;
 
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ITypeSymbol? other)
+            => other is IIntrinsicInvocationResult r &&
+                Routine.Equals(r.Routine) &&
+                Parameters.Equals(r.Parameters);
     }
 }

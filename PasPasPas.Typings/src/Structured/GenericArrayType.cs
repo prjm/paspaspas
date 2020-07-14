@@ -62,5 +62,17 @@ namespace PasPasPas.Typings.Structured {
             var arrayType = typeCreator.CreateDynamicArrayType(typeIds[0], string.Empty, false);
             return arrayType;
         }
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ITypeSymbol? other)
+            => other is GenericArrayType g &&
+                KnownNames.SameIdentifier(Name, g.Name) &&
+                GenericParameters.Count == 1 &&
+                g.GenericParameters.Count == 1 &&
+                GenericParameters[0].Equals(g.GenericParameters[0]);
     }
 }

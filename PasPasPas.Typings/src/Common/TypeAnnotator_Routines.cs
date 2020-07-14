@@ -74,6 +74,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             var parameters = new Routine(method, element.Kind);
+            method.Items.Add(parameters);
             PushTypeToStack(method.TypeDefinition);
 
             //parameters.IsClassItem = f.IsClassItem();
