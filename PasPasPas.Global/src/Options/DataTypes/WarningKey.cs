@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 
 namespace PasPasPas.Globals.Options.DataTypes {
 
@@ -33,7 +32,7 @@ namespace PasPasPas.Globals.Options.DataTypes {
         /// </summary>
         /// <param name="obj">other object</param>
         /// <returns></returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object? obj) {
             if (obj is WarningKey other)
                 return string.Equals(WarningIdentifier, other.WarningIdentifier, StringComparison.OrdinalIgnoreCase);
             return false;
@@ -43,13 +42,8 @@ namespace PasPasPas.Globals.Options.DataTypes {
         ///     compute a hash code for this object
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode() {
-            var result = 17;
-            unchecked {
-                result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(WarningIdentifier);
-                return result;
-            }
-        }
+        public override int GetHashCode()
+            => StringComparer.OrdinalIgnoreCase.GetHashCode(WarningIdentifier);
 
     }
 }

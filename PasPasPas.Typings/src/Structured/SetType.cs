@@ -63,25 +63,41 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public IOrdinalType BaseTypeDefinition { get; }
 
+        public SymbolTypeKind SymbolKind => throw new NotImplementedException();
+
         public override bool Equals(ITypeDefinition? other)
             => other is ISetType s &&
+                KnownNames.SameIdentifier(Name, s.Name) &&
                 s.BaseTypeDefinition.Equals(BaseTypeDefinition);
 
-        /*
+        public bool Equals(ITypeSymbol? other)
+            => other is ISetType s &&
+                KnownNames.SameIdentifier(Name, s.Name) &&
+                s.BaseTypeDefinition.Equals(BaseTypeDefinition);
+
+
+        public override int GetHashCode() {
+            var hashCode = new HashCode();
+            hashCode.Add(Name, KnownNames.IdentifierComparer);
+            hashCode.Add(BaseTypeDefinition);
+            return hashCode.ToHashCode();
+        }
+
+
         /// <summary>
         ///     check if this type can be assigned from another type
         /// </summary>
         /// <param name="otherType"></param>
         /// <returns></returns>
-        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.SetType && otherType is SetType set) {
-                return BaseType.CanBeAssignedFrom(set.BaseType);
+            if (otherType.BaseType == BaseType.Set && otherType is ISetType set) {
+                return BaseTypeDefinition.CanBeAssignedFromType(set.BaseTypeDefinition);
             }
 
-            return base.CanBeAssignedFrom(otherType);
+            return base.CanBeAssignedFromType(otherType);
         }
-        */
+
 
     }
 }

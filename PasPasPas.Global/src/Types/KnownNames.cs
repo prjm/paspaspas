@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PasPasPas.Globals.Types {
 
@@ -307,6 +308,14 @@ namespace PasPasPas.Globals.Types {
         ///     pointer to a extended floating point value
         /// </summary>
         public const string PExtended = "PExtended";
+
+        /// <summary>
+        ///     compute a hash code for an identifier
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static int GetHashCodeForIdentifier(string name)
+            => StringComparer.OrdinalIgnoreCase.GetHashCode(name);
 
         /// <summary>
         ///     pointer to an ANSI char
@@ -764,5 +773,10 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         public const string GreaterThanOrEqual = ">=";
 
+        /// <summary>
+        ///     get an identifier comparer
+        /// </summary>
+        public static IEqualityComparer<string> IdentifierComparer
+            => StringComparer.OrdinalIgnoreCase;
     }
 }

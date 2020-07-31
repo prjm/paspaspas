@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -33,7 +32,7 @@ namespace PasPasPas.Typings.Operators {
             if (operand.IsConstant(out var constant))
                 return Runtime.MakePointerValue(constant);
 
-            return default;
+            return Invalid;
         }
     }
 
@@ -79,12 +78,10 @@ namespace PasPasPas.Typings.Operators {
                 return arrayType.Reference;
             }
 
-            var leftValue = input[0] as IArrayValue;
-            var rightValue = input[1] as IArrayValue;
             using (var list = TypeRegistry.ListPools.GetList<IValue>()) {
-                list.Item.AddRange(leftValue.Values);
-                list.Item.AddRange(rightValue.Values);
-                var indexType = typeCreator.CreateSubrangeType(string.Empty, SystemUnit.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(list.Item.Count - 1));
+                list.Item.AddRange(i0.Values);
+                list.Item.AddRange(i1.Values);
+                var indexType = typeCreator.CreateSubrangeType(SystemUnit.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(list.Item.Count - 1));
                 var arrayType = typeCreator.CreateStaticArrayType(baseType, string.Empty, indexType, false);
                 return TypeRegistry.Runtime.Structured.CreateArrayValue(arrayType, baseType, TypeRegistry.ListPools.GetFixedArray(list));
             }

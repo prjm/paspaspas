@@ -1,5 +1,4 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     array type
@@ -21,5 +20,9 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         ITypeDefinition BaseTypeDefinition { get; }
 
+        /// <summary>
+        ///     packed array
+        /// </summary>
+        bool Packed { get; }
     }
 }

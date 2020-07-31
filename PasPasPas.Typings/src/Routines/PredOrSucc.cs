@@ -135,8 +135,7 @@ namespace PasPasPas.Typings.Routines {
                         return types.Runtime.Chars.ToWideCharValue(parameter.TypeDefinition, unchecked((char)(charValue.AsWideChar - 1)));
 
                 if (parameter is IBooleanValue boolValue) {
-                    var mask = 1u << ((int)ordinalType.TypeSizeInBytes * 4 - 1);
-                    return types.Runtime.Booleans.ToBoolean(boolValue.TypeDefinition as IBooleanType, (boolValue.AsUint - 1u) & mask);
+                    return types.Runtime.Booleans.ToBoolean(boolValue.TypeDefinition as IBooleanType, boolValue.AsUint == uint.MinValue ? uint.MinValue : (boolValue.Kind == BooleanTypeKind.Boolean ? 0 : boolValue.AsUint - 1));
                 }
 
                 if (parameter is IEnumeratedValue enumValue)
@@ -156,8 +155,7 @@ namespace PasPasPas.Typings.Routines {
                         return types.Runtime.Chars.ToWideCharValue(parameter.TypeDefinition, unchecked((char)(1 + charValue.AsWideChar)));
 
                 if (parameter is IBooleanValue boolValue) {
-                    var mask = 1u << ((int)ordinalType.TypeSizeInBytes * 8 - 1);
-                    return types.Runtime.Booleans.ToBoolean(boolValue.TypeDefinition as IBooleanType, (1u + boolValue.AsUint) & mask);
+                    return types.Runtime.Booleans.ToBoolean(boolValue.TypeDefinition as IBooleanType, boolValue.AsUint == uint.MaxValue ? uint.MaxValue : boolValue.AsUint + 1);
                 }
 
                 if (parameter is IEnumeratedValue enumValue)

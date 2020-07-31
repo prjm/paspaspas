@@ -136,7 +136,7 @@ namespace PasPasPas.Typings.Common {
             var source = fromType.TypeDefinition.ResolveAlias();
             var target = toType.TypeDefinition.ResolveAlias();
 
-            if (fromType == toType)
+            if (source.Equals(target))
                 return Runtime.Types.MakeCastResult(fromType, toType.TypeDefinition);
 
             var sourceTypeKind = source.BaseType;
@@ -150,7 +150,7 @@ namespace PasPasPas.Typings.Common {
             if (sourceTypeKind == BaseType.Boolean)
                 return CastBooleanTo(fromType, target);
 
-            if (sourceTypeKind == BaseType.Structured && fromType is IStructuredType structType && structType.StructTypeKind == StructuredTypeKind.Record)
+            if (sourceTypeKind == BaseType.Structured && fromType.TypeDefinition is IStructuredType structType && structType.StructTypeKind == StructuredTypeKind.Record)
                 return CastRecordTo(fromType, target);
 
             return Runtime.Types.MakeCastResult(fromType, SystemUnit.ErrorType);

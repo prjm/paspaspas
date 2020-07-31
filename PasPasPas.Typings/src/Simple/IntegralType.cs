@@ -126,28 +126,23 @@ namespace PasPasPas.Typings.Simple {
             }
         }
 
-        /*
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>
         /// <returns></returns>
-        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.IntegerType)
+            if (otherType.BaseType == BaseType.Integer)
                 return true;
 
-            if (otherType.TypeKind == CommonTypeKind.Int64Type)
-                return true;
-
-            if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType subrange) {
-                var subrangeBase = subrange.BaseType;
-                return subrangeBase.TypeKind == CommonTypeKind.IntegerType || subrangeBase.TypeKind == CommonTypeKind.Int64Type;
+            if (otherType.BaseType == BaseType.Subrange && otherType is ISubrangeType subrange) {
+                var subrangeBase = subrange.SubrangeOfType;
+                return subrangeBase.BaseType == BaseType.Integer;
             }
 
-            return base.CanBeAssignedFrom(otherType);
+            return base.CanBeAssignedFromType(otherType);
         }
-        */
 
         /// <summary>
         ///     get the long type name
@@ -204,5 +199,8 @@ namespace PasPasPas.Typings.Simple {
 
         public override bool Equals(ITypeDefinition? other)
             => other is IIntegralType i && i.Kind == Kind;
+
+        public override int GetHashCode()
+            => HashCode.Combine(Kind);
     }
 }

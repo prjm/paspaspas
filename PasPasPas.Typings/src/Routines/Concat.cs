@@ -1,5 +1,4 @@
-﻿#nullable disable
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
@@ -65,7 +64,7 @@ namespace PasPasPas.Typings.Routines {
             if (signature.Count < 1)
                 return Strings.Invalid;
 
-            var result = signature[0] as IValue;
+            var result = Runtime.Strings.EmptyString;
 
             if (result is ISubrangeValue subrange)
                 result = subrange.WrappedValue;
@@ -75,8 +74,8 @@ namespace PasPasPas.Typings.Routines {
                 if (parameter.HasTextType())
                     result = Strings.Concat(result, parameter as IValue);
 
-                else if (parameter is ISubrangeValue subrangeValue)
-                    result = Strings.Concat(result, subrangeValue.WrappedValue);
+                else if (parameter is ISubrangeValue subrangeValue && subrangeValue.WrappedValue.HasTextType())
+                    result = Strings.Concat(result, subrangeValue);
 
                 else
                     return Strings.Invalid;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
@@ -72,6 +73,76 @@ namespace PasPasPasTests.Common {
             => MakeRuntime().Integers.ToScaledIntegerValue(number);
 
         /// <summary>
+        ///     convert a value
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        protected static IValue GetByteValue(byte number)
+            => MakeRuntime().Integers.ToIntegerValue(number);
+
+        /// <summary>
+        ///     get a short int value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static IValue GetShortIntValue(sbyte value)
+            => MakeRuntime().Integers.ToIntegerValue(value);
+
+        /// <summary>
+        ///     get a small int value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static IValue GetSmallIntValue(short value)
+            => MakeRuntime().Integers.ToIntegerValue(value);
+
+
+        /// <summary>
+        ///     get a word value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static IValue GetWordValue(ushort value)
+            => MakeRuntime().Integers.ToIntegerValue(value);
+
+
+        /// <summary>
+        ///     get a cardinal value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static IValue GetCardinalValue(uint value)
+            => MakeRuntime().Integers.ToIntegerValue(value);
+
+        /// <summary>
+        ///     get a small int value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static IValue GetIntValue(int value)
+            => MakeRuntime().Integers.ToIntegerValue(value);
+
+        /// <summary>
+        ///     get a int63 value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static IValue GetInt64Value(long value)
+            => MakeRuntime().Integers.ToIntegerValue(value);
+
+
+
+        /// <summary>
+        ///     get a uint64 value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static IValue GetUInt64Value(ulong value)
+            => MakeRuntime().Integers.ToIntegerValue(value);
+
+
+
+        /// <summary>
         ///     create a invocation value
         /// </summary>
         /// <param name="resultType"></param>
@@ -94,7 +165,7 @@ namespace PasPasPasTests.Common {
             var e = CreateEnvironment();
             var rg = e.TypeRegistry.SystemUnit.Symbols.Where(t => t is IRoutineGroup x && x.RoutineId == id).FirstOrDefault(); ;
             var _ = CreateEnvironment().Runtime.Types.MakeSignature(result.Reference, param.Reference);
-            return MakeRuntime().Types.MakeInvocationResultFromIntrinsic(rg as IRoutineGroup, _);
+            return MakeRuntime().Types.MakeInvocationResultFromIntrinsic(rg as IRoutineGroup ?? throw new InvalidOperationException(), _);
         }
 
         /// <summary>
@@ -110,6 +181,13 @@ namespace PasPasPasTests.Common {
         /// <returns></returns>
         protected static IValue GetErrorValue()
             => MakeRuntime().Strings.Invalid;
+
+        /// <summary>
+        ///     get an invalid cast value
+        /// </summary>
+        /// <returns></returns>
+        protected static IValue GetInvalidCastValue()
+            => MakeRuntime().InvalidCast;
 
         /// <summary>
         ///     get some enumeration values
@@ -148,7 +226,7 @@ namespace PasPasPasTests.Common {
         protected static IValue GetSubrangeValue(IValue lowerBound, IValue upperBound, IValue value) {
             var e = CreateEnvironment();
             var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
-            var t = tc.CreateSubrangeType(string.Empty, e.TypeRegistry.SystemUnit.SmallIntType, lowerBound, upperBound);
+            var t = tc.CreateSubrangeType(e.TypeRegistry.SystemUnit.SmallIntType, lowerBound, upperBound);
             return e.Runtime.Types.MakeSubrangeValue(t, value);
         }
 
@@ -302,6 +380,17 @@ namespace PasPasPasTests.Common {
                 MakeRuntime().Booleans.FalseValue;
 
         /// <summary>
+        ///     get a boolean value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static IValue GetBooleanValue(byte value) {
+            var e = CreateEnvironment();
+            var bb = e.TypeRegistry.SystemUnit.ByteBoolType;
+            return e.Runtime.Booleans.ToByteBool(value, bb);
+        }
+
+        /// <summary>
         ///     get a byte sized boolean value
         /// </summary>
         /// <param name="value"></param>
@@ -343,6 +432,11 @@ namespace PasPasPasTests.Common {
         protected static IValue GetRecordValue(ITypeDefinition typeId, params IValue[] values)
             => MakeRuntime().Structured.CreateRecordValue(typeId, values.ToImmutableArray());
 
+        /// <summary>
+        ///     get a record value
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         protected static IValue GetRecordValue(params (string, IValue)[] values) {
             var e = CreateEnvironment();
             var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);

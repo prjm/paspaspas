@@ -24,7 +24,7 @@ namespace PasPasPas.Globals.Types {
         /// <param name="upperBound">upper bound</param>
         /// <param name="name">type name</param>
         /// <returns></returns>
-        ISubrangeType CreateSubrangeType(string name, IOrdinalType baseType, IValue lowerBound, IValue upperBound);
+        ISubrangeType CreateSubrangeType(IOrdinalType baseType, IValue lowerBound, IValue upperBound);
 
         /// <summary>
         ///     create a new aliased type

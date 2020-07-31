@@ -257,23 +257,14 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="typeDef"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IBooleanValue ToBoolean(IBooleanType typeDef, uint value) {
-            switch (typeDef.Kind) {
-
-                case BooleanTypeKind.Boolean:
-                    return ToBoolean(value != 0u);
-
-                case BooleanTypeKind.ByteBool:
-                    return ToByteBool((byte)value, typeDef);
-
-                case BooleanTypeKind.WordBool:
-                    return ToWordBool((ushort)value, typeDef);
-
-                case BooleanTypeKind.LongBool:
-                    return ToLongBool(value, typeDef);
-            }
-
-            throw new ArgumentOutOfRangeException(nameof(typeDef));
-        }
+        public IBooleanValue ToBoolean(IBooleanType typeDef, uint value)
+            => typeDef.Kind switch
+            {
+                BooleanTypeKind.Boolean => ToBoolean(value != 0u),
+                BooleanTypeKind.ByteBool => ToByteBool((byte)Math.Min(value, byte.MaxValue), typeDef),
+                BooleanTypeKind.WordBool => ToWordBool((ushort)Math.Min(value, ushort.MaxValue), typeDef),
+                BooleanTypeKind.LongBool => ToLongBool(value, typeDef),
+                _ => throw new ArgumentOutOfRangeException(nameof(typeDef)),
+            };
     }
 }

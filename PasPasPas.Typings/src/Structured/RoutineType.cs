@@ -71,5 +71,9 @@ namespace PasPasPas.Typings.Structured {
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
             => other is IRoutineType;
+
+        public override int GetHashCode()
+            => 0;
+
     }
 }

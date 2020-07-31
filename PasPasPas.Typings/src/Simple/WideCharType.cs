@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -51,22 +52,21 @@ namespace PasPasPas.Typings.Simple {
         public CharTypeKind Kind
             => CharTypeKind.WideChar;
 
-        /*
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>
         /// <returns></returns>
-        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType subrange) {
-                var subrangeBase = subrange.BaseType;
-                return subrangeBase.TypeKind == CommonTypeKind.WideCharType;
+            if (otherType.BaseType == BaseType.Subrange && otherType is ISubrangeType subrange) {
+                var subrangeBase = subrange.SubrangeOfType;
+                return subrangeBase.BaseType == BaseType.Char;
             }
 
-            return base.CanBeAssignedFrom(otherType);
+            return base.CanBeAssignedFromType(otherType);
         }
-        */
+
 
         /// <summary>
         ///     long type name
@@ -83,5 +83,12 @@ namespace PasPasPas.Typings.Simple {
         public override bool Equals(ITypeDefinition? other)
             => other is ICharType c && c.Kind == Kind &&
                 KnownNames.SameIdentifier(Name, c.Name);
+
+        public override int GetHashCode() {
+            var hashCode = new HashCode();
+            hashCode.Add(Name, KnownNames.IdentifierComparer);
+            hashCode.Add(Kind);
+            return hashCode.ToHashCode();
+        }
     }
 }

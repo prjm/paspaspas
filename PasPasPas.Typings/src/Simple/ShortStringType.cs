@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Simple {
     /// <summary>
@@ -48,6 +49,13 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override string MangledName
             => $"System@%SmallString$uc$i{Size}$%";
+
+        public override bool Equals(ITypeDefinition? other)
+            => base.Equals(other) && other is IShortStringType s && s.Size == Size;
+
+        public override int GetHashCode()
+            => HashCode.Combine(base.GetHashCode(), Size);
+
     }
 
 

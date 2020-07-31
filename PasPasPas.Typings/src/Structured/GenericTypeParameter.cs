@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
@@ -43,5 +44,9 @@ namespace PasPasPas.Typings.Structured {
 
         public override bool Equals(ITypeDefinition? other)
             => other is GenericTypeParameter p && KnownNames.SameIdentifier(p.Name, Name);
+
+
+        public override int GetHashCode()
+            => StringComparer.OrdinalIgnoreCase.GetHashCode(Name);
     }
 }

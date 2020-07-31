@@ -166,11 +166,10 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="baseType"></param>
         /// <param name="lowerBound"></param>
-        /// <param name="upperBound"></param>
-        /// <param name="name"></param>
+        /// <param name="upperBound"></param
         /// <returns>new subrange type</returns>
-        public ISubrangeType CreateSubrangeType(string name, IOrdinalType baseType, IValue lowerBound, IValue upperBound) {
-            var result = new SubrangeType(DefiningUnit, name, baseType, lowerBound, upperBound);
+        public ISubrangeType CreateSubrangeType(IOrdinalType baseType, IValue lowerBound, IValue upperBound) {
+            var result = new SubrangeType(DefiningUnit, baseType, lowerBound, upperBound);
             return result;
         }
 

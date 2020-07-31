@@ -83,10 +83,10 @@ namespace PasPasPas.Runtime.Values {
             if (ReferenceEquals(obj, this))
                 return true;
 
-            if (obj is null)
-                return false;
+            if (obj is IValue value)
+                return Equals(value);
 
-            return Equals(this);
+            return false;
         }
 
         /// <summary>
@@ -94,6 +94,13 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <returns></returns>
         public abstract override int GetHashCode();
+
+        /// <summary>
+        ///     value of this constant
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => GetValueString();
 
         public bool Equals(ITypeSymbol? other)
             => Equals(other as IValue);

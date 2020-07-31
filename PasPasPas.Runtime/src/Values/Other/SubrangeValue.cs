@@ -22,7 +22,9 @@ namespace PasPasPas.Runtime.Values.Other {
         public IValue WrappedValue { get; }
 
         public override bool Equals(IValue? other)
-            => other is SubrangeValue s && s.TypeDefinition.Equals(TypeDefinition) && s.WrappedValue.Equals(WrappedValue);
+            => other is SubrangeValue s &&
+            s.TypeDefinition.Equals(TypeDefinition) &&
+            s.WrappedValue.Equals(WrappedValue);
 
         /// <summary>
         ///     compute a hash code

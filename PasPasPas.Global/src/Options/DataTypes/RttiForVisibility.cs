@@ -1,8 +1,9 @@
-﻿#nullable disable
+﻿using System;
+
 namespace PasPasPas.Globals.Options.DataTypes {
 
     /// <summary>
-    ///     rtti flag based on item visibility
+    ///     <c>rtti</c> flag based on item visibility
     /// </summary>
     public class RttiForVisibility {
 
@@ -42,12 +43,12 @@ namespace PasPasPas.Globals.Options.DataTypes {
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj == null || GetType() != obj.GetType()) {
+        public override bool Equals(object? obj) {
+            if (obj is null)
                 return false;
-            }
 
-            var other = (RttiForVisibility)obj;
+            if (!(obj is RttiForVisibility other))
+                return false;
 
             return
                 other.ForPrivate == ForPrivate &&
@@ -70,16 +71,8 @@ namespace PasPasPas.Globals.Options.DataTypes {
         ///     compute hash code
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode() {
-            var result = 17;
-            unchecked {
-                result = result * 31 + ForPrivate.GetHashCode();
-                result = result * 31 + ForProtected.GetHashCode();
-                result = result * 31 + ForPublic.GetHashCode();
-                result = result * 31 + ForPublished.GetHashCode();
-                return result;
-            }
-        }
+        public override int GetHashCode()
+            => HashCode.Combine(ForPrivate, ForProtected, ForPublic, ForPublished);
 
         /// <summary>
         ///

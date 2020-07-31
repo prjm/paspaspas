@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System;
+using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -62,6 +63,9 @@ namespace PasPasPas.Typings.Simple {
             => other is IPointerType p &&
             ((BaseNameSymbol is null && p.BaseNameSymbol is null) ||
             (!(BaseNameSymbol is null) && BaseNameSymbol.Equals(p.BaseNameSymbol)));
+
+        public override int GetHashCode()
+            => HashCode.Combine(BaseNameSymbol);
 
     }
 }

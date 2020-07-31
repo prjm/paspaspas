@@ -39,7 +39,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(IValue? other)
-            => other is BooleanValue b && b.Value == Value;
+            => other is IBooleanValue b &&
+                b.Kind == Kind &&
+                b.AsUint == AsUint;
 
         /// <summary>
         ///     compute a hash code

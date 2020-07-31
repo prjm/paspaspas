@@ -165,7 +165,7 @@ namespace PasPasPas.Typings.Common {
                 var leftTypeDef = leftField.TypeDefinition;
                 var rightTypeDef = rightField.TypeDefinition;
 
-                if (!leftTypeDef.CanBeAssignedFromType(rightTypeDef))
+                if (!rightTypeDef.CanBeAssignedFromType(leftTypeDef))
                     return false;
             }
 
@@ -426,13 +426,13 @@ namespace PasPasPas.Typings.Common {
                 if (baseType.IsErrorType())
                     return baseType;
 
-                var typeDef = typeCreator.CreateSubrangeType(string.Empty, baseType as IOrdinalType, lowerBound as IValue, upperBound as IValue);
+                var typeDef = typeCreator.CreateSubrangeType(baseType as IOrdinalType, lowerBound as IValue, upperBound as IValue);
                 return typeDef;
             }
 
             if (lowerBound.TypeDefinition.Equals(upperBound.TypeDefinition)) {
                 var baseType = upperBound.TypeDefinition as IOrdinalType;
-                var typeDef = typeCreator.CreateSubrangeType(string.Empty, baseType, lowerBound as IValue, upperBound as IValue);
+                var typeDef = typeCreator.CreateSubrangeType(baseType, lowerBound as IValue, upperBound as IValue);
                 return typeDef;
             }
 

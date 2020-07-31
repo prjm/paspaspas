@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -66,12 +67,20 @@ namespace PasPasPas.Typings.Structured {
         public override bool CanBeAssignedFromType(ITypeDefinition otherType)
             => false;
 
+
+
         public override bool Equals(ITypeDefinition? other)
             => other is IUnitType u && KnownNames.SameIdentifier(u.Name, Name);
 
         public bool Equals(ITypeSymbol? other)
             => other is IUnitType u &&
                 KnownNames.SameIdentifier(Name, u.Name);
+
+        public override int GetHashCode() {
+            var hashCode = new HashCode();
+            hashCode.Add(Name, KnownNames.IdentifierComparer);
+            return hashCode.ToHashCode();
+        }
 
         /// <summary>
         ///     register a symbol

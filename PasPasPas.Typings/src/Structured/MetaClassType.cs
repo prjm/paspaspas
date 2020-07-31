@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System;
+using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -46,6 +47,9 @@ namespace PasPasPas.Typings.Structured {
 
         public override bool Equals(ITypeDefinition? other)
             => other is IMetaType m && m.BaseTypeDefinition.Equals(BaseTypeDefinition);
+
+        public override int GetHashCode()
+            => HashCode.Combine(BaseTypeDefinition);
 
     }
 }

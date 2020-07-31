@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Simple {
 
@@ -62,6 +63,15 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         internal static string GetMangledName(ushort codePage)
             => $"%AnsiStringT$us$i{codePage}$%";
+
+
+        public override bool Equals(ITypeDefinition? other)
+            => base.Equals(other) &&
+            other is IAnsiStringType s &&
+            s.WithCodePage == WithCodePage;
+
+        public override int GetHashCode()
+            => HashCode.Combine(base.GetHashCode(), WithCodePage);
     }
 
 

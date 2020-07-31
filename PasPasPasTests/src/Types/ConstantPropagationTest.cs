@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
 using SharpFloat.FloatingPoint;
 
@@ -10,7 +11,7 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class ConstantPropagationTest : TypeTest {
 
-        private ISystemUnit KnownTypeIds
+        private ISystemUnit SystemUnit
             => CreateEnvironment().TypeRegistry.SystemUnit;
 
         /// <summary>
@@ -51,7 +52,10 @@ namespace PasPasPasTests.Types {
             var e = CreateEnvironment();
             var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
             var et = tc.CreateEnumType("e");
-            var st = tc.CreateSubrangeType("e", e.TypeRegistry.SystemUnit.IntegerType, GetIntegerValue((sbyte)-4), GetIntegerValue((sbyte)8)); ;
+            var st = tc.CreateSubrangeType(e.TypeRegistry.SystemUnit.ShortIntType, GetIntegerValue((sbyte)-4), GetIntegerValue((sbyte)8));
+            var st2 = tc.CreateSubrangeType(e.TypeRegistry.SystemUnit.ShortIntType, GetIntegerValue((sbyte)-4), GetIntegerValue((sbyte)4));
+            var st3 = tc.CreateSubrangeType(e.TypeRegistry.SystemUnit.ShortIntType, GetIntegerValue((sbyte)1), GetIntegerValue((sbyte)9));
+
             IValue sv(int x)
                 => e.Runtime.Types.MakeSubrangeValue(st, e.Runtime.Integers.ToScaledIntegerValue(x));
 
@@ -60,18 +64,18 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Abs(-3)", GetIntegerValue(3));
             AssertExprValue("Abs(a)", sv(5), "type Ta=-4..8; const a: Ta = 5;");
             AssertExprValue("Abs(a)", sv(0), "type Ta=-4..8; const a: Ta = 0;");
-            AssertExprValue("Abs(a)", sv(-3), "type Ta=-4..8; const a: Ta = -3;");
-            AssertExprValue("Abs(a)", GetInvocationValue(IntrinsicRoutineId.Abs, KnownTypeIds.IntegerType, KnownTypeIds.IntegerType), "var a: integer;", isConstant: false);
-            AssertExprValue("Abs(-a)", GetInvocationValue(IntrinsicRoutineId.Abs, st, st), "type Ta = -4..4; var a: Ta;", isConstant: false);
-            AssertExprValue("Abs(a)", GetInvocationValue(IntrinsicRoutineId.Abs, KnownTypeIds.IntegerType, st), "type Ta = -4..4; var a: Ta;", isConstant: false);
-            AssertExprValue("Abs(-a)", GetInvocationValue(IntrinsicRoutineId.Abs, KnownTypeIds.IntegerType, st), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(a)", sv(3), "type Ta=-4..8; const a: Ta = -3;");
+            AssertExprValue("Abs(a)", GetInvocationValue(IntrinsicRoutineId.Abs, SystemUnit.IntegerType, SystemUnit.IntegerType), "var a: integer;", isConstant: false);
+            AssertExprValue("Abs(-a)", GetInvocationValue(IntrinsicRoutineId.Abs, st2, st2), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(a)", GetInvocationValue(IntrinsicRoutineId.Abs, st2, st2), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(-a)", GetInvocationValue(IntrinsicRoutineId.Abs, st2, st2), "type Ta = -4..4; var a: Ta;", isConstant: false);
 
 
             AssertExprValue("Abs(5.4)", GetExtendedValue("5.4"));
             AssertExprValue("Abs(0.0)", GetExtendedValue(0));
             AssertExprValue("Abs(-3.3)", GetExtendedValue("3.3"));
 
-            AssertExprValue("Abs(a)", GetSubrangeValue(st, GetIntegerValue(3)), "type Ta = 1..9; const a: Ta = 3;");
+            AssertExprValue("Abs(a)", GetSubrangeValue(st3, GetIntegerValue(3)), "type Ta = 1..9; const a: Ta = 3;");
         }
 
 
@@ -92,12 +96,12 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestHi() {
-            AssertExprValue("Hi($FF)", GetIntegerValue(0x00));
-            AssertExprValue("Hi($FFFF)", GetIntegerValue(0xff));
-            AssertExprValue("Hi($FFFFFF)", GetIntegerValue(0xff));
+            AssertExprValue("Hi($FF)", GetByteValue(0x00));
+            AssertExprValue("Hi($FFFF)", GetByteValue(0xff));
+            AssertExprValue("Hi($FFFFFF)", GetByteValue(0xff));
 
-            AssertExprValue("Hi(a)", GetIntegerValue(0xf0), "type ta = 3..$FFFF; const a: ta = $F0FF;");
-            AssertExprValue("Hi(a)", GetInvocationValue(IntrinsicRoutineId.Hi, KnownTypeIds.ByteType, KnownTypeIds.IntegerType), "type ta = 3..$FFFF; var a: ta;", isConstant: false);
+            AssertExprValue("Hi(a)", GetByteValue(0xf0), "type ta = 3..$FFFF; const a: ta = $F0FF;");
+            AssertExprValue("Hi(a)", GetInvocationValue(IntrinsicRoutineId.Hi, SystemUnit.ByteType, SystemUnit.IntegerType), "type ta = 3..$FFFF; var a: ta;", isConstant: false);
         }
 
         /// <summary>
@@ -146,7 +150,7 @@ namespace PasPasPasTests.Types {
 
             AssertExprValue("Length(a)", GetIntegerValue(3), "const a = (1,2,3);");
             AssertExprValue("Length(a)", GetIntegerValue(1), "type Ta = 'a'..'c'; const a: Ta = 'a';");
-            AssertExprValue("Length(a)", GetInvocationValue(IntrinsicRoutineId.Length, KnownTypeIds.IntegerType, KnownTypeIds.IntegerType), "type Ta = 'a'..'c'; var a: Ta;", isConstant: false);
+            AssertExprValue("Length(a)", GetInvocationValue(IntrinsicRoutineId.Length, SystemUnit.IntegerType, SystemUnit.IntegerType), "type Ta = 'a'..'c'; var a: Ta;", isConstant: false);
         }
 
         /// <summary>
@@ -155,10 +159,10 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestLo() {
             AssertExprValue("Lo($FF)", GetIntegerValue(0xff));
-            AssertExprValue("Lo($FF00)", GetIntegerValue(0x00));
-            AssertExprValue("Lo($FFFF0F)", GetIntegerValue(0x0f));
+            AssertExprValue("Lo($FF00)", GetByteValue(0x00));
+            AssertExprValue("Lo($FFFF0F)", GetByteValue(0x0f));
 
-            AssertExprValue("Lo(a)", GetIntegerValue(0x0f), "type ta = 3..$FFFF; const a: ta = $F00F;");
+            AssertExprValue("Lo(a)", GetByteValue(0x0f), "type ta = 3..$FFFF; const a: ta = $F00F;");
         }
 
         /// <summary>
@@ -175,13 +179,13 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Low(AnsiChar)", GetAnsiCharValue(byte.MinValue));
             AssertExprValue("Low(WideChar)", GetWideCharValue(char.MinValue));
             AssertExprValue("Low(ShortInt)", GetIntegerValue(sbyte.MinValue));
-            AssertExprValue("Low(Byte)", GetIntegerValue(byte.MinValue));
-            AssertExprValue("Low(SmallInt)", GetIntegerValue(short.MinValue));
-            AssertExprValue("Low(Word)", GetIntegerValue(ushort.MinValue));
-            AssertExprValue("Low(Integer)", GetIntegerValue(int.MinValue));
-            AssertExprValue("Low(Cardinal)", GetIntegerValue(uint.MinValue));
-            AssertExprValue("Low(Int64)", GetIntegerValue(long.MinValue));
-            AssertExprValue("Low(UInt64)", GetIntegerValue(ulong.MinValue));
+            AssertExprValue("Low(Byte)", GetByteValue(byte.MinValue));
+            AssertExprValue("Low(SmallInt)", GetSmallIntValue(short.MinValue));
+            AssertExprValue("Low(Word)", GetWordValue(ushort.MinValue));
+            AssertExprValue("Low(Integer)", GetIntValue(int.MinValue));
+            AssertExprValue("Low(Cardinal)", GetCardinalValue(uint.MinValue));
+            AssertExprValue("Low(Int64)", GetInt64Value(long.MinValue));
+            AssertExprValue("Low(UInt64)", GetUInt64Value(ulong.MinValue));
 
             // short string types
             AssertExprValue("Low(string[20])", GetIntegerValue(1));
@@ -203,8 +207,8 @@ namespace PasPasPasTests.Types {
         public void TestOdd() {
             AssertExprValue("Odd(-3)", GetBooleanValue(true));
             AssertExprValue("Odd(4)", GetBooleanValue(false));
-            AssertExprValue("Odd(a)", GetInvocationValue(IntrinsicRoutineId.Odd, KnownTypeIds.BooleanType, KnownTypeIds.ShortIntType), "var a: ShortInt;", isConstant: false);
-            AssertExprValue("Odd(a)", GetInvocationValue(KnownTypeIds.BooleanType, KnownTypeIds.ShortIntType), "type Ta = -3..3; var a: Ta;", isConstant: false);
+            AssertExprValue("Odd(a)", GetInvocationValue(IntrinsicRoutineId.Odd, SystemUnit.BooleanType, SystemUnit.ShortIntType), "var a: ShortInt;", isConstant: false);
+            AssertExprValue("Odd(a)", GetInvocationValue(SystemUnit.BooleanType, SystemUnit.ShortIntType), "type Ta = -3..3; var a: Ta;", isConstant: false);
         }
 
         /// <summary>
@@ -231,16 +235,16 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Ord(a)", GetIntegerValue(116), "type Ta = 's'..'z'; const a: Ta = 't';");
             AssertExprValue("Ord(a)", GetIntegerValue(1), "type Ta = (xa, xb, cx); Tb = xa..xb; const a: Tb = xb;");
 
-            AssertExprValue("Ord(a)", GetInvocationValue(IntrinsicRoutineId.Ord, KnownTypeIds.WordType, KnownTypeIds.WideCharType), "var a: WideChar;", isConstant: false);
-            AssertExprValue("Ord(a)", GetInvocationValue(IntrinsicRoutineId.Ord, KnownTypeIds.ByteType, KnownTypeIds.AnsiCharType), "var a: AnsiChar;", isConstant: false);
+            AssertExprValue("Ord(a)", GetInvocationValue(IntrinsicRoutineId.Ord, SystemUnit.WordType, SystemUnit.WideCharType), "var a: WideChar;", isConstant: false);
+            AssertExprValue("Ord(a)", GetInvocationValue(IntrinsicRoutineId.Ord, SystemUnit.ByteType, SystemUnit.AnsiCharType), "var a: AnsiChar;", isConstant: false);
 
-            AssertExprValue("Ord(q)", GetInvocationValue(IntrinsicRoutineId.Ord, KnownTypeIds.ShortIntType, KnownTypeIds.ShortIntType), "var q: ShortInt;", isConstant: false);
-            AssertExprValue("Ord(q)", GetInvocationValue(IntrinsicRoutineId.Ord, KnownTypeIds.ByteType, KnownTypeIds.BooleanType), "var q: Boolean;", isConstant: false);
+            AssertExprValue("Ord(q)", GetInvocationValue(IntrinsicRoutineId.Ord, SystemUnit.ShortIntType, SystemUnit.ShortIntType), "var q: ShortInt;", isConstant: false);
+            AssertExprValue("Ord(q)", GetInvocationValue(IntrinsicRoutineId.Ord, SystemUnit.ByteType, SystemUnit.BooleanType), "var q: Boolean;", isConstant: false);
 
             var e = CreateEnvironment();
             var ct = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
             var et = ct.CreateEnumType("Ta");
-            AssertExprValue("Ord(q)", GetInvocationValue(IntrinsicRoutineId.Ord, KnownTypeIds.ShortIntType, et), "type Ta = (xc,xb,xa); var q: Ta;", isConstant: false);
+            AssertExprValue("Ord(q)", GetInvocationValue(IntrinsicRoutineId.Ord, SystemUnit.ShortIntType, et), "type Ta = (xc,xb,xa); var q: Ta;", isConstant: false);
         }
 
         /// <summary>
@@ -250,8 +254,8 @@ namespace PasPasPasTests.Types {
         public void TestMulDiv64() {
             AssertExprValue("MulDivInt64(10, 4, 2)", GetIntegerValue(20));
             AssertExprValue("MulDivInt64(-10, 4, 2)", GetIntegerValue(-20));
-            AssertExprValue("MulDivInt64(a, 4, 2)", GetInvocationValue(IntrinsicRoutineId.MulDiv64, KnownTypeIds.Int64Type, KnownTypeIds.Int64Type), "var a: byte;", isConstant: false);
-            AssertExprValue("MulDivInt64(a, 4, 2)", GetInvocationValue(IntrinsicRoutineId.MulDiv64, KnownTypeIds.Int64Type, KnownTypeIds.Int64Type), "type Ta = 3..8; var a: Ta;", isConstant: false);
+            AssertExprValue("MulDivInt64(a, 4, 2)", GetInvocationValue(IntrinsicRoutineId.MulDiv64, SystemUnit.Int64Type, SystemUnit.Int64Type), "var a: byte;", isConstant: false);
+            AssertExprValue("MulDivInt64(a, 4, 2)", GetInvocationValue(IntrinsicRoutineId.MulDiv64, SystemUnit.Int64Type, SystemUnit.Int64Type), "type Ta = 3..8; var a: Ta;", isConstant: false);
         }
 
         /// <summary>
@@ -276,12 +280,16 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Concat(a, a, a)", GetUnicodeStringValue("aaa"), "type Ta = 'a'..'b'; const a: Ta = 'a';");
             AssertExprValue("Concat(a)", GetWideCharValue('a'), "type Ta = 'a'..'b'; const a: Ta = 'a';");
 
-            AssertExprValue("Concat(a, a, a)", GetInvocationValue(IntrinsicRoutineId.Concat, KnownTypeIds.UnicodeStringType, KnownTypeIds.WideCharType), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
-            AssertExprValue("Concat(a)", GetInvocationValue(IntrinsicRoutineId.Concat, KnownTypeIds.WideCharType, KnownTypeIds.WideCharType), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
+            var e = CreateEnvironment();
+            var ct = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
+            var sr = ct.CreateSubrangeType(SystemUnit.WideCharType, GetWideCharValue('a'), GetWideCharValue('b'));
+
+            AssertExprValue("Concat(a, a, a)", GetInvocationValue(IntrinsicRoutineId.Concat, SystemUnit.UnicodeStringType, SystemUnit.WideCharType), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
+            AssertExprValue("Concat(a)", GetInvocationValue(IntrinsicRoutineId.Concat, sr, sr), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
         }
 
         /// <summary>
-        ///     test pred operator
+        ///     test <c>pred</c> operator
         /// </summary>
         [TestMethod]
         public void TestPred() {
@@ -296,7 +304,7 @@ namespace PasPasPasTests.Types {
 
             // booleans
             AssertExprValue("Pred(true)", GetBooleanValue(false));
-            AssertExprValue("Pred(false)", GetBooleanValue(true));
+            AssertExprValue("Pred(false)", GetBooleanValue(false));
 
             // enumerations
             AssertExprValue("Pred(b)", GetIntegerValue(0), "type Te = (a,b);");
@@ -304,7 +312,7 @@ namespace PasPasPasTests.Types {
             // subrange types
             var e = CreateEnvironment();
             var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
-            var st = tc.CreateSubrangeType("Te", KnownTypeIds.IntegerType, GetIntegerValue(-3), GetIntegerValue(3));
+            var st = tc.CreateSubrangeType(SystemUnit.ShortIntType, GetIntegerValue(-3), GetIntegerValue(3));
             AssertExprValue("Pred(a)", GetSubrangeValue(st, GetIntegerValue(-3)), "type Te = -3..3; const a: Te = -2;");
         }
 
@@ -313,7 +321,7 @@ namespace PasPasPasTests.Types {
         /// </summary>
         [TestMethod]
         public void TestPtr()
-            => AssertExprValue("Ptr(4)", GetPointerValue(GetIntegerValue(4)));
+            => AssertExprValue("Ptr(4)", GetPointerValue(GetIntValue(4)));
 
         /// <summary>
         ///     test round function
@@ -341,7 +349,7 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
-        ///     test succ function
+        ///     test <c>succ</c> function
         /// </summary>
         [TestMethod]
         public void TestSucc() {
@@ -355,8 +363,10 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Succ('b')", GetWideCharValue('c'));
 
             // booleans
-            AssertExprValue("Succ(true)", GetBooleanValue(false));
+            AssertExprValue("Succ(true)", GetBooleanValue(true));
             AssertExprValue("Succ(false)", GetBooleanValue(true));
+            AssertExprValue("Succ(ByteBool(false))", GetBooleanValue(1));
+            AssertExprValue("Succ(ByteBool(true))", GetBooleanValue(0xff));
 
             // enumerations
             AssertExprValue("Succ(a)", GetIntegerValue(1), "type Te = (a,b);");
@@ -364,7 +374,7 @@ namespace PasPasPasTests.Types {
             // subrange types
             var e = CreateEnvironment();
             var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
-            var st = tc.CreateSubrangeType("Te", KnownTypeIds.IntegerType, GetIntegerValue(-3), GetIntegerValue(3));
+            var st = tc.CreateSubrangeType(SystemUnit.ShortIntType, GetIntegerValue(-3), GetIntegerValue(3));
             var sv = e.Runtime.Types.MakeSubrangeValue(st, GetIntegerValue(-1));
             AssertExprValue("Succ(a)", sv, "type Te = -3..3; const a: Te = -2;");
         }
@@ -509,13 +519,18 @@ namespace PasPasPasTests.Types {
         public void TestSetConstants() {
             var e = CreateEnvironment();
             var ct = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
-            var sr = ct.CreateSubrangeType("tA", KnownTypeIds.IntegerType, GetIntegerValue(1), GetIntegerValue(5));
-            var st = ct.CreateSetType(sr, "tb");
-            var v1 = GetSubrangeValue(sr, GetIntegerValue(1));
-            var v2 = GetSubrangeValue(sr, GetIntegerValue(2));
-            var v3 = GetSubrangeValue(sr, GetIntegerValue(3));
-            AssertExprValue("b", GetSetValue(sr, v1, v3), "type Ta = 1..5; Tb = set of Ta; const b : Tb = [1,3];");
-            AssertExprValue("b", GetSetValue(sr, v1, v2, v3), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];");
+            var sr1 = ct.CreateSubrangeType(SystemUnit.ShortIntType, GetIntegerValue(1), GetIntegerValue(5));
+            var sr2 = ct.CreateSubrangeType(SystemUnit.ShortIntType, GetIntegerValue(1), GetIntegerValue(3));
+            var st1 = ct.CreateSetType(sr1, "tb");
+            var st2 = ct.CreateSetType(sr2, "tb");
+            var v1 = GetSubrangeValue(sr1, GetIntegerValue(1));
+            var v2 = GetSubrangeValue(sr1, GetIntegerValue(2));
+            var v3 = GetSubrangeValue(sr1, GetIntegerValue(3));
+            var v4 = GetSubrangeValue(sr2, GetIntegerValue(1));
+            var v5 = GetSubrangeValue(sr2, GetIntegerValue(2));
+            var v6 = GetSubrangeValue(sr2, GetIntegerValue(3));
+            AssertExprValue("b", GetSetValue(st1, v1, v3), "type Ta = 1..5; Tb = set of Ta; const b : Tb = [1,3];");
+            AssertExprValue("b", GetSetValue(st2, v4, v5, v6), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];");
             AssertExprValue("b", e.TypeRegistry.SystemUnit.ErrorType.Reference, "type Ta = 1..3333; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];", isConstant: false);
             AssertExprValue("b", e.TypeRegistry.SystemUnit.ErrorType.Reference, "type Ta = 1..3; Tb = set of Ta; const b : Tb = [High(Ta)..Low(Ta)];", isConstant: false);
             AssertExprValue("b", e.TypeRegistry.SystemUnit.ErrorType.Reference, "type Tb = set of string; const b : Tb = [High(Ta)..Low(Ta)];", isConstant: false);
@@ -531,19 +546,21 @@ namespace PasPasPasTests.Types {
             var ev = CreateEnvironment();
             var tc = ev.TypeRegistry.CreateTypeFactory(ev.TypeRegistry.SystemUnit);
             var rt = tc.CreateStructuredType("ta", StructuredTypeKind.Record);
-            var at = tc.CreateStaticArrayType(rt, "", KnownTypeIds.IntegerType, false);
-            var r1 = GetRecordValue(rt, GetUnicodeStringValue("a"), GetIntegerValue(2));
-            var r2 = GetRecordValue(rt, GetUnicodeStringValue("b"), GetIntegerValue(4));
+            rt.Fields.Add(new Variable() { Name = "a", TypeDefinition = SystemUnit.UnicodeStringType });
+            rt.Fields.Add(new Variable() { Name = "b", TypeDefinition = SystemUnit.ShortIntType });
+            var at = tc.CreateStaticArrayType(rt, "", SystemUnit.IntegerType, false);
+            var r1 = GetRecordValue(rt, GetUnicodeStringValue("a"), GetIntValue(2));
+            var r2 = GetRecordValue(rt, GetUnicodeStringValue("b"), GetIntValue(4));
             var v = GetArrayValue(at, rt, r1, r2);
-            var a = GetArrayValue(at, KnownTypeIds.StringType, GetUnicodeStringValue("aa"), GetUnicodeStringValue("b"), GetUnicodeStringValue("cc"));
+            var a = GetArrayValue(at, SystemUnit.StringType, GetUnicodeStringValue("aa"), GetUnicodeStringValue("b"), GetUnicodeStringValue("cc"));
 
             AssertExprValue("c", a, "const c: array of string = ['aa','b','cc']");
             AssertExprValue("c", a, "const c: array of string = ['aa','b']+['cc']");
             AssertExprValue("c", v, "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));");
-            AssertExprValue("c", GetErrorValue(), "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 2;b:'b'),(a: 'b';b: 4));", isConstant: false);
-            AssertExprValue("c", GetErrorValue(), "type Ta = record a: integer; b: string; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));", isConstant: false);
+            AssertExprValue("c", GetInvalidCastValue(), "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 2;b:'b'),(a: 'b';b: 4));", isConstant: false);
+            AssertExprValue("c", GetInvalidCastValue(), "type Ta = record a: integer; b: string; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));", isConstant: false);
 
-            v = GetArrayValue(rt, KnownTypeIds.StringType, GetUnicodeStringValue("a"), GetUnicodeStringValue("b"));
+            v = GetArrayValue(rt, SystemUnit.StringType, GetUnicodeStringValue("a"), GetUnicodeStringValue("b"));
             AssertExprValue("c", v, "type Ta = (a1, a2); const c: array[Ta] of string = ('a','b'); ");
         }
 

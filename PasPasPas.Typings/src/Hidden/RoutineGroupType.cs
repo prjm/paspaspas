@@ -12,5 +12,8 @@ namespace PasPasPas.Typings.Hidden {
 
         public override bool Equals(ITypeDefinition? other)
             => other is IRoutineGroupType;
+
+        public override int GetHashCode()
+            => 0;
     }
 }

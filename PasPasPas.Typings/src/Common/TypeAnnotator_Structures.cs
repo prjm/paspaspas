@@ -398,7 +398,7 @@ namespace PasPasPas.Typings.Common {
             if (left == default)
                 typeDef = ErrorReference;
             else if (element.RangeEnd == null)
-                typeDef = TypeCreator.CreateSubrangeType(string.Empty, left, left.LowestElement, leftTypeRef as IValue).Reference;
+                typeDef = TypeCreator.CreateSubrangeType(left, left.LowestElement, leftTypeRef as IValue).Reference;
             else
                 typeDef = TypeRegistry.GetTypeForSubrangeType(TypeCreator, leftTypeRef, rightTypeRef).Reference;
 

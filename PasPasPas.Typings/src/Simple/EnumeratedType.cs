@@ -170,6 +170,7 @@ namespace PasPasPas.Typings.Simple {
             if (otherEnum == default)
                 return false;
 
+
             if (otherEnum.Values.Count != values.Count)
                 return false;
 
@@ -184,22 +185,29 @@ namespace PasPasPas.Typings.Simple {
             return true;
         }
 
-        /*
+        public override int GetHashCode() {
+            var hashCode = new HashCode();
+            hashCode.Add(Name, StringComparer.OrdinalIgnoreCase);
+            for (var i = 0; i < values.Count; i++)
+                hashCode.Add(values[i].GetHashCode());
+            return hashCode.ToHashCode();
+        }
+
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>
         /// <returns></returns>
-        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType subrange) {
-                var subrangeBase = subrange.BaseType;
-                return subrangeBase.TypeId == TypeInfo.TypeId;
+            if (otherType.BaseType == BaseType.Subrange && otherType is ISubrangeType subrange) {
+                var subrangeBase = subrange.SubrangeOfType;
+                return subrangeBase.Equals(TypeDefinition);
             }
 
-            return base.CanBeAssignedFrom(otherType);
+            return base.CanBeAssignedFromType(otherType);
         }
-        */
+
 
     }
 }

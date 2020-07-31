@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
@@ -17,18 +18,11 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="subrangeOf">subrange of another type</param>
         /// <param name="low"></param>
         /// <param name="high"></param>
-        /// <param name="name">type name</param>
-        public SubrangeType(IUnitType definingUnit, string name, IOrdinalType subrangeOf, IValue low, IValue high) : base(definingUnit) {
+        public SubrangeType(IUnitType definingUnit, IOrdinalType subrangeOf, IValue low, IValue high) : base(definingUnit) {
             SubrangeOfType = subrangeOf;
             LowestElement = low;
             HighestElement = high;
-            Name = name;
         }
-
-        /// <summary>
-        ///     type name
-        /// </summary>
-        public string Name { get; }
 
         /// <summary>
         ///     get the type kind
@@ -36,26 +30,24 @@ namespace PasPasPas.Typings.Simple {
         public override BaseType BaseType
             => BaseType.Subrange;
 
-        /*
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>
         /// <returns></returns>
-        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType otherSubrange) {
-
-
+            if (otherType.BaseType == BaseType.Subrange && otherType is ISubrangeType otherSubrange) {
+                return SubrangeOfType.CanBeAssignedFromType(otherSubrange.SubrangeOfType);
             }
 
-            if (BaseType.CanBeAssignedFrom(otherType)) {
+            if (SubrangeOfType.CanBeAssignedFromType(otherType)) {
                 return true;
             }
 
-            return base.CanBeAssignedFrom(otherType);
+            return base.CanBeAssignedFromType(otherType);
         }
-        */
+
 
         /// <summary>
         ///     subrange of another type
@@ -131,5 +123,8 @@ namespace PasPasPas.Typings.Simple {
                 s.SubrangeOfType.Equals(SubrangeOfType) &&
                 s.LowestElement.Equals(LowestElement) &&
                 s.HighestElement.Equals(HighestElement);
+
+        public override int GetHashCode()
+            => HashCode.Combine(SubrangeOfType, HighestElement, LowestElement);
     }
 }

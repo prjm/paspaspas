@@ -146,5 +146,21 @@ namespace PasPasPas.Typings.Common {
         /// <param name="other"></param>
         /// <returns></returns>
         public abstract bool Equals(ITypeDefinition? other);
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+            => Equals(obj as ITypeDefinition);
+
+
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public abstract override int GetHashCode();
+
     }
 }

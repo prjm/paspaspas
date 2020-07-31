@@ -21,28 +21,21 @@ namespace PasPasPas.Typings.Simple {
         public override BaseType BaseType
             => BaseType.Real;
 
-        /*
-
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>
         /// <returns></returns>
-        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.RealType)
+            if (otherType.BaseType == BaseType.Real)
                 return true;
 
-            if (otherType.TypeKind == CommonTypeKind.Int64Type)
+            if (otherType.BaseType == BaseType.Integer)
                 return true;
 
-            if (otherType.TypeKind == CommonTypeKind.IntegerType)
-                return true;
-
-            return base.CanBeAssignedFrom(otherType);
+            return base.CanBeAssignedFromType(otherType);
         }
-
-        */
 
         /// <summary>
         ///     long type name
@@ -107,5 +100,8 @@ namespace PasPasPas.Typings.Simple {
 
         public override bool Equals(ITypeDefinition? other)
             => other is IRealType r && r.Kind == Kind;
+
+        public override int GetHashCode()
+            => HashCode.Combine(Kind);
     }
 }

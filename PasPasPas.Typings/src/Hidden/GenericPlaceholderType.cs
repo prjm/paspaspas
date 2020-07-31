@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
@@ -64,6 +65,11 @@ namespace PasPasPas.Typings.Hidden {
             => default!;
 
         public override bool Equals(ITypeDefinition? other)
-            => other is GenericPlaceholderType o && string.Equals(Name, o.Name, System.StringComparison.OrdinalIgnoreCase);
+            => other is GenericPlaceholderType o &&
+                  string.Equals(Name, o.Name, System.StringComparison.OrdinalIgnoreCase);
+
+        public override int GetHashCode()
+            => StringComparer.OrdinalIgnoreCase.GetHashCode(Name);
+
     }
 }

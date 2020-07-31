@@ -12,6 +12,12 @@ namespace PasPasPas.Runtime.Values {
         private readonly Lazy<IValue> invalidCast;
 
         /// <summary>
+        ///     invalid cast value
+        /// </summary>
+        public IValue InvalidCast
+            => invalidCast.Value;
+
+        /// <summary>
         ///     cast values
         /// </summary>
         /// <param name="types"></param>

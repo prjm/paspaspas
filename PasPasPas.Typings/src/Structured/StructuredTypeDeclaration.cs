@@ -189,7 +189,7 @@ namespace PasPasPas.Typings.Structured {
         public IValue MakeConstant() {
             using var list = GetList<IValue>();
             foreach (var value in Fields) {
-                list.Add(value as IValue);
+                list.Add(value.InitialValue);
                 //((Variable)value).SymbolType = TypeRegistry.Runtime.Types.MakeTypeInstanceReference(value.SymbolType.TypeId, value.SymbolType.TypeKind);
             }
 
@@ -237,6 +237,17 @@ namespace PasPasPas.Typings.Structured {
             return default;
         }
 
+        public override int GetHashCode() {
+            var hashCode = new HashCode();
+            hashCode.Add(Name, KnownNames.IdentifierComparer);
+            hashCode.Add(StructTypeKind);
+            foreach (var field in Fields)
+                hashCode.Add(field);
+            foreach (var method in Methods)
+                hashCode.Add(method);
+            return hashCode.ToHashCode();
+        }
+
         public override bool Equals(ITypeDefinition? other) {
             if (!(other is IStructuredType t))
                 return false;
@@ -269,7 +280,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(ITypeSymbol other)
+        public bool Equals(ITypeSymbol? other)
             => Equals(other as ITypeDefinition);
     }
 }

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -51,21 +52,24 @@ namespace PasPasPas.Typings.Structured {
                 a.IndexType.Equals(IndexType) &&
                 a.BaseTypeDefinition.Equals(BaseTypeDefinition);
 
-        /*
+        public override int GetHashCode()
+            => HashCode.Combine(Kind, IndexType, BaseTypeDefinition);
+
+
         /// <summary>
         ///     check if the type can be assigned from another type
         /// </summary>
         /// <param name="otherType"></param>
         /// <returns></returns>
-        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.StaticArrayType && otherType is ArrayType array) {
-                var isPackedString = BaseType.TypeKind.IsChar() && array.BaseType.TypeKind.IsChar() && Packed && array.Packed;
+            if (otherType.BaseType == BaseType.Array && otherType is IArrayType array && array.Kind == ArrayTypeKind.StaticArray) {
+                var isPackedString = BaseTypeDefinition.BaseType == BaseType.Char && array.BaseTypeDefinition.BaseType == BaseType.Char && Packed && array.Packed;
                 return isPackedString;
             }
 
-            return base.CanBeAssignedFrom(otherType);
+            return base.CanBeAssignedFromType(otherType);
         }
-        */
+
     }
 }

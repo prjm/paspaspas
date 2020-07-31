@@ -157,7 +157,7 @@ namespace PasPasPas.Typings.Common {
                 var baseType = GetBaseTypeForArrayConstant(element.Items, out var isConstant, constantValues.Item, element, true);
                 var ints = TypeRegistry.Runtime.Integers;
                 var ubound = ints.ToScaledIntegerValue(constantValues.Item.Count);
-                var indexTypeDef = TypeCreator.CreateSubrangeType(string.Empty, ubound.TypeDefinition as IOrdinalType, ints.Zero, ubound);
+                var indexTypeDef = TypeCreator.CreateSubrangeType(ubound.TypeDefinition as IOrdinalType, ints.Zero, ubound);
                 var arrayType = TypeCreator.CreateStaticArrayType(baseType.TypeDefinition, string.Empty, indexTypeDef, false);
 
                 if (isConstant) {
@@ -199,7 +199,7 @@ namespace PasPasPas.Typings.Common {
                 if (!element.RequiresArray)
                     typdef = TypeCreator.CreateSetType(baseType.TypeDefinition as IOrdinalType, string.Empty);
                 else if (isConstant) {
-                    var indexType = TypeCreator.CreateSubrangeType(string.Empty, TypeRegistry.SystemUnit.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(values.Item.Count - 1));
+                    var indexType = TypeCreator.CreateSubrangeType(TypeRegistry.SystemUnit.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(values.Item.Count - 1));
                     typdef = TypeCreator.CreateStaticArrayType(baseType.TypeDefinition, string.Empty, indexType, false);
                 }
                 else

@@ -58,6 +58,11 @@ namespace PasPasPas.Globals.Runtime {
         ITypeOperations Types { get; }
 
         /// <summary>
+        ///     invalid cast value
+        /// </summary>
+        IValue InvalidCast { get; }
+
+        /// <summary>
         ///     cast a constant value to another type
         /// </summary>
         /// <param name="value">value to cast</param>

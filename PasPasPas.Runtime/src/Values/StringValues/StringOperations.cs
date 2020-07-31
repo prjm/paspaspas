@@ -47,6 +47,13 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="value2"></param>
         /// <returns></returns>
         public IValue Concat(IValue value1, IValue value2) {
+
+            if (value1 is ISubrangeValue subrangeValue1 && subrangeValue1.WrappedValue.HasTextType())
+                return Concat(subrangeValue1.WrappedValue, value2);
+
+            if (value2 is ISubrangeValue subrangeValue2 && subrangeValue2.WrappedValue.HasTextType())
+                return Concat(value1, subrangeValue2.WrappedValue);
+
             if (value1 is IStringValue string1 && value2 is IStringValue string2) {
 
                 if (value2 is EmptyStringValue)

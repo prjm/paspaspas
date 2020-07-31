@@ -48,22 +48,22 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public BooleanTypeKind Kind { get; }
 
-        /*
+
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>
         /// <returns></returns>
-        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType subrange) {
-                var subrangeBase = subrange.BaseType;
-                return subrangeBase.TypeKind == CommonTypeKind.BooleanType;
+            if (otherType.BaseType == BaseType.Subrange && otherType is ISubrangeType subrange) {
+                var subrangeBase = subrange.SubrangeOfType;
+                return subrangeBase.BaseType == BaseType.Boolean;
             }
 
-            return base.CanBeAssignedFrom(otherType);
+            return base.CanBeAssignedFromType(otherType);
         }
-        */
+
         /// <summary>
         ///     short type name
         /// </summary>
@@ -132,5 +132,8 @@ namespace PasPasPas.Typings.Simple {
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
             => other is IBooleanType b && b.Kind == Kind;
+
+        public override int GetHashCode()
+            => HashCode.Combine(Kind);
     }
 }

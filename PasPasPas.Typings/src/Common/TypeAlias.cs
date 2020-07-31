@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Common {
 
@@ -66,10 +67,21 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
             => other is IAliasedType a &&
+                KnownNames.SameIdentifier(Name, a.Name) &&
                 a.BaseTypeDefinition.Equals(BaseTypeDefinition);
+
+
 
         public bool Equals(ITypeSymbol? other)
             => other is IAliasedType a &&
+                KnownNames.SameIdentifier(Name, a.Name) &&
                 BaseTypeDefinition.Equals(a.BaseTypeDefinition);
+
+        public override int GetHashCode() {
+            var hashCode = new HashCode();
+            hashCode.Add(Name, KnownNames.IdentifierComparer);
+            hashCode.Add(BaseTypeDefinition);
+            return hashCode.ToHashCode();
+        }
     }
 }

@@ -51,22 +51,21 @@ namespace PasPasPas.Typings.Simple {
         public CharTypeKind Kind
             => CharTypeKind.AnsiChar;
 
-        /*
+
         /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>
         /// <returns></returns>
-        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType subrange) {
-                var subrangeBase = subrange.BaseType;
-                return subrangeBase.TypeKind == CommonTypeKind.AnsiCharType;
+            if (otherType.BaseType == BaseType.Subrange && otherType is ISubrangeType subrange) {
+                var subrangeBase = subrange.SubrangeOfType;
+                return subrangeBase.BaseType == BaseType.Char;
             }
 
-            return base.CanBeAssignedFrom(otherType);
+            return base.CanBeAssignedFromType(otherType);
         }
-        */
 
         /// <summary>
         ///     long type name
@@ -87,5 +86,13 @@ namespace PasPasPas.Typings.Simple {
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
             => other is ICharType c && c.Kind == CharTypeKind.AnsiChar;
+
+        /// <summary>
+        ///     hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+            => 0;
+
     }
 }

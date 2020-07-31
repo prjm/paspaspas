@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Globalization;
 using PasPasPas.Globals.Runtime;
 
@@ -18,7 +17,7 @@ namespace PasPasPas.Globals.Parsing {
         ///     empty token
         /// </summary>
         public static readonly Token Empty
-            = new Token(TokenKind.Empty, default);
+            = new Token(TokenKind.Empty, string.Empty);
 
         /// <summary>
         ///     Token value
@@ -33,7 +32,7 @@ namespace PasPasPas.Globals.Parsing {
         /// <summary>
         ///     parsed token value (if any)
         /// </summary>
-        public IValue ParsedValue { get; }
+        public IValue? ParsedValue { get; }
 
         /// <summary>
         ///     token length
@@ -47,7 +46,7 @@ namespace PasPasPas.Globals.Parsing {
         /// <param name="tokenId">token id</param>
         /// <param name="value">value</param>
         /// <param name="parsedValue">parser literal value (optional)</param>
-        public Token(int tokenId, string value, IValue parsedValue = null) : this() {
+        public Token(int tokenId, string value, IValue? parsedValue = null) : this() {
             Kind = tokenId;
             Value = value ?? string.Empty;
             ParsedValue = parsedValue;
@@ -57,7 +56,7 @@ namespace PasPasPas.Globals.Parsing {
         ///     format token as string
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public override readonly string ToString()
             => string.Format(CultureInfo.InvariantCulture, "{0}: {1}", Kind, Value);
 
         /// <summary>
@@ -65,15 +64,16 @@ namespace PasPasPas.Globals.Parsing {
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(Token other)
-            => Kind == other.Kind && string.Equals(Value, other.Value, StringComparison.Ordinal);
+        public readonly bool Equals(Token other)
+            => Kind == other.Kind &&
+                string.Equals(Value, other.Value, StringComparison.Ordinal);
 
         /// <summary>
         ///     compare tokens
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override bool Equals(object obj) {
+        public override readonly bool Equals(object? obj) {
             if (obj is Token token)
                 return Equals(token);
             return false;
@@ -83,10 +83,11 @@ namespace PasPasPas.Globals.Parsing {
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode() {
-            unchecked {
-                return 17 + 23 * Kind + 11 * Value.GetHashCode(StringComparison.Ordinal);
-            }
+        public override readonly int GetHashCode() {
+            var code = new HashCode();
+            code.Add(Kind);
+            code.Add(Value, StringComparer.OrdinalIgnoreCase);
+            return code.ToHashCode();
         }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace PasPasPas.Globals.Parsing {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator ==(Token left, Token right)
+        public static bool operator ==(in Token left, in Token right)
             => left.Equals(right);
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace PasPasPas.Globals.Parsing {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator !=(Token left, Token right)
+        public static bool operator !=(in Token left, in Token right)
             => !(left == right);
 
     }

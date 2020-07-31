@@ -21,5 +21,9 @@ namespace PasPasPas.Typings.Hidden {
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
             => other is INoType;
+
+        public override int GetHashCode()
+            => 0;
+
     }
 }

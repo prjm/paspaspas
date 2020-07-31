@@ -45,5 +45,9 @@ namespace PasPasPas.Typings.Hidden {
         /// <returns></returns>
         public override bool Equals(ITypeDefinition? other)
             => other is IErrorType;
+
+        public override int GetHashCode()
+            => 0;
+
     }
 }

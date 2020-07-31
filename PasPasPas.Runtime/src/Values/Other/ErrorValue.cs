@@ -37,6 +37,6 @@ namespace PasPasPas.Runtime.Values.Other {
             => unchecked(17 + 31 * (int)Kind);
 
         public override string GetValueString()
-            => "***";
+            => "*** " + Kind.ToString();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
@@ -34,28 +35,27 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(IValue? other)
-            => //
-            other is SetValue s &&
-            other.TypeDefinition.Equals(TypeDefinition) &&
-            Values.ToHashSet().SetEquals(s.Values);
+        public override bool Equals(IValue? other) {
+
+            if (!(other is SetValue sv))
+                return false;
+
+            var vals = Values.ToHashSet();
+            var otherValues = sv.Values.ToHashSet();
+
+            return vals.SetEquals(otherValues);
+        }
 
         /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() {
-            var result = 17;
-
-            unchecked {
-
-                result = result * 31 + TypeDefinition.GetHashCode();
-
-                foreach (var value in Values)
-                    result = result * 31 + value.GetHashCode();
-
-                return result;
-            }
+            var hashCode = new HashCode();
+            hashCode.Add(TypeDefinition);
+            foreach (var value in Values)
+                hashCode.Add(value);
+            return hashCode.ToHashCode();
         }
 
         /// <summary>

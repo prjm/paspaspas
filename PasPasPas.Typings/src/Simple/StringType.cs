@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using System;
+using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -25,30 +26,31 @@ namespace PasPasPas.Typings.Simple {
                 s.Kind == Kind &&
                 KnownNames.SameIdentifier(Name, s.Name);
 
+        public override int GetHashCode()
+            => HashCode.Combine(Name, Kind);
+
         /// <summary>
         ///     string type kind
         /// </summary>
         public abstract StringTypeKind Kind { get; }
 
-        /*
         /// <summary>
         ///     check if this type can be assigned from another type
         /// </summary>
         /// <param name="otherType"></param>
         /// <returns></returns>
-        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+        public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind.IsString()) {
+            if (otherType.BaseType == BaseType.String) {
                 return true;
             }
 
-            if (otherType.TypeKind.IsChar()) {
+            if (otherType.BaseType == BaseType.Char) {
                 return true;
             }
 
-            return base.CanBeAssignedFrom(otherType);
+            return base.CanBeAssignedFromType(otherType);
         }
-*/
     }
 
 
