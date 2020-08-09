@@ -5,6 +5,7 @@ using System.Linq;
 using PasPasPas.Globals;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Simplification;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -20,22 +21,17 @@ namespace PasPasPas.Typings.Structured {
         ///     create a new structured type declaration
         /// </summary>
         /// <param name="definingUnit"></param>
-        /// <param name="name"></param>
         /// <param name="kind"></param>
+        /// <param name="name">type name</param>
         public StructuredTypeDeclaration(IUnitType definingUnit, string name, StructuredTypeKind kind) : base(definingUnit) {
-            Name = name;
             StructTypeKind = kind;
+            Name = name;
 
             if (definingUnit is ISystemUnit system)
                 BaseClass = system.ErrorType;
             else
                 BaseClass = definingUnit.TypeRegistry.SystemUnit.ErrorType;
         }
-
-        /// <summary>
-        ///     type name
-        /// </summary>
-        public string Name { get; }
 
         /// <summary>
         ///     structured type kind
@@ -183,6 +179,11 @@ namespace PasPasPas.Typings.Structured {
             => SymbolTypeKind.TypeDefinition;
 
         /// <summary>
+        ///     type name
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
         ///     create a constant record value from this type declaration
         /// </summary>
         /// <returns></returns>
@@ -239,12 +240,9 @@ namespace PasPasPas.Typings.Structured {
 
         public override int GetHashCode() {
             var hashCode = new HashCode();
-            hashCode.Add(Name, KnownNames.IdentifierComparer);
             hashCode.Add(StructTypeKind);
-            foreach (var field in Fields)
-                hashCode.Add(field);
-            foreach (var method in Methods)
-                hashCode.Add(method);
+            hashCode.AddRange(Fields);
+            hashCode.AddRange(Methods);
             return hashCode.ToHashCode();
         }
 
@@ -263,6 +261,8 @@ namespace PasPasPas.Typings.Structured {
 
             if (t.Methods.Count != Methods.Count)
                 return false;
+
+            // check in order for records!
 
             foreach (var f in Fields)
                 if (!f.Equals(t.Fields.FirstOrDefault(x => string.Equals(x.Name, f.Name, StringComparison.OrdinalIgnoreCase))))

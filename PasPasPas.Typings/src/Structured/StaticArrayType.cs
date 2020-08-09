@@ -12,12 +12,12 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     create a new static array type
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="definingUnit"></param>
         /// <param name="baseTypeDefinition"></param>
         /// <param name="indexType"></param>
-        public StaticArrayType(string name, IUnitType definingUnit, ITypeDefinition indexType, ITypeDefinition baseTypeDefinition) : base(definingUnit, indexType, baseTypeDefinition)
-            => Name = name;
+        public StaticArrayType(IUnitType definingUnit, ITypeDefinition indexType, ITypeDefinition baseTypeDefinition) :
+            base(definingUnit, indexType, baseTypeDefinition) { }
+
 
         /// <summary>
         ///     type size in bytes
@@ -45,10 +45,6 @@ namespace PasPasPas.Typings.Structured {
         public override ArrayTypeKind Kind
             => ArrayTypeKind.StaticArray;
 
-        /// <summary>
-        ///     type name
-        /// </summary>
-        public string Name { get; }
 
     }
 }

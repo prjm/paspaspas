@@ -507,9 +507,15 @@ namespace PasPasPasTests.Types {
         public void TestRecordConstants() {
             var e = CreateEnvironment();
             var tc = e.TypeRegistry.CreateTypeFactory(e.TypeRegistry.SystemUnit);
-            var rt = tc.CreateStructuredType(string.Empty, StructuredTypeKind.Record);
-            AssertExprValue("a", GetRecordValue(rt, GetIntegerValue(1), GetWideCharValue('2')), "const a = (a: 1; b: '2');");
-            AssertExprValue("a", GetRecordValue(rt, GetExtendedValue(1.0), GetUnicodeStringValue("22")), "const a = (a: 1.0; b: '22');");
+            var rt1 = tc.CreateStructuredType(string.Empty, StructuredTypeKind.Record);
+            rt1.AddField(new Variable() { Name = "a", TypeDefinition = e.TypeRegistry.SystemUnit.ShortIntType });
+            rt1.AddField(new Variable() { Name = "b", TypeDefinition = e.TypeRegistry.SystemUnit.WideCharType });
+            var rt2 = tc.CreateStructuredType(string.Empty, StructuredTypeKind.Record);
+            rt2.AddField(new Variable() { Name = "a", TypeDefinition = e.TypeRegistry.SystemUnit.ExtendedType });
+            rt2.AddField(new Variable() { Name = "b", TypeDefinition = e.TypeRegistry.SystemUnit.UnicodeStringType });
+
+            AssertExprValue("a", GetRecordValue(rt1, GetIntegerValue(1), GetWideCharValue('2')), "const a = (a: 1; b: '2');");
+            AssertExprValue("a", GetRecordValue(rt2, GetExtendedValue(1.0), GetUnicodeStringValue("22")), "const a = (a: 1.0; b: '22');");
         }
 
         /// <summary>
@@ -545,14 +551,16 @@ namespace PasPasPasTests.Types {
 
             var ev = CreateEnvironment();
             var tc = ev.TypeRegistry.CreateTypeFactory(ev.TypeRegistry.SystemUnit);
+            var sr = tc.CreateSubrangeType(SystemUnit.ShortIntType, GetIntegerValue(0), GetIntegerValue(1));
             var rt = tc.CreateStructuredType("ta", StructuredTypeKind.Record);
-            rt.Fields.Add(new Variable() { Name = "a", TypeDefinition = SystemUnit.UnicodeStringType });
-            rt.Fields.Add(new Variable() { Name = "b", TypeDefinition = SystemUnit.ShortIntType });
-            var at = tc.CreateStaticArrayType(rt, "", SystemUnit.IntegerType, false);
+            rt.Fields.Add(new Variable() { Name = "a", TypeDefinition = SystemUnit.StringType });
+            rt.Fields.Add(new Variable() { Name = "b", TypeDefinition = SystemUnit.IntegerType });
+            var at2 = tc.CreateDynamicArrayType(SystemUnit.StringType, string.Empty, false);
+            var at3 = tc.CreateStaticArrayType(rt, string.Empty, sr, false);
             var r1 = GetRecordValue(rt, GetUnicodeStringValue("a"), GetIntValue(2));
             var r2 = GetRecordValue(rt, GetUnicodeStringValue("b"), GetIntValue(4));
-            var v = GetArrayValue(at, rt, r1, r2);
-            var a = GetArrayValue(at, SystemUnit.StringType, GetUnicodeStringValue("aa"), GetUnicodeStringValue("b"), GetUnicodeStringValue("cc"));
+            var v = GetArrayValue(at3, rt, r1, r2);
+            var a = GetArrayValue(at2, SystemUnit.StringType, GetUnicodeStringValue("aa"), GetUnicodeStringValue("b"), GetUnicodeStringValue("cc"));
 
             AssertExprValue("c", a, "const c: array of string = ['aa','b','cc']");
             AssertExprValue("c", a, "const c: array of string = ['aa','b']+['cc']");
@@ -560,7 +568,11 @@ namespace PasPasPasTests.Types {
             AssertExprValue("c", GetInvalidCastValue(), "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 2;b:'b'),(a: 'b';b: 4));", isConstant: false);
             AssertExprValue("c", GetInvalidCastValue(), "type Ta = record a: integer; b: string; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));", isConstant: false);
 
-            v = GetArrayValue(rt, SystemUnit.StringType, GetUnicodeStringValue("a"), GetUnicodeStringValue("b"));
+            var it = tc.CreateEnumType("Ta");
+            it.DefineEnumValue(MakeRuntime(), "a1", true, GetIntegerValue(0));
+            it.DefineEnumValue(MakeRuntime(), "a2", true, GetIntegerValue(1));
+            var at1 = tc.CreateStaticArrayType(SystemUnit.StringType, string.Empty, it, false);
+            v = GetArrayValue(at1, SystemUnit.StringType, GetUnicodeStringValue("a"), GetUnicodeStringValue("b"));
             AssertExprValue("c", v, "type Ta = (a1, a2); const c: array[Ta] of string = ('a','b'); ");
         }
 

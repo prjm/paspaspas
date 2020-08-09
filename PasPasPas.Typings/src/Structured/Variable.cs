@@ -12,6 +12,7 @@ namespace PasPasPas.Typings.Structured {
         ///     variable name
         /// </summary>
         public string Name { get; set; }
+            = string.Empty;
 
         /// <summary>
         ///     member visibility
@@ -28,6 +29,7 @@ namespace PasPasPas.Typings.Structured {
         ///     type definition
         /// </summary>
         public ITypeDefinition TypeDefinition { get; set; }
+            = default!;
 
         /// <summary>
         ///     symbol type
@@ -44,6 +46,7 @@ namespace PasPasPas.Typings.Structured {
         ///     initial value of the variable
         /// </summary>
         public IValue InitialValue { get; set; }
+            = default!;
 
         public bool Equals(ITypeSymbol? other)
             => other is IVariable v &&

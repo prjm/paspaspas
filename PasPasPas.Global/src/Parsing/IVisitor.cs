@@ -1,5 +1,4 @@
-﻿#nullable disable
-namespace PasPasPas.Globals.Parsing {
+﻿namespace PasPasPas.Globals.Parsing {
 
     /// <summary>
     ///     basic interface for a visitor

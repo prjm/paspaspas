@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Options.DataTypes;
@@ -55,7 +54,7 @@ namespace PasPasPasTests.Types {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} begin {statement}; end. ";
 
-            StructuredStatement searchfunction(object x) {
+            static StructuredStatement? searchfunction(object x) {
                 if (x is StructuredStatement)
                     return x as StructuredStatement;
                 return default;
@@ -73,8 +72,8 @@ namespace PasPasPasTests.Types {
         /// <param name="typeId"></param>
         /// <param name="resolveSubrange"></param>
         /// <param name="typeName"></param>
-        protected void AssertExprType(string file, string program, ITypeDefinition typeId, bool resolveSubrange, string typeName) {
-            SymbolReferencePart searchfunction(object x)
+        protected void AssertExprType(string file, string program, ITypeDefinition typeId, bool resolveSubrange, string? typeName) {
+            static SymbolReferencePart? searchfunction(object x)
                 => x is SymbolReferencePart srp && srp.Kind == SymbolReferencePartKind.CallParameters ? x as SymbolReferencePart : null;
 
             IExpression firstParam = null;
@@ -226,6 +225,7 @@ namespace PasPasPasTests.Types {
                 Assert.AreEqual(value.TypeDefinition, r.TypeDefinition);
             }
             else {
+                Assert.AreEqual(value.TypeDefinition, firstParam.TypeInfo.TypeDefinition);
                 Assert.AreEqual(value, firstParam.TypeInfo);
             }
 
@@ -420,6 +420,8 @@ namespace PasPasPasTests.Types {
             test(ti);
         }
 
+
+
         /// <summary>
         ///     evaluate an expression type
         /// </summary>
@@ -430,7 +432,7 @@ namespace PasPasPasTests.Types {
         /// <param name="intSize"></param>
         /// <param name="env"></param>
         /// <returns></returns>
-        protected ISyntaxPart EvaluateExpressionType<T>(string file, string program, Func<object, T> searchfunction, NativeIntSize intSize, out ITypedEnvironment env) where T : ISyntaxPart {
+        protected ISyntaxPart EvaluateExpressionType<T>(string file, string program, TestFunction<T> searchfunction, NativeIntSize intSize, out ITypedEnvironment env) where T : class, ISyntaxPart {
             IExpression firstParam;
 
             env = CreateEnvironment(intSize);
@@ -447,7 +449,7 @@ namespace PasPasPasTests.Types {
                 var project = api.CreateAbstractSyntraxTree(tree);
                 api.AnnotateWithTypes(project);
 
-                var astVisitor = new AstVisitor<T>() { SearchFunction = searchfunction };
+                var astVisitor = new AstVisitor<T>(searchfunction);
                 project.Accept(astVisitor.AsVisitor());
 
                 Assert.IsNotNull(astVisitor.Result);

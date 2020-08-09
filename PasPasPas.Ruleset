@@ -24,6 +24,34 @@
     <Rule Id="EPS07" Action="Warning" />
     <Rule Id="EPS08" Action="Warning" />
   </Rules>
+  <Rules AnalyzerId="IDisposableAnalyzers" RuleNamespace="IDisposableAnalyzers">
+    <Rule Id="IDISP001" Action="None" />
+    <Rule Id="IDISP002" Action="None" />
+    <Rule Id="IDISP003" Action="None" />
+    <Rule Id="IDISP004" Action="None" />
+    <Rule Id="IDISP005" Action="None" />
+    <Rule Id="IDISP006" Action="None" />
+    <Rule Id="IDISP007" Action="None" />
+    <Rule Id="IDISP008" Action="None" />
+    <Rule Id="IDISP009" Action="None" />
+    <Rule Id="IDISP010" Action="None" />
+    <Rule Id="IDISP011" Action="None" />
+    <Rule Id="IDISP012" Action="None" />
+    <Rule Id="IDISP013" Action="None" />
+    <Rule Id="IDISP014" Action="None" />
+    <Rule Id="IDISP015" Action="None" />
+    <Rule Id="IDISP016" Action="None" />
+    <Rule Id="IDISP017" Action="None" />
+    <Rule Id="IDISP018" Action="None" />
+    <Rule Id="IDISP019" Action="None" />
+    <Rule Id="IDISP020" Action="None" />
+    <Rule Id="IDISP021" Action="None" />
+    <Rule Id="IDISP022" Action="None" />
+    <Rule Id="IDISP023" Action="None" />
+    <Rule Id="IDISP024" Action="None" />
+    <Rule Id="IDISP025" Action="None" />
+    <Rule Id="SyntaxTreeCacheAnalyzer" Action="None" />
+  </Rules>
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1062" Action="None" />
     <Rule Id="CA1303" Action="None" />

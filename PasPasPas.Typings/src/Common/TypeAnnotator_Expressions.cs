@@ -156,7 +156,7 @@ namespace PasPasPas.Typings.Common {
 
                 var baseType = GetBaseTypeForArrayConstant(element.Items, out var isConstant, constantValues.Item, element, true);
                 var ints = TypeRegistry.Runtime.Integers;
-                var ubound = ints.ToScaledIntegerValue(constantValues.Item.Count);
+                var ubound = ints.ToScaledIntegerValue(constantValues.Item.Count - 1);
                 var indexTypeDef = TypeCreator.CreateSubrangeType(ubound.TypeDefinition as IOrdinalType, ints.Zero, ubound);
                 var arrayType = TypeCreator.CreateStaticArrayType(baseType.TypeDefinition, string.Empty, indexTypeDef, false);
 
@@ -313,6 +313,11 @@ namespace PasPasPas.Typings.Common {
                                 baseTypeValue = ErrorReference;
                             }
                             else if (reference.SymbolKind == SymbolTypeKind.IntrinsicRoutineResult || reference.SymbolKind == SymbolTypeKind.InvocationResult) {
+                                if (reference is IRoutineGroup routine) {
+                                    routine.ResolveCall(callableRoutines, signature);
+                                }
+                            }
+                            else if (reference.SymbolKind == SymbolTypeKind.RoutineGroup) {
                                 if (reference is IRoutineGroup routine) {
                                     routine.ResolveCall(callableRoutines, signature);
                                 }

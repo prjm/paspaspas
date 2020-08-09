@@ -90,7 +90,7 @@ namespace PasPasPas.Typings.Common {
 
             foreach (var vardef in element.Names) {
 
-                var varname = vardef.Name.CompleteName;
+                var varname = vardef.Name.CompleteName ?? string.Empty;
                 var variable = new Variable();
                 var unitType = CurrentUnitType;
                 var cmi = currentMethodImplementation.Count < 1 ? default : currentMethodImplementation.Peek();
@@ -108,7 +108,7 @@ namespace PasPasPas.Typings.Common {
                 resolver.AddToScope(varname, variable);
 
                 if (vardef is FunctionResult fn) {
-                    if (fn.Method.TypeValue != default)
+                    if (fn.Method?.TypeValue?.TypeInfo != default)
                         vardef.TypeInfo = fn.Method.TypeValue.TypeInfo;
                     else
                         MarkWithErrorType(vardef);
@@ -415,6 +415,9 @@ namespace PasPasPas.Typings.Common {
                 var placeholder = TypeCreator.CreateGenericPlaceholder(string.Empty);
                 PushTypeToStack(placeholder);
             }
+
+            if (element.TypeValue is INamedTypeDeclaration ntd && !string.IsNullOrEmpty(element.Name.CompleteName))
+                ntd.Name = element.Name.CompleteName;
         }
 
         /// <summary>
@@ -449,7 +452,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(SetTypeDeclaration element) {
 
             if (element.TypeValue is ITypedSyntaxPart declaredEnum && declaredEnum.TypeInfo != null && declaredEnum.TypeInfo.TypeDefinition is IOrdinalType ot) {
-                var setType = TypeCreator.CreateSetType(ot, string.Empty);
+                var setType = TypeCreator.CreateSetType(ot, element.Name);
                 element.TypeInfo = setType.Reference;
                 return;
             }
@@ -508,7 +511,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(StructuredType element) {
-            var typeDef = TypeCreator.CreateStructuredType(string.Empty, element.Kind);
+            var typeDef = TypeCreator.CreateStructuredType(element.Name, element.Kind);
             typeDef.BaseClass = SystemUnit.TObjectType;
             PushTypeToStack(typeDef);
         }
@@ -602,6 +605,7 @@ namespace PasPasPas.Typings.Common {
                     resolver.AddToScope(element.SymbolName, routineGroup);
                 }
                 routine = new Routine(routineGroup, element.Kind);
+                routineGroup.Items.Add(routine);
                 routine.ResultType = NoType.Reference;
                 currentMethodParameters.Push(routine);
             }

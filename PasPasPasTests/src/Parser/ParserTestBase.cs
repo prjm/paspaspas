@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -66,7 +65,7 @@ namespace PasPasPasTests.Parser {
         /// </summary>
         /// <param name="input"></param>
         /// <param name="output"></param>
-        protected void ParseString(string input, string output = null) {
+        protected void ParseString(string input, string? output = default) {
             if (string.IsNullOrEmpty(output))
                 output = input;
 
@@ -112,7 +111,7 @@ namespace PasPasPasTests.Parser {
         /// <param name="withTypes"></param>
         /// <param name="errorMessages"></param>
         /// <returns></returns>
-        protected ISyntaxPart RunAstTest<T>(string completeInput, Func<object, T> searchFunction, T expectedResult, bool withTypes = false, params uint[] errorMessages) {
+        protected ISyntaxPart? RunAstTest<T>(string completeInput, TestFunction<T> searchFunction, T expectedResult, bool withTypes = false, params uint[] errorMessages) {
             var env = CreateEnvironment();
             var msgs = new List<ILogMessage>();
             var log = new LogTarget();
@@ -130,7 +129,7 @@ namespace PasPasPasTests.Parser {
             };
 
             var project = new ProjectItemCollection();
-            ISyntaxPart tree = null;
+            var tree = default(ISyntaxPart);
 
             foreach (var input in completeInput.Split('§')) {
 
@@ -147,7 +146,7 @@ namespace PasPasPasTests.Parser {
                     project.Accept(ta.AsVisitor());
                 }
 
-                var astVisitor = new AstVisitor<T>() { SearchFunction = searchFunction };
+                var astVisitor = new AstVisitor<T>(searchFunction);
                 visitor.Project.Accept(astVisitor.AsVisitor());
 
                 var validator = new StructureValidator() { Manager = env.Log };
@@ -244,24 +243,26 @@ namespace PasPasPasTests.Parser {
         /// <param name="expr"></param>
         /// <param name="constName"></param>
         /// <param name="typeId"></param>
-        protected void TestConstant(string expr, string constName = "x", ITypeDefinition typeId = default) {
+        protected void TestConstant(string expr, string constName = "x", ITypeDefinition? typeId = default) {
             var statement = $"program z.x; const x = {expr}; .";
+            const string C = "CCCC";
 
-            bool? search(object t) {
+            string? search(object t) {
 
                 if (t is ConstantDeclaration decl && string.Equals(constName, decl.Name.CompleteName, StringComparison.Ordinal)) {
-                    if (decl == null || decl.Value == null)
-                        return null;
+                    if (decl == default || decl.Value == default)
+                        return default;
 
                     if (typeId != default)
                         Assert.AreEqual(typeId, decl.Value.TypeInfo.TypeDefinition);
 
-                    return decl.Value.TypeInfo.IsConstant();
+                    if (decl.Value.TypeInfo.IsConstant())
+                        return C;
                 }
-                return null;
+                return default;
             }
 
-            RunAstTest(statement, search, true, true);
+            RunAstTest(statement, search, C);
         }
 
         /// <summary>
@@ -270,8 +271,8 @@ namespace PasPasPasTests.Parser {
         /// <param name="path"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        protected IInputResolver CreateFileResolver(IFileReference path, string content) {
-            IReaderInput doResolve(IFileReference file, IReaderApi a) {
+        protected IInputResolver CreateFileResolver(IFileReference? path, string? content) {
+            IReaderInput? doResolve(IFileReference file, IReaderApi a) {
                 var incFile = file.CreateNewFileReference(Path.GetFullPath("dummy.inc"));
                 var resFile1 = file.CreateNewFileReference(Path.GetFullPath("res.res"));
                 var resFile2 = file.CreateNewFileReference(Path.GetFullPath("test_0.res"));

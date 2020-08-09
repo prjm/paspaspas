@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using PasPasPas.Api;
 using PasPasPas.Globals.Environment;
@@ -13,6 +14,15 @@ using SharpFloat.FloatingPoint;
 
 
 namespace PasPasPasTests.Common {
+
+    /// <summary>
+    ///     test function
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    [return: MaybeNull]
+    public delegate T TestFunction<T>(object data);
 
     /// <summary>
     ///     common base class for test cases

@@ -112,6 +112,6 @@ namespace PasPasPas.Runtime.Values.Other {
         }
 
         public override bool Equals(IValue? other)
-           => other is EnumeratedValue v && v.Value == Value;
+           => other is EnumeratedValue v && v.Value.Equals(Value);
     }
 }

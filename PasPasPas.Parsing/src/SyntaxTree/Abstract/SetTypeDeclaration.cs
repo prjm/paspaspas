@@ -1,12 +1,11 @@
-﻿#nullable disable
-using PasPasPas.Globals.Parsing;
+﻿using PasPasPas.Globals.Parsing;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     declaration of a set type
     /// </summary>
-    public class SetTypeDeclaration : StructuredTypeBase, ITypeTarget {
+    public class SetTypeDeclaration : StructuredTypeBase, ITypeTarget, INamedTypeDeclaration {
 
         /// <summary>
         ///     set type

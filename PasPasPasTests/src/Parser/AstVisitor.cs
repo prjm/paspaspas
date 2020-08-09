@@ -1,7 +1,7 @@
-﻿#nullable disable
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using PasPasPas.Globals.Parsing;
+using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
 
@@ -14,24 +14,20 @@ namespace PasPasPasTests.Parser {
         /// <summary>
         ///     create a new visitor
         /// </summary>
-        public AstVisitor() { }
-
-        /// <summary>
-        ///     create a new visitor
-        /// </summary>
-        /// <param name="sf"></param>
-        public AstVisitor(Func<object, T> sf)
-            => SearchFunction = sf;
+        /// <param name="tester"></param>
+        public AstVisitor(TestFunction<T> tester)
+            => SearchFunction = tester;
 
         /// <summary>
         ///     result of searching the abstract syntax tree
         /// </summary>
+        [MaybeNull]
         public T Result { get; internal set; }
 
         /// <summary>
         ///     search function
         /// </summary>
-        public Func<object, T> SearchFunction { get; set; }
+        public TestFunction<T> SearchFunction { get; set; }
 
         /// <summary>
         ///     implementation

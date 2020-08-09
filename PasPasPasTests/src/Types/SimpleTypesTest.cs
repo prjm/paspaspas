@@ -90,8 +90,9 @@ namespace PasPasPasTests.Types {
         public void TestConstantArrays() {
             var r = CreateEnvironment().TypeRegistry.SystemUnit;
             var tc = r.TypeRegistry.CreateTypeFactory(r);
-            var at = tc.CreateStaticArrayType(r.CardinalType, string.Empty, r.IntegerType, false);
-            AssertExprValue("a", GetArrayValue(at, r.CardinalType, GetIntegerValue(0x7E3), GetIntegerValue(0x81B), GetIntegerValue(0x819), GetIntegerValue(0x81A)), "const a: array [0..3] of Cardinal = ($000007E3, $0000081B, $00000819, $0000081A);");
+            var sr = tc.CreateSubrangeType(r.ShortIntType, GetIntegerValue(0), GetIntegerValue(3));
+            var at = tc.CreateStaticArrayType(r.CardinalType, string.Empty, sr, false);
+            AssertExprValue("a", GetArrayValue(at, r.CardinalType, GetCardinalValue(0x7E3), GetCardinalValue(0x81B), GetCardinalValue(0x819), GetCardinalValue(0x81A)), "const a: array [0..3] of Cardinal = ($000007E3, $0000081B, $00000819, $0000081A);");
         }
 
         /// <summary>

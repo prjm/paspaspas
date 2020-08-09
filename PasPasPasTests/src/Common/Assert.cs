@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using SharpFloat.FloatingPoint;
 using A = Xunit.Assert;
@@ -86,15 +87,15 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="o"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void IsNotNull(object o)
-            => A.NotNull(o);
+        public static void IsNotNull([NotNull] object? o)
+            => A.NotNull(o!);
 
         /// <summary>
         ///     check that an object is null
         /// </summary>
         /// <param name="o"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void IsNull(object o)
+        public static void IsNull(object? o)
             => A.Null(o);
 
         /// <summary>

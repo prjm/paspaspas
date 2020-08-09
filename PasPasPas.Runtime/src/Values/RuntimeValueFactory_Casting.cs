@@ -385,7 +385,6 @@ namespace PasPasPas.Runtime.Values {
             if (!(typeDef is IStructuredType structType) || !types.AreRecordTypesCompatible(value.TypeDefinition, typeDef) || !(value is RecordValue record))
                 return invalidCast.Value;
 
-
             using var list = ListPools.GetList<IValue>();
 
             for (var i = 0; i < record.Values.Length; i++)

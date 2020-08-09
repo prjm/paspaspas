@@ -146,7 +146,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="name">type name</param>
         /// <returns></returns>
         public IArrayType CreateStaticArrayType(ITypeDefinition baseType, string name, IOrdinalType indexType, bool isPacked)
-            => new StaticArrayType(name, DefiningUnit, indexType, baseType) {
+            => new StaticArrayType(DefiningUnit, indexType, baseType) {
                 Packed = isPacked
             };
 
@@ -166,7 +166,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="baseType"></param>
         /// <param name="lowerBound"></param>
-        /// <param name="upperBound"></param
+        /// <param name="upperBound"></param>
         /// <returns>new subrange type</returns>
         public ISubrangeType CreateSubrangeType(IOrdinalType baseType, IValue lowerBound, IValue upperBound) {
             var result = new SubrangeType(DefiningUnit, baseType, lowerBound, upperBound);

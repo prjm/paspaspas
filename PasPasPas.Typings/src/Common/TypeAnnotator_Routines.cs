@@ -143,6 +143,8 @@ namespace PasPasPas.Typings.Common {
             var isForward = element.Flags.HasFlag(MethodImplementationFlags.ForwardDeclaration);
             var isClassMethod = element.Declaration?.DefiningType != default;
 
+            var routine = currentMethodImplementation.Pop();
+
             resolver.CloseScope();
 
             if (!isClassMethod) {
@@ -152,9 +154,10 @@ namespace PasPasPas.Typings.Common {
                 else
                     parameters.ResultType = ErrorReference;
 
+                foreach (var param in parameters.Parameters)
+                    routine.Parameters.Add(param);
             }
 
-            currentMethodImplementation.Pop();
         }
 
     }
