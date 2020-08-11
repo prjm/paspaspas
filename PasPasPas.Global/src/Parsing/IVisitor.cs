@@ -10,7 +10,7 @@
         /// </summary>
         /// <typeparam name="TNodeToVisit"></typeparam>
         /// <param name="element">element to visit</param>
-        void StartVisit<TNodeToVisit>(TNodeToVisit element);
+        void StartVisit<TNodeToVisit>(TNodeToVisit element) where TNodeToVisit : notnull;
 
     }
 
@@ -24,7 +24,7 @@
         /// </summary>
         /// <typeparam name="TNodeToVisit"></typeparam>
         /// <param name="element">element to visit</param>
-        void EndVisit<TNodeToVisit>(TNodeToVisit element);
+        void EndVisit<TNodeToVisit>(TNodeToVisit element) where TNodeToVisit : notnull;
 
     }
 
@@ -40,7 +40,7 @@
     ///     visitor for a concrete type
     /// </summary>
     /// <typeparam name="TNodeToVisit">Visitor type</typeparam>
-    public interface IStartVisitor<TNodeToVisit> {
+    public interface IStartVisitor<TNodeToVisit> where TNodeToVisit : notnull {
 
         /// <summary>
         ///     get the concrete visitor
@@ -60,7 +60,7 @@
     ///     visitor for a concrete type
     /// </summary>
     /// <typeparam name="TNodeToVisit">Visitor type</typeparam>
-    public interface IEndVisitor<TNodeToVisit> {
+    public interface IEndVisitor<TNodeToVisit> where TNodeToVisit : notnull {
 
         /// <summary>
         ///     get the concrete visitor
@@ -80,7 +80,7 @@
     ///     visit tree node children
     /// </summary>
     /// <typeparam name="TNodeToVisit"></typeparam>
-    public interface IChildVisitor<TNodeToVisit> {
+    public interface IChildVisitor<TNodeToVisit> where TNodeToVisit : notnull {
 
         /// <summary>
         ///     start visiting
@@ -109,7 +109,7 @@
         /// <typeparam name="TNodeToVisit"></typeparam>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        void StartVisitChild<TNodeToVisit>(TNodeToVisit element, ISyntaxPart child);
+        void StartVisitChild<TNodeToVisit>(TNodeToVisit element, ISyntaxPart child) where TNodeToVisit : notnull;
 
         /// <summary>
         ///     stop visiting a child
@@ -117,8 +117,7 @@
         /// <typeparam name="TNodeToVisit"></typeparam>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        void EndVisitChild<TNodeToVisit>(TNodeToVisit element, ISyntaxPart child);
-
+        void EndVisitChild<TNodeToVisit>(TNodeToVisit element, ISyntaxPart child) where TNodeToVisit : notnull;
 
     }
 }

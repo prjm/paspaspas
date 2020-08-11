@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -64,7 +65,7 @@ namespace PasPasPas.Typings.Structured {
         public override bool CanBeAssignedFromType(ITypeDefinition otherType) {
 
             if (otherType.BaseType == BaseType.Array && otherType is IArrayType array && array.Kind == ArrayTypeKind.StaticArray) {
-                var isPackedString = BaseTypeDefinition.BaseType == BaseType.Char && array.BaseTypeDefinition.BaseType == BaseType.Char && Packed && array.Packed;
+                var isPackedString = BaseTypeDefinition.ResolveAlias().BaseType == BaseType.Char && array.BaseTypeDefinition.ResolveAlias().BaseType == BaseType.Char && Packed && array.Packed;
                 return isPackedString;
             }
 

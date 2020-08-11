@@ -21,6 +21,7 @@ namespace PasPasPasTests.Parser {
         /// <summary>
         ///     result of searching the abstract syntax tree
         /// </summary>
+        [AllowNull]
         [MaybeNull]
         public T Result { get; internal set; }
 
@@ -41,14 +42,14 @@ namespace PasPasPasTests.Parser {
         /// </summary>
         /// <typeparam name="TNodeType"></typeparam>
         /// <param name="element"></param>
-        public void EndVisit<TNodeType>(TNodeType element) { }
+        public void EndVisit<TNodeType>(TNodeType element) where TNodeType : notnull { }
 
         /// <summary>
         ///     start visiting a node
         /// </summary>
         /// <typeparam name="TNodeType"></typeparam>
         /// <param name="element"></param>
-        public void StartVisit<TNodeType>(TNodeType element) {
+        public void StartVisit<TNodeType>(TNodeType element) where TNodeType : notnull {
             var data = SearchFunction(element);
             if (EqualityComparer<T>.Default.Equals(default, Result))
                 Result = data;

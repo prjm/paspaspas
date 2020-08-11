@@ -320,7 +320,7 @@ namespace PasPasPas.Typings.Common {
                 typeId = TypeRegistry.SystemUnit.ErrorType;
 
             if (element.IsNewType) {
-                typeId = TypeCreator.CreateTypeAlias(typeId, "", true);
+                typeId = TypeCreator.CreateTypeAlias(typeId.ResolveAlias(), "", true);
             }
 
             element.TypeInfo = typeId.Reference;

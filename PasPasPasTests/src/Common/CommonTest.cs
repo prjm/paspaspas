@@ -12,7 +12,6 @@ using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Structured;
 using SharpFloat.FloatingPoint;
 
-
 namespace PasPasPasTests.Common {
 
     /// <summary>

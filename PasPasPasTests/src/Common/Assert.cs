@@ -10,25 +10,25 @@ namespace PasPasPasTests.Common {
     /// <summary>
     ///     common assertion library / alias
     /// </summary>
-    public static class Assert {
+    internal static class Assert {
 
         /// <summary>
         ///     check equality
         /// </summary>
-        /// <param name="expected"></param>
-        /// <param name="actual"></param>
+        /// <param name="expected">expected value</param>
+        /// <param name="actual">test result value</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AreEqual<T>(T expected, T actual) {
+        internal static bool AreEqual<T>(T expected, T actual) {
             A.Equal<T>(expected, actual);
             return true;
         }
 
         /// <summary>
-        ///     check equality
+        ///     check equality of strings
         /// </summary>
-        /// <param name="expected"></param>
-        /// <param name="actual"></param>
-        /// <param name="comp"></param>
+        /// <param name="expected">expected value</param>
+        /// <param name="actual">test result value</param>
+        /// <param name="comp">string comparer to use</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AreEqual(string expected, string actual, StringComparer? comp = default) {
@@ -40,71 +40,73 @@ namespace PasPasPasTests.Common {
         }
 
         /// <summary>
-        ///     check equality
+        ///     check equality of extended float values
         /// </summary>
-        /// <param name="expected"></param>
-        /// <param name="actual"></param>
+        /// <param name="expected">expected value</param>
+        /// <param name="actual">test result value</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AreEqual(in ExtF80 expected, in ExtF80 actual)
+        internal static void AreEqual(in ExtF80 expected, in ExtF80 actual)
             => A.Equal(expected, actual);
 
         /// <summary>
         ///     check equality
         /// </summary>
-        /// <param name="expected"></param>
-        /// <param name="actual"></param>
+        /// <param name="expected">expected value</param>
+        /// <param name="actual">test result value</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AreEqual(double expected, double actual)
+        internal static void AreEqual(double expected, double actual)
             => A.Equal(expected, actual, 10);
 
         /// <summary>
-        ///     check equality
+        ///     check if an expression is true
         /// </summary>
-        /// <param name="o"></param>
+        /// <param name="value">value to test</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void IsTrue(bool o)
-            => A.True(o);
+        internal static void IsTrue(bool value)
+            => A.True(value);
 
         /// <summary>
-        ///     check equality
+        ///     check if an expression is false
         /// </summary>
-        /// <param name="o"></param>
+        /// <param name="value">value to test</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void IsFalse(bool o)
-            => A.False(o);
+        internal static void IsFalse(bool value)
+            => A.False(value);
 
         /// <summary>
-        ///     check inequality
+        ///     check inequality of two values
         /// </summary>
-        /// <param name="notExpected"></param>
-        /// <param name="actual"></param>
+        /// <param name="notExpected">unexpected result</param>
+        /// <param name="actual">test result</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AreNotEqual(object notExpected, object actual)
-            => A.NotEqual(notExpected, actual);
+        internal static void AreNotEqual<T>(T notExpected, T actual)
+            => A.NotEqual<T>(notExpected, actual);
 
         /// <summary>
         ///     check that an object is not null
         /// </summary>
-        /// <param name="o"></param>
+        /// <param name="value">value to test</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void IsNotNull([NotNull] object? o)
-            => A.NotNull(o!);
+        internal static void IsNotNull([NotNull] object? value)
+#pragma warning disable CS8777 // Parameter must have a non-null value when exiting.
+            => A.NotNull(value);
+#pragma warning restore CS8777 // Parameter must have a non-null value when exiting.
 
         /// <summary>
         ///     check that an object is null
         /// </summary>
-        /// <param name="o"></param>
+        /// <param name="value">value to test</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void IsNull(object? o)
-            => A.Null(o);
+        internal static void IsNull(object? value)
+            => A.Null(value);
 
         /// <summary>
         ///     check that an exception is thrown
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="testCode"></param>
+        /// <param name="testCode">test code</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Throws<T>(Action testCode) where T : Exception
+        internal static void Throws<T>(Action testCode) where T : Exception
             => A.Throws<T>(testCode);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

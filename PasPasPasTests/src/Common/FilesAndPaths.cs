@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using PasPasPas.Api;
@@ -12,7 +11,7 @@ namespace PasPasPasTests.Common {
     /// <summary>
     ///     files and paths helper
     /// </summary>
-    public class FilesAndPaths {
+    internal class FilesAndPaths {
 
         private readonly Dictionary<string, string> data
             = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -21,7 +20,7 @@ namespace PasPasPasTests.Common {
         ///     create a new set of files and paths
         /// </summary>
         /// <param name="p"></param>
-        public FilesAndPaths(params (string name, string content)[] p) {
+        internal FilesAndPaths(params (string name, string content)[] p) {
             foreach (var (name, content) in p) {
                 Add(name, content);
             }
@@ -32,7 +31,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="inputResolver"></param>
         /// <returns></returns>
-        public IInputResolver CreateResolver(IInputResolver inputResolver = default) {
+        internal IInputResolver? CreateResolver(IInputResolver? inputResolver = default) {
             IReaderInput doResolve(IFileReference f, IReaderApi a) {
                 if (inputResolver != default) {
                     var value = inputResolver.Resolve(a, f);
@@ -42,6 +41,7 @@ namespace PasPasPasTests.Common {
 
                 if (data.TryGetValue(f.Path, out var content))
                     return a.CreateInputForString(f, content);
+
                 return default;
             }
 

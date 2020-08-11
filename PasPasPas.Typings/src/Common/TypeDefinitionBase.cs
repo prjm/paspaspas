@@ -63,20 +63,21 @@ namespace PasPasPas.Typings.Common {
         public ITypeSymbol Reference { get; }
 
         private static bool CanBeAssignedFromAlias(IAliasedType alias) {
+            var baseType = alias.BaseTypeDefinition.BaseType;
 
-            if (alias.BaseType == BaseType.Integer)
+            if (baseType == BaseType.Integer)
                 return true;
 
-            if (alias.BaseType == BaseType.Real)
+            if (baseType == BaseType.Real)
                 return true;
 
-            if (alias.BaseType == BaseType.Char)
+            if (baseType == BaseType.Char)
                 return true;
 
-            if (alias.BaseType == BaseType.Boolean)
+            if (baseType == BaseType.Boolean)
                 return true;
 
-            if (alias.BaseType == BaseType.Enumeration)
+            if (baseType == BaseType.Enumeration)
                 return true;
 
             return !alias.IsNewType;
@@ -119,8 +120,27 @@ namespace PasPasPas.Typings.Common {
             if (otherType.IsErrorType())
                 return false;
 
-            if (otherType.Equals(this))
+            if (otherType.Equals(this)) {
+
+                static bool skipType(ITypeDefinition def)
+                    => def is IAliasedType alias &&
+                        alias.IsNewType &&
+                        (alias.BaseTypeDefinition.BaseType switch
+                        {
+                            BaseType.Array => true,
+                            BaseType.Routine => true,
+                            BaseType.Structured => true,
+                            _ => false
+                        });
+
+                if (skipType(this))
+                    return false;
+
+                if (skipType(otherType))
+                    return false;
+
                 return true;
+            }
 
             var baseType = ResolveAliasForAssignment(this);
             var anotherType = ResolveAliasForAssignment(otherType);
