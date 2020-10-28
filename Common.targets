@@ -29,7 +29,7 @@
         <PackageReference Include="Microsoft.NetCore.Analyzers" Version="3.3.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="IDisposableAnalyzers" Version="3.4.2">
+        <PackageReference Include="IDisposableAnalyzers" Version="3.4.3">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Apex.Analyzers.Immutable" Version="1.2.5" >
